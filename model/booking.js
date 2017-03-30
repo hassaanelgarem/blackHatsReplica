@@ -4,11 +4,11 @@ const config = require('../config/database');
 // Schema
 const BookingSchema = mongoose.Schema({
   slot:{
-    start-time: {
+    start_time: {
       type: String,
   		required: true
     },
-    end-time: {
+    end_time: {
       type: String,
   		required: true
     }

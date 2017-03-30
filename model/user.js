@@ -24,10 +24,10 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	profile-picture:{
+	profile_picture:{
 		type: String
 	},
-  birth-date: {
+  birth_date: {
     type: Date
   },
   favorites: [{

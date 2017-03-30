@@ -10,7 +10,7 @@ const ActivitySchema = mongoose.Schema({
   price: {
     type: Number,
 		required: true
-  }
+  },
   description: {
     type: String,
 		required: true
@@ -23,11 +23,11 @@ const ActivitySchema = mongoose.Schema({
 		required: true
   },
   slots: [{
-    start-time: {
+    start_time: {
       type: String,
   		required: true
     },
-    end-time: {
+    end_time: {
       type: String,
   		required: true
     }

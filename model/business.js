@@ -18,10 +18,10 @@ const BusinessSchema = mongoose.Schema({
   phone_numbers: [{
     type: String
   }],
-  working-days: [{
+  working_days: [{
     type: String
   }],
-  working-hours:{
+  working_hours:{
     from: {
       type: String
     },
@@ -76,7 +76,7 @@ const BusinessSchema = mongoose.Schema({
   },
   deposit: {
     type: Number
-  }
+  },
 	logo: {
 		type: String
 	}
