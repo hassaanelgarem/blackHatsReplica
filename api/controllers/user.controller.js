@@ -15,3 +15,12 @@ module.exports.login = function(req, res){
 };
 
 */
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
+const Business = mongoose.model("Business");
+
+module.exports.privacy = function(req, res){
+    res.render('privacy');
+};
+
+

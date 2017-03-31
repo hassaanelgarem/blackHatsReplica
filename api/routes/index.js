@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const userCtrl = require('../controllers/user.controller');
 
 /*
 require controllers files
@@ -20,5 +21,8 @@ router.route('/login').post('userCtrl.login');
 
 
 */
+
+
+router.route('/privacy').get('userCtrl.privacy');
 
 module.exports = router;
