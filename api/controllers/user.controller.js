@@ -20,7 +20,8 @@ const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 
 module.exports.privacy = function(req, res){
-    res.render('privacy');
+	res.send("render privacy policy page");
+    //res.render('privacy');
 };
 
 
