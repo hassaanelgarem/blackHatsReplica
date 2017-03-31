@@ -67,7 +67,6 @@ let userController =
                         email: email,
                         username: username,
                         password: password,
-                        profilePicture: profilePicture,
                         birthDate: birthDate
                       });
 
@@ -83,11 +82,56 @@ let userController =
             }
                  )
         }
+    },
+    login: function(req, res)
+    {
+        //update this on frontend stage
+        passport.authenticate('local', {successRedirect:'/users/profile', failureRedirect:'/users/login',failureFlash: true}),
+        function(req, res) 
+        {
+            req.session.loggedin = req.body.username;
+            //redirect feen?
+            // res.redirect('/api/profile');
+        }
     }
-    //add login method
 }
 
-module.exports = userController;
+passport.use(new LocalStrategy(
+  function(username, password, done) 
+  {
+   User.getUserByUsername(username, function(err, user)
+   {
+   	if(err) throw err;
+   	if(!user)
+	{
+   		return done(null, false, {message: 'Invalid Username.'});
+   	}
+
+   	User.comparePassword(password, user.password, function(err, isMatch)
+	{
+   	if(err) throw err;
+   		if(isMatch)
+   			return done(null, user);
+		   else 
+   			return done(null, false, {message: 'Invalid password.'});
+   	});
+   });
+  }));
+
+passport.serializeUser(function(user, done) 
+  {
+ 	 done(null, user.id);
+  });
+
+passport.deserializeUser(function(id, done) 
+{
+  User.getUserById(id, function(err, user) 
+  {
+    done(err, user);
+  });
+});
+
+module.exports = userCtrl;
 
 /*
 Dummy example controller File
