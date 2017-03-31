@@ -27,4 +27,23 @@ module.exports.terms = function(req, res){
     res.render('terms');
 };
 
+//2.4:add business to favorites:
+module.exports.addFavorite = function(req, res){
+    
+    var business_id = req.params.businessId; //check
+    var user_id = req.user.id;  //using passport
+    var errors = req.validationErrors();
+	if(errors){
+		/*res.render('business',{
+			errors:errors
+		});*/
+	}
+	else {
+		db.User.update({_id: user_id}, { $addToSet: { favorites: business_id} })
+		res.redirect('/api/business/'+business_id);
+		//req.flash('success_msg', 'added to favorites');
+	}    
+};
+
+
 

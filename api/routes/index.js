@@ -26,4 +26,6 @@ router.route('/login').post('userCtrl.login');
 router.route('/privacy').get('userCtrl.privacy');
 router.route('/terms').get('userCtrl.terms');
 
+router.route('/business/:businessId/addfavorite').get('userCtrl.addFavorite'); //is this route valid?
+
 module.exports = router;
