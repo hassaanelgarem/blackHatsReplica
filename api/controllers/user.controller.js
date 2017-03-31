@@ -23,4 +23,8 @@ module.exports.privacy = function(req, res){
     res.render('privacy');
 };
 
+module.exports.terms = function(req, res){
+    res.render('terms');
+};
+
 
