@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
-const config = require('../config/database');
 
-// Schema
-
-const UserSchema = mongoose.Schema({
-	first_name: {
+const userSchema = new mongoose.Schema({
+	firstName: {
 		type: String,
 		required: true
 	},
-  last_name: {
+  lastName: {
     type: String,
     required: true
   },
@@ -24,24 +21,26 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	profile_picture:{
+	profilePicture:{
 		type: String
 	},
-  birth_date: {
+  birthDate: {
     type: Date
   },
   favorites: [{
-    type: Schema.Types.ObjectId,
-    ref: "Bussines"
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Business"
   }],
   reviews: [{
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Review"
   }],
   bookings: [{
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Booking"
-  }]
+  }],
+  resetPasswordToken : String,
+  resetPasswordTokenExpiry : Date
 });
 
-const User = module.exports = mongoose.model('User', UserSchema);
+mongoose.model('User', userSchema);
