@@ -24,6 +24,6 @@ router.route('/login').post('userCtrl.login');
 
 
 router.route('/privacy').get('userCtrl.privacy');
-router.route('/terms').get('userCtrl.terms');
+//router.route('/terms').get('userCtrl.terms');
 
 module.exports = router;
