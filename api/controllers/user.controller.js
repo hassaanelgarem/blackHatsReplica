@@ -24,7 +24,8 @@ module.exports.privacy = function(req, res){
 };
 
 module.exports.terms = function(req, res){
-    res.render('terms');
+	res.send("render terms and conditions page");
+    //res.render('terms');
 };
 
 
