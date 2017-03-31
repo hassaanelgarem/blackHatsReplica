@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+app.use("/api", routes);
 // Index Route
 app.get('/', (req, res) => {
 	res.send('Invalid EndPoint');
