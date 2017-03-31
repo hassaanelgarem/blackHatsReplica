@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
+var bcrypt = require('bcryptjs');
 
+function toLower (str) 
+{
+    return str.toLowerCase();
+}
 const userSchema = new mongoose.Schema({
 	firstName: {
 		type: String,
@@ -11,11 +16,13 @@ const userSchema = new mongoose.Schema({
   },
 	email: {
 		type: String,
-		required: true
+		required: true,
+    set: toLower
 	},
 	username: {
 		type: String,
-		required: true
+		required: true,
+    set: toLower
 	},
 	password: {
 		type: String,
@@ -43,4 +50,15 @@ const userSchema = new mongoose.Schema({
   resetPasswordTokenExpiry : Date
 });
 
-mongoose.model('User', userSchema);
+module.exports.createUser = function(newUser, callback)
+{
+	bcrypt.genSalt(10, function(err, salt) 
+    {
+	    bcrypt.hash(newUser.password, salt, function(err, hash) 
+        {
+	        newUser.password = hash;
+	        newUser.save(callback);
+	    });
+	});
+}
+var User = module.exports = mongoose.model('User', userSchema);

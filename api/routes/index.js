@@ -1,24 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-/*
-require controllers files
+var userController = require('../controllers/user.controller');
 
-Example: 
-
-const userCtrl = require('../controllers/user.controller');
-*/
-
-
-
-/*
-define routes
-
-Example:
-
-router.route('/login').post('userCtrl.login');
-
-
-*/
+router.post('/register', userController.registerUser);
 
 module.exports = router;

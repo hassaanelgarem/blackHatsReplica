@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const expressValidator = require('express-validator');
+const session = require('express-session');
 const routes = require("./api/routes");
 const app = express();
 
@@ -23,6 +27,37 @@ app.use("/api", routes);
 app.get('/', (req, res) => {
 	res.send('Invalid EndPoint');
 });
+
+// Express Session
+app.use(session(
+{
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}));
+
+// Passport initialization
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Express Validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
 
 // Start Server
 app.listen(app.get('port'), () => {

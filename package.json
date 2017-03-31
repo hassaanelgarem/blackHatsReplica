@@ -11,7 +11,13 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "bcryptjs": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*"
   },
   "repository": {
     "type": "git",
