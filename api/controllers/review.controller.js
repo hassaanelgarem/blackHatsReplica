@@ -5,16 +5,6 @@ const Review = mongoose.model("Review");
 
 
 module.exports.addReview = function(req, res){
-    newReview = new Review(req.body);
-    newReview.save(function(err,createdNewReview) {
-      if(err) {
-        res.send(err);
-      }
-      res.send(createdNewReview);
-    });
-};
-
-module.exports.addReview = function(req, res){
   //if user is logged in, passport.js will create user object in req
   if(req.user){
   //get values from post request
