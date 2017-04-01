@@ -4,7 +4,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require("mongoose");
 
-
+/* Function to register a new user into the users database
+   URI: /api/register/   */
     module.exports.registerUser= function(req, res)
     {
         var firstName = req.body.firstName;
@@ -28,7 +29,7 @@ const mongoose = require("mongoose");
 
         if (errors)
         {
-            //TODO
+            //TODO in front end
             res.render('register', {errors: errors});
         }
         else
@@ -38,7 +39,7 @@ const mongoose = require("mongoose");
                 if (err) 
                 {
                     //TODO Error handling
-                    console.log('Signup error');
+                    res.send('Signup error');
                     return done(err);
                 }
 
@@ -47,11 +48,11 @@ const mongoose = require("mongoose");
                 {
                     if(user[0].username)
                     {
-                        console.log('Username already exists, username: ' + username + '. Please enter another username.');                         
+                        res.send('Username already exists, username: ' + username + '. Please enter another username.');                         
                     }
                     else
                     {
-                        console.log('Email already exists, email: ' + email + '. Please enter another email. ');      
+                        res.send('Email already exists, email: ' + email + '. Please enter another email. ');      
                     }                                    
                       //check these 3 lines
                         var err = new Error();
@@ -72,7 +73,7 @@ const mongoose = require("mongoose");
                     User.createUser(newUser, function(err, user)
                     {
                         if(err) throw err;
-                        console.log(user);
+                        res.json(err);
                     });
                     //TODO
                     // req.flash('successMessage', 'You have been registered successfully!');
@@ -83,8 +84,9 @@ const mongoose = require("mongoose");
         }
     }
 
-
-    module.exports.login= function(req, res)
+/* Function to login a user
+   URI: /api/login/   */
+    module.exports.login = function(req, res)
     {
         //update this on frontend stage
         passport.authenticate('local', {successRedirect:'/users/profile', failureRedirect:'/users/login',failureFlash: true}),
@@ -96,10 +98,18 @@ const mongoose = require("mongoose");
         }
     }
 
+/* Function to logout a user
+   URI: /api/logout/   */
+    module.exports.logout = function(req,res)
+    {
+        req.logout();
+        res.redirect('/api');
+    }
 
+// Passport handling the login
 passport.use(new LocalStrategy(
   function(username, password, done) 
-  {
+  { // Finding the user by his username
    User.getUserByUsername(username, function(err, user)
    {
    	if(err) throw err;
@@ -107,7 +117,7 @@ passport.use(new LocalStrategy(
 	{
    		return done(null, false, {message: 'Invalid Username.'});
    	}
-
+       //Comparing to see if the 2 passwords match
    	User.comparePassword(password, user.password, function(err, isMatch)
 	{
    	if(err) throw err;
@@ -119,13 +129,13 @@ passport.use(new LocalStrategy(
    });
   }));
 
-
+//Passport module serializes User ID
 passport.serializeUser(function(user, done) 
   {
  	 done(null, user.id);
   });
 
-
+//Passport module deserializes User ID
 passport.deserializeUser(function(id, done) 
 {
   User.getUserById(id, function(err, user) 
