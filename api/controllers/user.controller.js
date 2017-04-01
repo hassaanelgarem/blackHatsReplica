@@ -3,18 +3,6 @@ const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 
 
-//frontend: 
-module.exports.privacy = function(req, res){
-    res.render('privacy');
-};
-
-
-//frontend:
-module.exports.terms = function(req, res){
-    res.render('terms');
-};
-
-
 /*2.4:
  Get function that adds the business to user's favorites
  URI: api/business/:businessId/addfavorite
