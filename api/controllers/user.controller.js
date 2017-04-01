@@ -1,12 +1,11 @@
-let User = require('../data/user.model');
+const User = require('../data/user.model');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require("mongoose");
 
-let userController = 
-{
-    registerUser: function(req, res)
+
+    module.exports.registerUser= function(req, res)
     {
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
@@ -82,8 +81,10 @@ let userController =
             }
                  )
         }
-    },
-    login: function(req, res)
+    }
+
+
+    module.exports.login= function(req, res)
     {
         //update this on frontend stage
         passport.authenticate('local', {successRedirect:'/users/profile', failureRedirect:'/users/login',failureFlash: true}),
@@ -94,7 +95,7 @@ let userController =
             // res.redirect('/api/profile');
         }
     }
-}
+
 
 passport.use(new LocalStrategy(
   function(username, password, done) 
@@ -118,10 +119,12 @@ passport.use(new LocalStrategy(
    });
   }));
 
+
 passport.serializeUser(function(user, done) 
   {
  	 done(null, user.id);
   });
+
 
 passport.deserializeUser(function(id, done) 
 {
@@ -132,16 +135,3 @@ passport.deserializeUser(function(id, done)
 });
 
 module.exports = userCtrl;
-
-/*
-Dummy example controller File
-
-2) define your functions that the route get or post method will call
-
-Example:
-
-module.exports.login = function(req, res){
-    //Do something here
-};
-
-*/
