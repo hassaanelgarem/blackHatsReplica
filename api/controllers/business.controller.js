@@ -6,17 +6,6 @@ const fs = require('fs');
 const path = require("path");
 
 
-// for testing
-/*
-module.exports.add = function(req, res){
-    const newBusiness = new Business({name: "test", email: "test", password: "test", description: "test"});
-    newBusiness.save(function (err, business) {
-      if (err) return res.json({success: false, msg: 'adding failed'});
-      res.json({success: true, msg: 'added'});
-    });
-};
-*/
-
 /* Multer configuration to upload a single file from an
 html input with name "myfile" to public/uploads folder*/
 const upload = multer({
@@ -29,7 +18,7 @@ Upload photo using multer
 and store the uploaded image path in the Business 
 model in photos array, and return the 
 filepath to the frontend to show the image.
-Calling route: '/api/business/:businessId/addPhoto'
+Calling route: '/business/:businessId/addPhoto'
 */
 module.exports.addPhoto = function (req, res) {
 	//Check if business logged in
@@ -83,7 +72,6 @@ module.exports.addPhoto = function (req, res) {
                         //return the file path to the frontend to show the image
 			            res.json(newPath);
                     }
-      
                 });
 			} 
 			//multer did not find a file selected to upload
@@ -102,9 +90,10 @@ module.exports.addPhoto = function (req, res) {
 
 
 /*
-delete function that deletes photo from business page
-URI: api/business/:businessId/deletePhoto/:photoPath
- */
+delete function that deletes photo from business'
+photos array, and returns success message or error message.
+Calling route: '/business/:businessId/deletePhoto/:photoPath'
+*/
 module.exports.deletePhoto = function(req, res){
     var imagePath = req.params.photoPath;
     var businessId = req.params.businessID;
