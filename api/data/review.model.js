@@ -18,6 +18,7 @@ const reviewSchema = new mongoose.Schema({
     ref: "Business",
 		required: true
 	},
+	//yyyy-MM-ddTHH:mm:ssZ
 	time: {
 		type: Date,
 		required: true

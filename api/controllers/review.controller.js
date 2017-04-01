@@ -3,8 +3,8 @@ const User = mongoose.model('User');
 const Business = mongoose.model('Business');
 const Review = mongoose.model('Review');
 
-// for testing
 
+// for testing
 module.exports.add = function(req, res){
     const newBusiness = new Business({
       name: "test4",
@@ -16,6 +16,7 @@ module.exports.add = function(req, res){
       res.json({success: true, msg: 'added'});
     });
 };
+
 
 module.exports.addUser = function(req, res){
     const newUser = new User({
@@ -31,11 +32,12 @@ module.exports.addUser = function(req, res){
     });
 };
 
+
 /* Post function that adds a review by a registered user on a business
 URI: api/review/add */
 module.exports.addReview = function(req, res){
   //check if logged in
-  //if(req.user){
+  if(req.user){
   //get values from post request
   var comment = req.body.comment;
   var rating = req.body.rating;
@@ -50,43 +52,47 @@ module.exports.addReview = function(req, res){
     business : business,
     time : time
   });
-
+  //saves the new review in the database
   newReview.save(function(err, review){
     if (err) return res.json({success: false, msg: 'There was a problem adding the information to the database'});
+    //Adds review to reviews array of corresponding user
     User.findByIdAndUpdate(
       review.user,
       {$push: {"reviews": review._id}},
       {safe: true, upsert: true, new: true},
       function(err, model){
         if (err) res.json({success: false});
-        Business.findByIdAndUpdate(
-          review.business,
-          {$push: {"reviews": review._id}},
-          {safe: true, upsert: true, new: true},
-          function(err, model){
-            if (err) res.json({success: false});
-            res.json({success: true});
-          }
-        );
+      });
+    //Adds review to reviews array of corresponding business
+    Business.findByIdAndUpdate(
+      review.business,
+      {$push: {"reviews": review._id}},
+      {safe: true, upsert: true, new: true},
+      function(err, model){
+      if (err) res.json({success: false});
+      res.json({success: true});
       }
     );
   });
 
-  //}
-  // User not logged in
-    /*else {
-      res.json({error : "login!"});
-    }*/
+  }
+  //User not logged in
+  else {
+    res.json({error : "login!"});
+  }
 };
 
 
+/* Get function that retrieves the reviews made on a Business
+URI: api/review/:businessId */
 module.exports.getReviews = function(req, res){
   Review.find({"business" : req.params.businessId}, function(err, reviews){
     if(err){
       res.status(500).send(err);
     }
     else{
-      res.send(reviews);
+      //returns an array of reviews
+      res.json({success: true, msg: 'successful retrieval', reviews});
     }
   });
 }
