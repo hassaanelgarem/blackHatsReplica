@@ -50,18 +50,28 @@ module.exports.addReview = function(req, res){
     business : business,
     time : time
   });
-  newReview.save(function (err, createdNewReview) {
-      if (err) return res.json({success: false, msg: 'There was a problem adding the information to the database'});
-      res.json({success: true, msg: 'added'});
-      User.update(
-        { _id: createdNewReview.user},
-        { $push : { reviews : createdNewReview._id} }
-      );
-      Business.update(
-        { _id : createdNewReview.business},
-        { $push : {reviews : createdNewReview._id} }
-      );
+
+  newReview.save(function(err, review){
+    if (err) return res.json({success: false, msg: 'There was a problem adding the information to the database'});
+    User.findByIdAndUpdate(
+      review.user,
+      {$push: {"reviews": review._id}},
+      {safe: true, upsert: true, new: true},
+      function(err, model){
+        if (err) res.json({success: false});
+        Business.findByIdAndUpdate(
+          review.business,
+          {$push: {"reviews": review._id}},
+          {safe: true, upsert: true, new: true},
+          function(err, model){
+            if (err) res.json({success: false});
+            res.json({success: true});
+          }
+        );
+      }
+    );
   });
+
   //}
   // User not logged in
     /*else {
