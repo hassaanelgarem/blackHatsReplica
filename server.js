@@ -8,6 +8,10 @@ const routes = require("./api/routes");
 const app = express();
 
 app.set('port', 8080);
+
+//Enable IP Address Getting
+app.enable('trust proxy')
+
 app.use(cors());
 
 // app.use(express.static(path.join(__dirname, '/public')));
@@ -17,6 +21,8 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 app.use(bodyParser.json());
+
+app.use("/api", routes);
 
 // Index Route
 app.get('/', (req, res) => {
