@@ -1,49 +1,41 @@
-/*
-Dummy example controller File
-
-1) require the database model you will be working on along with mongoose and any other module that you will use.
-
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
-
-2) define your functions that the route get or post method will call
-
-Example:
-
-module.exports.login = function(req, res){
-    //Do something here
-};
-
-*/
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 
+
+//frontend: 
 module.exports.privacy = function(req, res){
     res.render('privacy');
 };
 
+
+//frontend:
 module.exports.terms = function(req, res){
     res.render('terms');
 };
 
-//2.4:add business to favorites:
+
+/*2.4:
+ Get function that adds the business to user's favorites
+ URI: api/business/:businessId/addfavorite
+*/
 module.exports.addFavorite = function(req, res){
-    
-    var business_id = req.params.businessId; //check
-    var user_id = req.user.id;  //using passport
-    var errors = req.validationErrors();
-	if(errors){
-		/*res.render('business',{
-			errors:errors
-		});*/
-	}
-	else {
-		db.User.update({_id: user_id}, { $addToSet: { favorites: business_id} })
-		res.redirect('/api/business/'+business_id);
-		//req.flash('success_msg', 'added to favorites');
-	}    
+    //if the user is logged in
+    if(req.user){ 
+        var business_id = req.params.businessId; //to get the id of the busniness i want to add to favorites
+        var user_id = req.user.id;  //using passport, get the id of the signed in user
+		db.User.update({_id: user_id}, { $addToSet: { favorites: business_id} }) //add the business id to the favorites array of the user
+		//res.send("business added to favorites");
+		res.redirect('/business/'+business_id);
+    }
+	//if the user is not logged in:
+    else{
+		res.send("you should sign in first.")
+        //res.redirect('/register');
+    }
+       
 };
+
 
 
 

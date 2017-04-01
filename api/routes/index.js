@@ -1,31 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user.controller');
-
-/*
-require controllers files
-
-Example: 
-
-const userCtrl = require('../controllers/user.controller');
-*/
+//const businessCtrl = require('../controllers/business.controller');
 
 
-
-/*
-define routes
-
-Example:
-
-router.route('/login').post('userCtrl.login');
-
-
-*/
-
-
+//router.route('/add').post(businessCtrl.add);
 router.route('/privacy').get('userCtrl.privacy');
 router.route('/terms').get('userCtrl.terms');
-
-router.route('/business/:businessId/addfavorite').get('userCtrl.addFavorite'); //is this route valid?
+router.route('/business/:businessId/addfavorite').get('userCtrl.addFavorite'); 
 
 module.exports = router;
