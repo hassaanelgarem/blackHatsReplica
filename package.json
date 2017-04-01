@@ -11,8 +11,9 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
-    "multer": "*",
-    "mongoose": "*"
+    "fs": "0.0.1-security",
+    "mongoose": "*",
+    "multer": "*"
   },
   "repository": {
     "type": "git",
