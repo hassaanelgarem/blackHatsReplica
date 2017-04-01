@@ -1,24 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-/*
-require controllers files
+const profileCtrl=require('../controllers/profile.controller.js');
 
-Example: 
-
-const userCtrl = require('../controllers/user.controller');
-*/
+router
+    .route('/profile/:userId')
+    .get(profileCtrl.getOneUser); //get all info about a user with _id equals the param userId
 
 
-
-/*
-define routes
-
-Example:
-
-router.route('/login').post('userCtrl.login');
-
-
-*/
 
 module.exports = router;
