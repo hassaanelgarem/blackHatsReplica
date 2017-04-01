@@ -1,24 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-/*
-require controllers files
+const reviewCtrl = require('../controllers/review.controller');
 
-Example: 
-
-const userCtrl = require('../controllers/user.controller');
-*/
+router.route('/review/:businessId').get(reviewCtrl.getReviews);
+router.route('/review/add').post(reviewCtrl.addReview);
 
 
+router.route('/add').post(reviewCtrl.addUser);
+router.route('/addB').post(reviewCtrl.add);
 
-/*
-define routes
-
-Example:
-
-router.route('/login').post('userCtrl.login');
-
-
-*/
+//router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 module.exports = router;
