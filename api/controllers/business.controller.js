@@ -100,9 +100,10 @@ module.exports.addPhoto = function (req, res) {
 	}
 };
 
+
 /*
 delete function that deletes photo from business page
-URI: api/business/:businessId/deletePhoto
+URI: api/business/:businessId/deletePhoto/:photoPath
  */
 module.exports.deletePhoto = function(req, res){
     var imagePath = req.params.photoPath;
