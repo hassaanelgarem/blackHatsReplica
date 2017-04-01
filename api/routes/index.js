@@ -1,24 +1,9 @@
 const express = require('express');
 const router = express.Router();
-
-/*
-require controllers files
-
-Example: 
-
-const userCtrl = require('../controllers/user.controller');
-*/
+const businessCtrl = require('../controllers/business.controller');
 
 
-
-/*
-define routes
-
-Example:
-
-router.route('/login').post('userCtrl.login');
-
-
-*/
+router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
+router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
 
 module.exports = router;
