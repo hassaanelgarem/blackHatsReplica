@@ -1,17 +1,32 @@
-/*
-Dummy example controller File
-
-1) require the database model you will be working on along with mongoose and any other module that you will use.
-
 const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const Business = mongoose.model("Business");
 
-2) define your functions that the route get or post method will call
-
-Example:
-
-module.exports.login = function(req, res){
-    //Do something here
+module.exports.searchByNameOrTag = function (req, res) {
+    if (req.query && req.query.result) {
+        var nameOrTag = req.query.result;
+        Business.find({
+                $or: [{
+                        name: {
+                            $regex: "^" + nameOrTag,
+                            $options: "ix"
+                        }
+                    },
+                    {
+                        tags: {
+                            $regex: "^" + nameOrTag,
+                            $options: "ix"
+                        }
+                    }
+                ]
+            },
+            function (err, businesses) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(businesses);
+                }
+            }
+        );
+    } else
+        res.json([]);
 };
-
-*/
