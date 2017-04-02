@@ -3,7 +3,6 @@ const Business = mongoose.model("Business");
 
 
 /*Put function, to save the choosen tags by the business in the database .
-  business can choose up to 5 tags .
   Calling route: '/api/editBusiness/:businessId/addTags' */
 module.exports.addTags = function (req, res) {
   //check if logged in 
