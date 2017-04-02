@@ -37,3 +37,5 @@ require("./booking.model");
 require("./business.model");
 require("./review.model");
 require("./user.model");
+require("./advBooking.model");
+require("./advSlot.model");
