@@ -74,6 +74,17 @@ module.exports.addTags = function (req, res) {
 					business.tags.push(req.body.tag3);
 					business.tags.push(req.body.tag4);
 					business.tags.push(req.body.tag5);
+				/*service to save the choosen tags in the database 
+				and return the updated object to frontend.
+				*/
+					business.save(function(err){
+						if(err){
+							res.json(err);
+						}
+						else{
+							res.json(business);
+						}
+					});
 				}
 
 				//business not found 
