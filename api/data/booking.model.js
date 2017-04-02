@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const bookingSchema = new mongoose.Schema({
   slot:{
     startTime: {
-      type: String,
+      type: Date,
   		required: true
     },
     endTime: {
-      type: String,
+      type: Date,
   		required: true
     }
   },
