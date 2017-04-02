@@ -54,18 +54,11 @@ module.exports.getMostPopular = function (req, res) {
 };
 
 
-/* Multer configuration to upload a single file from an
-html input with name "myfile" to public/uploads folder*/
-const upload = multer({
-	dest: path.join(__dirname, '../', '../public/uploads')
-}).single('myfile');
 
-
-
-/*save the choosen tags by the business in the database .
-  business can choose up to 5 tags .
-  Calling route: '/api/business/addTags' */
-module.exports.addTags = function (req, res) {
+/*save the choosen Category by the business in the database .
+  business can choose only 1 Category
+  Calling route: '/api/business/addCategory' */
+module.exports.addCategory = function (req, res) {
 	//check if logged in 
 	if (req.user) {
 		Business.findOne({
@@ -77,11 +70,19 @@ module.exports.addTags = function (req, res) {
 			} else {
 				// if business found 
 				if (business) {
-					business.tags.push(req.body.tag1);
-					business.tags.push(req.body.tag2);
-					business.tags.push(req.body.tag3);
-					business.tags.push(req.body.tag4);
-					business.tags.push(req.body.tag5);
+					business.category = req.body.category;
+					
+					/*service to save the choosen Category in the database 
+				and return the updated object to frontend.
+				*/
+					business.save(function(err){
+						if(err){
+							res.json(err);
+						}
+						else{
+							res.json(business);
+						}
+					});
 				}
 
 				//business not found 

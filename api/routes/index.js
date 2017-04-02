@@ -7,5 +7,5 @@ const businessCtrl = require('../controllers/business.controller');
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
-router.route('/api/business/addTags').get(businessCtrl.addTags);
+router.route('/business/addCategory').post(businessCtrl.addCategory);
 module.exports = router;
