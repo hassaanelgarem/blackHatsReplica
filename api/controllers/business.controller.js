@@ -120,3 +120,40 @@ module.exports.uploadLogo = function (req, res) {
 		res.json({error : "login"});
 	}
 };
+
+/*save the choosen tags by the business in the database .
+  business can choose up to 5 tags .
+  Calling route: '/api/business/addTags' */
+module.exports.addTags = function (req, res) {
+    //check if logged in 
+    if (req.user) {
+        Business.findOne({
+            _id: req.params.businessId
+        }, function (err, business) {
+            //if error occured 
+            if (err) {
+                res.json(err);
+            } else {
+                // if business found 
+                if (business){
+                  business.tags.push(req.body.tag1);
+                  business.tags.push(req.body.tag2);
+                  business.tags.push(req.body.tag3);
+                  business.tags.push(req.body.tag4);
+                  business.tags.push(req.body.tag5);
+                }
+                   
+                //business not found 
+                else
+                    res.json({
+                        error: "Business not found!"
+                    });
+            }
+        });
+        //user is not logged in
+    } else {
+        res.json({
+            error: "login"
+        });
+    };
+};
