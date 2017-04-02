@@ -136,5 +136,8 @@ passport.deserializeUser(function(id, done)
 module.exports.deleteAccount = function(req, res)
 {
     var query = {username : req.session.loggedin};
-    User.remove(query);
+    User.remove(query, function(err){
+        if (err)
+            res.json(err);
+    });
 }
