@@ -16,7 +16,7 @@ const Business = mongoose.model("Business");
     user: "id of the user making the booking"
   }
 */
-module.exports.bookActivity = function(req, res){
+module.exports.bookActivity = function(req, res) {
     // Create new Booking object using parameters from request
     const newBooking = new Booking({
       slot: req.body.slot,
@@ -24,7 +24,7 @@ module.exports.bookActivity = function(req, res){
       user: req.body.user
     });
     // Save new booking in database
-    newBooking.save(function (err, booking){
+    newBooking.save(function (err, booking) {
       // If there is an error return it in response
       if (err) return res.json({success: false, msg: 'Error adding the booking', error: err});
 
@@ -33,7 +33,7 @@ module.exports.bookActivity = function(req, res){
         booking.user,
         {$push:{"bookings": booking._id}},
         {safe: true, upsert: true, new: true},
-        function(err, user){
+        function(err, user) {
           // If there is an error return it in response
           if(err) res.json({success: false, msg: "Error updating user", error: err});
 
@@ -42,7 +42,7 @@ module.exports.bookActivity = function(req, res){
             booking.activity,
             {$push:{"bookings": booking._id}},
             {safe: true, upsert: true, new: true},
-            function(err, activity){
+            function(err, activity) {
               // If there is an error return it in response
               if (err) res.json({success: false, msg: "Error updating activity", error: err});
 
