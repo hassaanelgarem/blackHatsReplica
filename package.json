@@ -12,7 +12,6 @@
     "cors": "*",
     "express": "*",
     "geoip-lite": "^1.2.0",
-    "mongoose": "*",
     "fs": "0.0.1-security",
     "mongoose": "*",
     "multer": "^1.3.0"
