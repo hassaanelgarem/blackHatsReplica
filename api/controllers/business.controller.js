@@ -19,9 +19,9 @@ module.exports.add = function(req, res){
 
 
 /* Multer configuration to upload a single file from an
-html input with name "myfile" to public/uploads folder*/
-const upload = multer({
-    dest: path.join(__dirname, '../', '../public/uploads')
+html input with name "myfile" to public/uploads/businessPhotos folder*/
+const uploadPhotos = multer({
+    dest: path.join(__dirname, '../', '../public/uploads/businessPhotos')
 }).single('myfile');
 
 
@@ -36,7 +36,7 @@ module.exports.addPhoto = function (req, res) {
 	//Check if business logged in
 	if (req.user) {
 		//upload the image
-		upload(req, res, function (err) {
+		uploadPhotos(req, res, function (err) {
 			//if an error occurred, return the error
 			if (err) {
 				return res.json(err);
