@@ -9,6 +9,8 @@ const Activity = mongoose.model("Activity");
   Calling route: '/api/activity/add'
 */
 module.exports.addActivity = function(req, res) {
+  //check if logged in
+  if(req.user){
     // Create new Activity object using parameters from request
     const newActivity = new Activity({
         name: req.body.name,
@@ -51,4 +53,8 @@ module.exports.addActivity = function(req, res) {
             }
         );
     });
+  }   //User not logged in
+  else {
+    res.json({error : "Please Login"});
+  }
 };
