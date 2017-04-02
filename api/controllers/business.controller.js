@@ -4,18 +4,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// for testing
-/*
-module.exports.add = function(req, res){
-    const newBusiness = new Business({name: "test4", email: "test4", password: "test4", description: "test4"});
-    newBusiness.save(function (err, business) {
-      if (err) return res.json({success: false, msg: 'adding failed'});
-      res.json({success: true, msg: 'added'});
-    });
-};
-*/
-
-
 
 // Post function that increments the interactivity attribute of a certain business by 1
 // URI: api/business/interact/:id
@@ -64,11 +52,11 @@ const uploadBusinessLogo = multer({
 
 
 /* 
-Upload Logo using multer 
+Put function to Upload Logo using multer 
 and store the uploaded image path in the Business 
 model in photos array, and return the 
 filepath to the frontend to show the image.
-Calling route: '/business/:businessId/addLogo'
+Calling route: '/editBusiness/:businessId/addLogo'
 */
 module.exports.uploadLogo = function (req, res) {
   //Check if logged in
@@ -109,6 +97,10 @@ module.exports.uploadLogo = function (req, res) {
           fs.unlink(req.file.path);
         });
 
+        //get the name part only from the uploaded image
+        var nameLength = ("img" + Date.now() + string).length + 1;
+        newPath = newPath.substring(newPath.length - nameLength);
+
         //save the image file path to the Business model
         Business.findById(req.params.businessId, function (err, business) {
           //if an error occurred, return the error
@@ -119,7 +111,7 @@ module.exports.uploadLogo = function (req, res) {
             if (business) {
               //if exists an old logo, save its old value incase updating logo fails
               if (business.logo) {
-                var oldLogo = business.logo;
+                var oldLogo = path.join(__dirname, "../", "../public/uploads/businessLogos/", business.logo);
               }
               business.logo = newPath;
               business.save(function (err) {
@@ -129,7 +121,7 @@ module.exports.uploadLogo = function (req, res) {
                 } else {
                   //updated successfully, delete the old logo
                   fs.unlink(oldLogo, function (err) {
-
+                    //don't care if file not found
                   });
                   //return the file path to the frontend to show the image
                   res.json(newPath);
