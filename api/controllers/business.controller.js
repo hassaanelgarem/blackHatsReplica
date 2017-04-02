@@ -45,3 +45,21 @@ module.exports.getMostPopular = function(req, res) {
       res.json({success: true, msg: 'Got most popular businesses successfully', businesses: businesses});
   });
 };
+
+
+/*
+  Get function that returns all info of a certain business
+  Calling route: api/business/businessPage/:id
+*/
+module.exports.getBusinessInfo = function(req, res) {
+
+  //Find the bussiness by id to get its info
+  Business.findById(req.params.id, function(err, business) {
+
+      //If an error occurred, display a msg along with the error
+      if (err) return res.json({success: false, msg: 'Cannot retrieve business'});
+
+      //If no error return the bisness info
+      else return res.json({success: true, msg: 'successful retrieval', business});
+  });
+}

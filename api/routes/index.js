@@ -6,12 +6,15 @@ const userCtrl = require('../controllers/user.controller');
 const businessCtrl = require('../controllers/business.controller');
 const bookingCtrl = require('../controllers/booking.controller');
 const reviewCtrl = require('../controllers/review.controller');
+const activityCtrl = require('../controllers/activity.controller');
 
 
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
+router.route('/business/businessPage/:id').get(businessCtrl.getBusinessInfo);
 router.route('/activity/book').post(bookingCtrl.bookActivity);
+router.route('/activity/:businessId').get(activityCtrl.getActivities);
 router.route('/review/user/:userID').get(reviewCtrl.getUserReviews);
 router.route('/review/edit/:reviewID').post(reviewCtrl.editReview);
 router.route('/review/:businessId').get(reviewCtrl.getReviews);
