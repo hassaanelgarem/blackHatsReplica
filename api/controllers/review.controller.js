@@ -25,7 +25,7 @@ module.exports.getUserReviews = function(req, res) {
 Calling route: api/review/add */
 module.exports.addReview = function(req, res) {
   //check if logged in
-  // if(req.user) {
+  if(req.user) {
     //get values from post request
     var comment = req.body.comment;
     var rating = req.body.rating;
@@ -61,11 +61,11 @@ module.exports.addReview = function(req, res) {
           }
         );
       });
-  // }
-  // //User not logged in
-  // else {
-  //   res.json({error : "login!"});
-  // }
+  }
+  //User not logged in
+  else {
+    res.json({error : "login!"});
+  }
 };
 
 
