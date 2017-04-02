@@ -10,7 +10,7 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 router.route('/register').post(userCtrl.registerUser);
-router.post('/login',userCtrl.passportAuthenticate, userCtrl.login);
+router.post('/login', userCtrl.passportAuthenticate, userCtrl.login);
 router.route('/logout').get(userCtrl.logout);
 router.route('/deleteAccount').post(userCtrl.deleteAccount);
 router.route('/search').get(userCtrl.searchByNameOrTag);
