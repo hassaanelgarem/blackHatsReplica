@@ -17,6 +17,11 @@ const reviewSchema = new mongoose.Schema( {
 		type: mongoose.Schema.Types.ObjectId,
     ref: "Business",
 		required: true
+	},
+	//yyyy-MM-ddTHH:mm:ssZ
+	time: {
+		type: Date,
+		default: Date.now
 	}
 });
 
