@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const Activity = mongoose.model("Activity");
 
 
-/* Service to edit an Activity in the database
-Calling route: '/api/editBusiness/:businessId'  */
+/* Post function to edit an Activity in the database
+Calling route: '/api/activity/edit/:activityId'  */
 module.exports.editActivity = function(req, res) {
     //Find Activity to be eidited
     Activity.findById(req.params.activityId, function(err, activity) {
