@@ -84,7 +84,7 @@ module.exports.addReview = function(req, res){
 
 
 /* Get function that retrieves the reviews made on a Business from the database
-URI: api/review/:businessId */
+Calling route: api/review/:businessId */
 module.exports.getReviews = function(req, res){
   //Finds all reviews made on a specific business according to its business ID
   Review.find({"business" : req.params.businessId}, function(err, reviews){
