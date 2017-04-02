@@ -10,25 +10,25 @@ module.exports.searchByNameOrTag = function (req, res) {
     //Check for query string Ex: "/api/search?result=omar"
     if (req.query && req.query.result) {
         var nameOrTag = req.query.result;
-        
+
         //Find businesses from the database
         Business.find({
-                $or: [{
-                        name: {
-                            //Starts with or is the nameOrTag
-                            $regex: "^" + nameOrTag,
-                            //Ignore whitespace characters and case insensitive
-                            $options: "ix"
-                        }
-                    },
-                    {
-                        tags: {
-                            $regex: "^" + nameOrTag,
-                            $options: "ix"
-                        }
-                    }
-                ]
+            $or: [{
+                name: {
+                    //Starts with or is the nameOrTag
+                    $regex: "^" + nameOrTag,
+                    //Ignore whitespace characters and case insensitive
+                    $options: "ix"
+                }
             },
+            {
+                tags: {
+                    $regex: "^" + nameOrTag,
+                    $options: "ix"
+                }
+            }
+            ]
+        },
             function (err, businesses) {
                 //If an error occured return it to the frontend
                 if (err) {

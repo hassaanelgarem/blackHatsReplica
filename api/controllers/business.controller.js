@@ -73,8 +73,8 @@ module.exports.addPhoto = function (req, res) {
 
         //add the image file path to the photos array of the Business model
         Business.update({
-            "_id": req.params.businessId
-          }, {
+          "_id": req.params.businessId
+        }, {
             $push: {
               "photos": newPath
             }
@@ -123,25 +123,25 @@ module.exports.deletePhoto = function (req, res) {
   Business.findOneAndUpdate({
     "_id": businessId
   }, {
-    $pull: {
-      "photos": imagePath
-    }
-  }, function (err, data) {
+      $pull: {
+        "photos": imagePath
+      }
+    }, function (err, data) {
 
-    if (err) {
-      res.json({
-        success: false,
-        msg: 'deleting photo failed'
-      });
-    } else {
-      res.json({
-        success: true,
-        msg: 'photo deleted successfully'
-      });
-    }
+      if (err) {
+        res.json({
+          success: false,
+          msg: 'deleting photo failed'
+        });
+      } else {
+        res.json({
+          success: true,
+          msg: 'photo deleted successfully'
+        });
+      }
 
 
-  });
+    });
 };
 
 
