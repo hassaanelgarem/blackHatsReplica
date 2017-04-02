@@ -143,5 +143,6 @@ module.exports.deleteAccount = function(req, res)
     User.remove(query, function(err){
         if (err)
             res.json(err);
+        else res.json("Account was deleted successfully.");
     });
 }
