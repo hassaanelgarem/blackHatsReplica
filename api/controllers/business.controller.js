@@ -8,7 +8,7 @@ const expressValidator = require('express-validator');
 
 
 // Post function that adds the business's name, password, email & description to the db on applying
-// URI: /api/business/apply
+// Calling Route: /api/business/apply
 module.exports.addBusiness = function(req, res) {
   const name = req.body.name;
   const password = req.body.password;
@@ -52,7 +52,7 @@ module.exports.passportAuthenticate = passport.authenticate('local');
 
 
 //Post function to login a business
-//URI: /api/business/login/
+//Calling Route: /api/business/login/
 module.exports.businessLogin = function(req, res) {
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
     req.session.loggedin = req.body.email;
@@ -99,7 +99,7 @@ passport.deserializeUser(function(id, done) {
 
 
 // Get function that returns all unverified businesses based on the value of the attribute verified
-// URI: api/business/unVerifiedBusinesses
+// Calling Route: /api/business/unVerifiedBusinesses
 module.exports.unVerifiedBusinesses = function(req, res) {
     const query = Business.find({verified : false});
     query.exec(function(err, businesses) {
@@ -109,11 +109,14 @@ module.exports.unVerifiedBusinesses = function(req, res) {
 };
 
 
-// Post function that increments the interactivity attribute of a certain business by 1
-// URI: api/business/verify/:id
+// Post function that verifies the business
+// Calling Route: /api/business/verify/:id
 module.exports.verifyBusiness = function(req, res) {
+    //Getting the business by its id
     Business.findById(req.params.id, function(err, business) {
+        // verifying the business
         business.verified = true;
+        // updating the db
         business.save(function(err) {
             if (err) res.jason({success : false, msg : 'Was not able to verify business'});
             res.json({success : true, msg : 'Business verified!'});
@@ -123,7 +126,7 @@ module.exports.verifyBusiness = function(req, res) {
 
 
 // Post function that increments the interactivity attribute of a certain business by 1
-// URI: api/business/interact/:id
+// Calling Route: /api/business/interact/:id
 module.exports.updateInteractivity = function(req, res) {
     Business.findById(req.params.id, function(err, business) {
         business.interactivity = business.interactivity + 1;
@@ -136,7 +139,7 @@ module.exports.updateInteractivity = function(req, res) {
 
 
 // Get function that returns the three most popular businesses based on their interactivity
-// URI: api/business/mostPopular
+// Calling Route: /api/business/mostPopular
 module.exports.getMostPopular = function(req, res) {
     const query = Business.find().sort({interactivity: -1}).limit(3);
     query.exec(function(err, businesses) {
