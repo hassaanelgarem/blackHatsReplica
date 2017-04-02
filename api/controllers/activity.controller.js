@@ -6,6 +6,7 @@ const Activity = mongoose.model("Activity");
   Post function that handles adding an activity
   It creates a new activity and saves it in the database
   And updates Activites array in the coreesponding Business
+  Calling route: '/api/activity/add'
 */
 module.exports.addActivity = function(req, res) {
     // Create new Activity object using parameters from request
