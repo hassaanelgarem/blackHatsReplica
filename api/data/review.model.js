@@ -21,7 +21,8 @@ const reviewSchema = new mongoose.Schema({
 	//yyyy-MM-ddTHH:mm:ssZ
 	time: {
 		type: Date,
-		required: true
+		required: true,
+		default: Date.now 
 	}
 });
 

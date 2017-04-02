@@ -35,7 +35,7 @@ module.exports.addUser = function(req, res){
 
 
 /* Post function that adds a review by a registered user on a business to the database
-URI: api/review/add */
+Calling route: api/review/add */
 module.exports.addReview = function(req, res){
   //check if logged in
   if(req.user){
@@ -50,8 +50,7 @@ module.exports.addReview = function(req, res){
     comment : comment,
     rating : rating,
     user : user,
-    business : business,
-    time : time
+    business : business
   });
   //saves the new review in the database
   newReview.save(function(err, review){
