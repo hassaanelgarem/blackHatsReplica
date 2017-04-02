@@ -95,8 +95,8 @@ module.exports.saveNewInfo = function (req, res) {
           business.name = req.body.name;
           business.email = req.body.email;
           business.password = req.body.password;
-          business.phoneNumbers.push(req.body.phoneNumber1);
-          business.phoneNumbers.push(req.body.phoneNumber2);
+          business.phoneNumbers[0] = req.body.phoneNumber1;
+          business.phoneNumbers[1] = req.body.phoneNumber2;
 
           //Split workDays by "," to return an array of strings
           business.workingDays = req.body.workingDays.split(",");
