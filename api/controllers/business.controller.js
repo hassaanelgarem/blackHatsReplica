@@ -119,10 +119,13 @@ module.exports.uploadLogo = function (req, res) {
                 if (err) {
                   res.json(err);
                 } else {
-                  //updated successfully, delete the old logo
-                  fs.unlink(oldLogo, function (err) {
-                    //don't care if file not found
-                  });
+                  //if he had a logo before
+                  if (oldLogo) {
+                    //updated successfully, delete the old logo
+                    fs.unlink(oldLogo, function (err) {
+                      //don't care if file not found
+                    });
+                  }
                   //return the file path to the frontend to show the image
                   res.json(newPath);
                 }
