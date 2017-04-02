@@ -3,6 +3,6 @@ const router = express.Router();
 
 const reviewCtrl = require('../controllers/review.controller');
 
-router.route().delete('reviewCtrl.deleteReview');
+router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 module.exports = router;
