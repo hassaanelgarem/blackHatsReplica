@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Business = mongoose.model("Business");
-
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // for testing
 /*
@@ -55,9 +57,9 @@ module.exports.getMostPopular = function (req, res) {
 
 
 /* Multer configuration to upload a single file from an
-html input with name "myfile" to public/uploads folder*/
-const upload = multer({
-  dest: path.join(__dirname, '../', '../public/uploads')
+html input with name "myfile" to public/uploads/businessLogos folder*/
+const uploadBusinessLogo = multer({
+  dest: path.join(__dirname, '../', '../public/uploads/businessLogos')
 }).single('myfile');
 
 
@@ -72,7 +74,7 @@ module.exports.uploadLogo = function (req, res) {
   //Check if logged in
   if (req.user) {
     //upload the image
-    upload(req, res, function (err) {
+    uploadBusinessLogo(req, res, function (err) {
       //if an error occurred, return the error
       if (err) {
         return res.json(err);
@@ -108,17 +110,36 @@ module.exports.uploadLogo = function (req, res) {
         });
 
         //save the image file path to the Business model
-        Business.findById(req.params.businessId, function (err, user) {
-          business.logo = newPath;
-          business.save(function (err) {
-            //couldn't save, return the error
-            if (err) {
-              res.json(err);
-            } else {
-              //return the file path to the frontend to show the image
-              res.json(newPath);
-            }
-          });
+        Business.findById(req.params.businessId, function (err, business) {
+          //if an error occurred, return the error
+          if (err)
+            res.json(err);
+          else {
+            //if found business
+            if (business) {
+              //if exists an old logo, save its old value incase updating logo fails
+              if (business.logo) {
+                var oldLogo = business.logo;
+              }
+              business.logo = newPath;
+              business.save(function (err) {
+                //couldn't save, return the error
+                if (err) {
+                  res.json(err);
+                } else {
+                  //updated successfully, delete the old logo
+                  fs.unlink(oldLogo, function (err) {
+
+                  });
+                  //return the file path to the frontend to show the image
+                  res.json(newPath);
+                }
+              });
+            } else
+              res.json({
+                error: "No business found"
+              });
+          }
         });
       }
       //multer did not find a file selected to upload
