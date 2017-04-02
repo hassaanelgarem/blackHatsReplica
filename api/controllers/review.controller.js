@@ -4,36 +4,6 @@ const Business = mongoose.model('Business');
 const Review = mongoose.model('Review');
 
 
-/* for testing
-module.exports.add = function(req, res){
-    const newBusiness = new Business({
-      name: "test4",
-      email: "test4",
-      password: "test4",
-      description: "test4"});
-    newBusiness.save(function (err, business) {
-      if (err) return res.json({success: false, msg: 'adding failed'});
-      res.json({success: true, msg: 'added'});
-    });
-};
-
-
-module.exports.addUser = function(req, res){
-    const newUser = new User({
-      firstName: "test4",
-      lastName: "test4",
-      email: "test4",
-      username: "test4",
-      password: "test4"
-    });
-    newUser.save(function (err, user) {
-      if (err) return res.json({success: false, msg: 'adding failed'});
-      res.json({success: true, msg: 'added'});
-    });
-};
-*/
-
-
 /* Post function that adds a review by a registered user on a business to the database
 Calling route: api/review/add */
 module.exports.addReview = function(req, res) {
@@ -78,18 +48,20 @@ module.exports.addReview = function(req, res) {
                         error: err
                     });
                 });
-            //Adds review to reviews array of corresponding business
-            Business.findByIdAndUpdate(
-                review.business, {
-                    $push: {
-                        "reviews": review._id
-                    }
-                }, {
-                    safe: true,
-                    upsert: true,
-                    new: true
-                },
-                function(err, model) {
+            // Gets the business being reviewed
+            Business.findById(review.business, function(err, doc) {
+                if (err) res.json({
+                    success: false
+                });
+
+                // Updates totalRating of the business
+                doc.totalRatings = doc.totalRatings + review.rating;
+
+                //Adds review to reviews array of corresponding business
+                doc.reviews.push(review._id);
+
+                // Saves the updated business document in database
+                doc.save(function(err, doc) {
                     if (err) res.json({
                         success: false,
                         msg: "Error occured while updating the business concered",
@@ -99,8 +71,8 @@ module.exports.addReview = function(req, res) {
                         success: true,
                         msg: "Review successfully added"
                     });
-                }
-            );
+                });
+            });
         });
     }
     //User not logged in
@@ -130,5 +102,36 @@ module.exports.getReviews = function(req, res) {
                 reviews
             });
         }
+    });
+}
+
+
+/*
+  Get function that returns the average rating of a business
+  Takes as a parameter the business ID in the route
+  Calling route: api/review/averageRating/:businessId
+*/
+module.exports.getAverageRating = function(req, res) {
+
+    // Get the business concered from the database by it's Id
+    Business.findById(req.params.businessId, function(err, doc) {
+
+        // If there is an error return it in response
+        if (err) res.json({
+            success: false,
+            msg: "error finding Business",
+            error: err
+        });
+
+        // Calculate average rating using totalRating and count of reviews
+        const reviewsCount = doc.reviews.length;
+        let averageRating = doc.totalRatings / reviewsCount;
+
+        // Return average rating in response
+        res.json({
+            success: true,
+            msg: "Successfully calculated average rating",
+            rating: averageRating
+        });
     });
 }

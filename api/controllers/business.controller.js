@@ -2,19 +2,6 @@ const mongoose = require("mongoose");
 const Business = mongoose.model("Business");
 
 
-// for testing
-/*
-module.exports.add = function(req, res){
-    const newBusiness = new Business({name: "test4", email: "test4", password: "test4", description: "test4"});
-    newBusiness.save(function (err, business) {
-      if (err) return res.json({success: false, msg: 'adding failed'});
-      res.json({success: true, msg: 'added'});
-    });
-};
-*/
-
-
-
 // Post function that increments the interactivity attribute of a certain business by 1
 // URI: api/business/interact/:id
 module.exports.updateInteractivity = function(req, res) {
