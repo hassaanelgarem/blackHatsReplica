@@ -8,11 +8,15 @@
     "start": "node server"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
     "express": "*",
-    "mongoose": "*"
+    "express-session": "^1.15.2",
+    "express-validator": "^3.1.2",
+    "mongoose": "*",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   },
   "repository": {
     "type": "git",
