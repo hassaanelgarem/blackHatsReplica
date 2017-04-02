@@ -1,9 +1,9 @@
 const User = require('../data/user.model');
+const mongoose = require("mongoose");
 const Business = mongoose.model("Business");
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const mongoose = require("mongoose");
 const expressValidator = require('express-validator');
 
 /* Function to register a new user into the users database
