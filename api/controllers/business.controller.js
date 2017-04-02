@@ -163,23 +163,22 @@ module.exports.updateInteractivity = function(req, res) {
 };
 
 
-/* 
-Get function that returns the three most popular businesses based on their interactivity
-Calling route: api/business/mostPopular
+/*
+  Get function that returns the three most popular businesses based on their interactivity
+  Calling route: api/business/mostPopular
 */
 module.exports.getMostPopular = function(req, res) {
-    const query = Business.find().sort({
-        interactivity: -1
-    }).limit(3);
+
+    // query for sorting businesses based on interactivity and limits the result to 3
+    const query = Business.find().sort({ interactivity: -1 }).limit(3);
+
+    // execute the above query
     query.exec(function(err, businesses) {
-        if (err) res.json({
-            success: false,
-            msg: 'Failed to retrieve most popular businesses'
-        });
-        res.json({
-            success: true,
-            msg: 'Got most popular businesses successfully',
-            businesses: businesses
-        });
+
+        // If there is an error return it in response
+        if (err) res.json({ success: false, msg: 'Failed to retrieve most popular businesses', error: err });
+
+        // If no error return the list of businesses
+        res.json({ success: true, msg: 'Got most popular businesses successfully', businesses: businesses });
     });
 };
