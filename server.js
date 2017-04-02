@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 	res.send('Invalid EndPoint');
 });
 
+
 // Express Session
 app.use(session(
 {
@@ -41,9 +42,11 @@ app.use(session(
     resave: true
 }));
 
+
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // Express Validator
 app.use(expressValidator({
@@ -68,6 +71,7 @@ app.use(function (req, res, next)
   res.locals.user = req.user || null;
   next();
 });
+app.use('/api',routes);
 
 // Start Server
 app.listen(app.get('port'), () => {
