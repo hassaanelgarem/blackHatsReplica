@@ -11,7 +11,8 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "passport": "^0.3.2"
   },
   "repository": {
     "type": "git",

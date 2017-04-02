@@ -1,48 +1,68 @@
-var mongoose = require("mongoose");
-var Business = mongoose.model('Business');
+const mongoose = require("mongoose");
+const Business = mongoose.model('Business');
 
 
+/*redirects business to display "Edit View" 
+also it passes business basic info to the "Edit view" */
+module.exports.editBasicInfo=function(req ,res){
+	//check if logged in 
+	if(req.user){ 
+			Business.findOne({
+				_id:req.params.businessId} , function(err,business){
+				//if error occured 
+				if (err) {
+				 res.json(err);
+			    } 
+			else { 
 
+					// if business found 
+					if(business)
+						res.json(business);
+					
 
-module.exports.EditBusinessBasicInfo=function (req,res){
-
-	res.send("should redirect to EditBusiness Page !");
-	//res.render('editbusiness');
+					//business is not logged in
+					else 
+						res.json({error : "Please log in first !"});
+			     }
+	    });
+   }
 }
 
 
-module.exports.SaveNewInfo=function (req,res){
+/* service to save the edited business info in the database */
+module.exports.saveNewInfo=function (req,res){
 
-
- if (req.session.name) {
+//if logged in
+ if (req.user) { 
  	Business.findOne({
- 		name:req.session.name } , function(err, business){
- 			if(!err && business)
- 			{ 
- 				var name = req.body.name;
-				var field = req.param.name ;
-				var fieldbody = req.body ; 
-
-					switch (field){
-
-						case'Name': business.name=fieldbody; break;
-						case 'Email': business.email= fieldbody; break;
-						case'phoneNumber': business.phoneNumbers=fieldbody; break;
-						case'workingDay': business.workingDays=fieldbody; break;
-						case'workingHourFrom': business.workingHours.from=fieldbody; break;
-						case'workingHourTo':business.workingHours.to=fieldbody; break;
-				        case'address': business.address=fieldbody; break;
-						case'description': business.description=fieldbody; break;
-						case'logo':business.logo=fieldbody; break;
-					} 
+ 		_id:req.parms.businessId} , function(err, business){
+ 			//if an error occurred, return the error
+			if (err) {
+				res.json(err);
 			}
-			 else 
- 				res.send("Please SignIn first !");
-}
 
- 	)} 
- 	else 
- 		res.send("Updating info Failed , Please try again !");
- }
+			// if business found in database its basic info will be saved 
+ 			if(!err && business){ 
+
+						business.name= req.body.name;
+						business.email= req.body.email;
+						business.password=req.body.password;
+						business.phoneNumbers.push(req.body.phoneNumber1); 
+						business.phoneNumbers.push(req.body.phoneNumber2); 
+						business.workingDays.push(req.body.workingDays);
+						business.workingHours = {from : req.body.from, to : req.body.to};
+				        business.address=req.body.address;
+					    business.description=req.body.description;
+					} 
+			} 
+		
+
+     	)}  
+ 	
+		 	//if business not logged in
+		 	else {
+				res.json({error : "login"});
+			    }
+}
 
     
