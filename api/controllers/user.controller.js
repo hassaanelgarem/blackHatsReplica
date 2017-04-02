@@ -13,7 +13,7 @@ module.exports.addFavorite = function(req, res){
     if(req.user){ 
         var business_id = req.params.businessId; //to get the id of the busniness i want to add to favorites
         var user_id = req.user.id;  //using passport, get the id of the signed in user
-		db.User.update({"_id": user_id}, 
+		User.update({"_id": user_id}, 
         {$addToSet: { favorites: business_id}},  //add the business id to the favorites array
         function(err, result) {
             //couldn't add to array, return the error
