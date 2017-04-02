@@ -17,5 +17,6 @@ router.route('/business/unVerifiedBusinesses').get(businessCtrl.unVerifiedBusine
 router.route('/business/verify/:id').post(businessCtrl.verifyBusiness);
 router.post('/business/login', businessCtrl.passportAuthenticate, businessCtrl.businessLogin);
 router.route('/business/logout').post(businessCtrl.businessLogout);
+router.route('/business/decline/:id').post(businessCtrl.declineBusiness);
 
 module.exports = router;

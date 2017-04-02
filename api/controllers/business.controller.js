@@ -125,6 +125,14 @@ module.exports.verifyBusiness = function(req, res) {
 };
 
 
+// Post function that declines verification of a business
+// Calling Route: /api/business/decline/:id
+module.exports.declineBusiness = function(req, res) {
+    // delete declined busiess
+    Business.deleteOne( { id : req.params.id } );
+};
+
+
 // Post function that increments the interactivity attribute of a certain business by 1
 // Calling Route: /api/business/interact/:id
 module.exports.updateInteractivity = function(req, res) {
