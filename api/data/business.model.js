@@ -77,6 +77,10 @@ const businessSchema = new mongoose.Schema({
   logo: {
     type: String
   },
+  verified: {
+    type: Boolean,
+    default: false
+  },
   resetPasswordToken : String,
   resetPasswordTokenExpiry : Date
 });

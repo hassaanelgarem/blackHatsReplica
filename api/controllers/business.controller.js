@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Business = mongoose.model("Business");
-
+const bcrypt = require('bcryptjs');
 
 // for testing
 /*
@@ -13,6 +13,31 @@ module.exports.add = function(req, res){
 };
 */
 
+// Business.methods.generateHash = function(password){
+//   return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
+// }
+
+
+module.exports.addBusiness = function(req, res){
+  let newBusiness = new Business({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    address: req.body.address,
+    phoneNumbers: req.body.phoneNumbers
+  });
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newBusiness.password, salt, (err, hash) => {
+      if(err) res.json({success: false, msg:'bcrypt'});
+      newBusiness.password = hash;
+      newBusiness.save(function(err){
+        if(err) res.json({success: false, msg:'save'});
+        res.json({success: true, msg:'Your application is successfully submitted!'});
+      });
+    });
+
+});
+}
 
 
 // Post function that increments the interactivity attribute of a certain business by 1
