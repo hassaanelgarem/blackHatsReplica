@@ -76,7 +76,7 @@ module.exports.getCurrentInfo = function (req, res) {
 
 
 
-/* Post function to save the edited business info in the database 
+/* Put function to save the edited business info in the database 
 and returns updated object to frontend.
 Calling route: '/api/editBusiness/:businessId'  */
 module.exports.saveNewInfo = function (req, res) {
