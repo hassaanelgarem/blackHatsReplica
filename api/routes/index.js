@@ -4,7 +4,7 @@ const userCtrl = require('../controllers/user.controller');
 const businessCtrl = require('../controllers/business.controller');
 
 router.route('/editBusiness/:businessId')
-   .get(businessCtrl.editBasicInfo)
+   .get(businessCtrl.displayEditView)
    .post(businessCtrl.saveNewInfo);	
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
