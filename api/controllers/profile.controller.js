@@ -16,20 +16,14 @@ module.exports.getOneUser =function(req,res){
     .exec(function(err,doc){
       //if an error to find the user,I return the error message
       if(err){
-        res
-          .status(500)
-          .json(err);
+        res.status(500).json(err);
       //if no user with that userId was found,I return an error message
       }else if(!doc){
-        res
-          .status(404)
-          .json({"message":"userId not found "+userId});
+        res.status(404).json({"message":"userId not found "+userId});
       }
       //when the user is found successfully,I return the user
       else{
-        res
-          .status(200)
-          .json(doc);
+        res.status(200).json(doc);
       }
     });
 };
