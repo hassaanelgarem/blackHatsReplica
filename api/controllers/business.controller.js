@@ -54,14 +54,6 @@ module.exports.getMostPopular = function (req, res) {
 };
 
 
-/* Multer configuration to upload a single file from an
-html input with name "myfile" to public/uploads folder*/
-const upload = multer({
-	dest: path.join(__dirname, '../', '../public/uploads')
-}).single('myfile');
-
-
-
 /*save the choosen tags by the business in the database .
   business can choose up to 5 tags .
   Calling route: '/api/business/addTags' */
