@@ -83,8 +83,14 @@ module.exports.passportAuthenticate = passport.authenticate('local');
    Calling Route: /api/login/   */
 module.exports.login = function (req, res) {
     //Setting the Session Variable loggedin to the username in order to get the logged in user for later usage.
-    req.session.loggedin = req.body.username;
-    res.json('You are logged in as ' + req.session.loggedin);
+    req.login(user, function (err) {
+        if (err)
+            return next(err);
+        
+        req.session.loggedin = req.body.username;
+        res.json('You are logged in as ' + req.session.loggedin);;
+    });
+
 }
 
 /* Function to logout a user
