@@ -23,8 +23,7 @@ module.exports.addBusiness = function(req, res){
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    address: req.body.address,
-    phoneNumbers: req.body.phoneNumbers
+    description: req.body.description
   });
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newBusiness.password, salt, (err, hash) => {
