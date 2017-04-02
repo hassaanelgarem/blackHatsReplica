@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const advBookingSchema = new mongoose.Schema({
-    business: {
+  business: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Business",
     required: true
@@ -13,7 +13,8 @@ const advBookingSchema = new mongoose.Schema({
     required: true
   },
   image:{
-    type: String
+    type: String,
+    required: true
   },
   startTime: {
       type: Date,
