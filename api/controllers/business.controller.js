@@ -72,7 +72,7 @@ module.exports.addPhoto = function (req, res) {
 				});
                 
                 //add the image file path to the photos array of the Business model
-                db.Business.update(
+                Business.update(
                  {"_id": req.params.businessId },
                  {$push: {"photos": newPath }},
                  function(err, result) {
