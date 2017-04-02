@@ -28,7 +28,7 @@ module.exports.getOneUser = function (req, res) {
       //if no user with that userId was found,I return an error message
     } else if (!doc) {
       res.status(404).json({
-        "message": "userId not found " + userId
+        message: "userId not found " + userId
       });
     }
     //when the user is found successfully,I return the user
@@ -78,11 +78,20 @@ module.exports.updateOneUser = function (req, res) {
               res.status(500).json(err);
             } else {
               //the user instance was updated successfully
-              res.status(204).json(userUpdated); //successful and no content
+              res.status(200).json({
+                success: true,
+                msg: "user updated sucessfully",
+                user: userUpdated
+              }); //successful and no content
             }
           });
         }
       });
+  } else {
+    res.json({
+      success: false,
+      msg: "you should login first"
+    });
   }
 };
 
@@ -158,7 +167,11 @@ module.exports.uploadProfilePicture = function (req, res) {
               });
             }
             //return the file path to the frontend to show the image
-            res.json(newPath);
+            res.json({
+              sucess: true,
+              msg: "uploaded successfully",
+              path: newPath
+            });
           }
         });
       });
