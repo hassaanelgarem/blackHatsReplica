@@ -54,3 +54,21 @@ module.exports.bookActivity = function(req, res) {
       );
     });
 };
+
+
+/*
+  Get function to return all bookings that a specific user booked
+  Calling routes: /api/booking/history/:userId
+*/
+module.exports.getBookingHistory = function(req, res) {
+
+    //Finds history of bookings for a specific user given his id
+    Booking.find({"user": req.params.userId}, function(err, bookings) {
+
+        //If an error occurred, display a message along with the error
+        if (err) return res.json({success: false, msg: 'Cannot retrieve history'})
+
+        //If no error display list of bookings made by this user
+        else res.json({success: true, msg: 'successful retrieval', bookings});
+    });
+}
