@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const expressValidator = require('express-validator');
 
 /* Function to register a new user into the users database
-   URI: /api/register/   */
+   Calling Route: /api/register/   */
     module.exports.registerUser= function(req, res)
     {
         var firstName = req.body.firstName;
@@ -76,17 +76,20 @@ const expressValidator = require('express-validator');
       }
     }
 
-/* Function to login a user
-   URI: /api/login/   */
+    //Middleware function for Passport module for authentication
     module.exports.passportAuthenticate = passport.authenticate('local');
+
+/* Function to login a user
+   Calling Route: /api/login/   */
     module.exports.login = function(req, res)
     {
+        //Setting the Session Variable loggedin to the username in order to get the logged in user for later usage.
         req.session.loggedin = req.body.username;
         res.json('You are logged in as ' + req.session.loggedin);   
     }
 
 /* Function to logout a user
-   URI: /api/logout/   */
+   Calling Route: /api/logout/   */
     module.exports.logout = function(req,res)
     {
         req.logout();
@@ -132,7 +135,8 @@ passport.deserializeUser(function(id, done)
 });
 
 /*Method to delete a user account by getting his username from the session used when he logged in,
- and then removing his entry from the db */
+ and then removing his entry from the db 
+ Calling Route: /api/deleteAccount */
 module.exports.deleteAccount = function(req, res)
 {
     var query = {username : req.session.loggedin};
