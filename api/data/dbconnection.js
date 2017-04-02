@@ -32,8 +32,8 @@ process.on('SIGTERM', function() {
   });
 });
 
+require("./business.model");
 require("./activity.model");
 require("./booking.model");
-require("./business.model");
 require("./review.model");
 require("./user.model");
