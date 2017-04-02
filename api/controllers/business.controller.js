@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Business = mongoose.model("Business");
 
 
+
 /*save the choosen Category by the business in the database .
   business can choose only 1 Category
   Calling route: '/api/editBusiness/:businessId/addCategory' */
