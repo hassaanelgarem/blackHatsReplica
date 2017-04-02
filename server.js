@@ -58,6 +58,11 @@ app.use(expressValidator({
   }
 }));
 
+app.use(function (req, res, next) 
+{
+  res.locals.user = req.user || null;
+  next();
+});
 
 // Start Server
 app.listen(app.get('port'), () => {

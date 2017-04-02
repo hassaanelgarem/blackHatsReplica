@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const dburl = "mongodb://localhost:27017/blackhats";
-
+  
 mongoose.connect(dburl);
 
 // CAPTURE APP TERMINATION / RESTART EVENTS

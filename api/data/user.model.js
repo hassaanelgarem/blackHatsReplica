@@ -52,6 +52,8 @@ const userSchema = new mongoose.Schema({
   resetPasswordTokenExpiry : Date
 });
 
+var User = module.exports = mongoose.model('User', userSchema);
+
 module.exports.createUser = function(newUser, callback)
 {
 	bcrypt.genSalt(10, function(err, salt) 
@@ -84,4 +86,4 @@ module.exports.comparePassword = function(candidatePassword, hash, callback)
 	});
 }
 
-var User = module.exports = mongoose.model('User', userSchema);
+

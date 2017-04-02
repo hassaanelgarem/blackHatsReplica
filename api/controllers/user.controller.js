@@ -3,6 +3,7 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require("mongoose");
+const expressValidator = require('express-validator');
 
 /* Function to register a new user into the users database
    URI: /api/register/   */
@@ -14,13 +15,13 @@ const mongoose = require("mongoose");
         var username = req.body.username;
         var password = req.body.password;
         var confirmPassword = req.body.confirmPassword;
-        var profilePicture = req.body.profilePicture;
         var birthDate = req.body.birthDate;
 
         //Validating entries
         req.checkBody('firstName', 'First Name is required.').notEmpty();
         req.checkBody('lastName', 'Last Name is required.').notEmpty();
-        req.checkBody('email', 'Email is required.').notEmpty().isEmail();
+        req.checkBody('email', 'Email is required.').notEmpty()
+        req.checkBody('email','Email format is not correct.').isEmail();
         req.checkBody('username', 'Username is required.').notEmpty();
         req.checkBody('password', 'Password is required.').notEmpty();
         req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
@@ -30,36 +31,31 @@ const mongoose = require("mongoose");
         if (errors)
         {
             //TODO in front end
-            res.render('register', {errors: errors});
+            //res.render('register', {errors: errors});
+            res.json({errors: errors});
         }
         else
         {
-            User.find({'username': username,'email':email }, function(err, user) 
+            User.find({ $or:[ {'username': username} ,{'email': email}]}, function(err, user) 
             {
+                //if there is an error, send an error message
                 if (err) 
                 {
                     //TODO Error handling
-                    res.send('Signup error');
+                    res.json('Signup error');
                     return done(err);
                 }
 
-                //if user found
+                //if username or email already exist
                 if (user.length!=0) 
                 {
-                    if(user[0].username)
-                    {
-                        res.send('Username already exists, username: ' + username + '. Please enter another username.');                         
-                    }
-                    else
-                    {
-                        res.send('Email already exists, email: ' + email + '. Please enter another email. ');      
-                    }                                    
-                      //check these 3 lines
-                        var err = new Error();
-                        err.status = 310;
-                        return done(err);
+                    if(user[0].username == username)
+                        return res.json('Username already exists, username: ' + username + '. Please enter another username.');          
+                    else 
+                        return res.json('Email already exists, email: ' + email + '. Please enter another email.');
                 }
-                else //we're good to go
+                //Username and email are unique, create the user and save it in the database.
+                else
                 {
                     var newUser = new User
                     ({  firstName: firstName,
@@ -72,30 +68,21 @@ const mongoose = require("mongoose");
 
                     User.createUser(newUser, function(err, user)
                     {
-                        if(err) throw err;
-                        res.json(err);
+                        if(err) res.json('Sign up Error');
+                        else res.json(newUser);
                     });
-                    //TODO
-                    // req.flash('successMessage', 'You have been registered successfully!');
-                    res.redirect('/api/login');
                 }
-            }
-                 )
-        }
+            });
+      }
     }
 
 /* Function to login a user
    URI: /api/login/   */
+    module.exports.passportAuthenticate = passport.authenticate('local');
     module.exports.login = function(req, res)
     {
-        //update this on frontend stage
-        passport.authenticate('local', {successRedirect:'/users/profile', failureRedirect:'/users/login',failureFlash: true}),
-        function(req, res) 
-        {
-            req.session.loggedin = req.body.username;
-            //redirect feen?
-            // res.redirect('/api/profile');
-        }
+        req.session.loggedin = req.body.username;
+        res.json('You are logged in as ' + req.session.loggedin);   
     }
 
 /* Function to logout a user
@@ -103,7 +90,7 @@ const mongoose = require("mongoose");
     module.exports.logout = function(req,res)
     {
         req.logout();
-        res.redirect('/api');
+        res.json('You have successfully logged out.');
     }
 
 // Passport handling the login
@@ -144,4 +131,10 @@ passport.deserializeUser(function(id, done)
   });
 });
 
-module.exports = userCtrl;
+/*Method to delete a user account by getting his username from the session used when he logged in,
+ and then removing his entry from the db */
+module.exports.deleteAccount = function(req, res)
+{
+    var query = {username : req.session.loggedin};
+    User.remove(query);
+}
