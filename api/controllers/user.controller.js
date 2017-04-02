@@ -9,8 +9,8 @@ else returns error message.
 Calling route: 'api/user/:userId/addfavorite/:businessId'
 */
 module.exports.addFavorite = function(req, res) {
-    //if the user is logged in
-    // if (req.user) {
+    // if the user is logged in
+    if (req.user) {
         var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
         var userId = req.params.userId; //using passport, get the id of the signed in user
         User.update({ "_id": userId }, { $addToSet: { favorites: businessId } }, //add the business id to the favorites array
@@ -24,10 +24,10 @@ module.exports.addFavorite = function(req, res) {
             });
     // }
     // //if the user is not logged in:
-    // else {
-    //     res.send("you should sign in first.")
-    //         //res.redirect('/register');
-    // }
+    else {
+        res.send("you should sign in first.")
+            //res.redirect('/register');
+    }
 };
 
 
