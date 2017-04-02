@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+
+
 const userCtrl = require('../controllers/user.controller');
 const businessCtrl = require('../controllers/business.controller');
 const bookingCtrl = require('../controllers/booking.controller');
@@ -14,5 +16,6 @@ router.route('/review/user/:userID').get(reviewCtrl.getUserReviews);
 router.route('/review/edit/:reviewID').post(reviewCtrl.editReview);
 router.route('/review/:businessId').get(reviewCtrl.getReviews);
 router.route('/review/add').post(reviewCtrl.addReview);
+router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 module.exports = router;
