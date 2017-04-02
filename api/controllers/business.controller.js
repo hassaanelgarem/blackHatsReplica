@@ -2,22 +2,9 @@ const mongoose = require("mongoose");
 const Business = mongoose.model("Business");
 
 
-// for testing
-/*
-module.exports.add = function(req, res){
-    const newBusiness = new Business({name: "test4", email: "test4", password: "test4", description: "test4"});
-    newBusiness.save(function (err, business) {
-      if (err) return res.json({success: false, msg: 'adding failed'});
-      res.json({success: true, msg: 'added'});
-    });
-};
-*/
-
-
-
 /*save the choosen Category by the business in the database .
   business can choose only 1 Category
-  Calling route: '/api/business/addCategory' */
+  Calling route: '/api/editBusiness/:businessId/addCategory' */
 module.exports.addCategory = function (req, res) {
 	//check if logged in 
 	if (req.user) {
@@ -31,15 +18,14 @@ module.exports.addCategory = function (req, res) {
 				// if business found 
 				if (business) {
 					business.category = req.body.category;
-					
+
 					/*service to save the choosen Category in the database 
 				and return the updated object to frontend.
 				*/
-					business.save(function(err){
-						if(err){
+					business.save(function (err) {
+						if (err) {
 							res.json(err);
-						}
-						else{
+						} else {
 							res.json(business);
 						}
 					});
