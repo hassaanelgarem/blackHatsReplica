@@ -9,7 +9,7 @@ const Business = mongoose.model("Business");
   Post function that handles booking an activity
   It creates a new booking and saves it in database
   And updates bookings array in concered Activity and User
-  URI: /api/activity/book
+  Calling route: /api/activity/book
   Parameters: {
     slot: "An object consist of two dates, startTime and endTime",
     activity: "id of the activity being booked",

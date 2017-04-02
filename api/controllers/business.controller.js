@@ -4,7 +4,7 @@ const Business = mongoose.model("Business");
 
 /*
   Post function that increments the interactivity attribute of a certain business by 1
-  URI: /api/business/interact/:id
+  Calling route: /api/business/interact/:id
 */
 module.exports.updateInteractivity = function(req, res){
   // Find the business to be updated from database
@@ -28,7 +28,7 @@ module.exports.updateInteractivity = function(req, res){
 
 /*
   Get function that returns the three most popular businesses based on their interactivity
-  URI: api/business/mostPopular
+  Calling route: api/business/mostPopular
 */
 module.exports.getMostPopular = function(req, res){
 
