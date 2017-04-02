@@ -4,7 +4,7 @@ const Business = mongoose.model('Business');
 const Review = mongoose.model('Review');
 
 
-// for testing
+/* for testing
 module.exports.add = function(req, res){
     const newBusiness = new Business({
       name: "test4",
@@ -31,9 +31,10 @@ module.exports.addUser = function(req, res){
       res.json({success: true, msg: 'added'});
     });
 };
+*/
 
 
-/* Post function that adds a review by a registered user on a business
+/* Post function that adds a review by a registered user on a business to the database
 URI: api/review/add */
 module.exports.addReview = function(req, res){
   //check if logged in
@@ -54,6 +55,7 @@ module.exports.addReview = function(req, res){
   });
   //saves the new review in the database
   newReview.save(function(err, review){
+    //if an error occurred, return an error
     if (err) return res.json({success: false, msg: 'There was a problem adding the information to the database'});
     //Adds review to reviews array of corresponding user
     User.findByIdAndUpdate(
@@ -74,7 +76,6 @@ module.exports.addReview = function(req, res){
       }
     );
   });
-
   }
   //User not logged in
   else {
@@ -83,10 +84,12 @@ module.exports.addReview = function(req, res){
 };
 
 
-/* Get function that retrieves the reviews made on a Business
+/* Get function that retrieves the reviews made on a Business from the database
 URI: api/review/:businessId */
 module.exports.getReviews = function(req, res){
+  //Finds all reviews made on a specific business according to its business ID
   Review.find({"business" : req.params.businessId}, function(err, reviews){
+    //If an error occurred, return an error
     if(err){
       res.status(500).send(err);
     }
