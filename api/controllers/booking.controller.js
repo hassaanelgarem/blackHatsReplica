@@ -19,39 +19,66 @@ const Business = mongoose.model("Business");
 module.exports.bookActivity = function(req, res) {
     // Create new Booking object using parameters from request
     const newBooking = new Booking({
-      slot: req.body.slot,
-      activity: req.body.activity,
-      user: req.body.user
+        slot: req.body.slot,
+        activity: req.body.activity,
+        user: req.body.user
     });
     // Save new booking in database
-    newBooking.save(function (err, booking) {
-      // If there is an error return it in response
-      if (err) return res.json({success: false, msg: 'Error adding the booking', error: err});
+    newBooking.save(function(err, booking) {
+        // If there is an error return it in response
+        if (err) return res.json({
+            success: false,
+            msg: 'Error adding the booking',
+            error: err
+        });
 
-      // Find user by his id and insert the booking id in his bookings array
-      User.findByIdAndUpdate(
-        booking.user,
-        {$push:{"bookings": booking._id}},
-        {safe: true, upsert: true, new: true},
-        function(err, user) {
-          // If there is an error return it in response
-          if(err) res.json({success: false, msg: "Error updating user", error: err});
+        // Find user by his id and insert the booking id in his bookings array
+        User.findByIdAndUpdate(
+            booking.user, {
+                $push: {
+                    "bookings": booking._id
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            function(err, user) {
+                // If there is an error return it in response
+                if (err) res.json({
+                    success: false,
+                    msg: "Error updating user",
+                    error: err
+                });
 
-          // Find activity by it's id and insert the booking id in it's bookings array
-          Activity.findByIdAndUpdate(
-            booking.activity,
-            {$push:{"bookings": booking._id}},
-            {safe: true, upsert: true, new: true},
-            function(err, activity) {
-              // If there is an error return it in response
-              if (err) res.json({success: false, msg: "Error updating activity", error: err});
+                // Find activity by it's id and insert the booking id in it's bookings array
+                Activity.findByIdAndUpdate(
+                    booking.activity, {
+                        $push: {
+                            "bookings": booking._id
+                        }
+                    }, {
+                        safe: true,
+                        upsert: true,
+                        new: true
+                    },
+                    function(err, activity) {
+                        // If there is an error return it in response
+                        if (err) res.json({
+                            success: false,
+                            msg: "Error updating activity",
+                            error: err
+                        });
 
-              // If no errors occur, respond with success = true
-              res.json({success: true, msg: "Booked an activity successfully"});
+                        // If no errors occur, respond with success = true
+                        res.json({
+                            success: true,
+                            msg: "Booked an activity successfully"
+                        });
+                    }
+                );
             }
-          );
-        }
-      );
+        );
     });
 };
 
@@ -63,12 +90,21 @@ module.exports.bookActivity = function(req, res) {
 module.exports.getBookingHistory = function(req, res) {
 
     //Finds history of bookings for a specific user given his id
-    Booking.find({"user": req.params.userId}, function(err, bookings) {
+    Booking.find({
+        "user": req.params.userId
+    }).populate('activity').exec(function(err, bookings) {
 
         //If an error occurred, display a message along with the error
-        if (err) return res.json({success: false, msg: 'Cannot retrieve history'})
+        if (err) return res.json({
+            success: false,
+            msg: 'Cannot retrieve history'
+        })
 
         //If no error display list of bookings made by this user
-        else res.json({success: true, msg: 'successful retrieval', bookings});
+        res.json({
+            success: true,
+            msg: 'successful retrieval',
+            bookings
+        });
     });
 }
