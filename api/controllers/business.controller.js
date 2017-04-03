@@ -4,6 +4,7 @@ const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 const fs = require('fs');
 const path = require("path");
+const nodemailer = require('nodemailer');
 
 
 /* Multer configuration to upload a single file from an
@@ -11,6 +12,26 @@ html input with name "myfile" to public/uploads/businessPhotos folder*/
 const uploadPhotos = multer({
     dest: path.join(__dirname, '../', '../public/uploads/businessPhotos')
 }).single('myfile');
+
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'blackhatsguc@gmail.com',
+        pass: 'youmwarayoum'
+    }
+});
+
+
+// setup email data with unicode symbols
+let mailOptions = {
+    from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
+    to: 'bar@blurdybloop.com, baz@blurdybloop.com', // list of receivers
+    subject: 'Hello ✔', // Subject line
+    text: 'Hello world ?', // plain text body
+    html: '<b>Hello world ?</b>' // html body
+};
 
 
 /*3.3:
@@ -187,3 +208,59 @@ module.exports.getMostPopular = function(req, res) {
         });
     });
 };
+
+
+/*
+  Helper function that takes Business Name and email and sends them
+  an email notifying them they were verified
+*/
+function sendEmailVerified(businessName, businessEmail, done) {
+  let mailOptions = {
+    from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+    to: businessEmail, // list of receivers
+    subject: 'Account Verified', // Subject line
+    text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats' // plain text body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      done(error, null);
+    }
+    done(null, info);
+  });
+}
+
+
+/*
+  Helper function that takes Business Name and email and sends them
+  an email notifying them they were rejected
+*/
+function sendEmailRejected(businessName, businessEmail, done) {
+  let mailOptions = {
+    from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+    to: businessEmail, // list of receivers
+    subject: 'Account Rejected', // Subject line
+    text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats' // plain text body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      done(error, null);
+    }
+    done(null, info);
+  });
+}
+
+// for testing
+// add route in index.js to test with
+/*
+module.exports.sendEmail = function(req, res) {
+    sendEmailRejected('Break Out', 'hassaanelgarem@gmail.com', function(err, info){
+        if(err) res.json({success: false, error: err});
+        res.json({success: true, info: info});
+    });
+
+}
+*/

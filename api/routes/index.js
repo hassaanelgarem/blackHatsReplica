@@ -21,5 +21,4 @@ router.route('/review/:businessId').get(reviewCtrl.getReviews);
 router.route('/review/add').post(reviewCtrl.addReview);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
-
 module.exports = router;
