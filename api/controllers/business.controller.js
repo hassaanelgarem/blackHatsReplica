@@ -68,11 +68,8 @@ module.exports.businessLogin = function(req, res) {
   console.log("Hi");
 
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
-    req.login(user,function(err){
-      if(err) return next(err);
       req.session.loggedin = req.body.email;
       res.json('You are logged in as ' + req.user.email);
-    })
     }
 
 
