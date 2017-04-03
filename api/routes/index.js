@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
-
 const userCtrl = require('../controllers/user.controller');
 const bookingCtrl = require('../controllers/booking.controller');
 const reviewCtrl = require('../controllers/review.controller');
@@ -9,6 +7,9 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
 
+router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
+router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
+router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite);
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
@@ -20,5 +21,6 @@ router.route('/review/edit/:reviewID').post(reviewCtrl.editReview);
 router.route('/review/:businessId').get(reviewCtrl.getReviews);
 router.route('/review/add').post(reviewCtrl.addReview);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
+
 
 module.exports = router;
