@@ -215,20 +215,20 @@ module.exports.getMostPopular = function(req, res) {
   an email notifying them they were verified
 */
 function sendEmailVerified(businessName, businessEmail, done) {
-  let mailOptions = {
-    from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
-    to: businessEmail, // list of receivers
-    subject: 'Account Verified', // Subject line
-    text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats' // plain text body
-  };
+    let mailOptions = {
+        from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+        to: businessEmail, // list of receivers
+        subject: 'Account Verified', // Subject line
+        text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats' // plain text body
+    };
 
-  // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      done(error, null);
-    }
-    done(null, info);
-  });
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            done(error, null);
+        }
+        done(null, info);
+    });
 }
 
 
@@ -237,20 +237,20 @@ function sendEmailVerified(businessName, businessEmail, done) {
   an email notifying them they were rejected
 */
 function sendEmailRejected(businessName, businessEmail, done) {
-  let mailOptions = {
-    from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
-    to: businessEmail, // list of receivers
-    subject: 'Account Rejected', // Subject line
-    text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats' // plain text body
-  };
+    let mailOptions = {
+        from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+        to: businessEmail, // list of receivers
+        subject: 'Account Rejected', // Subject line
+        text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats' // plain text body
+    };
 
-  // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      done(error, null);
-    }
-    done(null, info);
-  });
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            done(error, null);
+        }
+        done(null, info);
+    });
 }
 
 // for testing
