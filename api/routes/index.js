@@ -17,8 +17,8 @@ router.route('/review/user/:userID').get(reviewCtrl.getUserReviews);
 router.route('/review/edit/:reviewID').post(reviewCtrl.editReview);
 router.route('/review/:businessId').get(reviewCtrl.getReviews);
 router.route('/review/add').post(reviewCtrl.addReview);
-router.route('/review/:reviewId').delete(reviewCtrl.deleteReview
-router.route('/activity/edit/:activityId').post(activityCtrl.editActivity);
+router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
+router.route('/activity/edit/:activityId').put(activityCtrl.editActivity);
 
 
 module.exports = router;
