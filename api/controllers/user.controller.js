@@ -13,20 +13,32 @@ module.exports.addFavorite = function(req, res) {
     if (req.user) {
         var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
         var userId = req.params.userId; //using passport, get the id of the signed in user
-        User.update({ "_id": userId }, { $addToSet: { favorites: businessId } }, //add the business id to the favorites array
+        User.update({
+                "_id": userId
+            }, {
+                $addToSet: {
+                    favorites: businessId
+                }
+            }, //add the business id to the favorites array
             function(err, result) {
                 //couldn't add to array, return the error
                 if (err) {
-                    res.json({ success: false, msg: 'adding business to favorites failed' });
+                    res.json({
+                        success: false,
+                        msg: 'adding business to favorites failed'
+                    });
                 } else {
-                    res.json({ success: true, msg: 'business added to favorites' });
+                    res.json({
+                        success: true,
+                        msg: 'business added to favorites'
+                    });
                 }
             });
     }
     // //if the user is not logged in:
     else {
         res.send("you should sign in first.")
-            //res.redirect('/register');
+        //res.redirect('/register');
     }
 };
 
@@ -69,6 +81,6 @@ module.exports.searchByNameOrTag = function(req, res) {
             }
         );
     } else
-    //return an empty array
+        //return an empty array
         res.json([]);
 };
