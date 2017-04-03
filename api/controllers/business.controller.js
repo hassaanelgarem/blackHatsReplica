@@ -54,7 +54,7 @@ module.exports.getMostPopular = function(req, res) {
 module.exports.getBusinessInfo = function(req, res) {
 
   //Find the bussiness by id to get its info
-  Business.findById(req.params.id, function(err, business) {
+  Business.findById(req.params.id).populate('reviews').populate('activities').exec(function(err, business) {
 
       //If an error occurred, display a msg along with the error
       if (err) return res.json({success: false, msg: 'Cannot retrieve business'});
