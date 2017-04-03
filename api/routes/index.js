@@ -2,7 +2,6 @@ const express = require('express');
 var expressValidator = require('express-validator');
 const router = express.Router();
 const passport = require('passport');
-
 const profileCtrl = require('../controllers/profile.controller.js');
 const bookingCtrl = require('../controllers/booking.controller');
 const reviewCtrl = require('../controllers/review.controller');
@@ -14,9 +13,9 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 router.route('/register').post(userCtrl.registerUser);
-router.post('/login', userCtrl.passportAuthenticate, userCtrl.login);
+router.route('/login').post(userCtrl.passportAuthenticate, userCtrl.login);
 router.route('/logout').get(userCtrl.logout);
-router.route('/deleteAccount').post(userCtrl.deleteAccount);
+router.route('/deleteAccount').delete(userCtrl.deleteAccount);
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
