@@ -14,6 +14,7 @@ module.exports.addBusiness = function(req, res) {
   const password = req.body.password;
   const email = req.body.email;
   const description = req.body.description;
+
   //Validating inputs
   req.checkBody('name', 'Your business name is required.').notEmpty();
   req.checkBody('password', 'password is required.').notEmpty();
@@ -21,6 +22,7 @@ module.exports.addBusiness = function(req, res) {
   req.checkBody('email', 'Email is required.').notEmpty();
   req.checkBody('email','Email format is not correct.').isEmail();
   req.checkBody('description', 'A breif description of your business is necessary to apply.').notEmpty();
+
   //Checking if email is already taken
   User.find({'email' : email}, (err, business) => {
     if (err) return res.json('Signup error');
@@ -32,11 +34,13 @@ module.exports.addBusiness = function(req, res) {
     email: email,
     description: description
   });
+
   //Encrypting password
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newBusiness.password, salt, (err, hash) => {
         if(err) return res.json({success: false, msg:'An error occurred while encrypting'});
         newBusiness.password = hash;
+
         //Adding business to the db after making sure all inputs are valid and the password is encrypted
         newBusiness.save(function(err) {
           if(err) return res.json({success : false, msg : 'Was not able to save your business, please try again'});
@@ -55,9 +59,12 @@ module.exports.passportAuthenticate = passport.authenticate('local');
 //Calling Route: /api/business/login/
 module.exports.businessLogin = function(req, res) {
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
-    req.session.loggedin = req.body.email;
-    res.json('You are logged in as ' + req.session.loggedin);
-}
+    req.login(user,function(err){
+      if(err) return next(err);
+      req.session.loggedin = req.body.email;
+      res.json('You are logged in as ' + req.user.email);
+    })
+    }
 
 
 //Post function to logout a business
