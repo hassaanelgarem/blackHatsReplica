@@ -16,7 +16,8 @@
     "express-validator": "^3.1.2",
     "mongoose": "*",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "passport-http": "*"
   },
   "repository": {
     "type": "git",

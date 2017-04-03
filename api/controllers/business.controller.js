@@ -24,7 +24,7 @@ module.exports.addBusiness = function(req, res) {
   req.checkBody('description', 'A breif description of your business is necessary to apply.').notEmpty();
 
   //Checking if email is already taken
-  User.find({'email' : email}, (err, business) => {
+  Business.find({'email' : email}, (err, business) => {
     if (err) return res.json('Signup error');
     if (business.length!=0) return res.json('Email already used. Please enter another email.');
   })
@@ -54,10 +54,19 @@ module.exports.addBusiness = function(req, res) {
 //Middleware function for Passport module for authentication
 module.exports.passportAuthenticate = passport.authenticate('local');
 
+module.exports.test = function(req, res, next){
+  res.send("Hello");
+  next();
+}
+module.exports.test2 = function(req, res){
+  res.send("Hello2");
+}
 
 //Post function to login a business
 //Calling Route: /api/business/login/
 module.exports.businessLogin = function(req, res) {
+  console.log("Hi");
+
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
     req.login(user,function(err){
       if(err) return next(err);
@@ -76,14 +85,15 @@ module.exports.businessLogout = function(req,res) {
 
 
 //Passport handling the login
-passport.use(new LocalStrategy((email, password, done) => {
+passport.use(new LocalStrategy(function(email, password, done) {
+  console.log("Hi");
     // Finding the business by his email
-    Business.getBusinessByEmail(email, (err, business) => {
-        if(err) throw err;
+    Business.getBusinessByEmail(email, function(err, business) {
+        if(err) console.log(err);
         if(!business) return done(null, false, {message: 'Invalid Email.'});
         //Comparing to see if the 2 passwords match
-        Business.comparePassword(password, business.password, (err, isMatch) => {
-            if(err) throw err;
+        Business.comparePassword(password, business.password, function(err, isMatch) {
+            if(err) console.log(err);
             if(isMatch) return done(null, business);
             else return done(null, false, {message: 'Invalid password.'});
         });
@@ -93,13 +103,17 @@ passport.use(new LocalStrategy((email, password, done) => {
 
 //Passport module serializes User ID
 passport.serializeUser(function(business, done) {
+  console.log("Hi");
+
     done(null, business.id);
 });
 
 
 //Passport module deserializes User ID
 passport.deserializeUser(function(id, done) {
-    Business.getBusinessById(id, function(err, user) {
+    console.log("Hi");
+    Business.getBusinessById(id, function(err, business) {
+        if(err) console.log(err);
         done(err, business);
     });
 });
