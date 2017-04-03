@@ -12,7 +12,7 @@ const path = require("path");
   Calling route: '/api/editBusiness/:businessId/addCategory' */
 module.exports.addCategory = function (req, res) {
 	//check if logged in 
-	// if (req.user) {
+	if (req.user) {
 		Business.findOne({
 			_id: req.params.businessId
 		}, function (err, business) {
@@ -44,11 +44,11 @@ module.exports.addCategory = function (req, res) {
 			}
 		});
 		//user is not logged in
-	// } else {
-	// 	res.json({
-	// 		error: "login"
-	// 	});
-	// };
+	} else {
+		res.json({
+			error: "login"
+		});
+	};
 };
 
   
