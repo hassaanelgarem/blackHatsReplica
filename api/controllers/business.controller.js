@@ -38,7 +38,7 @@ module.exports.addBusiness = function(req, res) {
   //Encrypting password
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newBusiness.password, salt, (err, hash) => {
-        if(err) return res.json({success: false, msg:'An error occurred while encrypting'});
+        if(err) return res.json({success: false, msg:'An error occurred while encrypting', error: err});
         newBusiness.password = hash;
 
         //Adding business to the db after making sure all inputs are valid and the password is encrypted
