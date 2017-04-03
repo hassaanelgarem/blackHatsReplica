@@ -13,10 +13,10 @@ const uploadPhotos = multer({
 }).single('myfile');
 
 
-/*3.3: 
-Upload photo using multer 
-and store the uploaded image path in the Business 
-model in photos array, and return the 
+/*3.3:
+Upload photo using multer
+and store the uploaded image path in the Business
+model in photos array, and return the
 filepath to the frontend to show the image.
 Calling route: '/business/:businessId/addPhoto'
 */
@@ -30,7 +30,7 @@ module.exports.addPhoto = function(req, res) {
                 return res.json(err);
             }
             /*if multer found a file selected
-            and image was uploaded successfully, 
+            and image was uploaded successfully,
             multer will save the image in req.file*/
             if (req.file) {
                 //get the image format
@@ -142,7 +142,7 @@ module.exports.deletePhoto = function(req, res) {
 };
 
 
-/* 
+/*
 Post function that increments the interactivity attribute of a certain business by 1
 Calling route: api/business/interact/:id
 */
@@ -164,21 +164,26 @@ module.exports.updateInteractivity = function(req, res) {
 
 
 /*
-  Get function that returns the three most popular businesses based on their interactivity
-  Calling route: api/business/mostPopular
+Get function that returns the three most popular businesses based on their interactivity
+Calling route: api/business/mostPopular
 */
 module.exports.getMostPopular = function(req, res) {
-
     // query for sorting businesses based on interactivity and limits the result to 3
-    const query = Business.find().sort({ interactivity: -1 }).limit(3);
-
+    const query = Business.find().sort({
+        interactivity: -1
+    }).limit(3);
     // execute the above query
     query.exec(function(err, businesses) {
-
         // If there is an error return it in response
-        if (err) res.json({ success: false, msg: 'Failed to retrieve most popular businesses', error: err });
-
+        if (err) res.json({
+            success: false,
+            msg: 'Failed to retrieve most popular businesses'
+        });
         // If no error return the list of businesses
-        res.json({ success: true, msg: 'Got most popular businesses successfully', businesses: businesses });
+        res.json({
+            success: true,
+            msg: 'Got most popular businesses successfully',
+            businesses: businesses
+        });
     });
 };
