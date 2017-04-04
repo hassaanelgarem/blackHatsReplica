@@ -11,7 +11,10 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
-    "mongoose": "*"
+    "geoip-lite": "^1.2.0",
+    "fs": "0.0.1-security",
+    "mongoose": "*",
+    "multer": "*"
   },
   "repository": {
     "type": "git",
