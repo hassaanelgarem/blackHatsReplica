@@ -12,9 +12,10 @@
     "cors": "*",
     "express": "*",
     "passport": "^0.3.2",
+    "geoip-lite": "^1.2.0",
     "fs": "0.0.1-security",
     "mongoose": "*",
-    "multer": "^1.3.0"
+    "multer": "*"
   },
   "repository": {
     "type": "git",
