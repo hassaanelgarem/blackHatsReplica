@@ -7,8 +7,9 @@ const advBookingSchema = new mongoose.Schema({
     ref: "Business",
     required: true
   },
+  //Advertisement slot that displays this booking
   advSlot: {
-    type: mongoose.Schema.Types.ObjectId,   //chosen ad slot's id
+    type: mongoose.Schema.Types.ObjectId,   
     ref: "AdvSlot",
     required: true
   },
