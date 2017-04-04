@@ -312,7 +312,7 @@ module.exports.verifyBusiness = function(req, res) {
                 success: false,
                 msg: 'Was not able to verify business'
             });
-            sendEmailVerified(business.name, business.email, function(err, info){
+            sendEmail(true, business.name, business.email, function(err, info){
                 if(err) res.json({success: false, error: err, msg: 'Bussines was not notified of verification'});
                 res.json({success: true, msg: 'Business verified and notified'});
             });
@@ -333,7 +333,7 @@ module.exports.declineBusiness = function(req, res) {
         }
         else{
           console.log(business);
-          sendEmailRejected(business.name, business.email, function(err, info){
+          sendEmail(false, business.name, business.email, function(err, info){
               if(err) {
                 res.json({success: false, error: err, msg: 'Business was not notified of rejection'});
               }
@@ -399,37 +399,27 @@ module.exports.getMostPopular = function(req, res) {
 
 /*
   Helper function that takes Business Name and email and sends them
-  an email notifying them they were verified
+  an email notifying them they were verified or rejected
 */
-function sendEmailVerified(businessName, businessEmail, done) {
-    let mailOptions = {
-        from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
-        to: businessEmail, // list of receivers
-        subject: 'Account Verified', // Subject line
-        text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats' // plain text body
-    };
+function sendEmail(verify, businessName, businessEmail, done) {
+    var mailOptions = {};
+    if(verify) {
+       mailOptions = {
+          from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+          to: businessEmail, // list of receivers
+          subject: 'Account Verified', // Subject line
+          text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats' // plain text body
+      };
+    }
+    else {
+      mailOptions = {
+          from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+          to: businessEmail, // list of receivers
+          subject: 'Account Rejected', // Subject line
+          text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats' // plain text body
+      };
+    }
 
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            done(error, null);
-        }
-        done(null, info);
-    });
-}
-
-
-/*
-  Helper function that takes Business Name and email and sends them
-  an email notifying them they were rejected
-*/
-function sendEmailRejected(businessName, businessEmail, done) {
-    let mailOptions = {
-        from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
-        to: businessEmail, // list of receivers
-        subject: 'Account Rejected', // Subject line
-        text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats' // plain text body
-    };
 
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
