@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 
-function toLower (str)
-{
+function toLower(str) {
     return str.toLowerCase();
 }
 
@@ -13,12 +12,6 @@ const businessSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // username: {
-    //     type: String,
-    //     required: true,
-    //     set: toLower,
-    //     unique: true
-    // },
     email: {
         type: String,
         required: true,
@@ -46,12 +39,12 @@ const businessSchema = new mongoose.Schema({
     address: {
         type: String
     },
-    location : {
-        address : String,
+    location: {
+        address: String,
         // Always store coordinates longitude (East/West), latitude (North/South) order.
-        coordinates : {
-            type : [Number],
-            index : '2dsphere'
+        coordinates: {
+            type: [Number],
+            index: '2dsphere'
         }
     },
     tags: [{
@@ -97,39 +90,33 @@ const businessSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    resetPasswordToken : String,
-    resetPasswordTokenExpiry : Date
+    resetPasswordToken: String,
+    resetPasswordTokenExpiry: Date
 });
 
 
 //Helper function to compare encrypted paswords
 businessSchema.statics.comparePassword = function(candidatePassword, hash, callback) {
-	bcrypt.compare(candidatePassword, hash, function(err, isMatch)  {
-    	if(err) throw err;
-    	callback(null, isMatch);
-	});
+    bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+        if (err) throw err;
+        callback(null, isMatch);
+    });
 }
 
 
 //Helper function to get a business by its id
-businessSchema.statics.getBusinessById = function (id, callback) {
-	this.findById(id, callback);
+businessSchema.statics.getBusinessById = function(id, callback) {
+    this.findById(id, callback);
 }
 
 
 //Helper function to get a business by its email
 businessSchema.statics.getBusinessByEmail = function(email, callback) {
-  console.log("Get bussiness by email");
-	var query = {email : email};
-	this.findOne(query, callback);
+    var query = {
+        email: email
+    };
+    this.findOne(query, callback);
 }
-
-
-// //Helper function to get a business by its username
-// module.exports.getBusinessByUsername = function(username, callback) {
-// 	var query = {username : username};
-// 	Business.findOne(query, callback);
-// }
 
 
 mongoose.model('Business', businessSchema);

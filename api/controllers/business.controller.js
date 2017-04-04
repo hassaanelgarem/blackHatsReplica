@@ -11,41 +11,53 @@ require('../data/business.model.js');
 // Post function that adds the business's name, password, email & description to the db on applying
 // Calling Route: /api/business/apply
 module.exports.addBusiness = function(req, res) {
-  const name = req.body.name;
-  const password = req.body.password;
-  const email = req.body.email;
-  const description = req.body.description;
+    const name = req.body.name;
+    const password = req.body.password;
+    const email = req.body.email;
+    const description = req.body.description;
 
-  //Validating inputs
-  req.checkBody('name', 'Your business name is required.').notEmpty();
-  req.checkBody('password', 'password is required.').notEmpty();
-  req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
-  req.checkBody('email', 'Email is required.').notEmpty();
-  req.checkBody('email','Email format is not correct.').isEmail();
-  req.checkBody('description', 'A breif description of your business is necessary to apply.').notEmpty();
+    //Validating inputs
+    req.checkBody('name', 'Your business name is required.').notEmpty();
+    req.checkBody('password', 'password is required.').notEmpty();
+    req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
+    req.checkBody('email', 'Email is required.').notEmpty();
+    req.checkBody('email', 'Email format is not correct.').isEmail();
+    req.checkBody('description', 'A breif description of your business is necessary to apply.').notEmpty();
 
-  //Checking if email is already taken
-  Business.find({'email' : email}, (err, business) => {
-    if (err) return res.json('Signup error');
-    if (business.length!=0) return res.json('Email already used. Please enter another email.');
-  })
-  let newBusiness = new Business({
-    name: name,
-    password: password,
-    email: email,
-    description: description
-  });
+    //Checking if email is already taken
+    Business.find({
+        'email': email
+    }, (err, business) => {
+        if (err) return res.json('Signup error');
+        if (business.length != 0) return res.json('Email already used. Please enter another email.');
+    })
+    let newBusiness = new Business({
+        name: name,
+        password: password,
+        email: email,
+        description: description
+    });
 
-  //Encrypting password
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newBusiness.password, salt, (err, hash) => {
-        if(err) return res.json({success: false, msg:'An error occurred while encrypting', error: err});
-        newBusiness.password = hash;
+    //Encrypting password
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newBusiness.password, salt, (err, hash) => {
+            if (err) return res.json({
+                success: false,
+                msg: 'An error occurred while encrypting',
+                error: err
+            });
+            newBusiness.password = hash;
 
-        //Adding business to the db after making sure all inputs are valid and the password is encrypted
-        newBusiness.save(function(err) {
-          if(err) return res.json({success : false, msg : 'Was not able to save your business, please try again'});
-          res.json({success : true, msg : 'Your application is successfully submitted!'});
+            //Adding business to the db after making sure all inputs are valid and the password is encrypted
+            newBusiness.save(function(err) {
+                if (err) return res.json({
+                    success: false,
+                    msg: 'Was not able to save your business, please try again'
+                });
+                res.json({
+                    success: true,
+                    msg: 'Your application is successfully submitted!'
+                });
             })
         })
     })
@@ -56,28 +68,18 @@ module.exports.addBusiness = function(req, res) {
 module.exports.passportAuthenticate = passport.authenticate('local');
 
 
-// module.exports.test = function(req, res, next){
-//   res.send("Hello");
-//   next();
-// }
-// module.exports.test2 = function(req, res){
-//   res.send("Hello2");
-// }
-
 //Post function to login a business
 //Calling Route: /api/business/login/
 module.exports.businessLogin = function(req, res) {
-  console.log("bussiness login called");
-
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
-      req.session.loggedin = req.body.username;
-      res.json('You are logged in as ' + req.user.email);
-    }
+    req.session.loggedin = req.body.username;
+    res.json('You are logged in as ' + req.user.email);
+}
 
 
 //Post function to logout a business
 //Calling Route: /api/business/logout
-module.exports.businessLogout = function(req,res) {
+module.exports.businessLogout = function(req, res) {
     req.logout();
     res.json('You have successfully logged out.');
 }
@@ -85,16 +87,25 @@ module.exports.businessLogout = function(req,res) {
 
 //Passport handling the login
 passport.use(new LocalStrategy(function(username, password, done) {
-  console.log("Local Strategy");
     // Finding the business by his email
     Business.getBusinessByEmail(username, function(err, business) {
-        if(err) console.log(err);
-        if(!business) return done(null, false, {message: 'Invalid email.'});
+        if (err) res.json({
+            success: false,
+            msg: 'Can not get business by email'
+        });
+        if (!business) return done(null, false, {
+            message: 'Invalid email.'
+        });
         //Comparing to see if the 2 passwords match
         Business.comparePassword(password, business.password, function(err, isMatch) {
-            if(err) console.log(err);
-            if(isMatch) return done(null, business);
-            else return done(null, false, {message: 'Invalid password.'});
+            if (err) res.json({
+                success: false,
+                msg: 'Error in comparing passwords'
+            });
+            if (isMatch) return done(null, business);
+            else return done(null, false, {
+                message: 'Invalid password.'
+            });
         });
     });
 }));
@@ -102,17 +113,17 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 //Passport module serializes User ID
 passport.serializeUser(function(business, done) {
-  console.log("Serialize");
-
     done(null, business.id);
 });
 
 
 //Passport module deserializes User ID
 passport.deserializeUser(function(id, done) {
-    console.log("Deserialize");
     Business.getBusinessById(id, function(err, business) {
-        if(err) console.log(err);
+        if (err) res.json({
+            success: false,
+            msg: 'Can not deserialize user'
+        });
         done(err, business);
     });
 });
@@ -121,10 +132,19 @@ passport.deserializeUser(function(id, done) {
 // Get function that returns all unverified businesses based on the value of the attribute verified
 // Calling Route: /api/business/unVerifiedBusinesses
 module.exports.unVerifiedBusinesses = function(req, res) {
-    const query = Business.find({verified : false});
+    const query = Business.find({
+        verified: false
+    });
     query.exec(function(err, businesses) {
-        if(err) res.json({success : false, msg : 'Can not retrieve unverified businesses'});
-        res.json({success : true, msg : 'Got unverified businesses successfully', businesses : businesses});
+        if (err) res.json({
+            success: false,
+            msg: 'Can not retrieve unverified businesses'
+        });
+        res.json({
+            success: true,
+            msg: 'Got unverified businesses successfully',
+            businesses: businesses
+        });
     });
 };
 
@@ -138,8 +158,14 @@ module.exports.verifyBusiness = function(req, res) {
         business.verified = true;
         // updating the db
         business.save(function(err) {
-            if (err) res.jason({success : false, msg : 'Was not able to verify business'});
-            res.json({success : true, msg : 'Business verified!'});
+            if (err) res.jason({
+                success: false,
+                msg: 'Was not able to verify business'
+            });
+            res.json({
+                success: true,
+                msg: 'Business verified!'
+            });
         });
     });
 };
@@ -149,7 +175,9 @@ module.exports.verifyBusiness = function(req, res) {
 // Calling Route: /api/business/decline/:id
 module.exports.declineBusiness = function(req, res) {
     // delete declined busiess
-    Business.deleteOne( { id : req.params.id } );
+    Business.deleteOne({
+        id: req.params.id
+    });
 };
 
 
@@ -159,8 +187,14 @@ module.exports.updateInteractivity = function(req, res) {
     Business.findById(req.params.id, function(err, business) {
         business.interactivity = business.interactivity + 1;
         business.save(function(err) {
-            if(err) res.json({success : false, msg: 'Updating business interactivity failed'});
-            res.json({success : true, msg : 'Business interactivity incremented'});
+            if (err) res.json({
+                success: false,
+                msg: 'Updating business interactivity failed'
+            });
+            res.json({
+                success: true,
+                msg: 'Business interactivity incremented'
+            });
         })
     });
 };
@@ -169,9 +203,18 @@ module.exports.updateInteractivity = function(req, res) {
 // Get function that returns the three most popular businesses based on their interactivity
 // Calling Route: /api/business/mostPopular
 module.exports.getMostPopular = function(req, res) {
-    const query = Business.find().sort({interactivity: -1}).limit(3);
+    const query = Business.find().sort({
+        interactivity: -1
+    }).limit(3);
     query.exec(function(err, businesses) {
-        if(err) res.json({success : false, msg : 'Failed to retrieve most popular businesses'});
-        res.json({success : true, msg : 'Got most popular businesses successfully', businesses : businesses});
+        if (err) res.json({
+            success: false,
+            msg: 'Failed to retrieve most popular businesses'
+        });
+        res.json({
+            success: true,
+            msg: 'Got most popular businesses successfully',
+            businesses: businesses
+        });
     });
 };
