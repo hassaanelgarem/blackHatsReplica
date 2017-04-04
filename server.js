@@ -26,12 +26,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use("/api", routes);
-
-// Index Route
-app.get('/', (req, res) => {
-	res.send('Invalid EndPoint');
-});
 
 // Express Session
 app.use(session(
@@ -68,6 +62,14 @@ app.use(function (req, res, next)
   res.locals.user = req.user || null;
   next();
 });
+
+app.use("/api", routes);
+
+// Index Route
+app.get('/', (req, res) => {
+	res.send('Invalid EndPoint');
+});
+
 
 // Start Server
 app.listen(app.get('port'), () => {

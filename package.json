@@ -14,10 +14,13 @@
     "express": "*",
     "express-session": "^1.15.2",
     "express-validator": "^3.1.2",
-    "mongoose": "*",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "passport-http": "*"
+    "passport-http": "*",
+    "fs": "0.0.1-security",
+    "mongoose": "*",
+    "multer": "*",
+    "nodemailer": "^3.1.8"
   },
   "repository": {
     "type": "git",
