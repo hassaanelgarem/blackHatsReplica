@@ -32,6 +32,7 @@ router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/editBusiness/:businessId/addTags').put(businessCtrl.addTags);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
+router.route('/activity/add').post(activityCtrl.addActivity);
 router.route('/business/businessPage/:id').get(businessCtrl.getBusinessInfo);
 router.route('/profile/:userId').get(profileCtrl.getOneUser).put(profileCtrl.updateOneUser);
 router.route('/profile/:userId/uploadProfilePicture').put(profileCtrl.uploadProfilePicture);
