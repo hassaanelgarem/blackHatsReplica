@@ -1,5 +1,7 @@
 const express = require('express');
+var expressValidator = require('express-validator');
 const router = express.Router();
+const passport = require('passport');
 
 
 const userCtrl = require('../controllers/user.controller');
@@ -10,6 +12,15 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
 
+router.use(expressValidator());
+router.use(passport.initialize());
+router.use(passport.session());
+
+
+router.route('/register').post(userCtrl.registerUser);
+router.route('/login').post(userCtrl.passportAuthenticate, userCtrl.login);
+router.route('/logout').get(userCtrl.logout);
+router.route('/deleteAccount').delete(userCtrl.deleteAccount);
 router.route('/editBusiness/:businessId/addCategory').put(businessCtrl.addCategory);
 router.route('/search').get(userCtrl.searchByNameOrTag, userCtrl.searchByLocationAndCategory);
 router.route('/editBusiness/:businessId/addLogo').put(businessCtrl.uploadLogo);
