@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 
 function toLower (str)
@@ -102,7 +103,7 @@ const businessSchema = new mongoose.Schema({
 
 
 //Helper function to compare encrypted paswords
-module.exports.comparePassword = function(candidatePassword, hash, callback) {
+businessSchema.statics.comparePassword = function(candidatePassword, hash, callback) {
 	bcrypt.compare(candidatePassword, hash, function(err, isMatch)  {
     	if(err) throw err;
     	callback(null, isMatch);
@@ -111,15 +112,16 @@ module.exports.comparePassword = function(candidatePassword, hash, callback) {
 
 
 //Helper function to get a business by its id
-module.exports.getBusinessById = function (id, callback) {
-	Business.findById(id, callback);
+businessSchema.statics.getBusinessById = function (id, callback) {
+	this.findById(id, callback);
 }
 
 
 //Helper function to get a business by its email
-module.exports.getBusinessByEmail = function(email, callback) {
+businessSchema.statics.getBusinessByEmail = function(email, callback) {
+  console.log("Get bussiness by email");
 	var query = {email : email};
-	Business.findOne(query, callback);
+	this.findOne(query, callback);
 }
 
 

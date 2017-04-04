@@ -56,13 +56,13 @@ module.exports.addBusiness = function(req, res) {
 module.exports.passportAuthenticate = passport.authenticate('local');
 
 
-module.exports.test = function(req, res, next){
-  res.send("Hello");
-  next();
-}
-module.exports.test2 = function(req, res){
-  res.send("Hello2");
-}
+// module.exports.test = function(req, res, next){
+//   res.send("Hello");
+//   next();
+// }
+// module.exports.test2 = function(req, res){
+//   res.send("Hello2");
+// }
 
 //Post function to login a business
 //Calling Route: /api/business/login/
@@ -70,8 +70,8 @@ module.exports.businessLogin = function(req, res) {
   console.log("bussiness login called");
 
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
-      req.session.loggedin = req.body.email;
-      res.json('You are logged in as ' + req.business.email);
+      req.session.loggedin = req.body.username;
+      res.json('You are logged in as ' + req.user.email);
     }
 
 
@@ -84,10 +84,10 @@ module.exports.businessLogout = function(req,res) {
 
 
 //Passport handling the login
-passport.use(new LocalStrategy(function(email, password, done) {
-  console.log("Hi");
+passport.use(new LocalStrategy(function(username, password, done) {
+  console.log("Local Strategy");
     // Finding the business by his email
-    Business.getBusinessByEmail(email, function(err, business) {
+    Business.getBusinessByEmail(username, function(err, business) {
         if(err) console.log(err);
         if(!business) return done(null, false, {message: 'Invalid email.'});
         //Comparing to see if the 2 passwords match
@@ -102,7 +102,7 @@ passport.use(new LocalStrategy(function(email, password, done) {
 
 //Passport module serializes User ID
 passport.serializeUser(function(business, done) {
-  console.log("Hi");
+  console.log("Serialize");
 
     done(null, business.id);
 });
@@ -110,7 +110,7 @@ passport.serializeUser(function(business, done) {
 
 //Passport module deserializes User ID
 passport.deserializeUser(function(id, done) {
-    console.log("Hi");
+    console.log("Deserialize");
     Business.getBusinessById(id, function(err, business) {
         if(err) console.log(err);
         done(err, business);
