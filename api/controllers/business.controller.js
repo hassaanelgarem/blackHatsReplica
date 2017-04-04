@@ -503,3 +503,24 @@ module.exports.saveNewInfo = function (req, res) {
     });
   }
 };
+
+
+/*
+  Get function that returns all info of a certain business
+  Calling route: api/business/businessPage/:id
+*/
+module.exports.getBusinessInfo = function(req, res) {
+
+  //Find the bussiness by id to get its info, reviews and activities in details
+  Business.findById(req.params.id).populate('reviews').populate('activities').exec(function(err, business) {
+
+      //If an error occurred, display a msg along with the error
+      if (err) return res.json({success: false, msg: 'Cannot retrieve business'});
+
+      //If no error return the bisness info
+      else {
+        business.reviews = business.reviews.slice(0, 3);
+        return res.json({success: true, msg: 'successful retrieval', business});
+      }
+  });
+}
