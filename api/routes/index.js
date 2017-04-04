@@ -9,6 +9,7 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
 
+router.route('/editBusiness/:businessId/addCategory').put(businessCtrl.addCategory);
 router.route('/search').get(userCtrl.searchByNameOrTag, userCtrl.searchByLocationAndCategory);
 router.route('/editBusiness/:businessId/addLogo').put(businessCtrl.uploadLogo);
 router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);

@@ -55,6 +55,52 @@ module.exports.addTags = function (req, res) {
 }
 
 
+
+/*Put function, to save the choosen Category by the business in the database .
+  business can choose only 1 Category
+  Calling route: '/api/editBusiness/:businessId/addCategory' */
+module.exports.addCategory = function (req, res) {
+	//check if logged in
+	if (req.user) {
+		Business.findOne({
+			_id: req.params.businessId
+		}, function (err, business) {
+			//if error occured
+			if (err) {
+				res.json(err);
+			} else {
+				// if business found
+				if (business) {
+					business.category = req.body.category;
+
+					/*service to save the choosen Category in the database
+				and return the updated object to frontend.
+				*/
+					business.save(function (err) {
+						if (err) {
+							res.json(err);
+						} else {
+							res.json(business);
+						}
+					});
+				}
+
+				//business not found
+				else
+					res.json({
+						error: "Business not found!"
+					});
+			}
+		});
+		//user is not logged in
+	} else {
+		res.json({
+			error: "login"
+		});
+	};
+};
+
+
 /* Multer configuration to upload a single file from an
 html input with name "myfile" to public/uploads/businessPhotos folder*/
 const uploadPhotos = multer({
@@ -62,8 +108,7 @@ const uploadPhotos = multer({
 }).single('myfile');
 
 
-/*3.3:
-Upload photo using multer
+/*3.3:Upload photo using multer
 and store the uploaded image path in the Business
 model in photos array, and return the
 filepath to the frontend to show the image.
