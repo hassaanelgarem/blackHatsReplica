@@ -309,13 +309,13 @@ module.exports.verifyBusiness = function(req, res) {
         business.verified = true;
         // updating the db
         business.save(function(err) {
-            if (err) res.jason({
+            if (err) res.json({
                 success: false,
                 msg: 'Was not able to verify business'
             });
             sendEmailVerified(business.name, business.email, function(err, info){
-                if(err) res.json({success: false, error: err, msg: 'Bussines was not verified'});
-                res.json({success: true, msg: 'Business verified!'});
+                if(err) res.json({success: false, error: err, msg: 'Bussines was not notified of verification'});
+                res.json({success: true, msg: 'Business verified and notified'});
             });
         });
     });
@@ -326,12 +326,25 @@ module.exports.verifyBusiness = function(req, res) {
 // Calling Route: /api/business/decline/:id
 module.exports.declineBusiness = function(req, res) {
     // delete declined busiess
-    Business.deleteOne({id: req.params.id}, function(err, doc){
-      console.log(doc);
-      if(err) res.json({success: false, msg: "Error deleting business"});
-      sendEmailVerified(doc.name, doc.email, function(err, info){
-          if(err) res.json({success: false, error: err, msg: 'Bussines was not verified'});
-          res.json({success: true, msg: 'Business verified!'});
+    Business.findById(req.params.id, function(err, business) {
+      console.log(business);
+      Business.deleteOne({_id: req.params.id}, function(err, doc){
+        if(err) {
+          res.json({success: false, msg: "Error deleting business"});
+        }
+        else{
+          console.log(business);
+          sendEmailRejected(business.name, business.email, function(err, info){
+              if(err) {
+                res.json({success: false, error: err, msg: 'Bussines was not notified of rejection'});
+              }
+              else{
+                res.json({success: true, msg: 'Business rejected and notified'});
+              }
+
+          });
+        }
+
       });
     });
 };
@@ -427,15 +440,3 @@ function sendEmailRejected(businessName, businessEmail, done) {
         done(null, info);
     });
 }
-
-// for testing
-// add route in index.js to test with
-/*
-module.exports.sendEmail = function(req, res) {
-    sendEmailRejected('Break Out', 'hassaanelgarem@gmail.com', function(err, info){
-        if(err) res.json({success: false, error: err});
-        res.json({success: true, info: info});
-    });
-
-}
-*/
