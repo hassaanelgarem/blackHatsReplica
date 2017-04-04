@@ -43,6 +43,7 @@ router.route('/review/:businessId').get(reviewCtrl.getReviews);
 router.route('/review/add').post(reviewCtrl.addReview);
 router.route('/review/averageRating/:businessId').get(reviewCtrl.getAverageRating);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
+router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
 
 
 module.exports = router;
