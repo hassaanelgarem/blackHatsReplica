@@ -5,6 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const expressValidator = require('express-validator');
+require('../data/business.model.js');
 
 
 // Post function that adds the business's name, password, email & description to the db on applying
@@ -54,6 +55,7 @@ module.exports.addBusiness = function(req, res) {
 //Middleware function for Passport module for authentication
 module.exports.passportAuthenticate = passport.authenticate('local');
 
+
 module.exports.test = function(req, res, next){
   res.send("Hello");
   next();
@@ -65,11 +67,11 @@ module.exports.test2 = function(req, res){
 //Post function to login a business
 //Calling Route: /api/business/login/
 module.exports.businessLogin = function(req, res) {
-  console.log("Hi");
+  console.log("bussiness login called");
 
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
       req.session.loggedin = req.body.email;
-      res.json('You are logged in as ' + req.user.email);
+      res.json('You are logged in as ' + req.business.email);
     }
 
 
@@ -87,7 +89,7 @@ passport.use(new LocalStrategy(function(email, password, done) {
     // Finding the business by his email
     Business.getBusinessByEmail(email, function(err, business) {
         if(err) console.log(err);
-        if(!business) return done(null, false, {message: 'Invalid Email.'});
+        if(!business) return done(null, false, {message: 'Invalid email.'});
         //Comparing to see if the 2 passwords match
         Business.comparePassword(password, business.password, function(err, isMatch) {
             if(err) console.log(err);

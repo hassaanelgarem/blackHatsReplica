@@ -12,6 +12,12 @@ const businessSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // username: {
+    //     type: String,
+    //     required: true,
+    //     set: toLower,
+    //     unique: true
+    // },
     email: {
         type: String,
         required: true,
@@ -115,6 +121,13 @@ module.exports.getBusinessByEmail = function(email, callback) {
 	var query = {email : email};
 	Business.findOne(query, callback);
 }
+
+
+// //Helper function to get a business by its username
+// module.exports.getBusinessByUsername = function(username, callback) {
+// 	var query = {username : username};
+// 	Business.findOne(query, callback);
+// }
 
 
 mongoose.model('Business', businessSchema);
