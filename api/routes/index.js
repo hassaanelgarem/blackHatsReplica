@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+
+
 const userCtrl = require('../controllers/user.controller');
 const bookingCtrl = require('../controllers/booking.controller');
 const reviewCtrl = require('../controllers/review.controller');
@@ -7,6 +9,7 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
 
+router.route('/editBusiness/:businessId/addLogo').put(businessCtrl.uploadLogo);
 router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
 router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
 router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite);
