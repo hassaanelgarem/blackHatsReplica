@@ -10,7 +10,6 @@ const path = require("path");
 const nodemailer = require('nodemailer');
 const User = mongoose.model("User");
 const Business = mongoose.model("Business");
-require('../data/business.model.js');
 
 
 /* Multer configuration to upload a single file from an
@@ -21,7 +20,7 @@ const uploadPhotos = multer({
 
 
 // create reusable transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'blackhatsguc@gmail.com',
@@ -173,7 +172,7 @@ module.exports.addBusiness = function(req, res) {
     req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
     req.checkBody('email', 'Email is required.').notEmpty();
     req.checkBody('email', 'Email format is not correct.').isEmail();
-    req.checkBody('description', 'A breif description of your business is necessary to apply.').notEmpty();
+    req.checkBody('description', 'A brief description of your business is necessary to apply.').notEmpty();
 
     //Checking if email is already taken
     Business.find({
@@ -336,7 +335,7 @@ module.exports.declineBusiness = function(req, res) {
           console.log(business);
           sendEmailRejected(business.name, business.email, function(err, info){
               if(err) {
-                res.json({success: false, error: err, msg: 'Bussines was not notified of rejection'});
+                res.json({success: false, error: err, msg: 'Business was not notified of rejection'});
               }
               else{
                 res.json({success: true, msg: 'Business rejected and notified'});
