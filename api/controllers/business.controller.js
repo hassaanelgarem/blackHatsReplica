@@ -60,6 +60,9 @@ module.exports.getBusinessInfo = function(req, res) {
       if (err) return res.json({success: false, msg: 'Cannot retrieve business'});
 
       //If no error return the bisness info
-      else return res.json({success: true, msg: 'successful retrieval', business});
+      else {
+        business.reviews = business.reviews.slice(0, 3);
+        return res.json({success: true, msg: 'successful retrieval', business});
+      }
   });
 }
