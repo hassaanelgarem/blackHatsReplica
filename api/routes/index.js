@@ -14,6 +14,7 @@ router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
 router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
 router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite);
 router.route('/search').get(userCtrl.searchByNameOrTag);
+router.route('/editBusiness/:businessId/addTags').put(businessCtrl.addTags);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
 router.route('/profile/:userId').get(profileCtrl.getOneUser).put(profileCtrl.updateOneUser);
@@ -27,3 +28,4 @@ router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 
 module.exports = router;
+
