@@ -27,9 +27,6 @@ const businessSchema = new mongoose.Schema({
       type: String
     }
   },
-  address: {
-    type: String
-  },
   location : {
     address : String,
     // Always store coordinates longitude (East/West), latitude (North/South) order.

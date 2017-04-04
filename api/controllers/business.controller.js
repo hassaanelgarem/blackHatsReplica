@@ -48,7 +48,7 @@ module.exports.getMostPopular = function(req, res) {
 
 /* Get function that gets the current data of the business
 and pass business object to the frontend to display it in edit view.
-Calling route: '/api/editBusiness/:businessId' */
+Calling route: '/api/business/edit/:businessId' */
 module.exports.getCurrentInfo = function (req, res) {
   //check if logged in 
   if (req.user) {
@@ -82,7 +82,7 @@ module.exports.getCurrentInfo = function (req, res) {
 
 /* Put function to save the edited business info in the database 
 and returns updated object to frontend.
-Calling route: '/api/editBusiness/:businessId'  */
+Calling route: '/api/business/edit/:businessId'  */
 module.exports.saveNewInfo = function (req, res) {
 
   //if logged in
@@ -108,8 +108,16 @@ module.exports.saveNewInfo = function (req, res) {
             from: req.body.from,
             to: req.body.to
           };
-          business.address = req.body.address;
+          var coordinates = req.body.coordinates.split(",");
+          coordinates[0] = parseFloat(coordinates[0]);
+          coordinates[1] = parseFloat(coordinates[1]);
+          business.location = {
+            address : req.body.address,
+            coordinates : coordinates
+          };
           business.description = req.body.description;
+          business.paymentRequired = parseInt(req.body.paymentRequired);
+          business.deposit = parseInt(req.body.deposit);
 
           business.save(function (err) {
             if (err) {

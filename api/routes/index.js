@@ -6,7 +6,7 @@ const reviewCtrl = require('../controllers/review.controller');
 const userCtrl = require('../controllers/user.controller');
 const businessCtrl = require('../controllers/business.controller');
 
-router.route('/editBusiness/:businessId').get(businessCtrl.getCurrentInfo).put(businessCtrl.saveNewInfo);
+router.route('/business/edit/:businessId').get(businessCtrl.getCurrentInfo).put(businessCtrl.saveNewInfo);
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
@@ -19,4 +19,3 @@ router.route('/review/add').post(reviewCtrl.addReview);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 module.exports = router;
-
