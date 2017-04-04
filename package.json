@@ -1,28 +1,28 @@
 {
-    "name": "black-hats",
-    "version": "1.0.0",
-    "description": "Entertainment Directory made by Black Hats.",
-    "main": "server.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node server"
-    },
-    "dependencies": {
-        "body-parser": "*",
-        "cors": "*",
-        "express": "*",
-        "fs": "0.0.1-security",
-        "mongoose": "*",
-        "multer": "*"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/hassaanelgarem/blackHats.git"
-    },
-    "author": "Black Hats",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/hassaanelgarem/blackHats/issues"
-    },
-    "homepage": "https://github.com/hassaanelgarem/blackHats#readme"
+  "name": "black-hats",
+  "version": "1.0.0",
+  "description": "Entertainment Directory made by Black Hats.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "cors": "*",
+    "express": "*",
+    "fs": "0.0.1-security",
+    "mongoose": "*",
+    "multer": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hassaanelgarem/blackHats.git"
+  },
+  "author": "Black Hats",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hassaanelgarem/blackHats/issues"
+  },
+  "homepage": "https://github.com/hassaanelgarem/blackHats#readme"
 }
