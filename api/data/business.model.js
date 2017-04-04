@@ -27,9 +27,6 @@ const businessSchema = new mongoose.Schema({
             type: String
         }
     },
-    address: {
-        type: String
-    },
     location: {
         address: String,
         // Always store coordinates longitude (East/West), latitude (North/South) order.
@@ -73,7 +70,8 @@ const businessSchema = new mongoose.Schema({
       3: No payment needed
     */
     paymentRequired: {
-        type: Number
+        type: Number,
+        default: 3
     },
     deposit: {
         type: Number

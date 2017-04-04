@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require("path");
 const multer = require('multer');
 const mongoose = require("mongoose");
-
 const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 
@@ -219,7 +218,6 @@ module.exports.deletePhoto = function(req, res) {
                 msg: 'deleting photo failed'
             });
         } else {
-
             //add directory path to image name
             imagePath = path.join(__dirname, "../", "../public/uploads/businessPhotos/", req.params.photoPath);
 
@@ -386,6 +384,119 @@ module.exports.uploadLogo = function (req, res) {
     });
   }
   //user is not logged in
+  else {
+    res.json({
+      error: "login"
+    });
+  }
+};
+
+
+/* Get function that gets the current data of the business
+and pass business object to the frontend to display it in edit view.
+Calling route: '/api/business/edit/:businessId' */
+module.exports.getCurrentInfo = function (req, res) {
+  //check if logged in
+  if (req.user) {
+    Business.findOne({
+      _id: req.params.businessId
+    }, function (err, business) {
+      //if error occured
+      if (err) {
+        res.json(err);
+      } else {
+        // if business found
+        if (business)
+          res.json(business);
+
+        //business not found
+        else
+          res.json({
+            error: "Business not found!"
+          });
+      }
+    });
+  }
+  //user is not logged in
+  else {
+    res.json({
+      error: "login"
+    });
+  };
+}
+
+
+/* Put function to save the edited business info in the database
+and returns updated object to frontend.
+Calling route: '/api/business/edit/:businessId'  */
+module.exports.saveNewInfo = function (req, res) {
+
+  //if logged in
+  if (req.user) {
+    Business.findOne({
+      _id: req.params.businessId
+    }, function (err, business) {
+      //if an error occurred, return the error
+      if (err) {
+        res.json(err);
+      } else {
+        // if business found in database its basic info will be saved
+        if (business) {
+          // Required fields
+          business.name = req.body.name;
+          business.email = req.body.email;
+          business.phoneNumbers = req.body.phoneNumbers;
+          business.description = req.body.description;
+
+          // Not Required fields
+          if(req.body.workingDays) {
+            //Split workDays by "," to return an array of strings
+            business.workingDays = req.body.workingDays.split(",");
+          }
+          if(req.body.from && req.body.to) {
+            business.workingHours = {
+              from: req.body.from,
+              to: req.body.to
+            };
+          }
+
+          var coordinates = [];
+          if(req.body.coordinates) {
+            coordinates = req.body.coordinates.split(",");
+            coordinates[0] = parseFloat(coordinates[0]);
+            coordinates[1] = parseFloat(coordinates[1]);
+          }
+          business.location = {
+            address : req.body.address,
+            coordinates : coordinates
+          };
+          if(req.body.paymentRequired) {
+            business.paymentRequired = parseInt(req.body.paymentRequired);
+          }
+          if(req.body.deposit) {
+            business.deposit = parseFloat(req.body.deposit);
+          }
+          business.tags = req.body.tags;
+          business.category = req.body.category;
+
+          business.save(function (err) {
+            if (err) {
+              res.json(err);
+            } else {
+              res.json(business);
+            }
+          });
+        }
+        //if business not found return this message to frontend
+        else {
+          res.json({
+            error: "Business not found!"
+          });
+        }
+      }
+    });
+  }
+  //if business not logged in
   else {
     res.json({
       error: "login"

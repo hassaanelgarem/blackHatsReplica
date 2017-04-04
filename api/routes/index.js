@@ -17,6 +17,7 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 
+router.route('/business/edit/:businessId').get(businessCtrl.getCurrentInfo).put(businessCtrl.saveNewInfo);
 router.route('/register').post(userCtrl.registerUser);
 router.route('/login').post(userCtrl.passportAuthenticate, userCtrl.login);
 router.route('/logout').get(userCtrl.logout);
