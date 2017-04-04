@@ -9,6 +9,7 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
 
+router.route('/search').get(userCtrl.searchByNameOrTag, userCtrl.searchByLocationAndCategory);
 router.route('/editBusiness/:businessId/addLogo').put(businessCtrl.uploadLogo);
 router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
 router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
@@ -28,4 +29,3 @@ router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 
 module.exports = router;
-

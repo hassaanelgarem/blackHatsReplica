@@ -1,10 +1,10 @@
-const multer = require('multer');
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
-const Business = mongoose.model("Business");
 const fs = require('fs');
 const path = require("path");
 const multer = require('multer');
+const mongoose = require("mongoose");
+
+const User = mongoose.model("User");
+const Business = mongoose.model("Business");
 
 
 /*Put function, to save the choosen tags by the business in the database .

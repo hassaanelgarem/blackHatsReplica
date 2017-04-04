@@ -11,6 +11,7 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
+    "geoip-lite": "^1.2.0",
     "fs": "0.0.1-security",
     "mongoose": "*",
     "multer": "*"
