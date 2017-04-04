@@ -1,4 +1,3 @@
-const User = require('../data/user.model');
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const Business = mongoose.model("Business");
@@ -139,7 +138,7 @@ passport.deserializeUser(function (id, done) {
 
 
 /*Delete function, to delete a user account by getting his username from the session used when he logged in,
- and then removing his entry from the db 
+ and then removing his entry from the db
  Calling Route: /api/deleteAccount */
 module.exports.deleteAccount = function (req, res) {
     var query = {

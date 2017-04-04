@@ -4,7 +4,6 @@ const router = express.Router();
 const passport = require('passport');
 
 
-const profileCtrl = require('../controllers/profile.controller.js');
 const userCtrl = require('../controllers/user.controller');
 const bookingCtrl = require('../controllers/booking.controller');
 const reviewCtrl = require('../controllers/review.controller');
