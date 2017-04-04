@@ -228,6 +228,7 @@ module.exports.getMostPopular = function(req, res) {
             success: false,
             msg: 'Failed to retrieve most popular businesses'
         });
+
         // If no error return the list of businesses
         res.json({
             success: true,

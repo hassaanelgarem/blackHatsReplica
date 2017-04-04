@@ -25,6 +25,7 @@ router.route('/review/user/:userID').get(reviewCtrl.getUserReviews);
 router.route('/review/edit/:reviewID').post(reviewCtrl.editReview);
 router.route('/review/:businessId').get(reviewCtrl.getReviews);
 router.route('/review/add').post(reviewCtrl.addReview);
+router.route('/review/averageRating/:businessId').get(reviewCtrl.getAverageRating);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 
 

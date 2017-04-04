@@ -56,6 +56,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
     if (req.query && req.query.result) {
         var nameOrTag = req.query.result;
 
+
         if (req.query.offset) {
             offset = parseInt(req.query.offset, 10);
         }
@@ -73,6 +74,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
                         //Ignore whitespace characters and case insensitive
                         $options: "ix"
                     }
+
                 },
                 {
                     tags: {
