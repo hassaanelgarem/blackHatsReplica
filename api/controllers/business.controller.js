@@ -36,11 +36,11 @@ model in photos array, and return the
 filepath to the frontend to show the image.
 Calling route: '/business/:businessId/addPhoto'
 */
-module.exports.addPhoto = function(req, res) {
+module.exports.addPhoto = function (req, res) {
     //Check if business logged in
     if (req.user) {
         //upload the image
-        uploadPhotos(req, res, function(err) {
+        uploadPhotos(req, res, function (err) {
             //if an error occurred, return the error
             if (err) {
                 return res.json(err);
@@ -68,7 +68,7 @@ module.exports.addPhoto = function(req, res) {
                 }
                 //copy and rename the image to the following format and location
                 var newPath = path.join(__dirname, "../", "../public/uploads/businessPhotos/img" + Date.now() + "." + string);
-                fs.renameSync(req.file.path, newPath, function(err) {
+                fs.renameSync(req.file.path, newPath, function (err) {
                     if (err) throw err;
 
                     //delete the image with the old name
@@ -87,7 +87,7 @@ module.exports.addPhoto = function(req, res) {
                             "photos": newPath
                         }
                     },
-                    function(err, result) {
+                    function (err, result) {
                         //couldn't add to array, return the error
                         if (err) {
                             res.json(err);
@@ -125,7 +125,7 @@ delete function that deletes photo from business'
 photos array, and returns success message or error message.
 Calling route: '/business/:businessId/deletePhoto/:photoPath'
 */
-module.exports.deletePhoto = function(req, res) {
+module.exports.deletePhoto = function (req, res) {
     var imagePath = req.params.photoPath;
     var businessId = req.params.businessId;
     Business.update({
@@ -134,7 +134,7 @@ module.exports.deletePhoto = function(req, res) {
         $pull: {
             "photos": imagePath
         }
-    }, function(err, data) {
+    }, function (err, data) {
         if (err) {
             res.json({
                 success: false,
@@ -146,7 +146,7 @@ module.exports.deletePhoto = function(req, res) {
             imagePath = path.join(__dirname, "../", "../public/uploads/businessPhotos/", req.params.photoPath);
 
             //delete the photo from filesystem
-            fs.unlink(imagePath, function(err) {
+            fs.unlink(imagePath, function (err) {
                 //don't care if file doesn't exist
             });
             res.json({
@@ -160,7 +160,7 @@ module.exports.deletePhoto = function(req, res) {
 
 // Post function that adds the business's name, password, email & description to the db on applying
 // Calling Route: /api/business/apply
-module.exports.addBusiness = function(req, res) {
+module.exports.addBusiness = function (req, res) {
     const name = req.body.name;
     const password = req.body.password;
     const email = req.body.email;
@@ -176,51 +176,55 @@ module.exports.addBusiness = function(req, res) {
 
     var errors = req.validationErrors();
 
-    if(errors) {
-        res.json({success: false, msg: "Problem with submitted fields", errors: errors});
+    if (errors) {
+        res.json({
+            success: false,
+            msg: "Problem with submitted fields",
+            errors: errors
+        });
+    } else {
+
+        //Checking if email is already taken
+        Business.findOne({
+            'email': email
+        }, (err, business) => {
+            if (err) return res.json('Signup error');
+            if (business) res.json('Email already used. Please enter another email.');
+            else {
+
+                let newBusiness = new Business({
+                    name: name,
+                    password: password,
+                    email: email,
+                    description: description
+                });
+
+                //Encrypting password
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(newBusiness.password, salt, (err, hash) => {
+                        if (err) return res.json({
+                            success: false,
+                            msg: 'An error occurred while encrypting',
+                            error: err
+                        });
+                        newBusiness.password = hash;
+
+                        //Adding business to the db after making sure all inputs are valid and the password is encrypted
+                        newBusiness.save(function (err) {
+                            if (err) return res.json({
+                                success: false,
+                                msg: 'Was not able to save your business, please try again'
+                            });
+                            res.json({
+                                success: true,
+                                msg: 'Your application is successfully submitted!'
+                            });
+                        });
+                    });
+                });
+            }
+        });
     }
-    else {
-
-      //Checking if email is already taken
-      Business.find({
-          'email': email
-      }, (err, business) => {
-          if (err) return res.json('Signup error');
-          if (business.length != 0) return res.json('Email already used. Please enter another email.');
-      })
-      let newBusiness = new Business({
-          name: name,
-          password: password,
-          email: email,
-          description: description
-      });
-
-      //Encrypting password
-      bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newBusiness.password, salt, (err, hash) => {
-              if (err) return res.json({
-                  success: false,
-                  msg: 'An error occurred while encrypting',
-                  error: err
-              });
-              newBusiness.password = hash;
-
-              //Adding business to the db after making sure all inputs are valid and the password is encrypted
-              newBusiness.save(function(err) {
-                  if (err) return res.json({
-                      success: false,
-                      msg: 'Was not able to save your business, please try again'
-                  });
-                  res.json({
-                      success: true,
-                      msg: 'Your application is successfully submitted!'
-                  });
-              })
-          })
-      })
-    }
-
-
 };
 
 
@@ -229,8 +233,8 @@ module.exports.passportAuthenticate = passport.authenticate('local');
 
 
 //Post function to login a business
-//Calling Route: /api/business/login/
-module.exports.businessLogin = function(req, res) {
+//Calling Route: /api/business/login
+module.exports.businessLogin = function (req, res) {
     //Setting the Session Variable loggedin to the email in order to get the logged in user for later usage.
     req.session.loggedin = req.body.username;
     res.json('You are logged in as ' + req.user.email);
@@ -239,16 +243,16 @@ module.exports.businessLogin = function(req, res) {
 
 //Post function to logout a business
 //Calling Route: /api/business/logout
-module.exports.businessLogout = function(req, res) {
+module.exports.businessLogout = function (req, res) {
     req.logout();
     res.json('You have successfully logged out.');
 }
 
 
 //Passport handling the login
-passport.use(new LocalStrategy(function(username, password, done) {
+passport.use(new LocalStrategy(function (username, password, done) {
     // Finding the business by his email
-    Business.getBusinessByEmail(username, function(err, business) {
+    Business.getBusinessByEmail(username, function (err, business) {
         if (err) res.json({
             success: false,
             msg: 'Can not get business by email'
@@ -257,13 +261,13 @@ passport.use(new LocalStrategy(function(username, password, done) {
             message: 'Invalid email.'
         });
         //Comparing to see if the 2 passwords match
-        Business.comparePassword(password, business.password, function(err, isMatch) {
+        Business.comparePassword(password, business.password, function (err, isMatch) {
             if (err) res.json({
                 success: false,
                 msg: 'Error in comparing passwords'
             });
             if (isMatch) return done(null, business);
-            else return done(null, false, {
+            done(null, false, {
                 message: 'Invalid password.'
             });
         });
@@ -272,102 +276,113 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 
 //Passport module serializes User ID
-passport.serializeUser(function(business, done) {
+passport.serializeUser(function (business, done) {
     done(null, business.id);
 });
 
 
 //Passport module deserializes User ID
-passport.deserializeUser(function(id, done) {
-    Business.getBusinessById(id, function(err, business) {
+passport.deserializeUser(function (id, done) {
+    Business.getBusinessById(id, function (err, business) {
         if (err) res.json({
             success: false,
             msg: 'Can not deserialize user'
         });
-        done(err, business);
+        else
+            done(err, business);
     });
 });
 
 
 // Get function that returns all unverified businesses based on the value of the attribute verified
 // Calling Route: /api/business/unVerifiedBusinesses
-module.exports.unVerifiedBusinesses = function(req, res) {
+module.exports.unVerifiedBusinesses = function (req, res) {
     const query = Business.find({
         verified: false
     });
-    query.exec(function(err, businesses) {
+    query.exec(function (err, businesses) {
         if (err) res.json({
             success: false,
             msg: 'Can not retrieve unverified businesses'
         });
-        res.json({
-            success: true,
-            msg: 'Got unverified businesses successfully',
-            businesses: businesses
-        });
+        else
+            res.json({
+                success: true,
+                msg: 'Got unverified businesses successfully',
+                businesses: businesses
+            });
     });
 };
 
 
-// Post function that verifies the business
+// Put function that verifies the business
 // Calling Route: /api/business/verify/:id
-module.exports.verifyBusiness = function(req, res) {
+module.exports.verifyBusiness = function (req, res) {
     //Getting the business by its id
-    Business.findById(req.params.id, function(err, business) {
+    Business.findById(req.params.id, function (err, business) {
         // verifying the business
         business.verified = true;
         // updating the db
-        business.save(function(err) {
+        business.save(function (err) {
             if (err) res.json({
                 success: false,
                 msg: 'Was not able to verify business'
             });
-            sendEmail(true, business.name, business.email, function(err, info){
-                if(err) res.json({success: false, error: err, msg: 'Bussines was not notified of verification'});
-                res.json({success: true, msg: 'Business verified and notified'});
+            sendEmail(true, business.name, business.email, function (err, info) {
+                if (err) res.json({
+                    success: false,
+                    error: err,
+                    msg: 'Business was not notified of verification'
+                });
+                else
+                    res.json({
+                        success: true,
+                        msg: 'Business verified and notified'
+                    });
             });
         });
     });
 };
 
 
-// Post function that declines verification of a business
+// Delete function that declines verification of a business
 // Calling Route: /api/business/decline/:id
-module.exports.declineBusiness = function(req, res) {
+module.exports.declineBusiness = function (req, res) {
     // delete declined busiess
-    Business.findById(req.params.id, function(err, business) {
-      console.log(business);
-      Business.deleteOne({_id: req.params.id}, function(err, doc){
-        if(err) {
-          res.json({success: false, msg: "Error deleting business"});
+    Business.findByIdAndRemove(req.params.id, function (err, business) {
+        if (err) {
+            res.json({
+                success: false,
+                msg: "Error deleting business"
+            });
+        } else {
+            sendEmail(false, business.name, business.email, function (err, info) {
+                if (err) {
+                    res.json({
+                        success: false,
+                        error: err,
+                        msg: 'Business was not notified of rejection'
+                    });
+                } else {
+                    res.json({
+                        success: true,
+                        msg: 'Business rejected and notified'
+                    });
+                }
+            });
         }
-        else{
-          console.log(business);
-          sendEmail(false, business.name, business.email, function(err, info){
-              if(err) {
-                res.json({success: false, error: err, msg: 'Business was not notified of rejection'});
-              }
-              else{
-                res.json({success: true, msg: 'Business rejected and notified'});
-              }
-
-          });
-        }
-
-      });
     });
 };
-
 
 
 /*
 Post function that increments the interactivity attribute of a certain business by 1
 Calling route: api/business/interact/:id
 */
-module.exports.updateInteractivity = function(req, res) {
-    Business.findById(req.params.id, function(err, business) {
+module.exports.updateInteractivity = function (req, res) {
+    Business.findById(req.params.id, function (err, business) {
         business.interactivity = business.interactivity + 1;
-        business.save(function(err) {
+        business.save(function (err) {
             if (err) res.json({
                 success: false,
                 msg: 'Updating business interactivity failed'
@@ -385,13 +400,13 @@ module.exports.updateInteractivity = function(req, res) {
 Get function that returns the three most popular businesses based on their interactivity
 Calling route: api/business/mostPopular
 */
-module.exports.getMostPopular = function(req, res) {
+module.exports.getMostPopular = function (req, res) {
     // query for sorting businesses based on interactivity and limits the result to 3
     const query = Business.find().sort({
         interactivity: -1
     }).limit(3);
     // execute the above query
-    query.exec(function(err, businesses) {
+    query.exec(function (err, businesses) {
         // If there is an error return it in response
         if (err) res.json({
             success: false,
@@ -413,21 +428,20 @@ module.exports.getMostPopular = function(req, res) {
 */
 function sendEmail(verify, businessName, businessEmail, done) {
     var mailOptions = {};
-    if(verify) {
-       mailOptions = {
-          from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
-          to: businessEmail, // list of receivers
-          subject: 'Account Verified', // Subject line
-          text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats' // plain text body
-      };
-    }
-    else {
-      mailOptions = {
-          from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
-          to: businessEmail, // list of receivers
-          subject: 'Account Rejected', // Subject line
-          text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats' // plain text body
-      };
+    if (verify) {
+        mailOptions = {
+            from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+            to: businessEmail, // list of receivers
+            subject: 'Account Verified', // Subject line
+            text: 'Hello ' + businessName + '!\n\nYour acount has been verified.\n\nWelcome to Black Hats.' // plain text body
+        };
+    } else {
+        mailOptions = {
+            from: '"Black Hats Team" <blackhatsguc@gmail.com>', // sender address
+            to: businessEmail, // list of receivers
+            subject: 'Account Rejected', // Subject line
+            text: 'Hello ' + businessName + '\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats.' // plain text body
+        };
     }
 
 

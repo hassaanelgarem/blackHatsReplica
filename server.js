@@ -20,12 +20,14 @@ app.use(cors());
 
 // app.use(express.static(path.join(__dirname, '/public')));
 
+
+// ORDER OF THE MIDDLEWARE IS CRITICAL
+
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
 app.use(bodyParser.json());
-
 
 // Express Session
 app.use(session(
@@ -66,10 +68,9 @@ app.use(function (req, res, next)
 app.use("/api", routes);
 
 // Index Route
-app.get('/', (req, res) => {
+app.all('/', (req, res) => {
 	res.send('Invalid EndPoint');
 });
-
 
 // Start Server
 app.listen(app.get('port'), () => {

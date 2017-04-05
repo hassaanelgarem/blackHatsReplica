@@ -11,11 +11,6 @@ const businessCtrl = require('../controllers/business.controller');
 const expressValidator = require('express-validator');
 
 
-router.use(expressValidator());
-router.use(passport.initialize());
-router.use(passport.session());
-
-
 router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
 router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
 router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite);
@@ -24,10 +19,10 @@ router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
 router.route('/business/apply').post(businessCtrl.addBusiness);
 router.route('/business/unVerifiedBusinesses').get(businessCtrl.unVerifiedBusinesses);
-router.route('/business/verify/:id').post(businessCtrl.verifyBusiness);
+router.route('/business/verify/:id').put(businessCtrl.verifyBusiness);
 router.route('/business/login').post(businessCtrl.passportAuthenticate, businessCtrl.businessLogin);
 router.route('/business/logout').post(businessCtrl.businessLogout);
-router.route('/business/decline/:id').post(businessCtrl.declineBusiness);
+router.route('/business/decline/:id').delete(businessCtrl.declineBusiness);
 router.route('/profile/:userId').get(profileCtrl.getOneUser);
 router.route('/activity/book').post(bookingCtrl.bookActivity);
 router.route('/review/user/:userID').get(reviewCtrl.getUserReviews);

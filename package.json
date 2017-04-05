@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hassaanelgarem/blackHats.git"
+    "url": "git+https://github.com/SEGUC17/blackHats.git"
   },
   "author": "Black Hats",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hassaanelgarem/blackHats/issues"
+    "url": "https://github.com/SEGUC17/blackHats/issues"
   },
-  "homepage": "https://github.com/hassaanelgarem/blackHats#readme"
+  "homepage": "https://github.com/SEGUC17/blackHats#readme"
 }
