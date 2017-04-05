@@ -13,12 +13,6 @@ const profileCtrl = require('../controllers/profile.controller.js');
 const advCtrl = require('../controllers/advertisement.controller');
 
 
-
-router.use(expressValidator());
-router.use(passport.initialize());
-router.use(passport.session());
-
-
 router.route('/business/edit/:businessId').get(businessCtrl.getCurrentInfo).put(businessCtrl.saveNewInfo);
 router.route('/register').post(userCtrl.registerUser);
 router.route('/login').post(userCtrl.passportAuthenticate, userCtrl.login);
@@ -33,6 +27,13 @@ router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite)
 router.route('/editBusiness/:businessId/addTags').put(businessCtrl.addTags);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
+router.route('/business/apply').post(businessCtrl.addBusiness);
+router.route('/business/unVerifiedBusinesses').get(businessCtrl.unVerifiedBusinesses);
+router.route('/business/verify/:id').put(businessCtrl.verifyBusiness);
+router.route('/business/login').post(businessCtrl.passportAuthenticate, businessCtrl.businessLogin);
+router.route('/business/logout').post(businessCtrl.businessLogout);
+router.route('/business/decline/:id').delete(businessCtrl.declineBusiness);
+router.route('/profile/:userId').get(profileCtrl.getOneUser);
 router.route('/activity/add').post(activityCtrl.addActivity);
 router.route('/business/businessPage/:id').get(businessCtrl.getBusinessInfo);
 router.route('/profile/:userId').get(profileCtrl.getOneUser).put(profileCtrl.updateOneUser);

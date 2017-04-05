@@ -1,4 +1,11 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+
+function toLower(str) {
+    return str.toLowerCase();
+}
+
 
 const businessSchema = new mongoose.Schema({
     name: {
@@ -7,7 +14,9 @@ const businessSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        set: toLower,
+        unique: true
     },
     password: {
         type: String,
@@ -26,6 +35,9 @@ const businessSchema = new mongoose.Schema({
         to: {
             type: String
         }
+    },
+    address: {
+        type: String
     },
     location: {
         address: String,
@@ -79,8 +91,37 @@ const businessSchema = new mongoose.Schema({
     logo: {
         type: String
     },
+    verified: {
+        type: Boolean,
+        default: false
+    },
     resetPasswordToken: String,
     resetPasswordTokenExpiry: Date
 });
+
+
+//Helper function to compare encrypted paswords
+businessSchema.statics.comparePassword = function(candidatePassword, hash, callback) {
+    bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+        if (err) throw err;
+        callback(null, isMatch);
+    });
+}
+
+
+//Helper function to get a business by its id
+businessSchema.statics.getBusinessById = function(id, callback) {
+    this.findById(id, callback);
+}
+
+
+//Helper function to get a business by its email
+businessSchema.statics.getBusinessByEmail = function(email, callback) {
+    var query = {
+        email: email
+    };
+    this.findOne(query, callback);
+}
+
 
 mongoose.model('Business', businessSchema);

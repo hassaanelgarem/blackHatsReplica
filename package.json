@@ -14,22 +14,23 @@
     "express": "*",
     "express-session": "^1.15.2",
     "express-validator": "^3.1.2",
-    "mongoose": "*",
-    "passport": "*",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "passport-http": "*",
-    "passport-local": "*",
-    "geoip-lite": "^1.2.0",
     "fs": "0.0.1-security",
-    "multer": "*"
+    "mongoose": "*",
+    "multer": "*",
+    "nodemailer": "^3.1.8",
+    "geoip-lite": "^1.2.0",
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hassaanelgarem/blackHats.git"
+    "url": "git+https://github.com/SEGUC17/blackHats.git"
   },
   "author": "Black Hats",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hassaanelgarem/blackHats/issues"
+    "url": "https://github.com/SEGUC17/blackHats/issues"
   },
-  "homepage": "https://github.com/hassaanelgarem/blackHats#readme"
+  "homepage": "https://github.com/SEGUC17/blackHats#readme"
 }
