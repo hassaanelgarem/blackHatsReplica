@@ -69,16 +69,21 @@ const businessSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Review"
     }],
+    totalRatings: {
+        type: Number,
+        default: 0
+    },
     photos: [{
         type: String
     }],
     /*
-        1: Full payment needed
-        2: Deposit needed
-        3: No payment needed
+      1: Full payment needed
+      2: Deposit needed
+      3: No payment needed
     */
     paymentRequired: {
-        type: Number
+        type: Number,
+        default: 3
     },
     deposit: {
         type: Number
