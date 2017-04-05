@@ -17,7 +17,7 @@ Post function to upload photo using multer
 and store the uploaded image path in the Activity
 model in photos array, and return the
 filepath to the frontend to show the image.
-Calling route: '/activity/:activityId/addPhoto'
+Calling route: '/api/activity/:activityId/addPhoto'
 */
 module.exports.addPhoto = function(req, res) {
     //Check if business is logged in
@@ -97,7 +97,7 @@ module.exports.addPhoto = function(req, res) {
     //user is not logged in
     else {
         res.json({
-            //  error: "Please Login"
+            error: "Please Login"
         });
     }
 };
@@ -106,7 +106,7 @@ module.exports.addPhoto = function(req, res) {
 /*
 delete function that deletes photo from activity's
 photos array, and returns success message or error message.
-Calling route: '/activity/activityId/deletePhoto/:photoPath'
+Calling route: '/api/activity/activityId/deletePhoto/:photoPath'
 */
 module.exports.deletePhoto = function(req, res) {
     var imagePath = req.params.photoPath;
