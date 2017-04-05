@@ -102,7 +102,7 @@ module.exports.getAvailableSlots = function(req, res) {
 
 
 /* Delete function that finds and deletes a specific slot in a specific activity
-URI: api/activity/:activityId/deleteSlot */
+Calling route: api/activity/:activityId/deleteSlot */
 module.exports.deleteSlot = function(req, res) {
 
     //Create constants to save them as Date format
@@ -175,7 +175,7 @@ module.exports.deleteSlot = function(req, res) {
 
 
 /* Post function that adds a slot in a specific activity
-URI: api/activity/edit/:activityId/addSlot*/
+Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
 
     //Create constants to save them as Date format

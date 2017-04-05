@@ -17,7 +17,7 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 
-router.route('/activity/edit/:activityId/addSlot').post(activityCtrl.addSlot);
+router.route('/activity/:activityId/addSlot').post(activityCtrl.addSlot);
 router.route('/activity/:activityId/deleteSlot').delete(activityCtrl.deleteSlot);
 router.route('/business/edit/:businessId').get(businessCtrl.getCurrentInfo).put(businessCtrl.saveNewInfo);
 router.route('/register').post(userCtrl.registerUser);
