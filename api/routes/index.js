@@ -52,5 +52,5 @@ router.route('/advertisement/bookAdvSlot/:businessId/:advSlot').post(advCtrl.boo
 router.route('/advertisement/getCurrentBookings/:advSlotID').get(advCtrl.getCurrentBookings);
 router.route('/advertisement/getFreeSlot/:advSlotID').get(advCtrl.getFreeSlot);
 
->>>>>>> master
+
 module.exports = router;
