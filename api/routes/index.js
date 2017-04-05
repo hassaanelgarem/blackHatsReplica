@@ -11,9 +11,11 @@ const activityCtrl = require('../controllers/activity.controller');
 const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
+
 router.use(expressValidator());
 router.use(passport.initialize());
 router.use(passport.session());
+
 
 router.route('/activity/edit/:activityId/addSlot').post(activityCtrl.addSlot);
 router.route('/activity/:activityId/deleteSlot').delete(activityCtrl.deleteSlot);
@@ -38,7 +40,6 @@ router.route('/business/businessPage/:id').get(businessCtrl.getBusinessInfo);
 router.route('/profile/:userId').get(profileCtrl.getOneUser).put(profileCtrl.updateOneUser);
 router.route('/profile/:userId/uploadProfilePicture').put(profileCtrl.uploadProfilePicture);
 router.route('/activity/book').post(bookingCtrl.bookActivity);
-router.route('/activity/:businessId').get(activityCtrl.getActivities);
 router.route('/review/user/:userID').get(reviewCtrl.getUserReviews);
 router.route('/review/edit/:reviewID').post(reviewCtrl.editReview);
 router.route('/review/:businessId').get(reviewCtrl.getReviews);
@@ -46,6 +47,7 @@ router.route('/review/add').post(reviewCtrl.addReview);
 router.route('/review/averageRating/:businessId').get(reviewCtrl.getAverageRating);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
+router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
 
 
 module.exports = router;
