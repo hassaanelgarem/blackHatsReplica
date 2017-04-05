@@ -21,7 +21,8 @@ module.exports.bookActivity = function(req, res) {
     const newBooking = new Booking({
       slot: req.body.slot,
       activity: req.body.activity,
-      user: req.body.user
+      user: req.body.user,
+      date: req.body.date
     });
     // Save new booking in database
     newBooking.save(function (err, booking) {
