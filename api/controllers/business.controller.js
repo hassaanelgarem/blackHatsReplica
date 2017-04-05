@@ -174,43 +174,53 @@ module.exports.addBusiness = function(req, res) {
     req.checkBody('email', 'Email format is not correct.').isEmail();
     req.checkBody('description', 'A brief description of your business is necessary to apply.').notEmpty();
 
-    //Checking if email is already taken
-    Business.find({
-        'email': email
-    }, (err, business) => {
-        if (err) return res.json('Signup error');
-        if (business.length != 0) return res.json('Email already used. Please enter another email.');
-    })
-    let newBusiness = new Business({
-        name: name,
-        password: password,
-        email: email,
-        description: description
-    });
+    var errors = req.validationErrors();
 
-    //Encrypting password
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newBusiness.password, salt, (err, hash) => {
-            if (err) return res.json({
-                success: false,
-                msg: 'An error occurred while encrypting',
-                error: err
-            });
-            newBusiness.password = hash;
+    if(errors) {
+        res.json({success: false, msg: "Problem with submitted fields", errors: errors});
+    }
+    else {
 
-            //Adding business to the db after making sure all inputs are valid and the password is encrypted
-            newBusiness.save(function(err) {
-                if (err) return res.json({
-                    success: false,
-                    msg: 'Was not able to save your business, please try again'
-                });
-                res.json({
-                    success: true,
-                    msg: 'Your application is successfully submitted!'
-                });
-            })
-        })
-    })
+      //Checking if email is already taken
+      Business.find({
+          'email': email
+      }, (err, business) => {
+          if (err) return res.json('Signup error');
+          if (business.length != 0) return res.json('Email already used. Please enter another email.');
+      })
+      let newBusiness = new Business({
+          name: name,
+          password: password,
+          email: email,
+          description: description
+      });
+
+      //Encrypting password
+      bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newBusiness.password, salt, (err, hash) => {
+              if (err) return res.json({
+                  success: false,
+                  msg: 'An error occurred while encrypting',
+                  error: err
+              });
+              newBusiness.password = hash;
+
+              //Adding business to the db after making sure all inputs are valid and the password is encrypted
+              newBusiness.save(function(err) {
+                  if (err) return res.json({
+                      success: false,
+                      msg: 'Was not able to save your business, please try again'
+                  });
+                  res.json({
+                      success: true,
+                      msg: 'Your application is successfully submitted!'
+                  });
+              })
+          })
+      })
+    }
+
+
 };
 
 
