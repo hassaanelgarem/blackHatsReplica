@@ -10,6 +10,8 @@ const reviewCtrl = require('../controllers/review.controller');
 const activityCtrl = require('../controllers/activity.controller');
 const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
+const advCtrl = require('../controllers/advertisement.controller');
+
 
 
 router.use(expressValidator());
@@ -28,7 +30,6 @@ router.route('/editBusiness/:businessId/addLogo').put(businessCtrl.uploadLogo);
 router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
 router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
 router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite);
-router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/editBusiness/:businessId/addTags').put(businessCtrl.addTags);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
@@ -45,6 +46,11 @@ router.route('/review/add').post(reviewCtrl.addReview);
 router.route('/review/averageRating/:businessId').get(reviewCtrl.getAverageRating);
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
+router.route('/advertisement/addAdvSlots').post(advCtrl.addAdvSlots);
+router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
+router.route('/advertisement/bookAdvSlot/:businessId/:advSlot').post(advCtrl.bookAdvSlot);
+router.route('/advertisement/getCurrentBookings/:advSlotID').get(advCtrl.getCurrentBookings);
+router.route('/advertisement/getFreeSlot/:advSlotID').get(advCtrl.getFreeSlot);
 
 
 module.exports = router;
