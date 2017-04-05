@@ -4,11 +4,11 @@ const mongoose = require('mongoose');
 const bookingSchema = new mongoose.Schema({
     slot: {
         startTime: {
-            type: String,
+            type: Date,
             required: true
         },
         endTime: {
-            type: String,
+            type: Date,
             required: true
         }
     },
@@ -21,7 +21,11 @@ const bookingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
+    },
+    date: {
+  		type: Date,
+  		required: true
+  	}
 });
 
 mongoose.model('Booking', bookingSchema);
