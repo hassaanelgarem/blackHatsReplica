@@ -20,19 +20,14 @@ app.use(cors());
 
 // app.use(express.static(path.join(__dirname, '/public')));
 
+
+// ORDER OF THE MIDDLEWARE IS CRITICAL
+
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
 app.use(bodyParser.json());
-
-app.use("/api", routes);
-
-// Index Route
-app.get('/', (req, res) => {
-	res.send('Invalid EndPoint');
-});
-
 
 // Express Session
 app.use(session(
@@ -42,11 +37,9 @@ app.use(session(
     resave: true
 }));
 
-
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // Express Validator
 app.use(expressValidator({
@@ -66,12 +59,19 @@ app.use(expressValidator({
   }
 }));
 
-app.use(function (req, res, next) 
+app.use(function (req, res, next)
 {
   res.locals.user = req.user || null;
   next();
 });
-app.use('/api',routes);
+
+app.use("/api", routes);
+
+// Index Route
+app.all('/', (req, res) => {
+	res.send('Invalid EndPoint');
+});
+
 
 // Start Server
 app.listen(app.get('port'), () => {

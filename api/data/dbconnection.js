@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const dburl = "mongodb://localhost:27017/blackhats";
-  
+
 mongoose.connect(dburl);
 
 
@@ -41,3 +41,5 @@ require("./activity.model");
 require("./booking.model");
 require("./review.model");
 require("./user.model");
+require("./advBooking.model");
+require("./advSlot.model");

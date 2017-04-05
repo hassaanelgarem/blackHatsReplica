@@ -10,11 +10,7 @@ const reviewCtrl = require('../controllers/review.controller');
 const activityCtrl = require('../controllers/activity.controller');
 const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
-
-
-router.use(expressValidator());
-router.use(passport.initialize());
-router.use(passport.session());
+const advCtrl = require('../controllers/advertisement.controller');
 
 
 router.route('/activity/:activityId/addSlot').post(activityCtrl.addSlot);
@@ -36,6 +32,14 @@ router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/editBusiness/:businessId/addTags').put(businessCtrl.addTags);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
 router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
+router.route('/business/apply').post(businessCtrl.addBusiness);
+router.route('/business/unVerifiedBusinesses').get(businessCtrl.unVerifiedBusinesses);
+router.route('/business/verify/:id').put(businessCtrl.verifyBusiness);
+router.route('/business/login').post(businessCtrl.passportAuthenticate, businessCtrl.businessLogin);
+router.route('/business/logout').post(businessCtrl.businessLogout);
+router.route('/business/decline/:id').delete(businessCtrl.declineBusiness);
+router.route('/profile/:userId').get(profileCtrl.getOneUser);
+router.route('/activity/add').post(activityCtrl.addActivity);
 router.route('/business/businessPage/:id').get(businessCtrl.getBusinessInfo);
 router.route('/profile/:userId').get(profileCtrl.getOneUser).put(profileCtrl.updateOneUser);
 router.route('/profile/:userId/uploadProfilePicture').put(profileCtrl.uploadProfilePicture);
@@ -49,6 +53,11 @@ router.route('/review/averageRating/:businessId').get(reviewCtrl.getAverageRatin
 router.route('/review/:reviewId').delete(reviewCtrl.deleteReview);
 router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
 router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
+router.route('/advertisement/addAdvSlots').post(advCtrl.addAdvSlots);
+router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
+router.route('/advertisement/bookAdvSlot/:businessId/:advSlot').post(advCtrl.bookAdvSlot);
+router.route('/advertisement/getCurrentBookings/:advSlotID').get(advCtrl.getCurrentBookings);
+router.route('/advertisement/getFreeSlot/:advSlotID').get(advCtrl.getFreeSlot);
 
 
 module.exports = router;
