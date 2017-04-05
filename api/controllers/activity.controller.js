@@ -44,32 +44,32 @@ module.exports.deleteSlot = function(req, res) {
                     });
                 } else {
                     // loop
-                    for (const i = 0; i < activity.slots.length; i++) {
-                        if (activity.slots[i].startTime.getHours() == start.getHours()) {
-                            if (activity.slots[i].startTime.gteMinutes() == start.getMinutes()) {
-                                if (activity.slots[i].endTime.getHours() == end.getHours()) {
-                                    if (activity.slots[i].endTime.gteMinutes() == end.getMinutes()) {
-                                            activity.slots[i].splice(i, 1);
-                                            activity.save(function(err, activity) {
-                                                if (err) {
-                                                    res.json({
-                                                        success: false,
-                                                        msg: 'Slot Not Deleted'
-                                                    });
-                                                } else {
-                                                    res.json({
-                                                        success: true,
-                                                        msg: 'Slot Deleted'
-                                                    });
-                                                }
-                                            });
-                                        }
+                    for (var i = 0; i < activity.slots.length; i++) {
+                      var found = false;
+                        if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)){
+                                activity.slots.splice(i, 1);
+                                activity.save(function(err, activity) {
+                                    if (err) {
+                                        res.json({
+                                            success: false,
+                                            msg: 'Slot Not Deleted'
+                                        });
+                                    } else {
+                                        res.json({
+                                            success: true,
+                                            msg: 'Slot Deleted'
+                                        });
                                     }
-                                }
-
+                                });
+                                found = true;
+                                break;
                             }
-
                         }
+                      if(!found){
+                        res.json({success: false, msg: "Couldn't find desired slot"})
+                      }
+
+
                     }
                 });
         };
@@ -78,46 +78,53 @@ module.exports.deleteSlot = function(req, res) {
         module.exports.addSlot = function(req, res) {
             const start = new Date(req.body.startTime);
             const end = new Date(req.body.endTime);
-            Activity.findbyId(req.params.activityId, function(err, activity) {
+            Activity.findById(req.params.activityId, function(err, activity) {
                 if (err) {
                     res.json({
                         success: false,
                         msg: 'There was a problem finding the desired activity'
                     });
                 } else {
-                    for (const i = 0; i < activity.slots.length; i++) {
-
-                        const x = compareDate(activity.slot[i].startTime, end);
-                        const y = compareDate(start, activity.slot[i].endTime);
+                    var noOverlap = true;
+                    for (var i = 0; i < activity.slots.length; i++) {
+                        const x = compareDate(activity.slots[i].startTime, end);
+                        const y = compareDate(start, activity.slots[i].endTime);
 
                         if (!(x == -1 && y == -1)) {
-                            const newSlot = {
-                                "startTime": start,
-                                "endTime": end
-                            };
-
-                            activity.slots.push(newSlot);
-                            activity.save(function(err, activity) {
-                                if (err) {
-                                    res.json({
-                                        success: false,
-                                        msg: 'Slot Not Added'
-                                    });
-                                } else {
-                                    res.json({
-                                        success: true,
-                                        msg: 'Slot Added'
-                                    });
-                                }
-                            });
 
                         } else {
-                            res.json({
-                                success: false,
-                                msg: 'Overlap'
-                            });
+                            flag = false
+                            break;
                         }
                     }
+                    if (noOverlap) {
+                        const newSlot = {
+                            "startTime": start,
+                            "endTime": end
+                        };
+
+                        activity.slots.push(newSlot);
+                        activity.save(function(err, activity) {
+                            if (err) {
+                                res.json({
+                                    success: false,
+                                    msg: 'Slot Not Added'
+                                });
+                            } else {
+                                res.json({
+                                    success: true,
+                                    msg: 'Slot Added'
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({
+                            success: false,
+                            msg: 'Overlap'
+                        });
+                    }
+
+
                 }
             });
         };
