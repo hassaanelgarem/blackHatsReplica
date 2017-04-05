@@ -11,7 +11,6 @@ const activityCtrl = require('../controllers/activity.controller');
 const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 
-
 router.use(expressValidator());
 router.use(passport.initialize());
 router.use(passport.session());
@@ -29,6 +28,8 @@ router.route('/editBusiness/:businessId/addLogo').put(businessCtrl.uploadLogo);
 router.route('/business/:businessId/addPhoto').post(businessCtrl.addPhoto);
 router.route('/business/:businessId/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
 router.route('/user/:userId/addfavorite/:businessId').post(userCtrl.addFavorite);
+router.route('/activity/:activityId/addPhoto').post(activityCtrl.addPhoto);
+router.route('/activity/:activityId/deletePhoto/:photoPath').delete(activityCtrl.deletePhoto);
 router.route('/search').get(userCtrl.searchByNameOrTag);
 router.route('/editBusiness/:businessId/addTags').put(businessCtrl.addTags);
 router.route('/business/interact/:id').post(businessCtrl.updateInteractivity);
