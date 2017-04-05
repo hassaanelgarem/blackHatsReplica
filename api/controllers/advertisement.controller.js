@@ -131,7 +131,7 @@ module.exports.bookAdvSlot = function (req, res) {
 in ascending order and excluding any booking that is expired.
 Calling route: /advertisement/getCurrentBookings/:advSlotID */
 module.exports.getCurrentBookings = function (req, res) {
-    /*   A query that finds the advSchedule of the selected slot 
+    /*   A query that finds the advSchedule of the selected slot
     and sorts it ascendingly by startTime and excludes any expired ads */
     AdvSlot.findById(req.params.advSlotID)
         //  populate an array of references with booking objects being referenced
@@ -165,10 +165,10 @@ module.exports.getCurrentBookings = function (req, res) {
 }
 
 
-/*  Get method that returns the first available slot for booking in a slot's schedule.
+/*  Get function that returns the first available slot for booking in a slot's schedule.
     Calling route: /advertisement/getFreeSlot/:advSlotID    */
 module.exports.getFreeSlot = function (req, res) {
-    /*   A query that finds the advSchedule of the selected slot 
+    /*   A query that finds the advSchedule of the selected slot
      and sorts them descendingly by endTime to get the last occupied slot  */
     AdvSlot.findById(req.params.advSlotID)
         //used to populate an array of references with booking objects being referenced
@@ -205,10 +205,10 @@ module.exports.getFreeSlot = function (req, res) {
 
 
 
-//3.3: 
-//Upload photo using multer 
-//and store the uploaded image path in the Business 
-//model in photos array, and return the 
+//3.3:
+//Upload photo using multer
+//and store the uploaded image path in the Business
+//model in photos array, and return the
 //filepath to the frontend to show the image.
 //Calling route: '/business/:businessId/addPhoto'
 
@@ -220,7 +220,7 @@ var uploadAdv = function (req, res, callback) {
             return res.json(err);
         }
         //if multer found a file selected
-        //and image was uploaded successfully, 
+        //and image was uploaded successfully,
         //multer will save the image in req.file
         if (req.file) {
             //get the image format
