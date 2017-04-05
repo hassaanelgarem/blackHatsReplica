@@ -45,16 +45,16 @@ module.exports.addActivity = function(req, res) {
         bookingsPerSlot: req.body.bookingsPerSlot,
         business: req.body.business,
         slots: [{
-                "startTime": "2012-12-12:10:00",
-                "endTime": "2012-12-12:11:00"
+                "startTime": "2012-12-12:10:00:00.000Z",
+                "endTime": "2012-12-12:11:00:00.000Z"
             },
             {
-                "startTime": "2012-12-12:11:00",
-                "endTime": "2012-12-12:12:00"
+                "startTime": "2012-12-12:11:00:00.000Z",
+                "endTime": "2012-12-12:12:00:00.000Z"
             },
             {
-                "startTime": "2012-12-12:12:00",
-                "endTime": "2012-12-12:13:00"
+                "startTime": "2012-12-12:12:00:00.000Z",
+                "endTime": "2012-12-12:13:00:00.000Z"
             }
         ]
     });
@@ -131,11 +131,14 @@ module.exports.getAvailableSlots = function(req, res) {
                     counter = 0;
 
                     for (var j = 0; j < bookedSlots.bookings.length; j++) {
+                        console.log("x before: " + actSlots.slots[i].startTime);
                         const x = new Date(actSlots.slots[i].startTime);
                         const y = new Date(bookedSlots.bookings[j].slot.startTime);
                         const z = new Date(actSlots.slots[i].endTime);
                         const w = new Date(bookedSlots.bookings[j].slot.endTime)
                         if (x.getTime() == y.getTime()) {
+                          console.log("x: " + x);
+                          console.log("y: " + y);
                             if (z.getTime() == w.getTime()){
                               counter++;
                               console.log(x);
@@ -145,6 +148,8 @@ module.exports.getAvailableSlots = function(req, res) {
 
                     if (counter < maxBookings){
                       console.log("Passed: " + actSlots.slots[i]);
+                      console.log("Counter = " + counter);
+                      console.log("maxBookings = " + maxBookings);
                       availableSlots.push(actSlots.slots[i]);
                     }
 
