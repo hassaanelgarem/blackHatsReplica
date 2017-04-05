@@ -32,125 +32,194 @@ module.exports.getActivities = function(req, res) {
 /* Delete function that finds and deletes a specific slot in a specific activity
 URI: api/activity/:activityId/deleteSlot */
 module.exports.deleteSlot = function(req, res) {
-        const start = new Date(req.body.startTime);
-        const end = new Date(req.body.endTime);
-        //Finding specified activity
-        Activity.findById(req.params.activityId, function(err, activity) {
-                //If an error occurred, display a msg along with the error
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'There was a problem finding the desired activity'
-                    });
-                } else {
-                    // loop
-                    for (var i = 0; i < activity.slots.length; i++) {
-                      var found = false;
-                        if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)){
-                                activity.slots.splice(i, 1);
-                                activity.save(function(err, activity) {
-                                    if (err) {
-                                        res.json({
-                                            success: false,
-                                            msg: 'Slot Not Deleted'
-                                        });
-                                    } else {
-                                        res.json({
-                                            success: true,
-                                            msg: 'Slot Deleted'
-                                        });
-                                    }
-                                });
-                                found = true;
-                                break;
-                            }
-                        }
-                      if(!found){
-                        res.json({success: false, msg: "Couldn't find desired slot"})
-                      }
 
+    //Create constants to save them as Date format
+    const start = new Date(req.body.startTime);
+    const end = new Date(req.body.endTime);
 
-                    }
-                });
-        };
+    //Finding specified activity
+    Activity.findById(req.params.activityId, function(err, activity) {
 
-
-        module.exports.addSlot = function(req, res) {
-            const start = new Date(req.body.startTime);
-            const end = new Date(req.body.endTime);
-            Activity.findById(req.params.activityId, function(err, activity) {
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'There was a problem finding the desired activity'
-                    });
-                } else {
-                    var noOverlap = true;
-                    for (var i = 0; i < activity.slots.length; i++) {
-                        const x = compareDate(activity.slots[i].startTime, end);
-                        const y = compareDate(start, activity.slots[i].endTime);
-
-                        if (!(x == -1 && y == -1)) {
-
-                        } else {
-                            flag = false
-                            break;
-                        }
-                    }
-                    if (noOverlap) {
-                        const newSlot = {
-                            "startTime": start,
-                            "endTime": end
-                        };
-
-                        activity.slots.push(newSlot);
-                        activity.save(function(err, activity) {
-                            if (err) {
-                                res.json({
-                                    success: false,
-                                    msg: 'Slot Not Added'
-                                });
-                            } else {
-                                res.json({
-                                    success: true,
-                                    msg: 'Slot Added'
-                                });
-                            }
-                        });
-                    } else {
-                        res.json({
-                            success: false,
-                            msg: 'Overlap'
-                        });
-                    }
-
-
-                }
+        //If an error occurred, display a msg along with the error
+        if (err) {
+            res.json({
+                success: false,
+                msg: 'There was a problem finding the desired activity'
             });
-        };
+        }
+        //If activity is found
+        else {
 
+            //Loop to find the slot in the slots array
+            for (var i = 0; i < activity.slots.length; i++) {
 
-        // date1 = date2 --> 0
-        // date1 > date2 --> 1
-        // date1 < date2 --> -1
+                //Found flag
+                var found = false;
 
-        function compareDate(date1, date2) {
+                //Checking the specified time against the slots time
+                if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)) {
 
-            if (date1.getHours() == date2.getHours()) {
-                if (date1.getMinutes() == date2.getMinutes()) {
-                    return 0;
-                } else {
-                    if (date1.getMinutes() > date2.getMinutes()) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            } else {
-                if (date1.getHours() > date2.getHours()) {
-                    return 1;
-                } else {
-                    return -1;
+                    //Function to remove slot from array
+                    activity.slots.splice(i, 1);
+
+                    //Save changes
+                    activity.save(function(err, activity) {
+
+                        //If an error occurred, display a msg along with the error
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: 'Slot Not Deleted'
+                            });
+                        }
+
+                        //If no error occurrs, display msg
+                        else {
+                            res.json({
+                                success: true,
+                                msg: 'Slot Deleted'
+                            });
+                        }
+                    });
+
+                    //Set flag and break
+                    found = true;
+                    break;
                 }
             }
+
+            //If slot does not exist
+            if (!found) {
+                res.json({
+                    success: false,
+                    msg: "Couldn't find desired slot"
+                })
+            }
+
+
         }
+    });
+};
+
+
+/* Post function that adds a slot in a specific activity
+URI: api/activity/edit/:activityId/addSlot*/
+module.exports.addSlot = function(req, res) {
+
+    //Create constants to save them as Date format
+    const start = new Date(req.body.startTime);
+    const end = new Date(req.body.endTime);
+
+    //Finding specified activity
+    Activity.findById(req.params.activityId, function(err, activity) {
+
+        //If an error occurred, display a msg along with the error
+        if (err) {
+            res.json({
+                success: false,
+                msg: 'There was a problem finding the desired activity'
+            });
+        }
+
+        //If activity found
+        else {
+
+            //Flag for overlap
+            var noOverlap = true;
+
+            //Loop to find the slot in the slots array
+            for (var i = 0; i < activity.slots.length; i++) {
+
+                //Compare new and existing slot timings using helper function
+                const compareStart = compareDate(activity.slots[i].startTime, end);
+                const compareEnd = compareDate(start, activity.slots[i].endTime);
+
+                //If no overlap
+                if (!(x == -1 && y == -1)) {
+
+                }
+                //If overlap
+                else {
+                    noOverlap = false
+                    break;
+                }
+            }
+
+            // If flag is still set, no overlap
+            if (noOverlap) {
+
+                //Create new slot
+                const newSlot = {
+                    "startTime": start,
+                    "endTime": end
+                };
+
+                //Push it in the array
+                activity.slots.push(newSlot);
+
+                //Save activity
+                activity.save(function(err, activity) {
+
+                    //If an error occurred, display a msg along with the error
+                    if (err) {
+                        res.json({
+                            success: false,
+                            msg: 'Slot Not Added'
+                        });
+                    }
+
+                    //If no error occurrs, display msg
+                    else {
+                        res.json({
+                            success: true,
+                            msg: 'Slot Added'
+                        });
+                    }
+                });
+            }
+
+            //If an error occurred, display a msg along with the error
+            else {
+                res.json({
+                    success: false,
+                    msg: 'Overlap'
+                });
+            }
+
+
+        }
+    });
+};
+
+
+/* Helper function that compares dates and returns
+  date1 = date2 --> 0
+  date1 > date2 --> 1
+  date1 < date2 --> -1 */
+function compareDate(date1, date2) {
+
+
+    //Hours equal
+    if (date1.getHours() == date2.getHours()) {
+
+        //Check minutes
+        if (date1.getMinutes() == date2.getMinutes()) {
+            return 0;
+        } else {
+            if (date1.getMinutes() > date2.getMinutes()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+    //Hours not equal
+    else {
+        if (date1.getHours() > date2.getHours()) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+}
