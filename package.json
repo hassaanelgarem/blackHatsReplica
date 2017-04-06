@@ -21,7 +21,7 @@
     "mongoose": "*",
     "multer": "*",
     "nodemailer": "^3.1.8",
-    "geoip-lite": "^1.2.0",
+    "geoip-lite": "^1.2.0"
   },
   "repository": {
     "type": "git",

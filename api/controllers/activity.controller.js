@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const multer = require('multer');
 const fs = require('fs');
 const path = require("path");
+const expressValidator = require('express-validator');
 const Activity = mongoose.model("Activity");
 const Business = mongoose.model("Business");
 
@@ -15,51 +16,79 @@ const Business = mongoose.model("Business");
 module.exports.addActivity = function(req, res) {
     //check if logged in
     if (req.user) {
-        // Create new Activity object using parameters from request
-        const newActivity = new Activity({
-            name: req.body.name,
-            price: req.body.price,
-            description: req.body.description,
-            bookingsPerSlot: req.body.bookingsPerSlot,
-            business: req.body.business
-        });
-        // Save new Activity in database
-        newActivity.save(function(err, activity) {
-            // If there is an error return it in response
-            if (err) return res.json({
-                success: false,
-                msg: 'Failed to Add Activity',
-                error: err
-            });
+        req.checkBody('name', 'Name is required').notEmpty();
+        req.checkBody('price', 'Price is required').notEmpty();
+        req.checkBody('description', 'Description is required').notEmpty();
+        req.checkBody('bookingsPerSlot', 'Bookings per slot is required').notEmpty();
+        req.checkBody('business', 'Business Id is required').notEmpty();
 
-            // Find Business by their id and inserts the activity id in their activites array
-            Business.findByIdAndUpdate(
-                activity.business, {
-                    $push: {
-                        "activities": activity._id
+        const errors = req.validationErrors();
+
+        if (errors) {
+            res.json({
+                success: false,
+                msg: 'Incomplete input',
+                errors: errors
+            });
+        } else {
+            // Create new Activity object using parameters from request
+            const newActivity = new Activity({
+                name: req.body.name,
+                price: req.body.price,
+                description: req.body.description,
+                bookingsPerSlot: req.body.bookingsPerSlot,
+                business: req.body.business
+            });
+            // Save new Activity in database
+            newActivity.save(function(err, activity) {
+                // If there is an error return it in response
+                if (err) return res.json({
+                    success: false,
+                    msg: 'Failed to Add Activity',
+                    error: err
+                });
+
+                // Find Business by their id and inserts the activity id in their activites array
+                Business.findByIdAndUpdate(
+                    activity.business, {
+                        $push: {
+                            "activities": activity._id
+                        }
+                    }, {
+                        safe: true,
+                        upsert: true,
+                        new: true
+                    },
+                    function(err, business) {
+                        // If there is an error return it in response
+                        if (err) res.josn({
+                            success: false,
+                            error: err
+                        });
+                        if (business) {
+                            // If no errors occur, respond with success = true
+                            res.json({
+                                success: true,
+                                msg: 'Activity Added'
+                            });
+                        } else {
+                            res.json({
+                                success: false,
+                                msg: 'Could not find business'
+                            });
+                        }
+
+
                     }
-                }, {
-                    safe: true,
-                    upsert: true,
-                    new: true
-                },
-                function(err, business) {
-                    // If there is an error return it in response
-                    if (err) res.josn({
-                        success: false,
-                        error: err
-                    });
-                    // If no errors occur, respond with success = true
-                    res.json({
-                        success: true,
-                        msg: 'Activity Added'
-                    });
-                }
-            );
-        });
+                );
+            });
+        }
+
     } //User not logged in
     else {
-        res.json({ error: "Please Login" });
+        res.json({
+            error: "Please Login"
+        });
     }
 };
 
@@ -94,68 +123,91 @@ module.exports.getActivities = function(req, res) {
 the free slots where the resgistered user can make a booking
 Calling route: /activity/freeSlots */
 module.exports.getAvailableSlots = function(req, res) {
-  //values from the body of the put request
-  const actdate = req.body.date;
-  const actID = req.body.activityID;
-  //Maximum bookings that can be made in one slot and is specified by the business
-  var maxBookings = 0;
-  //Retrieves the array of bookings of this activity according to it's activity ID
-  Activity.findById(actID)
-  //populate an array of references with booking objects being referenced
-  .populate( {
-    path: 'bookings',
-    //filters to keep only bookings made on the date "actDate"
-    match: {
-      date: actdate
+
+    req.checkBody('date', 'Date is required').notEmpty();
+    req.checkBody('activityID', 'Activity ID is required').notEmpty();
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        res.json({
+            success: false,
+            msg: 'Incomplete input',
+            errors: errors
+        });
+    } else {
+        //values from the body of the put request
+        const actdate = req.body.date;
+        const actID = req.body.activityID;
+        //Maximum bookings that can be made in one slot and is specified by the business
+        var maxBookings = 0;
+        //Retrieves the array of bookings of this activity according to it's activity ID
+        Activity.findById(actID)
+            //populate an array of references with booking objects being referenced
+            .populate({
+                path: 'bookings',
+                //filters to keep only bookings made on the date "actDate"
+                match: {
+                    date: actdate
+                }
+            })
+            .exec(function(err, bookedSlots) {
+                //If an error occured return it in response
+                if (err) return res.json({
+                    success: false,
+                    msg: "Error occured while retrieving slots",
+                    error: err
+                })
+                if (!bookedSlots) return res.json({
+                    success: false,
+                    msg: "Could not find Activity"
+                });
+                //retrieves the slots specified by the business for their activity
+                Activity.findById(actID, function(err, actSlots) {
+                    //If an error occured return it in response
+                    if (err) res.json({
+                        success: false,
+                        msg: "error occured while retrieving activity slots",
+                        error: err
+                    });
+                    console.log(actSlots);
+                    //Initializes the maxBookings according to the Activity
+                    maxBookings = actSlots.bookingsPerSlot;
+                    //Array that will contain all the available slots for booking
+                    var availableSlots = [];
+                    var counter = 0;
+                    //Loops over the array of slots specified by the business
+                    for (var i = 0; i < actSlots.slots.length; i++) {
+                        //counts the number of bookings made in that slot
+                        counter = 0;
+                        //Loops over the array of bookings made for that activity
+                        for (var j = 0; j < bookedSlots.bookings.length; j++) {
+                            //checks if the activity time is equal to the booking time
+                            const actStartTime = new Date(actSlots.slots[i].startTime);
+                            const bookingStartTime = new Date(bookedSlots.bookings[j].slot.startTime);
+                            const actEndTime = new Date(actSlots.slots[i].endTime);
+                            const bookingEndTime = new Date(bookedSlots.bookings[j].slot.endTime)
+                            if (actStartTime.getTime() == bookingStartTime.getTime()) {
+                                if (actEndTime.getTime() == bookingEndTime.getTime()) {
+                                    counter++;
+                                }
+                            }
+                        }
+                        //Checks if the counter is less than the maximum number of bookings per slot
+                        if (counter < maxBookings)
+                            //adds the slot into the array of available slots
+                            availableSlots.push(actSlots.slots[i]);
+                    }
+                    //returns the array of available slots
+                    res.json({
+                        success: true,
+                        msg: "successful retrieval of available slots",
+                        availableSlots: availableSlots
+                    })
+                })
+            })
     }
-  })
-  .exec(function(err, bookedSlots) {
-    //If an error occured return it in response
-    if(err) return res.json({
-      success: false,
-      msg: "Error occured while retrieving slots"
-    })
-    //retrieves the slots specified by the business for their activity
-    Activity.findById(actID, function(err, actSlots) {
-      //If an error occured return it in response
-      if(err) res.json({
-        success: false,
-        msg: "error occured while retrieving activity slots"
-      });
-      //Initializes the maxBookings according to the Activity
-      maxBookings = actSlots.bookingsPerSlot;
-      //Array that will contain all the available slots for booking
-      var availableSlots = [];
-      const counter = 0;
-      //Loops over the array of slots specified by the business
-      for(const i = 0; i < actSlots.slots.length; i++) {
-        //counts the number of bookings made in that slot
-        counter = 0;
-      //Loops over the array of bookings made for that activity
-      for (var j = 0; j < bookedSlots.bookings.length; j++) {
-          //checks if the activity time is equal to the booking time
-          const actStartTime = new Date(actSlots.slots[i].startTime);
-          const bookingStartTime = new Date(bookedSlots.bookings[j].slot.startTime);
-          const actEndTime = new Date(actSlots.slots[i].endTime);
-          const bookingEndTime = new Date(bookedSlots.bookings[j].slot.endTime)
-          if (actStartTime.getTime() == bookingStartTime.getTime()) {
-              if (actEndTime.getTime() == bookingEndTime.getTime()){
-                counter++;
-              }
-          }
-      }
-      //Checks if the counter is less than the maximum number of bookings per slot
-      if(counter < maxBookings)
-        //adds the slot into the array of available slots
-        availableSlots.push(slots[i]);
-    }
-    //returns the array of available slots
-    res.json( {
-      success: true,
-      msg: "successful retrieval of available slots",
-      availableSlots : availableSlots })
-      })
-      })
+
 }
 
 
@@ -163,72 +215,107 @@ module.exports.getAvailableSlots = function(req, res) {
 Calling route: api/activity/:activityId/deleteSlot */
 module.exports.deleteSlot = function(req, res) {
 
-    //Create constants to save them as Date format
-    const start = new Date(req.body.startTime);
-    const end = new Date(req.body.endTime);
+    req.checkBody('startTime', 'Start Time is required').notEmpty();
+    req.checkBody('endTime', 'End Time is required').notEmpty();
+    req.checkParams('activityId', 'Activity ID is required').notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            success: false,
+            msg: 'Incomplete input',
+            errors: errors
+        });
+    } else {
+        if (req.user) {
+            if (activityBelongs(req.params.activityId, req.user._id)) {
+                //Create constants to save them as Date format
+                const start = new Date(req.body.startTime);
+                const end = new Date(req.body.endTime);
 
-    //Finding specified activity
-    Activity.findById(req.params.activityId, function(err, activity) {
+                //Finding specified activity
+                Activity.findById(req.params.activityId, function(err, activity) {
 
-        //If an error occurred, display a msg along with the error
-        if (err) {
-            res.json({
-                success: false,
-                msg: 'There was a problem finding the desired activity'
-            });
-        }
-        //If activity is found
-        else {
+                    //If an error occurred, display a msg along with the error
+                    if (err) {
+                        res.json({
+                            success: false,
+                            msg: 'There was a problem finding the desired activity'
+                        });
+                    }
+                    //If activity is found
+                    else {
 
-            //Loop to find the slot in the slots array
-            for (var i = 0; i < activity.slots.length; i++) {
+                        if (!activity) return res.json({
+                            success: false,
+                            msg: "Could not find activity"
+                        })
 
-                //Found flag
-                var found = false;
+                        //Loop to find the slot in the slots array
+                        for (var i = 0; i < activity.slots.length; i++) {
 
-                //Checking the specified time against the slots time
-                if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)) {
+                            //Found flag
+                            var found = false;
 
-                    //Function to remove slot from array
-                    activity.slots.splice(i, 1);
+                            //Checking the specified time against the slots time
+                            if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)) {
 
-                    //Save changes
-                    activity.save(function(err, activity) {
+                                //Function to remove slot from array
+                                activity.slots.splice(i, 1);
 
-                        //If an error occurred, display a msg along with the error
-                        if (err) {
+                                //Save changes
+                                activity.save(function(err, activity) {
+
+                                    //If an error occurred, display a msg along with the error
+                                    if (err) {
+                                        res.json({
+                                            success: false,
+                                            msg: 'Slot Not Deleted'
+                                        });
+                                    }
+
+                                    //If no error occurrs, display msg
+                                    else {
+                                        res.json({
+                                            success: true,
+                                            msg: 'Slot Deleted'
+                                        });
+                                    }
+                                });
+
+                                //Set flag and break
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        //If slot does not exist
+                        if (!found) {
                             res.json({
                                 success: false,
-                                msg: 'Slot Not Deleted'
-                            });
+                                msg: "Couldn't find desired slot"
+                            })
                         }
 
-                        //If no error occurrs, display msg
-                        else {
-                            res.json({
-                                success: true,
-                                msg: 'Slot Deleted'
-                            });
-                        }
-                    });
 
-                    //Set flag and break
-                    found = true;
-                    break;
-                }
-            }
+                    }
+                });
 
-            //If slot does not exist
-            if (!found) {
+            } else {
                 res.json({
                     success: false,
-                    msg: "Couldn't find desired slot"
-                })
+                    msg: "Unauthorized access"
+                });
             }
-
-
+        } else {
+            res.json({
+                error: "Please Login"
+            });
         }
-    });
+    }
+
+
+
+
 };
 
 
@@ -236,89 +323,120 @@ module.exports.deleteSlot = function(req, res) {
 Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
 
-    //Create constants to save them as Date format
-    const start = new Date(req.body.startTime);
-    const end = new Date(req.body.endTime);
+    if (req.user) {
+        if (activityBelongs(req.params.activityId, req.user._id)) {
+            req.checkBody('startTime', 'Start Time is required').notEmpty();
+            req.checkBody('endTime', 'End Time is required').notEmpty();
 
-    //Finding specified activity
-    Activity.findById(req.params.activityId, function(err, activity) {
+            const errors = req.validationErrors();
 
-        //If an error occurred, display a msg along with the error
-        if (err) {
-            res.json({
-                success: false,
-                msg: 'There was a problem finding the desired activity'
-            });
-        }
+            if (errors) {
+                res.json({
+                    success: false,
+                    msg: 'Incomplete input',
+                    errors: errors
+                });
+            } else {
+                //Create constants to save them as Date format
+                const start = new Date(req.body.startTime);
+                const end = new Date(req.body.endTime);
 
-        //If activity found
-        else {
-
-            //Flag for overlap
-            var noOverlap = true;
-
-            //Loop to find the slot in the slots array
-            for (var i = 0; i < activity.slots.length; i++) {
-
-                //Compare new and existing slot timings using helper function
-                const compareStart = compareDate(activity.slots[i].startTime, end);
-                const compareEnd = compareDate(start, activity.slots[i].endTime);
-
-                //If no overlap
-                if (!(x == -1 && y == -1)) {
-
-                }
-                //If overlap
-                else {
-                    noOverlap = false
-                    break;
-                }
-            }
-
-            // If flag is still set, no overlap
-            if (noOverlap) {
-
-                //Create new slot
-                const newSlot = {
-                    "startTime": start,
-                    "endTime": end
-                };
-
-                //Push it in the array
-                activity.slots.push(newSlot);
-
-                //Save activity
-                activity.save(function(err, activity) {
+                //Finding specified activity
+                Activity.findById(req.params.activityId, function(err, activity) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
                         res.json({
                             success: false,
-                            msg: 'Slot Not Added'
+                            msg: 'There was a problem finding the desired activity'
                         });
                     }
 
-                    //If no error occurrs, display msg
+                    //If activity found
                     else {
-                        res.json({
-                            success: true,
-                            msg: 'Slot Added'
-                        });
+                        if (!activity) return res.json({
+                            success: false,
+                            msg: "Could not find activity"
+                        })
+                        //Flag for overlap
+                        var noOverlap = true;
+
+                        //Loop to find the slot in the slots array
+                        for (var i = 0; i < activity.slots.length; i++) {
+
+                            //Compare new and existing slot timings using helper function
+                            const compareStart = compareDate(activity.slots[i].startTime, end);
+                            const compareEnd = compareDate(start, activity.slots[i].endTime);
+
+                            //If no overlap
+                            if (!(compareStart == -1 && compareEnd == -1)) {
+
+                            }
+                            //If overlap
+                            else {
+                                noOverlap = false
+                                break;
+                            }
+                        }
+
+                        // If flag is still set, no overlap
+                        if (noOverlap) {
+
+                            //Create new slot
+                            const newSlot = {
+                                "startTime": start,
+                                "endTime": end
+                            };
+
+                            //Push it in the array
+                            activity.slots.push(newSlot);
+
+                            //Save activity
+                            activity.save(function(err, activity) {
+
+                                //If an error occurred, display a msg along with the error
+                                if (err) {
+                                    res.json({
+                                        success: false,
+                                        msg: 'Slot Not Added'
+                                    });
+                                }
+
+                                //If no error occurrs, display msg
+                                else {
+                                    res.json({
+                                        success: true,
+                                        msg: 'Slot Added'
+                                    });
+                                }
+                            });
+                        }
+
+                        //If an error occurred, display a msg along with the error
+                        else {
+                            res.json({
+                                success: false,
+                                msg: 'Overlap'
+                            });
+                        }
+
+
                     }
                 });
             }
-
-            //If an error occurred, display a msg along with the error
-            else {
-                res.json({
-                    success: false,
-                    msg: 'Overlap'
-                });
-            }
-
-
+        } else {
+            res.json({
+                success: false,
+                msg: "Unauthorized access"
+            });
         }
-    });
+
+    } else {
+        res.json({
+            error: "Please Login"
+        });
+    }
+
 };
 
 
@@ -372,78 +490,86 @@ Calling route: '/api/activity/:activityId/addPhoto'
 module.exports.addPhoto = function(req, res) {
     //Check if business is logged in
     if (req.user) {
-        //upload the image
-        uploadPhotos(req, res, function(err) {
-            //if an error occurred, return the error
-            if (err) {
-                return res.json(err);
-            }
-            /*if multer found a file selected
-            and image was uploaded successfully,
-            multer will save the image in req.file*/
-            if (req.file) {
-                //get the image format
-                var string = req.file.originalname.substring(req.file.originalname.length - 3, req.file.originalname.length);
+        if (activityBelongs(req.params.activityId, req.user._id)) {
+            //upload the image
+            uploadPhotos(req, res, function(err) {
+                //if an error occurred, return the error
+                if (err) {
+                    return res.json(err);
+                }
+                /*if multer found a file selected
+                and image was uploaded successfully,
+                multer will save the image in req.file*/
+                if (req.file) {
+                    //get the image format
+                    var string = req.file.originalname.substring(req.file.originalname.length - 3, req.file.originalname.length);
 
-                //if it was jpeg add a "j" to the returned "peg"
-                if (string === "peg")
-                    string = "j" + string;
+                    //if it was jpeg add a "j" to the returned "peg"
+                    if (string === "peg")
+                        string = "j" + string;
 
-                //check if it is not a valid image format
-                if (!(string === "png" || string === "jpg" || string === "jpeg")) {
-                    //delete the uploaded file
-                    fs.unlink(req.file.path);
+                    //check if it is not a valid image format
+                    if (!(string === "png" || string === "jpg" || string === "jpeg")) {
+                        //delete the uploaded file
+                        fs.unlink(req.file.path);
 
-                    //return the error message to frontend
-                    return res.json({
-                        error: "File format is not supported!"
+                        //return the error message to frontend
+                        return res.json({
+                            error: "File format is not supported!"
+                        });
+                    }
+                    //copy and rename the image to the following format and location
+                    var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/img" + Date.now() + "." + string);
+                    fs.renameSync(req.file.path, newPath, function(err) {
+                        if (err) throw err;
+
+                        //delete the image with the old name
+                        fs.unlink(req.file.path);
+                    });
+
+                    //get the name part only from the uploaded image
+                    var nameLength = ("img" + Date.now() + string).length + 1;
+                    newPath = newPath.substring(newPath.length - nameLength);
+
+                    //add the image file name to the photos array of the Business model
+                    Activity.update({
+                            "_id": req.params.activityId
+                        }, {
+                            $push: {
+                                "photos": newPath
+                            }
+                        },
+                        function(err, result) {
+                            //couldn't add to array, return the error
+                            if (err) {
+                                res.json(err);
+                            } else {
+                                //if updating is ok
+                                if (result) {
+                                    //return the file path to the frontend to show the image
+                                    res.json(newPath);
+                                } else
+                                    res.json({
+                                        error: "Activity not found"
+                                    });
+                            }
+                        });
+                }
+                //multer did not find a file selected to upload
+                else {
+                    res.json({
+                        error: "Choose a valid file"
                     });
                 }
-                //copy and rename the image to the following format and location
-                var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/img" + Date.now() + "." + string);
-                fs.renameSync(req.file.path, newPath, function(err) {
-                    if (err) throw err;
-
-                    //delete the image with the old name
-                    fs.unlink(req.file.path);
-                });
-
-                //get the name part only from the uploaded image
-                var nameLength = ("img" + Date.now() + string).length + 1;
-                newPath = newPath.substring(newPath.length - nameLength);
-
-                //add the image file name to the photos array of the Business model
-                Activity.update({
-                        "_id": req.params.activityId
-                    }, {
-                        $push: {
-                            "photos": newPath
-                        }
-                    },
-                    function(err, result) {
-                        //couldn't add to array, return the error
-                        if (err) {
-                            res.json(err);
-                        } else {
-                            //if updating is ok
-                            if (result) {
-                                //return the file path to the frontend to show the image
-                                res.json(newPath);
-                            } else
-                                res.json({
-                                    error: "Activity not found"
-                                });
-                        }
-                    });
-            }
-            //multer did not find a file selected to upload
-            else {
-                res.json({
-                    error: "Choose a valid file"
-                });
-            }
-        });
+            });
+        } else {
+            res.json({
+                success: false,
+                msg: "Unauthorized access"
+            });
+        }
     }
+
     //user is not logged in
     else {
         res.json({
@@ -459,33 +585,73 @@ photos array, and returns success message or error message.
 Calling route: '/api/activity/activityId/deletePhoto/:photoPath'
 */
 module.exports.deletePhoto = function(req, res) {
-    var imagePath = req.params.photoPath;
-    var activityId = req.params.activityId;
-    Activity.update({
-        "_id": activityId
-    }, {
-        $pull: {
-            "photos": imagePath
-        }
-    }, function(err, data) {
-        if (err) {
-            res.json({
-                success: false,
-                msg: 'deleting photo failed'
-            });
+
+    req.checkParams('activityId', 'Activity ID is required').notEmpty();
+    req.checkParams('photoPath', 'Photo Path is required').notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            success: false,
+            msg: 'Incomplete input',
+            errors: errors
+        });
+    } else {
+        if (req.user) {
+            if (activityBelongs(req.params.activityId, req.user._id)) {
+                var imagePath = req.params.photoPath;
+                var activityId = req.params.activityId;
+                Activity.update({
+                    "_id": activityId
+                }, {
+                    $pull: {
+                        "photos": imagePath
+                    }
+                }, function(err, data) {
+                    if (err) {
+                        res.json({
+                            success: false,
+                            msg: 'deleting photo failed'
+                        });
+                    } else {
+
+                        //add directory path to image name
+                        imagePath = path.join(__dirname, "../", "../public/uploads/activityPhotos/", req.params.photoPath);
+
+                        //delete the photo from filesystem
+                        fs.unlink(imagePath, function(err) {
+                            //don't care if file doesn't exist
+                        });
+                        res.json({
+                            success: true,
+                            msg: 'photo deleted successfully'
+                        });
+                    }
+                });
+            } else {
+                res.json({
+                    success: false,
+                    msg: "Unauthorized access"
+                });
+            }
         } else {
-
-            //add directory path to image name
-            imagePath = path.join(__dirname, "../", "../public/uploads/activityPhotos/", req.params.photoPath);
-
-            //delete the photo from filesystem
-            fs.unlink(imagePath, function(err) {
-                //don't care if file doesn't exist
-            });
             res.json({
-                success: true,
-                msg: 'photo deleted successfully'
+                error: "Please Login"
             });
+        }
+    }
+
+};
+
+function activityBelongs(activityId, businessId) {
+    Business.findById(businessId, function(err, business) {
+        if (business) {
+            if (business.activities.indexOf(activityId) > -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     });
-};
+}
