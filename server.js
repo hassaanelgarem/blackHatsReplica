@@ -5,7 +5,6 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const expressValidator = require('express-validator');
 const session = require('express-session');
 const routes = require("./api/routes");
@@ -67,9 +66,13 @@ app.use(function (req, res, next)
 
 app.use("/api", routes);
 
-// Index Route
-app.all('/', (req, res) => {
-	res.send('Invalid EndPoint');
+app.get('/', (req, res) => {
+	res.json('Redirected to Home');
+});
+
+// Ignore all http requests on unknown routes
+app.all('*', (req, res) => {
+	res.json('TO-DO: Redirect on a page not found view');
 });
 
 
