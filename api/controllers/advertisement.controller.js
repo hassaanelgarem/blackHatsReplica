@@ -93,9 +93,9 @@ module.exports.getAdvSlots = function(req, res) {
 module.exports.bookAdvSlot = function(req, res) {
 
 
-        req.checkParams('advSlot', 'advSlot ID is required').notEmpty();
-        req.checkBody('startTime', 'Start Time is required').notEmpty();
-        req.checkBody('endTime', 'End Time is required').notEmpty();
+        // req.checkParams('advSlot', 'advSlot ID is required').notEmpty();
+        // req.checkBody('startTime', 'Start Time is required').notEmpty();
+        // req.checkBody('endTime', 'End Time is required').notEmpty();
 
         const errors = req.validationErrors();
 
