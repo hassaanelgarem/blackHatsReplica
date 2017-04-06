@@ -226,40 +226,45 @@ module.exports.deleteReview = function (req, res) {
             success: false,
             msg: 'There was a problem with deleting the review'
         });
+        if (reviewToDelete) {
 
-        //Delete review from reviews array in corresponding user
-        User.findByIdAndUpdate(reviewToDelete.user, {
-                $pull: {
-                    "reviews": reviewToDelete._id
-                }
-            }, {
-                safe: true,
-                upsert: true,
-                new: true
-            },
-            function (err, model) {
-                if (err) return res.json({
-                    success: false
-                });
-                //Delete review from reviews array in corresponding business
-                Business.findByIdAndUpdate(reviewToDelete.business, {
-                        $pull: {
-                            "reviews": reviewToDelete._id
-                        }
-                    }, {
-                        safe: true,
-                        upsert: true,
-                        new: true
-                    },
-                    function (err, model) {
-                        if (err) return res.json({
-                            success: false
-                        });
-                        res.json({
-                            success: true,
-                            msg: 'Review successfully deleted'
-                        });
+            //Delete review from reviews array in corresponding user
+            User.findByIdAndUpdate(reviewToDelete.user, {
+                    $pull: {
+                        "reviews": reviewToDelete._id
+                    }
+                }, {
+                    safe: true,
+                    upsert: true,
+                    new: true
+                },
+                function (err, model) {
+                    if (err) return res.json({
+                        success: false
                     });
-            });
+                    //Delete review from reviews array in corresponding business
+                    Business.findByIdAndUpdate(reviewToDelete.business, {
+                            $pull: {
+                                "reviews": reviewToDelete._id
+                            }
+                        }, {
+                            safe: true,
+                            upsert: true,
+                            new: true
+                        },
+                        function (err, model) {
+                            if (err) return res.json({
+                                success: false
+                            });
+                            res.json({
+                                success: true,
+                                msg: 'Review successfully deleted'
+                            });
+                        });
+                });
+        } else
+            res.json({
+                error: "review not found"
+            })
     });
 };
