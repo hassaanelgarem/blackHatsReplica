@@ -1,17 +1,60 @@
 const mongoose = require("mongoose");
-const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const expressValidator = require('express-validator');
 const geoip = require('geoip-lite');
-
-
 const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 
+// Passport handling the login
+passport.use('local-user', new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password'
+}, function (username, password, done) { // Finding the user by his username
+    User.getUserByUsername(username, function (err, user) {
+        if (err) return done(err);
+        if (!user) {
+            return done(null, false, {
+                message: 'Invalid Username.'
+            });
+        }
+        //Comparing to see if the 2 passwords match
+        User.comparePassword(password, user.password, function (err, isMatch) {
+            if (err) return done(err);
+            if (isMatch)
+                return done(null, user);
+            else
+                return done(null, false, {
+                    message: 'Invalid password.'
+                });
+        });
+    });
+}));
+
+
+//Passport module serializes User ID
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
+});
+
+
+//Passport module deserializes User ID
+passport.deserializeUser(function (id, done) {
+    User.getUserById(id, function (err, user) {
+        done(err, user);
+    });
+});
+
+
+//Middleware function for Passport module for authentication and login
+module.exports.passportAuthenticate = passport.authenticate('local-user', {
+    successRedirect: '/',
+    failureRedirect: '/api/login',
+    failureFlash: false
+});
+
 
 /* Post Function, to register a new user into the users database
-   Calling Route: /api/register/   */
+   Calling Route: /api/user/register  */
 module.exports.registerUser = function (req, res) {
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
@@ -33,13 +76,11 @@ module.exports.registerUser = function (req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
-        //TODO in front end
-        //res.render('register', {errors: errors});
         res.json({
             errors: errors
         });
     } else {
-        User.find({
+        User.findOne({
             $or: [{
                 'username': username
             }, {
@@ -49,16 +90,15 @@ module.exports.registerUser = function (req, res) {
             //if there is an error, send an error message
             if (err) {
                 //TODO Error handling
-                res.json('Signup error');
-                return done(err);
+                return res.json('Signup error');
             }
 
             //if username or email already exist
-            if (user.length != 0) {
-                if (user[0].username == username)
-                    return res.json('Username already exists, username: ' + username + '. Please enter another username.');
+            if (user) {
+                if (user.username === username)
+                    res.json('Username already exists, username: ' + username + '. Please enter another username.');
                 else
-                    return res.json('Email already exists, email: ' + email + '. Please enter another email.');
+                    res.json('Email already exists, email: ' + email + '. Please enter another email.');
             }
             //Username and email are unique, create the user and save it in the database.
             else {
@@ -72,126 +112,79 @@ module.exports.registerUser = function (req, res) {
                 });
 
                 User.createUser(newUser, function (err, user) {
-                    if (err) res.json('Sign up Error');
-                    else res.json(newUser);
+                    if (err) res.json({
+                        error: 'Sign up Error'
+                    });
+                    else {
+                        if (user)
+                            res.json(user);
+                        else
+                            res.json({
+                                error: "Registration failed"
+                            });
+                    }
                 });
             }
         });
     }
-}
-
-
-//Middleware function for Passport module for authentication
-module.exports.passportAuthenticate = passport.authenticate('local');
-
-
-/* Function to login a user
-   Calling Route: /api/login/   */
-module.exports.login = function (req, res) {
-    //Setting the Session Variable loggedin to the username in order to get the logged in user for later usage.
-    req.session.loggedin = req.body.username;
-    res.json('You are logged in as ' + req.session.loggedin);;
 };
 
 
 /* Get Function, to logout a user
-   Calling Route: /api/logout/   */
+   Calling Route: /api/user/logout   */
 module.exports.logout = function (req, res) {
     req.logout();
     res.json('You have successfully logged out.');
 }
 
 
-// Passport handling the login
-passport.use(new LocalStrategy(
-    function (username, password, done) { // Finding the user by his username
-        User.getUserByUsername(username, function (err, user) {
-            if (err) throw err;
-            if (!user) {
-                return done(null, false, {
-                    message: 'Invalid Username.'
-                });
-            }
-            //Comparing to see if the 2 passwords match
-            User.comparePassword(password, user.password, function (err, isMatch) {
-                if (err) throw err;
-                if (isMatch)
-                    return done(null, user);
-                else
-                    return done(null, false, {
-                        message: 'Invalid password.'
-                    });
-            });
-        });
-    }));
-
-
-//Passport module serializes User ID
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-
-//Passport module deserializes User ID
-passport.deserializeUser(function (id, done) {
-    User.getUserById(id, function (err, user) {
-        done(err, user);
-    });
-});
-
-
 /*Delete function, to delete a user account by getting his username from the session used when he logged in,
  and then removing his entry from the db
- Calling Route: /api/deleteAccount */
+ Calling Route: /api/user/deleteAccount */
 module.exports.deleteAccount = function (req, res) {
     var query = {
-        username: req.session.loggedin
+        _id: req.user._id
     };
     User.remove(query, function (err) {
         if (err)
             res.json(err);
-        else res.json("Account was deleted successfully.");
+        else {
+            req.logout();
+            res.redirect('/');
+        }
     });
-}
+};
 
 
-/*Add business id to the favorites array in user model,
+/* Put function to Add business id to the favorites array in user model,
 and return success message if business added successfuly,
 else returns error message.
-Calling route: 'api/user/:userId/addfavorite/:businessId'
+Calling route: 'api/user/addfavorite/:businessId'
 */
-module.exports.addFavorite = function(req, res) {
-    // if the user is logged in
-    if (req.user) {
-        var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
-        var userId = req.params.userId; //using passport, get the id of the signed in user
-        User.update({
-                "_id": userId
-            }, {
-                $addToSet: {
-                    favorites: businessId
-                }
-            }, //add the business id to the favorites array
-            function(err, result) {
-                //couldn't add to array, return the error
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'adding business to favorites failed'
-                    });
-                } else {
-                    res.json({
-                        success: true,
-                        msg: 'business added to favorites'
-                    });
-                }
-            });
-    }
-    // //if the user is not logged in:
-    else {
-        res.send("you should sign in first.")
-        //res.redirect('/register');
-    }
+module.exports.addFavorite = function (req, res) {
+    var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
+    var userId = req.user._id; //using passport, get the id of the signed in user
+    User.update({
+            "_id": userId
+        }, {
+            $addToSet: {
+                favorites: businessId
+            }
+        }, //add the business id to the favorites array
+        function (err, result) {
+            //couldn't add to array, return the error
+            if (err) {
+                res.json({
+                    success: false,
+                    msg: 'adding business to favorites failed'
+                });
+            } else {
+                res.json({
+                    success: true,
+                    msg: 'business added to favorites'
+                });
+            }
+        });
 };
 
 
@@ -312,7 +305,7 @@ module.exports.searchByLocationAndCategory = function (req, res) {
                             type: "Point",
                             coordinates: [lng, lat]
                         },
-                        //max distance in metres, so this 50 km
+                        //max distance in metres, so this is 50 km
                         $maxDistance: 50 * 1000
                     }
                 }
@@ -329,7 +322,7 @@ module.exports.searchByLocationAndCategory = function (req, res) {
                             type: "Point",
                             coordinates: [lng, lat]
                         },
-                        //max distance in metres, so this 50 km
+                        //max distance in metres, so this is 50 km
                         $maxDistance: 50 * 1000
                     }
                 }
