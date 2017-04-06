@@ -13,15 +13,12 @@ const Business = mongoose.model("Business");
   Parameters: {
     slot: "An object consist of two dates, startTime and endTime",
     activity: "id of the activity being booked",
-    user: "id of the user making the booking",
     date: "date of the booking"
   }
 */
 module.exports.bookActivity = function(req, res) {
-    if (req.user) {
         req.checkBody('slot', 'Slot is required').notEmpty();
         req.checkBody('activity', 'Activity ID is required').notEmpty();
-        req.checkBody('user', 'User ID is required').notEmpty();
         req.checkBody('date', 'Date is required').notEmpty();
 
         const errors = req.validationErrors();
@@ -37,7 +34,7 @@ module.exports.bookActivity = function(req, res) {
             const newBooking = new Booking({
                 slot: req.body.slot,
                 activity: req.body.activity,
-                user: req.body.user,
+                user: req.user._id,
                 date: req.body.date
             });
             Activity.findById(req.body.activity, function(err, doc){
@@ -103,11 +100,6 @@ module.exports.bookActivity = function(req, res) {
             });
 
         }
-    } else {
-        res.json({
-            error: "Please Login"
-        });
-    }
 };
 
 

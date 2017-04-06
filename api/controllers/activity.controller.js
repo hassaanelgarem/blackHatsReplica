@@ -15,12 +15,10 @@ const Business = mongoose.model("Business");
 */
 module.exports.addActivity = function(req, res) {
     //check if logged in
-    if (req.user) {
         req.checkBody('name', 'Name is required').notEmpty();
         req.checkBody('price', 'Price is required').notEmpty();
         req.checkBody('description', 'Description is required').notEmpty();
         req.checkBody('bookingsPerSlot', 'Bookings per slot is required').notEmpty();
-        req.checkBody('business', 'Business Id is required').notEmpty();
 
         const errors = req.validationErrors();
 
@@ -31,13 +29,14 @@ module.exports.addActivity = function(req, res) {
                 errors: errors
             });
         } else {
+          console.log(req.user);
             // Create new Activity object using parameters from request
             const newActivity = new Activity({
                 name: req.body.name,
                 price: req.body.price,
                 description: req.body.description,
                 bookingsPerSlot: req.body.bookingsPerSlot,
-                business: req.body.business
+                business: req.user._id
             });
             // Save new Activity in database
             newActivity.save(function(err, activity) {
@@ -83,13 +82,6 @@ module.exports.addActivity = function(req, res) {
                 );
             });
         }
-
-    } //User not logged in
-    else {
-        res.json({
-            error: "Please Login"
-        });
-    }
 };
 
 
@@ -99,27 +91,41 @@ module.exports.addActivity = function(req, res) {
 */
 module.exports.getActivities = function(req, res) {
 
-    //Finds all activities ofeered by a specific business according to its business ID
-    Activity.find({
-        "business": req.params.businessId
-    }, function(err, activities) {
+    req.checkParams('businessId', 'Business ID is required').notEmpty();
 
-        //If an error occurred, display a msg along with the error
-        if (err) return res.json({
+    const errors = req.validationErrors();
+
+    if (errors) {
+        res.json({
             success: false,
-            msg: 'Cannot retrieve activities'
+            msg: 'Incomplete input',
+            errors: errors
         });
+    } else {
+        //Finds all activities ofeered by a specific business according to its business ID
+        Activity.find({
+            "business": req.params.businessId
+        }, function(err, activities) {
 
-        //If no error return list of activities offered
-        else res.json({
-            success: true,
-            msg: 'successful retrieval',
-            activities
+            //If an error occurred, display a msg along with the error
+            if (err) return res.json({
+                success: false,
+                msg: 'Cannot retrieve activities'
+            });
+
+            //If no error return list of activities offered
+            else res.json({
+                success: true,
+                msg: 'successful retrieval',
+                activities
+            });
         });
-    });
+    }
+
+
 }
 
-/* Put method that takes as a parameters the date and the Activity ID and returns
+/* Post method that takes as a parameters the date and the Activity ID and returns
 the free slots where the resgistered user can make a booking
 Calling route: /activity/freeSlots */
 module.exports.getAvailableSlots = function(req, res) {
@@ -226,7 +232,6 @@ module.exports.deleteSlot = function(req, res) {
             errors: errors
         });
     } else {
-        if (req.user) {
             if (activityBelongs(req.params.activityId, req.user._id)) {
                 //Create constants to save them as Date format
                 const start = new Date(req.body.startTime);
@@ -306,11 +311,6 @@ module.exports.deleteSlot = function(req, res) {
                     msg: "Unauthorized access"
                 });
             }
-        } else {
-            res.json({
-                error: "Please Login"
-            });
-        }
     }
 
 
@@ -323,7 +323,6 @@ module.exports.deleteSlot = function(req, res) {
 Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
 
-    if (req.user) {
         if (activityBelongs(req.params.activityId, req.user._id)) {
             req.checkBody('startTime', 'Start Time is required').notEmpty();
             req.checkBody('endTime', 'End Time is required').notEmpty();
@@ -431,12 +430,6 @@ module.exports.addSlot = function(req, res) {
             });
         }
 
-    } else {
-        res.json({
-            error: "Please Login"
-        });
-    }
-
 };
 
 
@@ -489,7 +482,6 @@ Calling route: '/api/activity/:activityId/addPhoto'
 */
 module.exports.addPhoto = function(req, res) {
     //Check if business is logged in
-    if (req.user) {
         if (activityBelongs(req.params.activityId, req.user._id)) {
             //upload the image
             uploadPhotos(req, res, function(err) {
@@ -568,21 +560,13 @@ module.exports.addPhoto = function(req, res) {
                 msg: "Unauthorized access"
             });
         }
-    }
-
-    //user is not logged in
-    else {
-        res.json({
-            error: "Please Login"
-        });
-    }
 };
 
 
 /*
 delete function that deletes photo from activity's
 photos array, and returns success message or error message.
-Calling route: '/api/activity/activityId/deletePhoto/:photoPath'
+Calling route: '/api/activity/:activityId/deletePhoto/:photoPath'
 */
 module.exports.deletePhoto = function(req, res) {
 
@@ -596,7 +580,6 @@ module.exports.deletePhoto = function(req, res) {
             errors: errors
         });
     } else {
-        if (req.user) {
             if (activityBelongs(req.params.activityId, req.user._id)) {
                 var imagePath = req.params.photoPath;
                 var activityId = req.params.activityId;
@@ -633,11 +616,6 @@ module.exports.deletePhoto = function(req, res) {
                     msg: "Unauthorized access"
                 });
             }
-        } else {
-            res.json({
-                error: "Please Login"
-            });
-        }
     }
 
 };
