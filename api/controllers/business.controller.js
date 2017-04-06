@@ -554,7 +554,7 @@ module.exports.getCurrentInfo = function (req, res) {
                 });
         }
     });
-}
+};
 
 
 /* Put function to save the edited business info in the database
