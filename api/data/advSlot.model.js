@@ -10,14 +10,16 @@ const advSlotSchema = new mongoose.Schema({
     required: true
   },
   length: {
-    type: Number
+    type: Number,
+    required: true
   },
   width: {
-    type: Number
+    type: Number,
+    required: true
   },
   // Array of advertisements that will be shown on this slot
   advSchedule: [{
-    type: mongoose.Schema.Types.ObjectId,       
+    type: mongoose.Schema.Types.ObjectId,
     ref: "AdvBooking"
   }]
 });
