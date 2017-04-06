@@ -29,7 +29,6 @@ module.exports.addActivity = function(req, res) {
                 errors: errors
             });
         } else {
-          console.log(req.user);
             // Create new Activity object using parameters from request
             const newActivity = new Activity({
                 name: req.body.name,
@@ -176,7 +175,6 @@ module.exports.getAvailableSlots = function(req, res) {
                         msg: "error occured while retrieving activity slots",
                         error: err
                     });
-                    console.log(actSlots);
                     //Initializes the maxBookings according to the Activity
                     maxBookings = actSlots.bookingsPerSlot;
                     //Array that will contain all the available slots for booking
