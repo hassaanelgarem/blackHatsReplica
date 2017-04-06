@@ -41,6 +41,7 @@ const businessSchema = new mongoose.Schema({
     },
     location: {
         address: String,
+        city : String,
         // Always store coordinates longitude (East/West), latitude (North/South) order.
         coordinates: {
             type: [Number],
@@ -103,16 +104,15 @@ const businessSchema = new mongoose.Schema({
 //Helper function to compare encrypted paswords
 businessSchema.statics.comparePassword = function(candidatePassword, hash, callback) {
     bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-        if (err) throw err;
-        callback(null, isMatch);
+        callback(err, isMatch);
     });
-}
+};
 
 
 //Helper function to get a business by its id
 businessSchema.statics.getBusinessById = function(id, callback) {
     this.findById(id, callback);
-}
+};
 
 
 //Helper function to get a business by its email
@@ -121,7 +121,7 @@ businessSchema.statics.getBusinessByEmail = function(email, callback) {
         email: email
     };
     this.findOne(query, callback);
-}
+};
 
 
 mongoose.model('Business', businessSchema);
