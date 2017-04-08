@@ -1,56 +1,7 @@
 const mongoose = require("mongoose");
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const geoip = require('geoip-lite');
 const User = mongoose.model("User");
 const Business = mongoose.model("Business");
-
-// Passport handling the login
-passport.use('local-user', new LocalStrategy({
-    usernameField: 'username',
-    passwordField: 'password'
-}, function (username, password, done) { // Finding the user by his username
-    User.getUserByUsername(username, function (err, user) {
-        if (err) return done(err);
-        if (!user) {
-            return done(null, false, {
-                message: 'Invalid Username.'
-            });
-        }
-        //Comparing to see if the 2 passwords match
-        User.comparePassword(password, user.password, function (err, isMatch) {
-            if (err) return done(err);
-            if (isMatch)
-                return done(null, user);
-            else
-                return done(null, false, {
-                    message: 'Invalid password.'
-                });
-        });
-    });
-}));
-
-
-//Passport module serializes User ID
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-
-//Passport module deserializes User ID
-passport.deserializeUser(function (id, done) {
-    User.getUserById(id, function (err, user) {
-        done(err, user);
-    });
-});
-
-
-//Middleware function for Passport module for authentication and login
-module.exports.passportAuthenticate = passport.authenticate('local-user', {
-    successRedirect: '/',
-    failureRedirect: '/api/login',
-    failureFlash: false
-});
 
 
 /* Post Function, to register a new user into the users database
@@ -130,14 +81,6 @@ module.exports.registerUser = function (req, res) {
 };
 
 
-/* Get Function, to logout a user
-   Calling Route: /api/user/logout   */
-module.exports.logout = function (req, res) {
-    req.logout();
-    res.json('You have successfully logged out.');
-}
-
-
 /*Delete function, to delete a user account by getting his username from the session used when he logged in,
  and then removing his entry from the db
  Calling Route: /api/user/deleteAccount */
@@ -159,7 +102,7 @@ module.exports.deleteAccount = function (req, res) {
 /* Put function to Add business id to the favorites array in user model,
 and return success message if business added successfuly,
 else returns error message.
-Calling route: 'api/user/addfavorite/:businessId'
+Calling route: '/api/user/addFavorite/:businessId'
 */
 module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
