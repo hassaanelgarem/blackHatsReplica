@@ -42,6 +42,8 @@ var configurePassport = function (passport) {
             if (!business) return done(null, false, {
                 message: 'Invalid email.'
             });
+            if(!business.verified)
+              return done(null, false, {error : "Not verified yet"});
             //Comparing to see if the 2 passwords match
             Business.comparePassword(password, business.password, function (err, isMatch) {
                 if (err) return done(err);
@@ -83,7 +85,7 @@ var configurePassport = function (passport) {
 
 var isUserLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
-        if (req.user.firstName)
+      if (req.user.constructor.modelName === "User")
             return next();
     }
 
@@ -100,19 +102,18 @@ var isAdminLoggedIn = function (req, res, next) {
     }
 
     res.json({
-        error: "unauthorized access"
+        error: "unauthorized user or business access"
     });
 };
 
 
 var isBusinessLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
-        if (req.user.interactivity)
+        if (req.user.constructor.modelName === "Business")
             return next();
     }
-
     res.json({
-        error: "unauthorized access"
+        error: "unauthorized user or admin access"
     });
 };
 
@@ -122,7 +123,7 @@ var isNotLoggedIn = function (req, res, next) {
         return next();
 
     res.json({
-        error: "unauthorized access"
+        error: "already logged in"
     });
 };
 
