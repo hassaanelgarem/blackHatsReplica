@@ -71,7 +71,7 @@ const uploadBusinessLogo = multer({
   Calling route: '/api/business/addTags' */
 module.exports.addTags = function (req, res) {
     Business.findOne({
-        _id: req.user._id
+        _id: req.body.id
     }, function (err, business) {
         //if error occured
         if (err) {
@@ -121,7 +121,7 @@ module.exports.addTags = function (req, res) {
   Calling route: '/api/business/addCategory' */
 module.exports.addCategory = function (req, res) {
     Business.findOne({
-        _id: req.user._id
+        _id: req.body.id
     }, function (err, business) {
         //if error occured
         if (err) {
@@ -211,7 +211,7 @@ module.exports.addPhoto = function (req, res) {
 
             //add the image file name to the photos array of the Business model
             Business.update({
-                    "_id": req.user._id
+                    "_id": req.body.id
                 }, {
                     $push: {
                         "photos": newPath
@@ -250,7 +250,7 @@ Calling route: '/business/deletePhoto/:photoPath'
 */
 module.exports.deletePhoto = function (req, res) {
     var imagePath = req.params.photoPath;
-    var businessId = req.user._id;
+    var businessId = req.body.id;
     Business.update({
         "_id": businessId
     }, {
@@ -486,7 +486,7 @@ module.exports.uploadLogo = function (req, res) {
             newPath = newPath.substring(newPath.length - nameLength);
 
             //save the image file path to the Business model
-            Business.findById(req.user._id, function (err, business) {
+            Business.findById(req.body.id, function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.json(err);
@@ -563,7 +563,7 @@ Calling route: '/api/business/editInfo'  */
 module.exports.saveNewInfo = function (req, res) {
 
     Business.findOne({
-        _id: req.user._id
+        _id: req.body.id
     }, function (err, business) {
         //if an error occurred, return the error
         if (err) {

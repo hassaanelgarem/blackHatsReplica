@@ -20,6 +20,7 @@ module.exports.bookActivity = function(req, res) {
         req.checkBody('slot', 'Slot is required').notEmpty();
         req.checkBody('activity', 'Activity ID is required').notEmpty();
         req.checkBody('date', 'Date is required').notEmpty();
+        req.checkBody('id', 'User ID needed').notEmpty();
 
         const errors = req.validationErrors();
 
@@ -34,7 +35,7 @@ module.exports.bookActivity = function(req, res) {
             const newBooking = new Booking({
                 slot: req.body.slot,
                 activity: req.body.activity,
-                user: req.user._id,
+                user: req.body.id,
                 date: req.body.date
             });
             Activity.findById(req.body.activity, function(err, doc){

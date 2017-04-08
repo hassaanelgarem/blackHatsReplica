@@ -43,7 +43,7 @@ module.exports.getOneUser = function (req, res) {
 Calling route: '/api/user/profile/editInfo'
 */
 module.exports.updateOneUser = function (req, res) {
-    var userId = req.user._id;
+    var userId = req.body.id;
 
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
@@ -160,7 +160,7 @@ module.exports.uploadProfilePicture = function (req, res) {
             newPath = newPath.substring(newPath.length - nameLength);
 
             //save the image file path to the User model
-            User.findById(req.user._id, function (err, user) {
+            User.findById(req.body.id, function (err, user) {
                 if (user.profilePicture) {
                     var oldPP = path.join(__dirname, "../", "../public/uploads/profilePictures/", user.profilePicture);
                 }

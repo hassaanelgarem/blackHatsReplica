@@ -28,8 +28,8 @@ function isNotLoggedIn(req, res, next) {
 }
 
 //Not logged in only routes
-router.route('/user/login').post(isNotLoggedIn, userCtrl.passportAuthenticate);
-router.route('/business/login').post(isNotLoggedIn, businessCtrl.passportAuthenticate);
+router.route('/user/login').post(userCtrl.passportAuthenticate);
+router.route('/business/login').post(businessCtrl.passportAuthenticate);
 
 
 //Available to all routes
@@ -56,45 +56,45 @@ router.route('/advertisement/getFreeSlot/:advSlotID').get(advCtrl.getFreeSlot);
 
 //Business routes
 router.route('/business/:businessId/interact').put(businessCtrl.updateInteractivity);
-router.route('/business/addTags').put(isLoggedIn, businessCtrl.addTags);
-router.route('/business/addCategory').put(isLoggedIn, businessCtrl.addCategory);
-router.route('/business/editInfo').put(isLoggedIn, businessCtrl.saveNewInfo);
-router.route('/business/addPhoto').post(isLoggedIn, businessCtrl.addPhoto);
-router.route('/business/deletePhoto/:photoPath').delete(isLoggedIn, businessCtrl.deletePhoto);
-router.route('/business/addLogo').post(isLoggedIn, businessCtrl.uploadLogo);
-router.route('/business/logout').get(isLoggedIn, businessCtrl.businessLogout);
+router.route('/business/addTags').put(businessCtrl.addTags);
+router.route('/business/addCategory').put(businessCtrl.addCategory);
+router.route('/business/editInfo').put(businessCtrl.saveNewInfo);
+router.route('/business/addPhoto').post(businessCtrl.addPhoto);
+router.route('/business/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto);
+router.route('/business/addLogo').post(businessCtrl.uploadLogo);
+router.route('/business/logout').get(businessCtrl.businessLogout);
 
 
 //Admin routes
-router.route('/admin/verify/:businessId').put(isLoggedIn, adminCtrl.verifyBusiness);
-router.route('/admin/delete/:businessId').delete(isLoggedIn, adminCtrl.deleteBusiness);
+router.route('/admin/verify/:businessId').put(adminCtrl.verifyBusiness);
+router.route('/admin/delete/:businessId').delete(adminCtrl.deleteBusiness);
 
 
 //User routes
-router.route('/user/logout').get(isLoggedIn, userCtrl.logout);
-router.route('/user/profile/editInfo').put(isLoggedIn, profileCtrl.updateOneUser);
-router.route('/user/profile/uploadProfilePicture').post(isLoggedIn, profileCtrl.uploadProfilePicture);
-router.route('/user/deleteAccount').delete(isLoggedIn, userCtrl.deleteAccount);
-router.route('/user/addfavorite/:businessId').put(isLoggedIn, userCtrl.addFavorite);
+router.route('/user/logout').get(userCtrl.logout);
+router.route('/user/profile/editInfo').put(profileCtrl.updateOneUser);
+router.route('/user/profile/uploadProfilePicture').post(profileCtrl.uploadProfilePicture);
+router.route('/user/deleteAccount').delete(userCtrl.deleteAccount);
+router.route('/user/addfavorite/:businessId').put(userCtrl.addFavorite);
 
 
 //Review routes
-router.route('/review/:businessId/add').post(isLoggedIn, reviewCtrl.addReview);
-router.route('/review/:reviewId/edit').put(isLoggedIn, reviewCtrl.editReview);
-router.route('/review/:reviewId/delete').delete(isLoggedIn, reviewCtrl.deleteReview);
+router.route('/review/:businessId/add').post(reviewCtrl.addReview);
+router.route('/review/:reviewId/edit').put(reviewCtrl.editReview);
+router.route('/review/:reviewId/delete').delete(reviewCtrl.deleteReview);
 
 
 //Activity routes
-router.route('/activity/add').post(isLoggedIn, activityCtrl.addActivity);
-router.route('/activity/:activityId/addSlot').post(isLoggedIn, activityCtrl.addSlot);
-router.route('/activity/:activityId/deleteSlot').delete(isLoggedIn, activityCtrl.deleteSlot);
-router.route('/activity/:activityId/addPhoto').post(isLoggedIn, activityCtrl.addPhoto);
-router.route('/activity/:activityId/deletePhoto/:photoPath').delete(isLoggedIn, activityCtrl.deletePhoto);
-router.route('/activity/book').post(isLoggedIn, bookingCtrl.bookActivity);
+router.route('/activity/add').post(activityCtrl.addActivity);
+router.route('/activity/:activityId/addSlot').post(activityCtrl.addSlot);
+router.route('/activity/:activityId/deleteSlot').delete(activityCtrl.deleteSlot);
+router.route('/activity/:activityId/addPhoto').post(activityCtrl.addPhoto);
+router.route('/activity/:activityId/deletePhoto/:photoPath').delete(activityCtrl.deletePhoto);
+router.route('/activity/book').post(bookingCtrl.bookActivity);
 
 
 //Advertisement routes
-router.route('/advertisement/bookAdvSlot/:businessId/:advSlot').post(isLoggedIn, advCtrl.bookAdvSlot);
+router.route('/advertisement/bookAdvSlot/:businessId/:advSlot').post(advCtrl.bookAdvSlot);
 
 
 module.exports = router;

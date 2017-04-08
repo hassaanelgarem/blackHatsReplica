@@ -32,7 +32,7 @@ module.exports.addReview = function (req, res) {
     //get values from post request
     var comment = req.body.comment;
     var rating = req.body.rating;
-    var user = req.user._id;
+    var user = req.body.id;
     var business = req.params.businessId;
 
     //Validating entries

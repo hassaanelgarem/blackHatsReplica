@@ -143,7 +143,7 @@ module.exports.logout = function (req, res) {
  Calling Route: /api/user/deleteAccount */
 module.exports.deleteAccount = function (req, res) {
     var query = {
-        _id: req.user._id
+        _id: req.body.id
     };
     User.remove(query, function (err) {
         if (err)
@@ -163,7 +163,7 @@ Calling route: 'api/user/addfavorite/:businessId'
 */
 module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
-    var userId = req.user._id; //using passport, get the id of the signed in user
+    var userId = req.body.id; //using passport, get the id of the signed in user
     User.update({
             "_id": userId
         }, {

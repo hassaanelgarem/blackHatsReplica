@@ -19,6 +19,7 @@ module.exports.addActivity = function(req, res) {
         req.checkBody('price', 'Price is required').notEmpty();
         req.checkBody('description', 'Description is required').notEmpty();
         req.checkBody('bookingsPerSlot', 'Bookings per slot is required').notEmpty();
+        req.checkBody('id', 'Business ID needed').notEmpty();
 
         const errors = req.validationErrors();
 
@@ -35,7 +36,7 @@ module.exports.addActivity = function(req, res) {
                 price: req.body.price,
                 description: req.body.description,
                 bookingsPerSlot: req.body.bookingsPerSlot,
-                business: req.user._id
+                business: req.body.id
             });
             // Save new Activity in database
             newActivity.save(function(err, activity) {
@@ -222,6 +223,8 @@ module.exports.deleteSlot = function(req, res) {
     req.checkBody('startTime', 'Start Time is required').notEmpty();
     req.checkBody('endTime', 'End Time is required').notEmpty();
     req.checkParams('activityId', 'Activity ID is required').notEmpty();
+    req.checkBody('id', 'Business ID needed').notEmpty();
+
     const errors = req.validationErrors();
     if (errors) {
         res.json({
@@ -230,7 +233,7 @@ module.exports.deleteSlot = function(req, res) {
             errors: errors
         });
     } else {
-            if (activityBelongs(req.params.activityId, req.user._id)) {
+            if (activityBelongs(req.params.activityId, req.body.id)) {
                 //Create constants to save them as Date format
                 const start = new Date(req.body.startTime);
                 const end = new Date(req.body.endTime);
@@ -321,7 +324,7 @@ module.exports.deleteSlot = function(req, res) {
 Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
 
-        if (activityBelongs(req.params.activityId, req.user._id)) {
+        if (activityBelongs(req.params.activityId, req.body.id)) {
             req.checkBody('startTime', 'Start Time is required').notEmpty();
             req.checkBody('endTime', 'End Time is required').notEmpty();
 
@@ -480,7 +483,7 @@ Calling route: '/api/activity/:activityId/addPhoto'
 */
 module.exports.addPhoto = function(req, res) {
     //Check if business is logged in
-        if (activityBelongs(req.params.activityId, req.user._id)) {
+        if (activityBelongs(req.params.activityId, req.body.id)) {
             //upload the image
             uploadPhotos(req, res, function(err) {
                 //if an error occurred, return the error
@@ -570,6 +573,7 @@ module.exports.deletePhoto = function(req, res) {
 
     req.checkParams('activityId', 'Activity ID is required').notEmpty();
     req.checkParams('photoPath', 'Photo Path is required').notEmpty();
+    req.checkBody('id', 'Business ID needed').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
         res.json({
@@ -578,7 +582,7 @@ module.exports.deletePhoto = function(req, res) {
             errors: errors
         });
     } else {
-            if (activityBelongs(req.params.activityId, req.user._id)) {
+            if (activityBelongs(req.params.activityId, req.body.id)) {
                 var imagePath = req.params.photoPath;
                 var activityId = req.params.activityId;
                 Activity.update({

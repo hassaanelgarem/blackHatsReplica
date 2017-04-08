@@ -118,7 +118,7 @@ module.exports.bookAdvSlot = function(req, res) {
                         });
 
                     const newAdvBooking = new AdvBooking({
-                        business: req.user._id,
+                        business: req.body.id,
                         advSlot: req.params.advSlot,
                         image: image,
                         startTime: req.body.startTime,
