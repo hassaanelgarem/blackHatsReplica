@@ -6,13 +6,15 @@ const Business = mongoose.model("Business");
 
 /*  
     Post Function, to register a new user into the users database
-    Takes from body: 
-        firstName
-        lastName
-        email
-        username
-        password
-        confirmPassword 
+    Takes:
+        body{  
+            firstName
+            lastName
+            email
+            username
+            password
+            confirmPassword 
+        }
     Returns: Success or failure messages along with errors in case of failure.
     Redirects to: Nothing.    
     Calling Route: /api/user/register  
@@ -135,7 +137,10 @@ module.exports.deleteAccount = function (req, res) {
 
 /*  
     Put function to Add business id to the favorites array in user model.
-    Takes as params: businessId
+    Takes: 
+        params{
+            businessId
+        }
     Returns: Success or failure messages along with errors in case of failure.
     Redirects to: Nothing.
     Calling route: '/api/user/addFavorite/:businessId'
@@ -171,7 +176,12 @@ module.exports.addFavorite = function (req, res) {
     Get function, to Search the Business model for businesses with name or tag
     entered by the user, it gets all businesses with matching names
     and tags.
-    Takes from Query String: result or offset or count.
+    Takes: 
+        query{
+            result: "used for name or tag search value",
+            offset: "get businesses starting from number",
+            count: "how many businesses to get"
+        }
     Returns: Array of matching businesses to the search query.
     Redirects to: Nothing.
     Calling route: '/api/search' 
@@ -238,7 +248,13 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 /*  
     Get function, Search the Business model for businesses with location or category 
     or both entered by the user.
-    Takes from Query String: location or category or offset or count.
+    Takes:
+        query{
+            location: "used for location search value",
+            category: "used for category search value",
+            offset: "get businesses starting from number",
+            count: "how many businesses to get"
+        }
     Returns: Array of matching businesses to the search query.
     Redirects to: nothing.
     Calling route: '/api/search'
