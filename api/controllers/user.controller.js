@@ -4,16 +4,27 @@ const User = mongoose.model("User");
 const Business = mongoose.model("Business");
 
 
-/* Post Function, to register a new user into the users database
-   Calling Route: /api/user/register  */
+/*  
+    Post Function, to register a new user into the users database
+    Takes from body: 
+        firstName
+        lastName
+        email
+        username
+        password
+        confirmPassword 
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: /api/user/register  
+*/
 module.exports.registerUser = function (req, res) {
+
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var email = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
     var confirmPassword = req.body.confirmPassword;
-    var birthDate = req.body.birthDate;
 
     //Validating entries
     req.checkBody('firstName', 'First Name is required.').notEmpty();
@@ -27,8 +38,10 @@ module.exports.registerUser = function (req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            errors: errors
+        res.status(500).json({
+            error: errors,
+            msg: null,
+            data: null
         });
     } else {
         User.findOne({
@@ -40,38 +53,52 @@ module.exports.registerUser = function (req, res) {
         }, function (err, user) {
             //if there is an error, send an error message
             if (err) {
-                //TODO Error handling
-                return res.json('Signup error');
+                return res.status(500).json({
+                    error: err,
+                    msg: null,
+                    data: null
+                });
             }
 
-            //if username or email already exist
+            //if username or email already exists
             if (user) {
-                if (user.username === username)
-                    res.json('Username already exists, username: ' + username + '. Please enter another username.');
+                if (user.username === req.body.username)
+                    res.status(500).json({
+                        error: null,
+                        msg: 'Username already exists, Username: ' + username + '. Please enter another username.',
+                        data: null
+                    });
                 else
-                    res.json('Email already exists, email: ' + email + '. Please enter another email.');
+                    res.status(500).json({
+                        error: null,
+                        msg: 'Email already exists, Email: ' + email + '. Please enter another email.',
+                        data: null
+                    });
             }
             //Username and email are unique, create the user and save it in the database.
             else {
-                var newUser = new User({
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    username: username,
-                    password: password,
-                    birthDate: birthDate
-                });
+                //Pass the whole body and it will take whatever is not null
+                var newUser = new User(req.body);
 
                 User.createUser(newUser, function (err, user) {
-                    if (err) res.json({
-                        error: 'Sign up Error'
+                    if (err) res.status(500).json({
+                        error: err,
+                        msg: null,
+                        data: null
                     });
                     else {
-                        if (user)
-                            res.json(user);
-                        else
-                            res.json({
-                                error: "Registration failed"
+                        if (user) {
+                            
+                            res.status(200).json({
+                                error: null,
+                                msg: 'Registration Successful.',
+                                data: null
+                            });
+                        } else
+                            res.status(500).json({
+                                error: null,
+                                msg: "Registration failed.",
+                                data: null
                             });
                     }
                 });
@@ -81,60 +108,74 @@ module.exports.registerUser = function (req, res) {
 };
 
 
-/*Delete function, to delete a user account by getting his username from the session used when he logged in,
- and then removing his entry from the db
- Calling Route: /api/user/deleteAccount */
+/*  
+    Delete function, to delete a user account by getting his username from the session 
+    used when he logged in,and then removing his entry from the db and logging out.
+    Takes: nothing.
+    Returns: Errors in case of failure.
+    Redirects to: '/' (Home Page).
+    Calling Route: '/api/user/deleteAccount' 
+*/
 module.exports.deleteAccount = function (req, res) {
-    var query = {
-        _id: req.user._id
-    };
-    User.remove(query, function (err) {
+
+    User.findByIdAndRemove(req.user._id, function (err) {
         if (err)
-            res.json(err);
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
         else {
             req.logout();
-            res.redirect('/');
+            res.status(200).redirect('/');
         }
     });
 };
 
 
-/* Put function to Add business id to the favorites array in user model,
-and return success message if business added successfuly,
-else returns error message.
-Calling route: '/api/user/addFavorite/:businessId'
+/*  
+    Put function to Add business id to the favorites array in user model.
+    Takes as params: businessId
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.
+    Calling route: '/api/user/addFavorite/:businessId'
 */
 module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    User.update({
-            "_id": userId
-        }, {
+    User.findByIdAndUpdate(userId, {
             $addToSet: {
                 favorites: businessId
             }
         }, //add the business id to the favorites array
-        function (err, result) {
+        function (err) {
             //couldn't add to array, return the error
             if (err) {
-                res.json({
-                    success: false,
-                    msg: 'adding business to favorites failed'
+                res.status(500).json({
+                    error: err,
+                    msg: null,
+                    data: null
                 });
             } else {
-                res.json({
-                    success: true,
-                    msg: 'business added to favorites'
+                res.status(200).json({
+                    error: null,
+                    msg: 'Business was added to favorites successfully.',
+                    data: null
                 });
             }
         });
 };
 
 
-/*Get function, Search the Business model for businesses with name or tag
-entered by the user, it gets all businesses with matching names
-and tags and returns them to the frontend
-Calling route: "/api/search" */
+/*  
+    Get function, to Search the Business model for businesses with name or tag
+    entered by the user, it gets all businesses with matching names
+    and tags.
+    Takes from Query String: result or offset or count.
+    Returns: Array of matching businesses to the search query.
+    Redirects to: Nothing.
+    Calling route: '/api/search' 
+*/
 module.exports.searchByNameOrTag = function (req, res, next) {
     var offset = 0;
     var count = 10;
@@ -152,7 +193,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
             count = parseInt(req.query.count, 10);
         }
 
-        //Find businesses from the database
+        //Find businesses from the database excluding password in returned document
         Business.find({
             $or: [{
                     name: {
@@ -171,13 +212,21 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 
                 }
             ]
-        }).skip(offset).limit(count).exec(function (err, businesses) {
+        }).select('-password').skip(offset).limit(count).exec(function (err, businesses) {
             //If an error occured return it to the frontend
             if (err) {
-                res.json(err);
+                res.status(500).json({
+                    error: err,
+                    msg: null,
+                    data: null
+                });
             } else {
                 //return an array of businesses or an empty array
-                res.json(businesses);
+                res.status(200).json({
+                    error: null,
+                    msg: null,
+                    data: businesses
+                });
             }
         });
     } else
@@ -186,8 +235,14 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 };
 
 
-/*Get function, Search the Business model for businesses with location or category or both entered by the user and returns them to the frontend
-Calling route: "/api/search" */
+/*  
+    Get function, Search the Business model for businesses with location or category 
+    or both entered by the user.
+    Takes from Query String: location or category or offset or count.
+    Returns: Array of matching businesses to the search query.
+    Redirects to: nothing.
+    Calling route: '/api/search'
+*/
 module.exports.searchByLocationAndCategory = function (req, res) {
     var offset = 0;
     var count = 10;
@@ -258,7 +313,12 @@ module.exports.searchByLocationAndCategory = function (req, res) {
         //if category was chosen get by location nearby and category
         else {
             findQuery = {
-                "category": category,
+                "category": {
+                    //is the category
+                    $regex: category,
+                    //Ignore whitespace characters and case insensitive
+                    $options: "ix"
+                },
                 "location.coordinates": {
                     $near: {
                         $geometry: {
@@ -278,7 +338,12 @@ module.exports.searchByLocationAndCategory = function (req, res) {
     //if location and category were chosen
     else if (location !== "All" && category !== "All") {
         findQuery = {
-            "category": category,
+            "category": {
+                //is the category
+                $regex: category,
+                //Ignore whitespace characters and case insensitive
+                $options: "ix"
+            },
             "location.city": {
                 //Starts with or is the city
                 $regex: "^" + location,
@@ -306,25 +371,38 @@ module.exports.searchByLocationAndCategory = function (req, res) {
         //if category was chosen
         else if (category !== "All") {
             findQuery = {
-                "category": category
+                "category": {
+                    //is the category
+                    $regex: category,
+                    //Ignore whitespace characters and case insensitive
+                    $options: "ix"
+                }
             };
         }
 
-        //if nothing was chosen get all
+        //if nothing was chosen return empty array
         else
-            findQuery = {};
+            return res.status(200).json([]);
     }
 
     //execute the query
-    Business.find(findQuery).skip(offset).limit(count).exec(function (err, businesses) {
+    Business.find(findQuery).select('-password').skip(offset).limit(count).exec(function (err, businesses) {
 
         //if an error occurred, return the error
         if (err)
-            res.json(err);
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
 
         //return the found businesses or an empty array
         else {
-            res.json(businesses);
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: businesses
+            });
         }
     });
 };

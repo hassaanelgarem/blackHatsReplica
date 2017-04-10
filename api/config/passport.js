@@ -15,7 +15,7 @@ var configurePassport = function (passport) {
             if (err) return done(err);
             if (!user) {
                 return done(null, false, {
-                    message: 'Invalid Username.'
+                    msg: 'Invalid Username.'
                 });
             }
             //Comparing to see if the 2 passwords match
@@ -25,7 +25,7 @@ var configurePassport = function (passport) {
                     return done(null, user);
                 else
                     return done(null, false, {
-                        message: 'Invalid password.'
+                        msg: 'Invalid password.'
                     });
             });
         });
@@ -40,10 +40,10 @@ var configurePassport = function (passport) {
         Business.getBusinessByEmail(email, function (err, business) {
             if (err) return done(err);
             if (!business) return done(null, false, {
-                message: 'Invalid email.'
+                msg: 'Invalid email.'
             });
             if(!business.verified)
-              return done(null, false, {error : "Not verified yet"});
+              return done(null, false, {msg : "Not verified yet"});
             //Comparing to see if the 2 passwords match
             Business.comparePassword(password, business.password, function (err, isMatch) {
                 if (err) return done(err);
@@ -89,8 +89,10 @@ var isUserLoggedIn = function (req, res, next) {
             return next();
     }
 
-    res.json({
-        error: "unauthorized access"
+    res.status(401).json({
+        error: null,
+        msg: 'User login is required.',
+        data: null
     });
 };
 
@@ -100,9 +102,10 @@ var isAdminLoggedIn = function (req, res, next) {
         if (req.user.username === 'admin')
             return next();
     }
-
-    res.json({
-        error: "unauthorized user or business access"
+    res.status(401).json({
+        error: null,
+        msg: 'Admin login is required.',
+        data: null
     });
 };
 
@@ -112,8 +115,10 @@ var isBusinessLoggedIn = function (req, res, next) {
         if (req.user.constructor.modelName === "Business")
             return next();
     }
-    res.json({
-        error: "unauthorized user or admin access"
+    res.status(401).json({
+        error: null,
+        msg: 'Business login is required.',
+        data: null
     });
 };
 
@@ -122,15 +127,21 @@ var isNotLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated())
         return next();
 
-    res.json({
-        error: "already logged in"
+    res.status(401).json({
+        error: null,
+        msg: 'A login session already exists.',
+        data: null
     });
 };
 
 
 var logout = function (req, res) {
     req.logout();
-    res.json('You have successfully logged out.');
+    res.status(200).json({
+        error: null,
+        msg: 'You were successfully logged out of your account.',
+        data: null
+    });
 };
 
 
