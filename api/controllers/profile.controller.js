@@ -21,21 +21,34 @@ module.exports.getOneUser = function (req, res) {
     var userId = req.params.userId;
 
     // finds user with the userId from the User model
-    User.findById(userId).exec(function (err, doc) {
-        //if an error to find the user,I return the error message
-        if (err) {
-            res.status(500).json(err);
-            //if no user with that userId was found,I return an error message
-        } else if (!doc) {
-            res.status(404).json({
-                message: "userId not found " + userId
-            });
-        }
-        //when the user is found successfully,I return the user
-        else {
-            res.status(200).json(doc);
-        }
-    });
+    User
+        .findById(userId)
+        .select("-password")
+        .exec(function (err, doc) {
+            //if an error to find the user,I return the error message
+            if (err) {
+                res.status(500).json({
+                    error: err,
+                    msg: "there is a problem retrieving the data from the database",
+                    data: doc
+                });
+                //if no user with that userId was found,I return an error message
+            } else if (!doc) {
+                res.status(404).json({
+                    error: err,
+                    msg: "Can not find a user with the specified id " + userId,
+                    data: doc
+                });
+            }
+            //when the user is found successfully,I return the user
+            else {
+                res.status(200).json({
+                    error: err,
+                    msg: "User is found successfully",
+                    data: doc
+                });
+            }
+        });
 };
 
 
@@ -45,67 +58,54 @@ Calling route: '/api/user/profile/editInfo'
 module.exports.updateOneUser = function (req, res) {
     var userId = req.user._id;
 
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var email = req.body.email;
-    var username = req.body.username;
-    var password = req.body.password;
-    var birthDate = req.body.birthDate;
 
-    //Validating entries
-    req.checkBody('firstName', 'First Name is required.').notEmpty();
-    req.checkBody('lastName', 'Last Name is required.').notEmpty();
-    req.checkBody('email', 'Email is required.').notEmpty();
-    req.checkBody('email', 'Email format is not correct.').isEmail();
-    req.checkBody('username', 'Username is required.').notEmpty();
-    req.checkBody('password', 'Password is required.').notEmpty();
+    // finds user with the userId from the User model
+    User.
+    findById(userId)
+        //exclude the arrays from the query as i won't update them
+        .select("-favorites -reviews -bookings -password -username -email")
+        .exec(function (err, doc) {
+            //if an error to find the user,I return the error message
+            if (err) {
+                res.status(500).json({
+                    error: err,
+                    msg: "there is a problem retrieving the data from the database",
+                    data: doc
+                });
+            } else if (!doc) {
+                //if no user with that userId was found,I return an error message
+                res.status(404).json({
+                    error: err,
+                    msg: "Can not find a user with the specified id " + userId,
+                    data: doc
+                });
+            }
+            //if the user is found start updating his info
+            else {
+                doc.firstName = req.body.firstName || doc.firstName;
+                doc.lastName = req.body.lastName || doc.lastName;
+                doc.birthDate = req.body.birthDate || doc.birthDate; //should be in the format mm-dd-yyyy or mm/dd/yyyy
 
-    var errors = req.validationErrors();
-
-    if (errors) {
-        res.json({
-            errors: errors
+                //save the user instance to the database
+                doc.save(function (err, updatedUser) {
+                    //if an error saving the user instance
+                    if (err) {
+                        res.status(500).json({
+                            error: err,
+                            msg: "there is a problem updating the User",
+                            data: updatedUser
+                        });
+                    } else {
+                        //the user instance was updated successfully
+                        res.status(200).json({
+                            error: err,
+                            msg: "User is found successfully",
+                            data: updatedUser
+                        }); //successful and no content
+                    }
+                });
+            }
         });
-    } else {
-        // finds user with the userId from the User model
-        User.
-        findById(userId)
-            //exclude the arrays from the query as i won't update them
-            .select("-favorites -reviews -bookings")
-            .exec(function (err, doc) {
-                //if an error to find the user,I return the error message
-                if (err) {
-                    res.status(500).json(err);
-                } else if (!doc) {
-                    //if no user with that userId was found,I return an error message
-                    res.status(404).json({
-                        "message": "userId not found " + userId
-                    });
-                }
-                //if the user is found start updating his info
-                else {
-                    doc.firstName = req.body.firstName;
-                    doc.lastName = req.body.lastName;
-                    doc.email = req.body.email;
-                    doc.username = req.body.username;
-                    doc.password = req.body.password;
-                    doc.birthDate = req.body.birthDate; //should be in the format mm-dd-yyyy or mm/dd/yyyy
-                    //save the user instance to the database
-                    doc.save(function (err) {
-                        //if an error saving the user instance
-                        if (err) {
-                            res.status(500).json(err);
-                        } else {
-                            //the user instance was updated successfully
-                            res.status(200).json({
-                                success: true,
-                                msg: "user updated sucessfully"
-                            }); //successful and no content
-                        }
-                    });
-                }
-            });
-    }
 };
 
 
