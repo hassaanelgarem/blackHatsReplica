@@ -93,7 +93,7 @@ module.exports.getAdvSlots = function (req, res) {
 module.exports.bookAdvSlot = function (req, res) {
 
     // check if advSlot exists
-    AdvSlot.findById(req.params.advSlot, function (err, slot) {
+    AdvSlot.findById(req.params.advSlotId, function (err, slot) {
         if (err) return res.json({
             success: false,
             msg: "Error searching for slot"
@@ -111,7 +111,7 @@ module.exports.bookAdvSlot = function (req, res) {
 
             const newAdvBooking = new AdvBooking({
                 business: req.user._id,
-                advSlot: req.params.advSlot,
+                advSlot: req.params.advSlotId,
                 image: image,
                 startTime: req.body.startTime,
                 endTime: req.body.endTime
@@ -211,10 +211,10 @@ module.exports.getCurrentBookings = function (req, res) {
 
 
 /*  Get function that returns the first available slot for booking in a slot's schedule.
-    Calling route: /advertisement/getFreeSlot/:advSlotID    */
+    Calling route: /advertisement/getFreeSlot/:advSlotId    */
 module.exports.getFreeSlot = function (req, res) {
 
-    req.checkParams('advSlotID', 'Adv slot ID is required').notEmpty();
+    req.checkParams('advSlotId', 'Adv slot ID is required').notEmpty();
 
     const errors = req.validationErrors();
 
@@ -228,7 +228,7 @@ module.exports.getFreeSlot = function (req, res) {
 
         /*   A query that finds the advSchedule of the selected slot
          and sorts them descendingly by endTime to get the last occupied slot  */
-        AdvSlot.findById(req.params.advSlotID)
+        AdvSlot.findById(req.params.advSlotId)
             //used to populate an array of references with booking objects being referenced
             .populate({
                 path: 'advSchedule',

@@ -49,8 +49,8 @@ module.exports = function (passportConfig) {
     router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
     router.route('/advertisement/addAdvSlots').post(advCtrl.addAdvSlots);
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
-    router.route('/advertisement/getCurrentBookings/:advSlotID').get(advCtrl.getCurrentBookings);
-    router.route('/advertisement/getFreeSlot/:advSlotID').get(advCtrl.getFreeSlot);
+    router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
+    router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
 
 
     //Available to logged in only routes
