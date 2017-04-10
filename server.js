@@ -7,8 +7,12 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const expressValidator = require('express-validator');
 const session = require('express-session');
-const routes = require("./api/routes");
 const app = express();
+
+//require passport.js for configuration
+const passportConfig = require('./api/config/passport');
+//pass passport to configure it
+passportConfig.configurePassport(passport);
 
 app.set('port', 8080);
 
@@ -63,6 +67,9 @@ app.use(function (req, res, next)
   res.locals.user = req.user || null;
   next();
 });
+
+//pass passportConfiguration to routes for login and return the routes
+const routes = require("./api/routes")(passportConfig);
 
 app.use("/api", routes);
 

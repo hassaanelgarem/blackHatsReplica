@@ -3,54 +3,7 @@ const path = require("path");
 const multer = require('multer');
 const mongoose = require("mongoose");
 const bcrypt = require('bcryptjs');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const Business = mongoose.model("Business");
-
-
-//Passport handling the login
-passport.use('local-business', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-}, function (email, password, done) {
-    // Finding the business by his email
-    Business.getBusinessByEmail(email, function (err, business) {
-        if (err) return done(err);
-        if (!business) return done(null, false, {
-            message: 'Invalid email.'
-        });
-        //Comparing to see if the 2 passwords match
-        Business.comparePassword(password, business.password, function (err, isMatch) {
-            if (err) return done(err);
-            if (isMatch) return done(null, business);
-            done(null, false, {
-                message: 'Invalid password.'
-            });
-        });
-    });
-}));
-
-
-//Passport module serializes business ID
-passport.serializeUser(function (business, done) {
-    done(null, business.id);
-});
-
-
-//Passport module deserializes business ID
-passport.deserializeUser(function (id, done) {
-    Business.getBusinessById(id, function (err, business) {
-        done(err, business);
-    });
-});
-
-
-//Middleware function for Passport module for authentication and login
-module.exports.passportAuthenticate = passport.authenticate('local-business', {
-    successRedirect: '/',
-    failureRedirect: '/api/login',
-    failureFlash: false
-});
 
 
 /* Multer configuration to upload a single file from an
@@ -357,14 +310,6 @@ module.exports.addBusiness = function (req, res) {
         });
     }
 };
-
-
-/* Get function to logout a business
-Calling Route: /api/business/logout */
-module.exports.businessLogout = function (req, res) {
-    req.logout();
-    res.json('You have successfully logged out.');
-}
 
 
 /* Get function that returns all unverified businesses based on the value of the attribute verified
