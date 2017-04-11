@@ -105,6 +105,9 @@ module.exports.bookActivity = function(req, res) {
 
 /*
   Get function to return all bookings that a specific user booked
+  Returns: Success or failure message along with the error if any
+  and a list of bookings by this user
+  Redirects to: Nothing.
   Calling routes: /api/booking/history/:userId
 */
 module.exports.getBookingHistory = function(req, res) {
@@ -113,10 +116,10 @@ module.exports.getBookingHistory = function(req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
+        res.status(500).json({
+            "error": errors,
+            "msg": "Incomplete input",
+            "data": null
         });
     } else {
         //Finds history of bookings for a specific user given his id
@@ -125,16 +128,17 @@ module.exports.getBookingHistory = function(req, res) {
         }).populate('activity').exec(function(err, bookings) {
 
             //If an error occurred, display a message along with the error
-            if (err) return res.json({
-                success: false,
-                msg: 'Cannot retrieve history'
+            if (err) return res.status(500).json({
+                "error": err,
+                "msg": "Cannot retrieve history.",
+                "data": null
             })
 
             //If no error display list of bookings made by this user
-            res.json({
-                success: true,
-                msg: 'successful retrieval',
-                bookings
+            res.status(200).json({
+                "error": null,
+                "msg": "Successful retrieval",
+                "data": bookings
             });
         });
     }

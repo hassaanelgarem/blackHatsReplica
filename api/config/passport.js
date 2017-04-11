@@ -112,8 +112,10 @@ var isBusinessLoggedIn = function (req, res, next) {
         if (req.user.constructor.modelName === "Business")
             return next();
     }
-    res.json({
-        error: "unauthorized user or admin access"
+    res.status(401).json({
+        "error": null,
+        "msg": "Unauthorized user or admin access.",
+        "data": null
     });
 };
 
@@ -122,15 +124,21 @@ var isNotLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated())
         return next();
 
-    res.json({
-        error: "already logged in"
+    res.status(500).json({
+        "error": null,
+        "msg": "already logged in",
+        "data": null
     });
 };
 
 
 var logout = function (req, res) {
     req.logout();
-    res.json('You have successfully logged out.');
+    res.status(200).json({
+      "error": null,
+      "msg": "You have successfully logged out.",
+      "data": null
+    });
 };
 
 
