@@ -6,7 +6,7 @@ const Business = mongoose.model("Business");
 
 /* Post Function, to register a new user into the users database
    Calling Route: /api/user/register  */
-module.exports.registerUser = function (req, res) {
+module.exports.registerUser = function(req, res) {
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var email = req.body.email;
@@ -37,7 +37,7 @@ module.exports.registerUser = function (req, res) {
             }, {
                 'email': email
             }]
-        }, function (err, user) {
+        }, function(err, user) {
             //if there is an error, send an error message
             if (err) {
                 //TODO Error handling
@@ -62,7 +62,7 @@ module.exports.registerUser = function (req, res) {
                     birthDate: birthDate
                 });
 
-                User.createUser(newUser, function (err, user) {
+                User.createUser(newUser, function(err, user) {
                     if (err) res.json({
                         error: 'Sign up Error'
                     });
@@ -84,11 +84,11 @@ module.exports.registerUser = function (req, res) {
 /*Delete function, to delete a user account by getting his username from the session used when he logged in,
  and then removing his entry from the db
  Calling Route: /api/user/deleteAccount */
-module.exports.deleteAccount = function (req, res) {
+module.exports.deleteAccount = function(req, res) {
     var query = {
         _id: req.user._id
     };
-    User.remove(query, function (err) {
+    User.remove(query, function(err) {
         if (err)
             res.json(err);
         else {
@@ -99,35 +99,92 @@ module.exports.deleteAccount = function (req, res) {
 };
 
 
+
+
+
 /* Put function to Add business id to the favorites array in user model,
 and return success message if business added successfuly,
 else returns error message.
 Calling route: '/api/user/addFavorite/:businessId'
 */
-module.exports.addFavorite = function (req, res) {
+module.exports.addFavorite = function(req, res) {
+    var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
+    var userId = req.user._id; //using passport, get the id of the signed in user
+    User.findById(businessId, function(err, doc) {
+
+        //if an error to find the business,I return the error message
+        if (err) {
+            res.status(500).json(err);
+        } else if (!doc) {
+            //if no business with that businessId was found,I return an error message
+            res.status(404).json({
+                "message": "businessId not found " + businessId
+            });
+        }
+        //if the business is found, add it to user's favorites
+        else {
+            User.update({
+                    "_id": userId
+                }, {
+                    $addToSet: {
+                        favorites: businessId
+                    }
+                }, //add the business id to the favorites array
+                function(err, result) {
+                    //couldn't add to array, return the error
+                    if (err) {
+                        res.json({
+                            success: false,
+                            msg: 'adding business to favorites failed'
+                        });
+                    } else {
+                        res.json({
+                            success: true,
+                            msg: 'business added to favorites'
+                        });
+                    }
+                });
+
+        }
+    });
+};
+
+
+/* delete function to delete business id from the favorites array in user model,
+and return success message if business removed successfuly,
+else returns error message.
+Calling route: '/api/user/deleteFavorite/:businessId'
+*/
+module.exports.deleteFavorite = function(req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
     User.update({
-            "_id": userId
-        }, {
-            $addToSet: {
-                favorites: businessId
-            }
-        }, //add the business id to the favorites array
-        function (err, result) {
-            //couldn't add to array, return the error
-            if (err) {
-                res.json({
-                    success: false,
-                    msg: 'adding business to favorites failed'
-                });
-            } else {
+        "_id": userId
+    }, {
+        $pull: {
+            "favorites": businessId
+        }
+    }, function(err, data) {
+        if (err) {
+            res.json({
+                success: false,
+                msg: 'deleting favorite failed'
+            });
+        } else {
+            //if business found in user favorites
+            if (data.nModified > 0) {
+
                 res.json({
                     success: true,
-                    msg: 'business added to favorites'
+                    msg: 'business deleted successfully from favorites'
                 });
-            }
-        });
+            } else
+                res.json({
+                    success: false,
+                    msg: 'business not found'
+                });
+        }
+    });
 };
 
 
@@ -135,7 +192,7 @@ module.exports.addFavorite = function (req, res) {
 entered by the user, it gets all businesses with matching names
 and tags and returns them to the frontend
 Calling route: "/api/search" */
-module.exports.searchByNameOrTag = function (req, res, next) {
+module.exports.searchByNameOrTag = function(req, res, next) {
     var offset = 0;
     var count = 10;
 
@@ -171,7 +228,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 
                 }
             ]
-        }).skip(offset).limit(count).exec(function (err, businesses) {
+        }).skip(offset).limit(count).exec(function(err, businesses) {
             //If an error occured return it to the frontend
             if (err) {
                 res.json(err);
@@ -181,14 +238,14 @@ module.exports.searchByNameOrTag = function (req, res, next) {
             }
         });
     } else
-        //if he didn't search by name or tag call searchByLocationAndCategory
+    //if he didn't search by name or tag call searchByLocationAndCategory
         next();
 };
 
 
 /*Get function, Search the Business model for businesses with location or category or both entered by the user and returns them to the frontend
 Calling route: "/api/search" */
-module.exports.searchByLocationAndCategory = function (req, res) {
+module.exports.searchByLocationAndCategory = function(req, res) {
     var offset = 0;
     var count = 10;
     var location = "All";
@@ -316,7 +373,7 @@ module.exports.searchByLocationAndCategory = function (req, res) {
     }
 
     //execute the query
-    Business.find(findQuery).skip(offset).limit(count).exec(function (err, businesses) {
+    Business.find(findQuery).skip(offset).limit(count).exec(function(err, businesses) {
 
         //if an error occurred, return the error
         if (err)

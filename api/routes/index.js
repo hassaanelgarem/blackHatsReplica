@@ -12,7 +12,7 @@ const advCtrl = require('../controllers/advertisement.controller');
 const adminCtrl = require('../controllers/admin.controller');
 
 
-module.exports = function (passportConfig) {
+module.exports = function(passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/',
         failureRedirect: '/api/login',
@@ -82,6 +82,7 @@ module.exports = function (passportConfig) {
     router.route('/user/profile/uploadProfilePicture').post(passportConfig.isUserLoggedIn, profileCtrl.uploadProfilePicture);
     router.route('/user/deleteAccount').delete(passportConfig.isUserLoggedIn, userCtrl.deleteAccount);
     router.route('/user/addFavorite/:businessId').put(passportConfig.isUserLoggedIn, userCtrl.addFavorite);
+    router.route('/user/deleteFavorite/:businessId').delete(passportConfig.isUserLoggedIn, userCtrl.deleteFavorite);
     router.route('/activity/book').post(passportConfig.isUserLoggedIn, bookingCtrl.bookActivity);
     //User review routes
     router.route('/review/:businessId/add').post(passportConfig.isUserLoggedIn, reviewCtrl.addReview);
