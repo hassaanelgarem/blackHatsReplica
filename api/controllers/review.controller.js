@@ -279,7 +279,7 @@ module.exports.deleteReview = function (req, res) {
     Review.findByIdAndRemove(req.params.reviewId, function (err, reviewToDelete) {
         if (err) return res.status(500).json({
             error: err,
-            msg: 'There was a problem with deleting the review'
+            msg: 'There was a problem with deleting the review',
             data: null
         });
         if (reviewToDelete) {
@@ -310,11 +310,12 @@ module.exports.deleteReview = function (req, res) {
                             upsert: true,
                             new: true
                         },
-                        if (err) return res.status(201).json({
+                        function(err, data) {
+                          if (err) return res.status(201).json({
                             error: err,
                             msg: "Error occured while updating Business concerned",
                             data: null
-                        });
+                          });
                             res.status(200).json({
                                 error: null,
                                 msg: 'Review successfully deleted',
