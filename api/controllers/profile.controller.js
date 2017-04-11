@@ -59,53 +59,71 @@ module.exports.updateOneUser = function (req, res) {
     var userId = req.user._id;
 
 
-    // finds user with the userId from the User model
-    User.
-    findById(userId)
-        //exclude the arrays from the query as i won't update them
-        .select("-favorites -reviews -bookings -password -username -email")
-        .exec(function (err, doc) {
-            //if an error to find the user,I return the error message
-            if (err) {
-                res.status(500).json({
-                    error: err,
-                    msg: "there is a problem retrieving the data from the database",
-                    data: doc
-                });
-            } else if (!doc) {
-                //if no user with that userId was found,I return an error message
-                res.status(404).json({
-                    error: err,
-                    msg: "Can not find a user with the specified id " + userId,
-                    data: doc
-                });
-            }
-            //if the user is found start updating his info
-            else {
-                doc.firstName = req.body.firstName || doc.firstName;
-                doc.lastName = req.body.lastName || doc.lastName;
-                doc.birthDate = req.body.birthDate || doc.birthDate; //should be in the format mm-dd-yyyy or mm/dd/yyyy
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var birthDate = req.body.birthDate;
 
-                //save the user instance to the database
-                doc.save(function (err, updatedUser) {
-                    //if an error saving the user instance
-                    if (err) {
-                        res.status(500).json({
-                            error: err,
-                            msg: "there is a problem updating the User",
-                            data: updatedUser
-                        });
-                    } else {
-                        //the user instance was updated successfully
-                        res.status(200).json({
-                            error: err,
-                            msg: "User is found successfully",
-                            data: updatedUser
-                        }); //successful and no content
-                    }
-                });
-            }
+    //Validating entries
+    req.checkBody('firstName', 'First Name is required.').notEmpty();
+    req.checkBody('lastName', 'Last Name is required.').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        res.status(400).json({
+            errors: errors,
+            msg: "Fields shouldn't be empty",
+            data:null
         });
+    } else {
+        // finds user with the userId from the User model
+        User.
+        findById(userId)
+            //exclude the arrays from the query as i won't update them
+            .select("-favorites -reviews -bookings -password -username -email")
+            .exec(function (err, doc) {
+                //if an error to find the user,I return the error message
+                if (err) {
+                    res.status(500).json({
+                        error: err,
+                        msg: "there is a problem retrieving the data from the database",
+                        data: doc
+                    });
+                } else if (!doc) {
+                    //if no user with that userId was found,I return an error message
+                    res.status(404).json({
+                        error: err,
+                        msg: "Can not find a user with the specified id " + userId,
+                        data: doc
+                    });
+                }
+                //if the user is found start updating his info
+                else {
+                    doc.firstName = firstName || doc.firstName;
+                    doc.lastName = lastName || doc.lastName;
+                    doc.birthDate = birthDate || doc.birthDate; //should be in the format mm-dd-yyyy or mm/dd/yyyy
+
+                    //save the user instance to the database
+                    doc.save(function (err, updatedUser) {
+                        //if an error saving the user instance
+                        if (err) {
+                            res.status(500).json({
+                                error: err,
+                                msg: "there is a problem updating the User",
+                                data: updatedUser
+                            });
+                        } else {
+                            //the user instance was updated successfully
+                            res.status(200).json({
+                                error: err,
+                                msg: "User is found successfully",
+                                data: updatedUser
+                            }); //successful and no content
+                        }
+                    });
+                }
+            });
+    }
 };
 
 
