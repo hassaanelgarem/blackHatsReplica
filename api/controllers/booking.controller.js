@@ -177,12 +177,30 @@ module.exports.deleteBooking = function(req, res) {
                   msg: "Error occured while updating User concerned",
                   data: null
               });
+              //Delete booking from bookings array in corresponding activity
+              Activity.findByIdAndUpdate(bookingToDel.activity, {
+                $pull: {
+                    "bookings": bookingToDel.id
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            //If error occurred, return it in response
+            function (err, model) {
+              if (err) return res.status(201).json({
+                  error: err,
+                  msg: "Error occured while updating Activity concerned",
+                  data: null
+                });
               //If booking successfully deleted, return success message
               res.status(200).json({
                 error: err,
                 msg: 'Booking successfully deleted',
                 data:null
               });
+            });
           });
       }
       else
