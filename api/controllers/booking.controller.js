@@ -140,3 +140,74 @@ module.exports.getBookingHistory = function(req, res) {
     }
 
 }
+
+
+/* Delete function that finds and deletes a specific booking
+Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message"
+}
+Redirects to: Nothing
+Calling route: /api/activity/deleteBooking/:bookingId
+*/
+module.exports.deleteBooking = function(req, res) {
+  //Finding and deleting booking from database
+  Booking.findByIdAndRemove(req.params.bookingId, function(err, bookingToDel) {
+    //If error, return in response
+    if(err) return res.status(500).json({
+      error: err,
+      msg: "There was a problem with deleting the booking",
+      data: null
+    });
+    if(bookingToDel){
+      //Delete booking from bookings array in corresponding user
+      User.findByIdAndUpdate(bookingToDel.user, {
+              $pull: {
+                  "bookings": bookingToDel.id
+              }
+          }, {
+              safe: true,
+              upsert: true,
+              new: true
+          },
+          //If error occurred, return it in response
+          function (err, model) {
+              if (err) return res.status(201).json({
+                  error: err,
+                  msg: "Error occured while updating User concerned",
+                  data: null
+              });
+              //Delete booking from bookings array in corresponding activity
+              Activity.findByIdAndUpdate(bookingToDel.activity, {
+                $pull: {
+                    "bookings": bookingToDel.id
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            //If error occurred, return it in response
+            function (err, model) {
+              if (err) return res.status(201).json({
+                  error: err,
+                  msg: "Error occured while updating Activity concerned",
+                  data: null
+                });
+              //If booking successfully deleted, return success message
+              res.status(200).json({
+                error: err,
+                msg: 'Booking successfully deleted',
+                data:null
+              });
+            });
+          });
+      }
+      else
+      res.status(404).json({
+          error: null,
+          msg: "booking not found",
+          data: null
+      })
+    })
+}
