@@ -196,14 +196,14 @@ module.exports.getCurrentBookings = function (req, res) {
                     }
                 }
             })
-            .exec(function (err, bookings) {
+            .exec(function (err, currentSlot) {
                 //if an error occured, return it in response
                 if (err)  return res.status(500).json({
 	                        error: err,
                             msg: "Error Retrieving Advertisement Bookings",
                             data: null
                             });
-                if (!bookings)  return res.status(404).json({
+                if (!currentSlot)  return res.status(404).json({
 	                                error: null,
                                     msg: "Advertisement Booking Not Found",
                                     data: null
@@ -212,7 +212,7 @@ module.exports.getCurrentBookings = function (req, res) {
                  return res.status(200).json({
 	                error: errors,
                     msg: "Current Bookings Retrieved Successfully",
-                    data: bookings
+                    data: currentSlot.advSchedule
                     });
          })
     }
@@ -294,8 +294,6 @@ module.exports.getFreeSlot = function (req, res) {
     }
 
 }
-
-
 
 
 var uploadAdv = function (req, res, callback) {
