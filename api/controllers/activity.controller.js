@@ -11,81 +11,102 @@ const Business = mongoose.model("Business");
   Post function that handles adding an activity
   It creates a new activity and saves it in the database
   And updates Activites array in the coreesponding Business
+  Body: {
+  name: "name of new activity",
+  price: "price of new activity",
+  description: "description of new activity",
+  bookingsPerSlot: "Maximum number of bookins per slot of new activity",
+    }
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message",
+    data: "Nothing"
+    }
+  Redirects to: Nothing.
   Calling route: '/api/activity/add'
 */
 module.exports.addActivity = function(req, res) {
     //check if logged in
-        req.checkBody('name', 'Name is required').notEmpty();
-        req.checkBody('price', 'Price is required').notEmpty();
-        req.checkBody('description', 'Description is required').notEmpty();
-        req.checkBody('bookingsPerSlot', 'Bookings per slot is required').notEmpty();
+    req.checkBody('name', 'Name is required').notEmpty();
+    req.checkBody('price', 'Price is required').notEmpty();
+    req.checkBody('description', 'Description is required').notEmpty();
+    req.checkBody('bookingsPerSlot', 'Bookings per slot is required').notEmpty();
 
-        const errors = req.validationErrors();
+    const errors = req.validationErrors();
 
-        if (errors) {
-            res.json({
-                success: false,
-                msg: 'Incomplete input',
-                errors: errors
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
+        });
+    } else {
+        // Create new Activity object using parameters from request
+        const newActivity = new Activity({
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            bookingsPerSlot: req.body.bookingsPerSlot,
+            business: req.user._id
+        });
+        // Save new Activity in database
+        newActivity.save(function(err, activity) {
+            // If there is an error return it in response
+            if (err) return res.status(500).json({
+                error: err,
+                msg: "Failed To Add Activity",
+                data: null
             });
-        } else {
-            // Create new Activity object using parameters from request
-            const newActivity = new Activity({
-                name: req.body.name,
-                price: req.body.price,
-                description: req.body.description,
-                bookingsPerSlot: req.body.bookingsPerSlot,
-                business: req.user._id
-            });
-            // Save new Activity in database
-            newActivity.save(function(err, activity) {
-                // If there is an error return it in response
-                if (err) return res.json({
-                    success: false,
-                    msg: 'Failed to Add Activity',
-                    error: err
-                });
 
-                // Find Business by their id and inserts the activity id in their activites array
-                Business.findByIdAndUpdate(
-                    activity.business, {
-                        $push: {
-                            "activities": activity._id
-                        }
-                    }, {
-                        safe: true,
-                        upsert: true,
-                        new: true
-                    },
-                    function(err, business) {
-                        // If there is an error return it in response
-                        if (err) res.josn({
-                            success: false,
-                            error: err
-                        });
-                        if (business) {
-                            // If no errors occur, respond with success = true
-                            res.json({
-                                success: true,
-                                msg: 'Activity Added'
-                            });
-                        } else {
-                            res.json({
-                                success: false,
-                                msg: 'Could not find business'
-                            });
-                        }
-
-
+            // Find Business by their id and inserts the activity id in their activites array
+            Business.findByIdAndUpdate(
+                activity.business, {
+                    $push: {
+                        "activities": activity._id
                     }
-                );
-            });
-        }
+                }, {
+                    safe: true,
+                    upsert: true,
+                    new: true
+                },
+                function(err, business) {
+                    // If there is an error return it in response
+                    if (err) res.status(500).json({
+                        error: err,
+                        msg: null,
+                        data: null
+                    });
+                    if (business) {
+                        // If no errors occur, respond with success = true
+                        res.status(200).json({
+                            error: null,
+                            msg: "Activity Added Successfully",
+                            data: null
+                        });
+                    } else {
+                        res.status(404).json({
+                            error: null,
+                            msg: "Business not found",
+                            data: null
+                        });
+                    }
+
+
+                }
+            );
+        });
+    }
 };
 
 
 /*
   Get function that retrieves the activities offered by a Business from the database
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message",
+    data: "Activities of a given business"
+    }
+  Redirects to: Nothing.
   Calling route: api/activity/:businessId
 */
 module.exports.getActivities = function(req, res) {
@@ -95,10 +116,10 @@ module.exports.getActivities = function(req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
         });
     } else {
         //Finds all activities ofeered by a specific business according to its business ID
@@ -107,16 +128,17 @@ module.exports.getActivities = function(req, res) {
         }, function(err, activities) {
 
             //If an error occurred, display a msg along with the error
-            if (err) return res.json({
-                success: false,
-                msg: 'Cannot retrieve activities'
+            if (err) return res.status(500).json({
+                error: err,
+                msg: "Cannot Retrieve activities",
+                data: null
             });
 
             //If no error return list of activities offered
-            else res.json({
-                success: true,
-                msg: 'successful retrieval',
-                activities
+            else res.status(200).json({
+                error: null,
+                msg: "Successful Retrieval",
+                data: activites
             });
         });
     }
@@ -126,6 +148,16 @@ module.exports.getActivities = function(req, res) {
 
 /* Post method that takes as a parameters the date and the Activity ID and returns
 the free slots where the resgistered user can make a booking
+Body: {
+    date:"Date to find available slots in"
+    activityID: "id of the activity tha will contain the slot to be added"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Available Slots in given date"
+  }
+Redirects to: Nothing.
 Calling route: /activity/freeSlots */
 module.exports.getAvailableSlots = function(req, res) {
 
@@ -135,10 +167,10 @@ module.exports.getAvailableSlots = function(req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
         });
     } else {
         //values from the body of the put request
@@ -158,22 +190,23 @@ module.exports.getAvailableSlots = function(req, res) {
             })
             .exec(function(err, bookedSlots) {
                 //If an error occured return it in response
-                if (err) return res.json({
-                    success: false,
-                    msg: "Error occured while retrieving slots",
-                    error: err
-                })
-                if (!bookedSlots) return res.json({
-                    success: false,
-                    msg: "Could not find Activity"
+                if (err) return res.status(500).json({
+                    error: err,
+                    msg: "Error occured while retrieving Slots",
+                    data: null
+                });
+                if (!bookedSlots) return res.status(404).json({
+                    error: null,
+                    msg: "Activity not found",
+                    data: null
                 });
                 //retrieves the slots specified by the business for their activity
                 Activity.findById(actID, function(err, actSlots) {
                     //If an error occured return it in response
-                    if (err) res.json({
-                        success: false,
-                        msg: "error occured while retrieving activity slots",
-                        error: err
+                    if (err) res.status(500).json({
+                        error: err,
+                        msg: "Error occured while retrieving Activity Slots",
+                        data: null
                     });
                     //Initializes the maxBookings according to the Activity
                     maxBookings = actSlots.bookingsPerSlot;
@@ -203,11 +236,11 @@ module.exports.getAvailableSlots = function(req, res) {
                             availableSlots.push(actSlots.slots[i]);
                     }
                     //returns the array of available slots
-                    res.json({
-                        success: true,
-                        msg: "successful retrieval of available slots",
-                        availableSlots: availableSlots
-                    })
+                    res.status(200).json({
+                        error: null,
+                        msg: "Successful Retrieval of Available Slots",
+                        data: availableSlots
+                    });
                 })
             })
     }
@@ -216,6 +249,16 @@ module.exports.getAvailableSlots = function(req, res) {
 
 
 /* Delete function that finds and deletes a specific slot in a specific activity
+Body: {
+    start: "start time of slot to be deleted"
+    end: "end time of slot to be deleted"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: api/activity/:activityId/deleteSlot */
 module.exports.deleteSlot = function(req, res) {
 
@@ -224,13 +267,14 @@ module.exports.deleteSlot = function(req, res) {
     req.checkParams('activityId', 'Activity ID is required').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
         });
     } else {
-            if (activityBelongs(req.params.activityId, req.user._id)) {
+        activityBelongs(req.params.activityId, req.user._id, function(flag) {
+            if (flag) {
                 //Create constants to save them as Date format
                 const start = new Date(req.body.startTime);
                 const end = new Date(req.body.endTime);
@@ -240,18 +284,20 @@ module.exports.deleteSlot = function(req, res) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
-                        res.json({
-                            success: false,
-                            msg: 'There was a problem finding the desired activity'
+                        res.status(500).json({
+                            error: err,
+                            msg: "Error retrieving desired activity",
+                            data: null
                         });
                     }
                     //If activity is found
                     else {
 
-                        if (!activity) return res.json({
-                            success: false,
-                            msg: "Could not find activity"
-                        })
+                        if (!activity) return res.status(404).json({
+                            error: null,
+                            msg: "Activity not found",
+                            data: null
+                        });
 
                         //Loop to find the slot in the slots array
                         for (var i = 0; i < activity.slots.length; i++) {
@@ -270,17 +316,19 @@ module.exports.deleteSlot = function(req, res) {
 
                                     //If an error occurred, display a msg along with the error
                                     if (err) {
-                                        res.json({
-                                            success: false,
-                                            msg: 'Slot Not Deleted'
+                                        res.status(500).json({
+                                            error: err,
+                                            msg: "Error while deleting Slot",
+                                            data: null
                                         });
                                     }
 
                                     //If no error occurrs, display msg
                                     else {
-                                        res.json({
-                                            success: true,
-                                            msg: 'Slot Deleted'
+                                        res.status(200).json({
+                                            error: null,
+                                            msg: "Slot Deleted Successfully",
+                                            data: null
                                         });
                                     }
                                 });
@@ -293,10 +341,11 @@ module.exports.deleteSlot = function(req, res) {
 
                         //If slot does not exist
                         if (!found) {
-                            res.json({
-                                success: false,
-                                msg: "Couldn't find desired slot"
-                            })
+                            return res.status(404).json({
+                                error: null,
+                                msg: "Slot not found",
+                                data: null
+                            });
                         }
 
 
@@ -304,11 +353,14 @@ module.exports.deleteSlot = function(req, res) {
                 });
 
             } else {
-                res.json({
-                    success: false,
-                    msg: "Unauthorized access"
+                res.status(401).json({
+                    error: null,
+                    msg: "Business Login Required or Unauthorized Access",
+                    data: null
                 });
             }
+        });
+
     }
 
 
@@ -318,20 +370,31 @@ module.exports.deleteSlot = function(req, res) {
 
 
 /* Post function that adds a slot in a specific activity
+Body: {
+newSlot: "An object consist of two dates, startTime and endTime that will be added to the activity",
+    start: "start time of newSlot"
+    end: "end time of newSlot"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
-
-        if (activityBelongs(req.params.activityId, req.user._id)) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+        if (flag) {
             req.checkBody('startTime', 'Start Time is required').notEmpty();
             req.checkBody('endTime', 'End Time is required').notEmpty();
 
             const errors = req.validationErrors();
 
             if (errors) {
-                res.json({
-                    success: false,
-                    msg: 'Incomplete input',
-                    errors: errors
+                res.status(500).json({
+                    error: errors,
+                    msg: "Incomplete Input",
+                    data: null
                 });
             } else {
                 //Create constants to save them as Date format
@@ -343,18 +406,20 @@ module.exports.addSlot = function(req, res) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
-                        res.json({
-                            success: false,
-                            msg: 'There was a problem finding the desired activity'
+                        res.status(500).json({
+                            error: err,
+                            msg: "Error while finding Activity",
+                            data: null
                         });
                     }
 
                     //If activity found
                     else {
-                        if (!activity) return res.json({
-                            success: false,
-                            msg: "Could not find activity"
-                        })
+                        if (!activity) return res.status(404).json({
+                            error: null,
+                            msg: "Activity not found",
+                            data: null
+                        });
                         //Flag for overlap
                         var noOverlap = true;
 
@@ -393,17 +458,19 @@ module.exports.addSlot = function(req, res) {
 
                                 //If an error occurred, display a msg along with the error
                                 if (err) {
-                                    res.json({
-                                        success: false,
-                                        msg: 'Slot Not Added'
+                                    res.status(500).json({
+                                        error: err,
+                                        msg: "Error while adding Slot",
+                                        data: null
                                     });
                                 }
 
                                 //If no error occurrs, display msg
                                 else {
-                                    res.json({
-                                        success: true,
-                                        msg: 'Slot Added'
+                                    res.status(200).json({
+                                        error: null,
+                                        msg: "Slot Added Successfully",
+                                        data: null
                                     });
                                 }
                             });
@@ -411,9 +478,10 @@ module.exports.addSlot = function(req, res) {
 
                         //If an error occurred, display a msg along with the error
                         else {
-                            res.json({
-                                success: false,
-                                msg: 'Overlap'
+                            res.status(500).json({
+                                error: null,
+                                msg: "Slots Overlap",
+                                data: null
                             });
                         }
 
@@ -422,11 +490,13 @@ module.exports.addSlot = function(req, res) {
                 });
             }
         } else {
-            res.json({
-                success: false,
-                msg: "Unauthorized access"
+            res.status(401).json({
+                error: null,
+                msg: "Business Login Required or Unauthorized Access",
+                data: null
             });
         }
+    });
 
 };
 
@@ -476,16 +546,31 @@ Post function to upload photo using multer
 and store the uploaded image path in the Activity
 model in photos array, and return the
 filepath to the frontend to show the image.
+Body: {
+    newPath: "path of photo to be added",
+    activityId: "id of the activity tha will contain the photo to be added"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: '/api/activity/:activityId/addPhoto'
 */
 module.exports.addPhoto = function(req, res) {
     //Check if business is logged in
-        if (activityBelongs(req.params.activityId, req.user._id)) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+        if (flag) {
             //upload the image
             uploadPhotos(req, res, function(err) {
                 //if an error occurred, return the error
                 if (err) {
-                    return res.json(err);
+                    return res.status(500).json({
+                        error: err,
+                        msg: null,
+                        data: null
+                    });
                 }
                 /*if multer found a file selected
                 and image was uploaded successfully,
@@ -504,8 +589,10 @@ module.exports.addPhoto = function(req, res) {
                         fs.unlink(req.file.path);
 
                         //return the error message to frontend
-                        return res.json({
-                            error: "File format is not supported!"
+                        return res.status(500).json({
+                            error: err,
+                            msg: "File Format is Not Supported",
+                            data: null
                         });
                     }
                     //copy and rename the image to the following format and location
@@ -532,38 +619,64 @@ module.exports.addPhoto = function(req, res) {
                         function(err, result) {
                             //couldn't add to array, return the error
                             if (err) {
-                                res.json(err);
+                                return res.status(500).json({
+                                    error: err,
+                                    msg: null,
+                                    data: null
+                                });
                             } else {
                                 //if updating is ok
                                 if (result) {
                                     //return the file path to the frontend to show the image
-                                    res.json(newPath);
+                                    res.status(200).json({
+                                        error: null,
+                                        msg: null,
+                                        data: newPath
+                                    });
                                 } else
-                                    res.json({
-                                        error: "Activity not found"
+                                    res.status(404).json({
+                                        error: null,
+                                        msg: "Activity not found",
+                                        data: null
                                     });
                             }
                         });
                 }
                 //multer did not find a file selected to upload
                 else {
-                    res.json({
-                        error: "Choose a valid file"
+                    return res.status(500).json({
+                        error: err,
+                        msg: "Choose a Valid File",
+                        data: null
                     });
                 }
             });
         } else {
-            res.json({
-                success: false,
-                msg: "Unauthorized access"
+            res.status(401).json({
+                error: null,
+                msg: "Business Login Required or Unauthorized Access",
+                data: null
             });
         }
+    });
+
+
 };
 
 
 /*
 delete function that deletes photo from activity's
 photos array, and returns success message or error message.
+Body: {
+    imagePath: "path of photo to be deleted",
+    activityId: "id of the activity containg the photo to be deleted"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: '/api/activity/:activityId/deletePhoto/:photoPath'
 */
 module.exports.deletePhoto = function(req, res) {
@@ -572,13 +685,14 @@ module.exports.deletePhoto = function(req, res) {
     req.checkParams('photoPath', 'Photo Path is required').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
         });
     } else {
-            if (activityBelongs(req.params.activityId, req.user._id)) {
+        activityBelongs(req.params.activityId, req.user._id, function(flag) {
+            if (flag) {
                 var imagePath = req.params.photoPath;
                 var activityId = req.params.activityId;
                 Activity.update({
@@ -589,9 +703,10 @@ module.exports.deletePhoto = function(req, res) {
                     }
                 }, function(err, data) {
                     if (err) {
-                        res.json({
-                            success: false,
-                            msg: 'deleting photo failed'
+                        res.status(500).json({
+                            error: err,
+                            msg: "Error while deleting Photo",
+                            data: null
                         });
                     } else {
 
@@ -602,32 +717,96 @@ module.exports.deletePhoto = function(req, res) {
                         fs.unlink(imagePath, function(err) {
                             //don't care if file doesn't exist
                         });
-                        res.json({
-                            success: true,
-                            msg: 'photo deleted successfully'
+                        res.status(200).json({
+                            error: null,
+                            msg: "Photo Deleted Successfully",
+                            data: null
                         });
                     }
                 });
             } else {
-                res.json({
-                    success: false,
-                    msg: "Unauthorized access"
+                res.status(401).json({
+                    error: null,
+                    msg: "Business Login Required or Unauthorized Access",
+                    data: null
                 });
             }
+        });
     }
 
 };
 
-function activityBelongs(activityId, businessId) {
+function activityBelongs(activityId, businessId, done) {
     Business.findById(businessId, function(err, business) {
         if (business) {
             if (business.activities.indexOf(activityId) > -1) {
-                return true;
+                done(true);
             } else {
-                return false;
+                done(false);
             }
         } else {
-            return false;
+            done(false);
         }
     });
 }
+
+
+/* Delete function that finds and deletes a specific activity
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
+Calling route: /api/activity/:activityId/delete */
+module.exports.deleteActivity = function(req, res) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+        if (flag) {
+            //Finding and deleting activity from database
+            Activity.findByIdAndRemove(req.params.activityId, function(err, activity) {
+                if (err) return rres.status(500).json({
+                    error: err,
+                    msg: "Error while deleting Activity",
+                    data: null
+                });
+                if (activity) {
+
+                    //Delete activity from activites array in corresponding business
+                    Business.findByIdAndUpdate(activity.business, {
+                            $pull: {
+                                "activities": activity._id
+                            }
+                        }, {
+                            safe: true,
+                            upsert: true,
+                            new: true
+                        },
+                        function(err, model) {
+                            if (err) return res.json({
+                                success: false
+                            });
+                            res.status(200).json({
+                                error: null,
+                                msg: "Activity Deleted Successfully",
+                                data: null
+                            });
+                        });
+
+                } else {
+                    res.status(404).json({
+                        error: null,
+                        msg: "Activity not found",
+                        data: null
+                    });
+                }
+            });
+        } else {
+            res.status(401).json({
+                error: null,
+                msg: "Business Login Required or Unauthorized Access",
+                data: null
+            });
+        }
+    });
+
+};
