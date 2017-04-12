@@ -11,6 +11,19 @@ const Business = mongoose.model("Business");
   Post function that handles adding an activity
   It creates a new activity and saves it in the database
   And updates Activites array in the coreesponding Business
+  Body: {
+  name: "name of new activity",
+  price: "price of new activity",
+  description: "description of new activity",
+  bookingsPerSlot: "Maximum number of bookins per slot of new activity",
+  business: "od of busiess that the activity will be added to"
+    }
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message",
+    data: "Nothing"
+    }
+  Redirects to: Nothing.
   Calling route: '/api/activity/add'
 */
 module.exports.addActivity = function(req, res) {
@@ -89,6 +102,16 @@ module.exports.addActivity = function(req, res) {
 
 /*
   Get function that retrieves the activities offered by a Business from the database
+  Body: {
+      businessId:"id of business to find its activites"
+      activites: "array of activites in business"
+    }
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message",
+    data: "Activities of a given business"
+    }
+  Redirects to: Nothing.
   Calling route: api/activity/:businessId
 */
 module.exports.getActivities = function(req, res) {
@@ -130,6 +153,16 @@ module.exports.getActivities = function(req, res) {
 
 /* Post method that takes as a parameters the date and the Activity ID and returns
 the free slots where the resgistered user can make a booking
+Body: {
+    actdate:"Date to find available slots in"
+    actID: "id of the activity tha will contain the slot to be added"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Available Slots in given date"
+  }
+Redirects to: Nothing.
 Calling route: /activity/freeSlots */
 module.exports.getAvailableSlots = function(req, res) {
 
@@ -221,6 +254,17 @@ module.exports.getAvailableSlots = function(req, res) {
 
 
 /* Delete function that finds and deletes a specific slot in a specific activity
+Body: {
+    start: "start time of slot to be deleted"
+    end: "end time of slot to be deleted"
+    activity: "id of the activity tha will contain the slot to be added"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: api/activity/:activityId/deleteSlot */
 module.exports.deleteSlot = function(req, res) {
 
@@ -329,6 +373,18 @@ module.exports.deleteSlot = function(req, res) {
 
 
 /* Post function that adds a slot in a specific activity
+Body: {
+newSlot: "An object consist of two dates, startTime and endTime that will be added to the activity",
+    start: "start time of newSlot"
+    end: "end time of newSlot"
+    activity: "id of the activity tha will contain the slot to be added"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
 
@@ -493,6 +549,16 @@ Post function to upload photo using multer
 and store the uploaded image path in the Activity
 model in photos array, and return the
 filepath to the frontend to show the image.
+Body: {
+    newPath: "path of photo to be added",
+    activityId: "id of the activity tha will contain the photo to be added"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: '/api/activity/:activityId/addPhoto'
 */
 module.exports.addPhoto = function(req, res) {
@@ -600,6 +666,16 @@ module.exports.addPhoto = function(req, res) {
 /*
 delete function that deletes photo from activity's
 photos array, and returns success message or error message.
+Body: {
+    imagePath: "path of photo to be deleted",
+    activityId: "id of the activity containg the photo to be deleted"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: '/api/activity/:activityId/deletePhoto/:photoPath'
 */
 module.exports.deletePhoto = function(req, res) {
@@ -657,14 +733,30 @@ module.exports.deletePhoto = function(req, res) {
 
 };
 
+// function activityBelongs(activityId, businessId) {
+//     Business.findById(businessId, function(err, business) {
+//         if (business) {
+//             if (business.activities.indexOf(activityId) > -1) {
+//                 return true;
+//             } else {
+//                 return false;
+//             }
+//         } else {
+//             return false;
+//         }
+//     });
+// }
+
+
 function activityBelongs(activityId, businessId) {
     Business.findById(businessId, function(err, business) {
         if (business) {
-            if (business.activities.indexOf(activityId) > -1) {
+          for (var i = 0; i < business.activities.length; i++) {
+              if (business.activities[i].activityId == activityId) {
                 return true;
-            } else {
-                return false;
-            }
+              }
+          }
+          return false;
         } else {
             return false;
         }
@@ -673,6 +765,17 @@ function activityBelongs(activityId, businessId) {
 
 
 /* Delete function that finds and deletes a specific activity
+Body: {
+    business: "object containing the array of activites",
+    activity: "id of the activity being deleted",
+    activites: "array of activities inside business"
+  }
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "Nothing"
+  }
+Redirects to: Nothing.
 Calling route: /api/activity/:activityId/delete */
 module.exports.deleteActivity = function(req, res) {
     //Finding and deleting activity from database
