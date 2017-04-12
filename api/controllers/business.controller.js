@@ -241,6 +241,15 @@ module.exports.deletePhoto = function(req, res) {
 
 
 /* Post function that adds the business's name, password, email & description to the db on applying
+Body: {
+   name: "name of business",
+   password: "password of business",
+   confirmPassword: "confirming password of business",
+   email: "email of business",
+   description: "description about business"
+ }
+ Returns: Success or failure message along with the error if any
+ Redirects to: Nothing.
 Calling Route: /api/business/apply */
 module.exports.addBusiness = function(req, res) {
     const name = req.body.name;
@@ -259,10 +268,10 @@ module.exports.addBusiness = function(req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: "Problem with submitted fields",
-            errors: errors
+        res.status(500).json({
+            "error": errors,
+            "msg": "Problem with submitted fields.",
+            "data": null
         });
     } else {
 
@@ -270,9 +279,15 @@ module.exports.addBusiness = function(req, res) {
         Business.findOne({
             'email': email
         }, (err, business) => {
-            if (err) return res.json(err);
-            if (business) res.json({
-                error: 'Email already used. Please enter another email.'
+            if (err) return res.status(500).json({
+                "error": err,
+                "msg": "Error finding business.",
+                "data": null
+            });
+            if (business) res.status(200).json({
+                "error": null,
+                "msg": "Email already used. Please enter another email.",
+                "data": null
             });
             else {
 
@@ -286,22 +301,24 @@ module.exports.addBusiness = function(req, res) {
                 //Encrypting password
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newBusiness.password, salt, (err, hash) => {
-                        if (err) return res.json({
-                            success: false,
-                            msg: 'An error occurred while encrypting',
-                            error: err
+                        if (err) return res.status(500).json({
+                            "error": err,
+                            "msg": "An error occurred while encrypting.",
+                            "data": null
                         });
                         newBusiness.password = hash;
 
                         //Adding business to the db after making sure all inputs are valid and the password is encrypted
                         newBusiness.save(function(err) {
-                            if (err) return res.json({
-                                success: false,
-                                msg: 'Was not able to save your business, please try again'
+                            if (err) return res.status(500).json({
+                                "error": err,
+                                "msg": "Was not able to save your business, please try again.",
+                                "data": null
                             });
-                            res.json({
-                                success: true,
-                                msg: 'Your application is successfully submitted!'
+                            res.status(200).json({
+                                "error": null,
+                                "msg": "Your application is successfully submitted!",
+                                "data": null
                             });
                         });
                     });
@@ -313,21 +330,25 @@ module.exports.addBusiness = function(req, res) {
 
 
 /* Get function that returns all unverified businesses based on the value of the attribute verified
+ Returns: Success or failure message along with error if any
+ and a list of all unverified businesses
+ Redirects to: Nothing.
 Calling Route: /api/business/unVerifiedBusinesses */
 module.exports.unVerifiedBusinesses = function(req, res) {
     const query = Business.find({
         verified: false
     });
     query.exec(function(err, businesses) {
-        if (err) res.json({
-            success: false,
-            msg: 'Can not retrieve unverified businesses'
+        if (err) res.status(500).json({
+            "error": err,
+            "msg": "Can not retrieve unverified businesses.",
+            "data": null
         });
         else
-            res.json({
-                success: true,
-                msg: 'Got unverified businesses successfully',
-                businesses: businesses
+            res.status(200).json({
+                "error": null,
+                "msg": "Got unverified businesses successfully",
+                "data": businesses
             });
     });
 };
@@ -513,6 +534,9 @@ module.exports.uploadLogo = function(req, res) {
 
 /* Get function that gets the current data of the business
 and pass business object to the frontend to display it.
+ Returns: Succes or failure message along with error if any
+ and the business object of the requested business.
+ Redirects to: Nothing.
 Calling route: '/api/business/:businessId/getInfo' */
 module.exports.getCurrentInfo = function(req, res) {
     //check if logged in
@@ -521,16 +545,26 @@ module.exports.getCurrentInfo = function(req, res) {
     }, function(err, business) {
         //if error occured
         if (err) {
-            res.json(err);
+            res.status(500).json({
+                "error": err,
+                "msg": "Error finding business.",
+                "data": null
+            });
         } else {
             // if business found
             if (business)
-                res.json(business);
+                res.status(200).json({
+                    "error": null,
+                    "msg": "Business found.",
+                    "data": business
+                });
 
             //business not found
             else
-                res.json({
-                    error: "Business not found!"
+                res.status(404).json({
+                    "error": null,
+                    "msg": "Business not found!",
+                    "data": null
                 });
         }
     });
