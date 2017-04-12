@@ -13,17 +13,17 @@ Returns: {
 }
 Redirects to: Nothing
 Calling route: /api/review/user/:userId */
-module.exports.getUserReviews = function (req, res) {
+module.exports.getUserReviews = function(req, res) {
     //Finds all reviews made by a user according to the User ID
     Review.find({
         "user": req.params.userId
-    }, function (err, reviews) {
+    }, function(err, reviews) {
         //If an error occurred, return an error
         if (err) {
             res.status(500).json({
-              error: err,
-              msg: "Error retrieving desired reviews",
-              data: null
+                error: err,
+                msg: "Error retrieving desired reviews",
+                data: null
             });
         } else {
             //returns an array of reviews or empty array
@@ -49,7 +49,7 @@ Returns: {
 }
 Redirects to: Nothing
 Calling route: /api/review/businessId/add */
-module.exports.addReview = function (req, res) {
+module.exports.addReview = function(req, res) {
     //get values from post request
     var comment = req.body.comment;
     var rating = req.body.rating;
@@ -63,9 +63,9 @@ module.exports.addReview = function (req, res) {
 
     if (errors) {
         res.status(500).json({
-          error: err,
-          msg: null,
-          data: null
+            error: err,
+            msg: null,
+            data: null
         });
     } else {
         //creates a new Review object with the values from the post request
@@ -76,7 +76,7 @@ module.exports.addReview = function (req, res) {
             business: business
         });
         //saves the new review in the database
-        newReview.save(function (err, review) {
+        newReview.save(function(err, review) {
             //if an error occurred, return an error
             if (err) return res.status(500).json({
                 error: err,
@@ -94,18 +94,18 @@ module.exports.addReview = function (req, res) {
                     upsert: true,
                     new: true
                 },
-                function (err, model) {
+                function(err, model) {
                     if (err) return res.status(201).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
                         data: null
                     });
                     // Gets the business being reviewed
-                    Business.findById(review.business, function (err, doc) {
+                    Business.findById(review.business, function(err, doc) {
                         if (err) return res.status(201).json({
-                          error: err,
-                          msg: "Error occured while updating Business concerned",
-                          data: null
+                            error: err,
+                            msg: "Error occured while updating Business concerned",
+                            data: null
                         });
 
                         // Updates totalRating of the business
@@ -115,7 +115,7 @@ module.exports.addReview = function (req, res) {
                         doc.reviews.push(review._id);
 
                         // Saves the updated business document in database
-                        doc.save(function (err) {
+                        doc.save(function(err) {
                             if (err) return res.status(400).json({
                                 error: err,
                                 msg: "Error occured while saving review",
@@ -142,24 +142,24 @@ Returns: {
 }
 Redirects to: Nothing
 Calling route: /api/review/:businessId */
-module.exports.getReviews = function (req, res) {
+module.exports.getReviews = function(req, res) {
     //Finds all reviews made on a specific business according to its business ID
     Review.find({
         "business": req.params.businessId
-    }, function (err, reviews) {
+    }, function(err, reviews) {
         //If an error occurred, return an error
         if (err) {
             res.status(500).json({
-              error: err,
-              msg: "Error retrieving desired reviews",
-              data: null
+                error: err,
+                msg: "Error retrieving desired reviews",
+                data: null
             });
         } else {
             //returns an array of reviews or empty array
             res.status(200).json({
-              error: null,
-              msg: "Reviews retrieved Successfully",
-              data: reviews
+                error: null,
+                msg: "Reviews retrieved Successfully",
+                data: reviews
 
             });
         }
@@ -178,10 +178,10 @@ module.exports.getReviews = function (req, res) {
   Redirects to: Nothing.
   Calling route: /api/review/averageRating/:businessId
 */
-module.exports.getAverageRating = function (req, res) {
+module.exports.getAverageRating = function(req, res) {
 
     // Get the business concered from the database by it's Id
-    Business.findById(req.params.businessId, function (err, doc) {
+    Business.findById(req.params.businessId, function(err, doc) {
         // If there is an error return it in response
         if (err) return res.status(500).json({
             error: err,
@@ -224,7 +224,7 @@ Returns: {
 Redirects to: Nothing
 Calling route: /api/review/:reviewId/edit
 */
-module.exports.editReview = function (req, res) {
+module.exports.editReview = function(req, res) {
     //gets values of variables that user wants to edit
     const newComment = req.body.comment;
     const newRating = req.body.rating;
@@ -242,28 +242,73 @@ module.exports.editReview = function (req, res) {
         });
     } else {
         //Finds the review by the ID specified in the URI and updates the comment and the rating
-        Review.findByIdAndUpdate(
-            req.params.reviewId, {
-                "comment": newComment,
-                "rating": newRating
-            }, {
-                safe: true,
-                new: true
-            },
-            function (err, editedReview) {
-                //If error occurred return it in response
-                if (err) return res.status(201).json({
+        Review.findById(req.params.reviewId, function(err, oldReview) {
+            //If error occurred return it in response
+            if (err) {
+                res.status(500).json({
                     error: err,
-                    msg: 'Failed to edit review',
+                    msg: 'Failed to retrieve review',
                     data: null
                 });
-                //If no error occurs, response with success = true
-                res.status(200).json({
-                    error: err,
-                    msg: 'Review successfully edited',
-                    data: null
-                });
-            });
+            } else {
+                if (!oldReview) {
+                    res.status(404).json({
+                        error: null,
+                        msg: "Review not found",
+                        data: null
+                    });
+                } else {
+                    Business.findById(oldReview.business, function(err, business) {
+                        if (err) {
+                            res.status(500).json({
+                                error: err,
+                                msg: 'Failed to retrieve business',
+                                data: null
+                            });
+                        } else {
+                            if (!business) {
+                                res.status(404).json({
+                                    error: null,
+                                    msg: "Business not found",
+                                    data: null
+                                });
+                            } else {
+                                business.totalRatings = business.totalRatings - oldReview.rating + newRating;
+                                business.save(function(err, updatedBusiness) {
+                                    if (err) {
+                                        res.status(500).json({
+                                            error: err,
+                                            msg: 'Failed to update business',
+                                            data: null
+                                        });
+                                    } else {
+                                        oldReview.rating = newRating;
+                                        oldReview.comment = newComment;
+                                        oldReview.save(function(err, newReview) {
+                                            if (err) {
+                                                res.status(500).json({
+                                                    error: err,
+                                                    msg: 'Failed to update review',
+                                                    data: null
+                                                });
+                                            } else {
+                                                //If no error occurs, response with success = true
+                                                res.status(200).json({
+                                                    error: err,
+                                                    msg: 'Review successfully edited',
+                                                    data: null
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+        });
     }
 };
 
@@ -275,9 +320,9 @@ Returns: {
 }
 Redirects to: Nothing
 Calling route: /api/review/:reviewId/delete */
-module.exports.deleteReview = function (req, res) {
+module.exports.deleteReview = function(req, res) {
     //Finding and deleting review from database
-    Review.findByIdAndRemove(req.params.reviewId, function (err, reviewToDelete) {
+    Review.findByIdAndRemove(req.params.reviewId, function(err, reviewToDelete) {
         if (err) return res.status(500).json({
             error: err,
             msg: 'There was a problem with deleting the review',
@@ -295,34 +340,36 @@ module.exports.deleteReview = function (req, res) {
                     upsert: true,
                     new: true
                 },
-                function (err, model) {
-                    if (err) return res.status(201).json({
+                function(err, model) {
+                    if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
                         data: null
                     });
                     //Delete review from reviews array in corresponding business
-                    Business.findByIdAndUpdate(reviewToDelete.business, {
-                            $pull: {
-                                "reviews": reviewToDelete._id
+                    Business.findById(reviewToDelete.business, function(err, business) {
+                        console.log("Before");
+                        console.log(business);
+                        business.reviews.pull(reviewToDelete._id);
+                        business.totalRatings = business.totalRatings - reviewToDelete.rating;
+                        console.log("After");
+                        console.log(business);
+                        business.save(function(err, updatedBusiness) {
+                            if (err) {
+                                res.status(500).json({
+                                    error: err,
+                                    msg: "Error occured while updating Business concerned",
+                                    data: null
+                                });
+                            } else {
+                                res.status(200).json({
+                                    error: null,
+                                    msg: 'Review successfully deleted',
+                                    data: null
+                                });
                             }
-                        }, {
-                            safe: true,
-                            upsert: true,
-                            new: true
-                        },
-                        function(err, data) {
-                          if (err) return res.status(201).json({
-                            error: err,
-                            msg: "Error occured while updating Business concerned",
-                            data: null
-                          });
-                            res.status(200).json({
-                                error: null,
-                                msg: 'Review successfully deleted',
-                                data: null
-                            });
                         });
+                    });
                 });
         } else
             res.status(404).json({

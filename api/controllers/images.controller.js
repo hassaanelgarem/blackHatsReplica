@@ -2,6 +2,18 @@ const path = require('path');
 const fs = require('fs');
 const imageTypes = ["activityPhotos", "businessAds", "businessLogos", "businessPhotos", "profilePictures"];
 
+/*
+  Get function that retrieves an image
+  imageType can only be:
+    - activityPhotos
+    - businessAds
+    - businessLogos
+    - businessPhotos
+    - profilePictures
+  Returns an image or an error message.
+  Redirect to: Nothing
+  Calling route: 'api/image/:imageType/:imageName'
+*/
 module.exports.getImage = function(req, res) {
   if(imageTypes.indexOf(req.params.imageType) < 0){
     res.status(500).send("Invalid image type");
