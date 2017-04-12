@@ -3,49 +3,62 @@ const Business = mongoose.model("Business");
 const emailSender = require('../config/emailSender');
 
 
-/* Put function that verifies the business
+/* Put function that verifies the business,
+it allows the admin to verify the applying business
+  Returns: Success or failure message along with the error if any
+  Redirects to: Nothing.
 Calling Route: /api/admin/verify/:businessId */
-module.exports.verifyBusiness = function (req, res) {
+module.exports.verifyBusiness = function(req, res) {
     //Getting the business by its id
-    Business.findById(req.params.businessId, function (err, business) {
+    Business.findById(req.params.businessId, function(err, business) {
         if (err)
-            res.json(err);
+            res.status(500).json({
+                "error": err,
+                "msg": "Error finding the business.",
+                "data": null
+            });
         else {
             if (business) {
                 //if business is already verified
                 if (business.verified)
-                    return res.json({
-                        error: "Business is already verified."
+                    return res.status(200).json({
+                        "error": null,
+                        "msg": "Business is already verified.",
+                        "data": null
                     });
 
                 // else verifying the business
                 business.verified = true;
                 // updating the db
-                business.save(function (err) {
-                    if (err) res.json({
-                        success: false,
-                        msg: 'Was not able to verify business'
+                business.save(function(err) {
+                    if (err) res.status(500).json({
+                        "error": err,
+                        "msg": "Was not able to verify business.",
+                        "data": null
                     });
                     else {
                         var text = 'Hello ' + business.name + ',\n\nYour account has been verified.\n\nWelcome to Black Hats.';
                         var subject = 'Account Verified';
-                        emailSender.sendEmail(subject, business.email, text, function (err, info) {
-                            if (err) res.json({
-                                success: false,
-                                error: err,
-                                msg: 'Business was not notified of verification.'
+                        emailSender.sendEmail(subject, business.email, text, function(err, info) {
+                            if (err) res.status(500).json({
+                                "error": err,
+                                "msg": "Business was not notified of verification.",
+                                "data": null
                             });
                             else
-                                res.json({
-                                    success: true,
-                                    msg: 'Business is verified and notified.'
+                                res.status(200).json({
+                                    "error": null,
+                                    "msg": "Business is verified and notified.",
+                                    "data": null
                                 });
                         });
                     }
                 });
             } else
-                res.json({
-                    error: "Business not found."
+                res.status(404).json({
+                    "error": null,
+                    "msg": "Business not found.",
+                    "data": null
                 })
         }
     });
@@ -53,15 +66,17 @@ module.exports.verifyBusiness = function (req, res) {
 
 
 /* Delete function that deletes a business wether he was approved or not
+ Returns: Success or failure message along with the error if any
+ Redirects to: Nothing.
 Calling Route: /api/admin/delete/:businessId */
-module.exports.deleteBusiness = function (req, res) {
+module.exports.deleteBusiness = function(req, res) {
     // delete declined busiess
-    Business.findByIdAndRemove(req.params.businessId, function (err, business) {
+    Business.findByIdAndRemove(req.params.businessId, function(err, business) {
         if (err) {
-            res.json({
-                success: false,
-                msg: "Error deleting business",
-                err
+            res.status(500).json({
+                "error": err,
+                "msg": "Error deleting business.",
+                "data": null
             });
         } else {
             if (business) {
@@ -72,23 +87,26 @@ module.exports.deleteBusiness = function (req, res) {
                     var text = 'Hello ' + business.name + ',\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats.';
                     var subject = 'Account Rejected';
                 }
-                emailSender.sendEmail(subject, business.email, text, function (err, info) {
+                emailSender.sendEmail(subject, business.email, text, function(err, info) {
                     if (err) {
-                        res.json({
-                            success: false,
-                            error: err,
-                            msg: 'Business was not notified of rejection'
+                        res.status(500).json({
+                            "error": err,
+                            "msg": "Business was not notified of rejection.",
+                            "data": null
                         });
                     } else {
-                        res.json({
-                            success: true,
-                            msg: 'Business deleted and notified'
+                        res.status(200).json({
+                            "error": null,
+                            "msg": "Business deleted and notified.",
+                            "data": null
                         });
                     }
                 });
             } else
-                res.json({
-                    error: "Business not found."
+                res.status(404).json({
+                    "error": null,
+                    "msg": "Business not found.",
+                    "data": null
                 });
         }
     });

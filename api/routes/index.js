@@ -10,6 +10,7 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 const advCtrl = require('../controllers/advertisement.controller');
 const adminCtrl = require('../controllers/admin.controller');
+const imagesCtrl = require("../controllers/images.controller");
 
 
 module.exports = function(passportConfig) {
@@ -51,6 +52,7 @@ module.exports = function(passportConfig) {
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
+    router.route('/image/:imageType/:imageName').get(imagesCtrl.getImage);
 
 
     //Available to logged in only routes
@@ -84,6 +86,7 @@ module.exports = function(passportConfig) {
     router.route('/user/addFavorite/:businessId').put(passportConfig.isUserLoggedIn, userCtrl.addFavorite);
     router.route('/user/deleteFavorite/:businessId').delete(passportConfig.isUserLoggedIn, userCtrl.deleteFavorite);
     router.route('/activity/book').post(passportConfig.isUserLoggedIn, bookingCtrl.bookActivity);
+    router.route('/activity/deleteBooking/:bookingId').delete(passportConfig.isUserLoggedIn, bookingCtrl.deleteBooking);
     //User review routes
     router.route('/review/:businessId/add').post(passportConfig.isUserLoggedIn, reviewCtrl.addReview);
     router.route('/review/:reviewId/edit').put(passportConfig.isUserLoggedIn, reviewCtrl.editReview);
