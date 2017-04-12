@@ -85,6 +85,7 @@ module.exports = function(passportConfig) {
     router.route('/user/profile/uploadProfilePicture').post(passportConfig.isUserLoggedIn, profileCtrl.uploadProfilePicture);
     router.route('/user/deleteAccount').delete(passportConfig.isUserLoggedIn, userCtrl.deleteAccount);
     router.route('/user/addFavorite/:businessId').put(passportConfig.isUserLoggedIn, userCtrl.addFavorite);
+    router.route('/user/deleteFavorite/:businessId').delete(passportConfig.isUserLoggedIn, userCtrl.deleteFavorite);
     router.route('/activity/book').post(passportConfig.isUserLoggedIn, bookingCtrl.bookActivity);
     router.route('/activity/deleteBooking/:bookingId').delete(passportConfig.isUserLoggedIn, bookingCtrl.deleteBooking);
     //User review routes
