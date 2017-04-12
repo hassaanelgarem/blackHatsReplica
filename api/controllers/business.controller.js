@@ -22,10 +22,10 @@ const uploadBusinessLogo = multer({
 
 /*Put function, to save the choosen tags by the business in the database .
   Calling route: '/api/business/addTags' */
-module.exports.addTags = function (req, res) {
+module.exports.addTags = function(req, res) {
     Business.findOne({
         _id: req.user._id
-    }, function (err, business) {
+    }, function(err, business) {
         //if error occured
         if (err) {
             res.json(err);
@@ -50,7 +50,7 @@ module.exports.addTags = function (req, res) {
                     /*save the choosen tags in the database
                     and return the updated object to frontend.
                     */
-                    business.save(function (err) {
+                    business.save(function(err) {
                         if (err) {
                             res.json(err);
                         } else {
@@ -72,10 +72,10 @@ module.exports.addTags = function (req, res) {
 /*Put function, to save the choosen Category by the business in the database .
   business can choose only 1 Category
   Calling route: '/api/business/addCategory' */
-module.exports.addCategory = function (req, res) {
+module.exports.addCategory = function(req, res) {
     Business.findOne({
         _id: req.user._id
-    }, function (err, business) {
+    }, function(err, business) {
         //if error occured
         if (err) {
             res.json(err);
@@ -94,7 +94,7 @@ module.exports.addCategory = function (req, res) {
                 } else {
                     business.category = req.body.category;
 
-                    business.save(function (err) {
+                    business.save(function(err) {
                         if (err) {
                             res.json(err);
                         } else {
@@ -121,9 +121,9 @@ model in photos array, and return the
 filepath to the frontend to show the image.
 Calling route: '/business/addPhoto'
 */
-module.exports.addPhoto = function (req, res) {
+module.exports.addPhoto = function(req, res) {
     //upload the image
-    uploadPhotos(req, res, function (err) {
+    uploadPhotos(req, res, function(err) {
         //if an error occurred, return the error
         if (err) {
             return res.json(err);
@@ -151,7 +151,7 @@ module.exports.addPhoto = function (req, res) {
             }
             //copy and rename the image to the following format and location
             var newPath = path.join(__dirname, "../", "../public/uploads/businessPhotos/img" + Date.now() + "." + string);
-            fs.renameSync(req.file.path, newPath, function (err) {
+            fs.renameSync(req.file.path, newPath, function(err) {
                 if (err) throw err;
 
                 //delete the image with the old name
@@ -170,7 +170,7 @@ module.exports.addPhoto = function (req, res) {
                         "photos": newPath
                     }
                 },
-                function (err, result) {
+                function(err, result) {
                     //couldn't add to array, return the error
                     if (err) {
                         res.json(err);
@@ -201,7 +201,7 @@ delete function that deletes photo from business'
 photos array, and returns success message or error message.
 Calling route: '/business/deletePhoto/:photoPath'
 */
-module.exports.deletePhoto = function (req, res) {
+module.exports.deletePhoto = function(req, res) {
     var imagePath = req.params.photoPath;
     var businessId = req.user._id;
     Business.update({
@@ -210,7 +210,7 @@ module.exports.deletePhoto = function (req, res) {
         $pull: {
             "photos": imagePath
         }
-    }, function (err, data) {
+    }, function(err, data) {
         if (err) {
             res.json({
                 success: false,
@@ -223,7 +223,7 @@ module.exports.deletePhoto = function (req, res) {
                 imagePath = path.join(__dirname, "../", "../public/uploads/businessPhotos/", req.params.photoPath);
 
                 //delete the photo from filesystem
-                fs.unlink(imagePath, function (err) {
+                fs.unlink(imagePath, function(err) {
                     //don't care if file doesn't exist
                 });
                 res.json({
@@ -241,8 +241,17 @@ module.exports.deletePhoto = function (req, res) {
 
 
 /* Post function that adds the business's name, password, email & description to the db on applying
+Body: {
+   name: "name of business",
+   password: "password of business",
+   confirmPassword: "confirming password of business",
+   email: "email of business",
+   description: "description about business"
+ }
+ Returns: Success or failure message along with the error if any
+ Redirects to: Nothing.
 Calling Route: /api/business/apply */
-module.exports.addBusiness = function (req, res) {
+module.exports.addBusiness = function(req, res) {
     const name = req.body.name;
     const password = req.body.password;
     const email = req.body.email;
@@ -259,10 +268,10 @@ module.exports.addBusiness = function (req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: "Problem with submitted fields",
-            errors: errors
+        res.status(500).json({
+            "error": errors,
+            "msg": "Problem with submitted fields.",
+            "data": null
         });
     } else {
 
@@ -270,9 +279,15 @@ module.exports.addBusiness = function (req, res) {
         Business.findOne({
             'email': email
         }, (err, business) => {
-            if (err) return res.json(err);
-            if (business) res.json({
-                error: 'Email already used. Please enter another email.'
+            if (err) return res.status(500).json({
+                "error": err,
+                "msg": "Error finding business.",
+                "data": null
+            });
+            if (business) res.status(200).json({
+                "error": null,
+                "msg": "Email already used. Please enter another email.",
+                "data": null
             });
             else {
 
@@ -286,22 +301,24 @@ module.exports.addBusiness = function (req, res) {
                 //Encrypting password
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newBusiness.password, salt, (err, hash) => {
-                        if (err) return res.json({
-                            success: false,
-                            msg: 'An error occurred while encrypting',
-                            error: err
+                        if (err) return res.status(500).json({
+                            "error": err,
+                            "msg": "An error occurred while encrypting.",
+                            "data": null
                         });
                         newBusiness.password = hash;
 
                         //Adding business to the db after making sure all inputs are valid and the password is encrypted
-                        newBusiness.save(function (err) {
-                            if (err) return res.json({
-                                success: false,
-                                msg: 'Was not able to save your business, please try again'
+                        newBusiness.save(function(err) {
+                            if (err) return res.status(500).json({
+                                "error": err,
+                                "msg": "Was not able to save your business, please try again.",
+                                "data": null
                             });
-                            res.json({
-                                success: true,
-                                msg: 'Your application is successfully submitted!'
+                            res.status(200).json({
+                                "error": null,
+                                "msg": "Your application is successfully submitted!",
+                                "data": null
                             });
                         });
                     });
@@ -313,21 +330,25 @@ module.exports.addBusiness = function (req, res) {
 
 
 /* Get function that returns all unverified businesses based on the value of the attribute verified
+ Returns: Success or failure message along with error if any
+ and a list of all unverified businesses
+ Redirects to: Nothing.
 Calling Route: /api/business/unVerifiedBusinesses */
-module.exports.unVerifiedBusinesses = function (req, res) {
+module.exports.unVerifiedBusinesses = function(req, res) {
     const query = Business.find({
         verified: false
     });
-    query.exec(function (err, businesses) {
-        if (err) res.json({
-            success: false,
-            msg: 'Can not retrieve unverified businesses'
+    query.exec(function(err, businesses) {
+        if (err) res.status(500).json({
+            "error": err,
+            "msg": "Can not retrieve unverified businesses.",
+            "data": null
         });
         else
-            res.json({
-                success: true,
-                msg: 'Got unverified businesses successfully',
-                businesses: businesses
+            res.status(200).json({
+                "error": null,
+                "msg": "Got unverified businesses successfully",
+                "data": businesses
             });
     });
 };
@@ -337,10 +358,10 @@ module.exports.unVerifiedBusinesses = function (req, res) {
 Put function that increments the interactivity attribute of a certain business by 1
 Calling route: /api/business/:businessId/interact
 */
-module.exports.updateInteractivity = function (req, res) {
-    Business.findById(req.params.businessId, function (err, business) {
+module.exports.updateInteractivity = function(req, res) {
+    Business.findById(req.params.businessId, function(err, business) {
         business.interactivity = business.interactivity + 1;
-        business.save(function (err) {
+        business.save(function(err) {
             if (err) res.json({
                 success: false,
                 msg: 'Updating business interactivity failed'
@@ -359,13 +380,13 @@ module.exports.updateInteractivity = function (req, res) {
 Get function that returns the three most popular businesses based on their interactivity
 Calling route: /api/business/mostPopular
 */
-module.exports.getMostPopular = function (req, res) {
+module.exports.getMostPopular = function(req, res) {
     // query for sorting businesses based on interactivity and limits the result to 3
     const query = Business.find().sort({
         interactivity: -1
     }).limit(3);
     // execute the above query
-    query.exec(function (err, businesses) {
+    query.exec(function(err, businesses) {
         // If there is an error return it in response
         if (err) res.json({
             success: false,
@@ -389,9 +410,9 @@ model in photos array, and return the
 filepath to the frontend to show the image.
 Calling route: '/api/business/addLogo'
 */
-module.exports.uploadLogo = function (req, res) {
+module.exports.uploadLogo = function(req, res) {
     //upload the image
-    uploadBusinessLogo(req, res, function (err) {
+    uploadBusinessLogo(req, res, function(err) {
         //if an error occurred, return the error
         if (err) {
             return res.json(err);
@@ -419,7 +440,7 @@ module.exports.uploadLogo = function (req, res) {
             }
             //copy and rename the image to the following format and location
             var newPath = path.join(__dirname, "../", "../public/uploads/businessLogos/img" + Date.now() + "." + string);
-            fs.renameSync(req.file.path, newPath, function (err) {
+            fs.renameSync(req.file.path, newPath, function(err) {
                 if (err) throw err;
 
                 //delete the image with the old name
@@ -431,7 +452,7 @@ module.exports.uploadLogo = function (req, res) {
             newPath = newPath.substring(newPath.length - nameLength);
 
             //save the image file path to the Business model
-            Business.findById(req.user._id, function (err, business) {
+            Business.findById(req.user._id, function(err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.json(err);
@@ -443,7 +464,7 @@ module.exports.uploadLogo = function (req, res) {
                             var oldLogo = path.join(__dirname, "../", "../public/uploads/businessLogos/", business.logo);
                         }
                         business.logo = newPath;
-                        business.save(function (err) {
+                        business.save(function(err) {
                             //couldn't save, return the error
                             if (err) {
                                 res.json(err);
@@ -451,7 +472,7 @@ module.exports.uploadLogo = function (req, res) {
                                 //if he had a logo before
                                 if (oldLogo) {
                                     //updated successfully, delete the old logo
-                                    fs.unlink(oldLogo, function (err) {
+                                    fs.unlink(oldLogo, function(err) {
                                         //don't care if file not found
                                     });
                                 }
@@ -478,24 +499,37 @@ module.exports.uploadLogo = function (req, res) {
 
 /* Get function that gets the current data of the business
 and pass business object to the frontend to display it.
+ Returns: Succes or failure message along with error if any
+ and the business object of the requested business.
+ Redirects to: Nothing.
 Calling route: '/api/business/:businessId/getInfo' */
-module.exports.getCurrentInfo = function (req, res) {
+module.exports.getCurrentInfo = function(req, res) {
     //check if logged in
     Business.findOne({
         _id: req.params.businessId
-    }, function (err, business) {
+    }, function(err, business) {
         //if error occured
         if (err) {
-            res.json(err);
+            res.status(500).json({
+                "error": err,
+                "msg": "Error finding business.",
+                "data": null
+            });
         } else {
             // if business found
             if (business)
-                res.json(business);
+                res.status(200).json({
+                    "error": null,
+                    "msg": "Business found.",
+                    "data": business
+                });
 
             //business not found
             else
-                res.json({
-                    error: "Business not found!"
+                res.status(404).json({
+                    "error": null,
+                    "msg": "Business not found!",
+                    "data": null
                 });
         }
     });
@@ -505,11 +539,11 @@ module.exports.getCurrentInfo = function (req, res) {
 /* Put function to save the edited business info in the database
 and returns updated object to frontend.
 Calling route: '/api/business/editInfo'  */
-module.exports.saveNewInfo = function (req, res) {
+module.exports.saveNewInfo = function(req, res) {
 
     Business.findOne({
         _id: req.user._id
-    }, function (err, business) {
+    }, function(err, business) {
         //if an error occurred, return the error
         if (err) {
             res.json(err);
@@ -566,7 +600,7 @@ module.exports.saveNewInfo = function (req, res) {
                         business.deposit = parseFloat(req.body.deposit);
                     }
 
-                    business.save(function (err) {
+                    business.save(function(err) {
                         if (err) {
                             res.json(err);
                         } else {

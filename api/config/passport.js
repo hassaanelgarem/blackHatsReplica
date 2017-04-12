@@ -5,13 +5,13 @@ const User = mongoose.model("User");
 const passport = null;
 
 
-var configurePassport = function (passport) {
+var configurePassport = function(passport) {
     // Passport handling the login
     passport.use('local-user', new LocalStrategy({
         usernameField: 'username',
         passwordField: 'password'
-    }, function (username, password, done) { // Finding the user by his username
-        User.getUserByUsername(username, function (err, user) {
+    }, function(username, password, done) { // Finding the user by his username
+        User.getUserByUsername(username, function(err, user) {
             if (err) return done(err);
             if (!user) {
                 return done(null, false, {
@@ -19,7 +19,7 @@ var configurePassport = function (passport) {
                 });
             }
             //Comparing to see if the 2 passwords match
-            User.comparePassword(password, user.password, function (err, isMatch) {
+            User.comparePassword(password, user.password, function(err, isMatch) {
                 if (err) return done(err);
                 if (isMatch)
                     return done(null, user);
@@ -35,17 +35,19 @@ var configurePassport = function (passport) {
     passport.use('local-business', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password',
-    }, function (email, password, done) {
+    }, function(email, password, done) {
         // Finding the business by his email
-        Business.getBusinessByEmail(email, function (err, business) {
+        Business.getBusinessByEmail(email, function(err, business) {
             if (err) return done(err);
             if (!business) return done(null, false, {
                 msg: 'Invalid email.'
             });
-            if(!business.verified)
-              return done(null, false, {msg : "Not verified yet"});
+            if (!business.verified)
+                return done(null, false, {
+                    msg: "Not verified yet"
+                });
             //Comparing to see if the 2 passwords match
-            Business.comparePassword(password, business.password, function (err, isMatch) {
+            Business.comparePassword(password, business.password, function(err, isMatch) {
                 if (err) return done(err);
                 if (isMatch) return done(null, business);
                 done(null, false, {
@@ -57,20 +59,20 @@ var configurePassport = function (passport) {
 
 
     //Passport module serializes document ID
-    passport.serializeUser(function (user, done) {
+    passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
 
 
     //Passport module deserializes document ID
-    passport.deserializeUser(function (id, done) {
-        User.getUserById(id, function (err, user) {
+    passport.deserializeUser(function(id, done) {
+        User.getUserById(id, function(err, user) {
             if (err)
                 done(err);
             else if (user) {
                 done(err, user);
             } else {
-                Business.getBusinessById(id, function (err, business) {
+                Business.getBusinessById(id, function(err, business) {
                     if (err)
                         done(err);
                     else
@@ -83,9 +85,9 @@ var configurePassport = function (passport) {
 };
 
 
-var isUserLoggedIn = function (req, res, next) {
+var isUserLoggedIn = function(req, res, next) {
     if (req.isAuthenticated()) {
-      if (req.user.constructor.modelName === "User")
+        if (req.user.constructor.modelName === "User")
             return next();
     }
 
@@ -97,7 +99,7 @@ var isUserLoggedIn = function (req, res, next) {
 };
 
 
-var isAdminLoggedIn = function (req, res, next) {
+var isAdminLoggedIn = function(req, res, next) {
     if (req.isAuthenticated()) {
         if (req.user.username === 'admin')
             return next();
@@ -110,7 +112,7 @@ var isAdminLoggedIn = function (req, res, next) {
 };
 
 
-var isBusinessLoggedIn = function (req, res, next) {
+var isBusinessLoggedIn = function(req, res, next) {
     if (req.isAuthenticated()) {
         if (req.user.constructor.modelName === "Business")
             return next();
@@ -123,10 +125,9 @@ var isBusinessLoggedIn = function (req, res, next) {
 };
 
 
-var isNotLoggedIn = function (req, res, next) {
+var isNotLoggedIn = function(req, res, next) {
     if (!req.isAuthenticated())
         return next();
-
     res.status(401).json({
         error: null,
         msg: 'A login session already exists.',
@@ -135,7 +136,7 @@ var isNotLoggedIn = function (req, res, next) {
 };
 
 
-var logout = function (req, res) {
+var logout = function(req, res) {
     req.logout();
     res.status(200).json({
         error: null,
