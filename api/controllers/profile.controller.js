@@ -13,9 +13,22 @@ const uploadProfilePic = multer({
 }).single('myfile');
 
 
-/*Get function, to Get User info from the User model with _id
-equal to the paraams.userID and return it
-Calling route: '/api/user/profile/:userId'
+/*
+  Get function that gets all info of a user
+   it gets User info from the User model with _id
+  equal to the params.userID and return it
+  Query params:
+  	- userId
+  Body: {
+    nothing
+  }
+  Returns: {
+    error: "Error object if any",
+    msg: "A message",
+    data : the retrieved object from the database
+  }
+  Redirects to: Nothing.
+  Calling route:/api/user/profile/:userId
 */
 module.exports.getOneUser = function(req, res) {
     var userId = req.params.userId;
@@ -52,8 +65,24 @@ module.exports.getOneUser = function(req, res) {
 };
 
 
-/*Put function, to Update the User info in the User model.
-Calling route: '/api/user/profile/editInfo'
+/*
+  Put function that updates a user
+   it updates the user's info in the User model
+   with _id equal to the params.userID
+   Query params:
+  	- nothing
+  Body: {
+    firstName:"user's first name",
+    lastName:"user's last name,
+    birthDate:"user's birth date in the mm-dd-yyyy format"
+  }
+  Returns: {
+    error: "Error object if any",
+    msg: "A message",
+    data : retrieve the updated object from the database
+  }
+  Redirects to: Nothing.
+  Calling route:/api/user/profile/editInfo
 */
 module.exports.updateOneUser = function(req, res) {
     var userId = req.user._id;
