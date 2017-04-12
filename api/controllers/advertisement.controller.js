@@ -26,10 +26,10 @@ module.exports.addAdvSlots = function (req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
+        res.status(500).json({
+	    error: errors,
+        msg: "Incomplete Input",
+        data: null
         });
     } else {
         //  creates a new advertisement slot using values from the POST request
@@ -43,19 +43,19 @@ module.exports.addAdvSlots = function (req, res) {
         //  saves the new advertisement slot in the database
         newAdvSlot.save(function (err, newSlot) {
             //  If there is an error return it in response
-            if (err) return res.json({
-                success: false,
-                msg: 'Error adding the advertisement slot'
+            if (err) return res.status(500).json({
+	        error: err,
+            msg: "Error Adding the Advertisement Slot",
+            data: null
             });
             //  returns a success message
-            res.json({
-                success: true,
-                msg: 'advertisement slot Successfully added'
-            })
+            res.status(200).json({
+	        error: null,
+            msg: "Advertisement Slot Added Successfully",
+            data: null
+            });
         })
     }
-
-
 }
 
 
@@ -72,20 +72,21 @@ module.exports.getAdvSlots = function (req, res) {
     }, function (err, advSlot) {
         //  If there is an error return it in response
         if (err) {
-            return res.json({
-                success: false,
-                msg: "Error retrieving advSlots"
+            return res.status(500).json({
+	            error: err,
+                msg: "Error retrieving advSlots",
+                data: null
             });
         } else {
             //  returns an array of Adv Slots
-            res.json({
-                success: true,
-                msg: 'Successful retrieval',
-                advSlot
+            res.status(200).json({
+	            error: null,
+                msg: "Advertisement Slots Retrieved Successfully",
+                data: advSlot
             });
         }
     })
-};
+}
 
 
 /*  Post function that handles booking an advertisement slot.
@@ -94,21 +95,26 @@ module.exports.bookAdvSlot = function (req, res) {
 
     // check if advSlot exists
     AdvSlot.findById(req.params.advSlotId, function (err, slot) {
-        if (err) return res.json({
-            success: false,
-            msg: "Error searching for slot"
-        });
-        if (!slot) return res.json({
-            success: false,
-            msg: "Can't find slot"
-        });
-        // Create new AdvBooking object using parameters from post request
+        if (err) return res.status(500).json({
+	            error: err,
+                msg: "Error Searching For Advertisement Slot",
+                data: null
+            })
+            
+        if (!slot) return res.status(404).json({
+	            error: null,
+                msg: "Advertisement Slot Not Found",
+                data: null
+            });
+        // Upload the adv image
         uploadAdv(req, res, function (flag, image) {
             if (flag)
-                return res.json({
-                    error: "You have to choose a valid file"
+                return res.status(500).json({
+	            error: err,
+                msg: "Choose A Valid File",
+                data: null
                 });
-
+        // Create new AdvBooking object using parameters from post request
             const newAdvBooking = new AdvBooking({
                 business: req.user._id,
                 advSlot: req.params.advSlotId,
@@ -120,16 +126,17 @@ module.exports.bookAdvSlot = function (req, res) {
             // Save new booking in database
             newAdvBooking.save(function (err, booking) {
                 // If there is an error return it in response
-                if (err) return res.json({
-                    success: false,
-                    msg: 'Error adding the booking',
-                    err
+                if (err) return res.status(500).json({
+	                        error: err,
+                            msg: "Error Adding the Booking",
+                            data: null
+                            });
+                //return a success message
+                res.status(200).json({
+	            error: null,
+                msg: "Booking Added To the Advertisement Slot Successfully",
+                data: null
                 });
-                //return a sucess message
-                res.json({
-                    success: true,
-                    msg: 'Booking is added Successfully'
-                })
             })
             //Adds the new booking to the advSchedule array in advSlot
             AdvSlot.findByIdAndUpdate(
@@ -144,10 +151,11 @@ module.exports.bookAdvSlot = function (req, res) {
                 },
                 function (err, adv) {
                     //If there is an error, return it in response
-                    if (err) return res.json({
-                        success: false,
-                        msg: "Error occured while updating advertisement slot"
-                    });
+                    if (err) return res.status(500).json({
+	                        error: err,
+                            msg: "Error While Updating Advertisement Slot",
+                            data: null
+                            });
                 });
         });
     });
@@ -164,11 +172,11 @@ module.exports.getCurrentBookings = function (req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
-        });
+        return res.status(500).json({
+	        error: errors,
+            msg: "Invalid Input",
+            data: null
+            });
     } else {
         /*   A query that finds the advSchedule of the selected slot
         and sorts it ascendingly by startTime and excludes any expired ads */
@@ -190,21 +198,23 @@ module.exports.getCurrentBookings = function (req, res) {
             })
             .exec(function (err, bookings) {
                 //if an error occured, return it in response
-                if (err) return res.json({
-                    success: false,
-                    msg: "Error occured while retrieving bookings"
-                })
-                if (!bookings) return res.json({
-                    success: false,
-                    msg: "Could not find Adv slot"
-                });
+                if (err)  return res.status(500).json({
+	                        error: err,
+                            msg: "Error Retrieving Advertisement Bookings",
+                            data: null
+                            });
+                if (!bookings)  return res.status(404).json({
+	                                error: null,
+                                    msg: "Advertisement Booking Not Found",
+                                    data: null
+                                    });
                 //return a success message
-                res.json({
-                    success: true,
-                    msg: "Successfully retrieved bookings",
-                    bookings: bookings.advSchedule
-                })
-            })
+                 return res.status(200).json({
+	                error: errors,
+                    msg: "Current Bookings Retrieved Successfully",
+                    data: bookings
+                    });
+         })
     }
 
 }
@@ -219,16 +229,16 @@ module.exports.getFreeSlot = function (req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
-        res.json({
-            success: false,
-            msg: 'Incomplete input',
-            errors: errors
-        });
+        return res.status(500).json({
+	        error: errors,
+            msg: "Invalid Input",
+            data: null
+            });
     } else {
 
         /*   A query that finds the advSchedule of the selected slot
          and sorts them descendingly by endTime to get the last occupied slot  */
-        AdvSlot.findById(req.params.advSlotId)
+       const query =  AdvSlot.findById(req.params.advSlotId)
             //used to populate an array of references with booking objects being referenced
             .populate({
                 path: 'advSchedule',
@@ -240,27 +250,30 @@ module.exports.getFreeSlot = function (req, res) {
                     //returns only the first element of the array
                     limit: 1
                 }
-            })
-            .exec(function (err, lastSlot) {
+            });
+
+            query.exec(function (err, lastSlot) {
                 //If an error occured return it in response
-                if (err) return res.json({
-                    success: false,
-                    msg: "Error occured while retrieving slot"
-                })
-                if (!lastSlot) return res.json({
-                    success: false,
-                    msg: "Could not find Adv Slot"
-                });
+                if (err) return res.status(500).json({
+	                        error: err,
+                            msg: "Error Retrieving Last Advertisement Slot",
+                            data: null
+                            });
+                if (!lastSlot) return res.status(404).json({
+	                        error: null,
+                            msg: "Advertisement Slot Not Found",
+                            data: null
+                            });
                 //gets the end date of the last booked slot
                 const freeSlot = lastSlot.advSchedule[0].endTime;
                 //Increments this date to retrieve the first available slot for booking
                 freeSlot.setDate(freeSlot.getDate() + 1);
                 //return the first available date for booking
-                res.json({
-                    success: true,
-                    msg: "Successful retrieval of Last Slot",
-                    lastSlot: freeSlot
-                })
+                return res.status(200).json({
+	                error: null,
+                    msg: "Free Advertisement Slot Retrieved Successfully",
+                    data: freeSlot
+                    });
             })
 
     }
@@ -275,7 +288,11 @@ var uploadAdv = function (req, res, callback) {
     uploadAdPhoto(req, res, function (err) {
         //if an error occurred, return the error
         if (err) {
-            return res.json(err);
+            return res.status(500).json({
+	            error: err,
+                msg: "Error Uploading Photo",
+                data: null
+                });
         }
         //if multer found a file selected
         //and image was uploaded successfully,
@@ -294,8 +311,10 @@ var uploadAdv = function (req, res, callback) {
                 fs.unlink(req.file.path);
 
                 //return the error message to frontend
-                return res.json({
-                    error: "File format is not supported!"
+                 return res.status(500).json({
+	            error: err,
+                msg: "File Format Not Supported",
+                data: null
                 });
             }
             //copy and rename the image to the following format and location
@@ -319,3 +338,40 @@ var uploadAdv = function (req, res, callback) {
         }
     });
 };
+
+
+/*
+res.status(Status Code).json({
+	error: error object if any,
+	msg: Descriptive message,
+	data: Data object returned if Any
+});
+
+// For Example
+
+res.status(200).json({
+	error: null,
+    msg: "Business retrieved successfully",
+    data: business
+});
+
+res.status(500).json({
+	error: err,
+    msg: "Error retrieving desired business",
+    data: null
+});
+
+res.status(404).json({
+	error: null,
+    msg: "Business not found",
+    data: null
+});
+
+// Codes
+
+200 --> Ok
+201 --> Created
+401 --> Not Authorized
+404 --> Not found
+500 --> Internal server error
+*/
