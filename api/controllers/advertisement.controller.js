@@ -263,9 +263,23 @@ module.exports.getFreeSlot = function (req, res) {
 	                        error: null,
                             msg: "Advertisement Slot Not Found",
                             data: null
-                            });
+                        });
+
+                
+                var freeSlot = lastSlot.advSchedule[0];
+                
+                //if AdvSlot had no previous bookings, return current date
+                if("undefined" === typeof freeSlot) {
+                        const currentDate = new Date().toISOString();
+                        return res.status(200).json({
+	                        error: null,
+                            msg: "Free Advertisement Slot Retrieved Successfully",
+                            data: currentDate
+                        });
+                } else {
+
                 //gets the end date of the last booked slot
-                const freeSlot = lastSlot.advSchedule[0].endTime;
+                freeSlot = lastSlot.advSchedule[0].endTime;
                 //Increments this date to retrieve the first available slot for booking
                 freeSlot.setDate(freeSlot.getDate() + 1);
                 //return the first available date for booking
@@ -274,6 +288,7 @@ module.exports.getFreeSlot = function (req, res) {
                     msg: "Free Advertisement Slot Retrieved Successfully",
                     data: freeSlot
                     });
+                }            
             })
 
     }
@@ -338,40 +353,3 @@ var uploadAdv = function (req, res, callback) {
         }
     });
 };
-
-
-/*
-res.status(Status Code).json({
-	error: error object if any,
-	msg: Descriptive message,
-	data: Data object returned if Any
-});
-
-// For Example
-
-res.status(200).json({
-	error: null,
-    msg: "Business retrieved successfully",
-    data: business
-});
-
-res.status(500).json({
-	error: err,
-    msg: "Error retrieving desired business",
-    data: null
-});
-
-res.status(404).json({
-	error: null,
-    msg: "Business not found",
-    data: null
-});
-
-// Codes
-
-200 --> Ok
-201 --> Created
-401 --> Not Authorized
-404 --> Not found
-500 --> Internal server error
-*/
