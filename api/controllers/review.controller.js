@@ -133,35 +133,41 @@ module.exports.getReviews = function (req, res) {
 /*
   Get function that returns the average rating of a business
   Takes as a parameter the business ID in the route
+  Returns: {
+  error: "Error object if any",
+  msg: "Success or failure message",
+  data: "average rating of business"
+  }
+  Redirects to: Nothing.
   Calling route: /api/review/averageRating/:businessId
 */
 module.exports.getAverageRating = function (req, res) {
 
     // Get the business concered from the database by it's Id
     Business.findById(req.params.businessId, function (err, doc) {
-
         // If there is an error return it in response
-        if (err) return res.json({
-            success: false,
-            msg: "error finding Business",
-            error: err
+        if (err) return res.status(500).json({
+            error: err,
+            msg: "Error finding Business",
+            data: null
+
         });
         if (doc) {
-
             // Calculate average rating using totalRating and count of reviews
             const reviewsCount = doc.reviews.length;
             let averageRating = doc.totalRatings / reviewsCount;
 
             // Return average rating in response
-            res.json({
-                success: true,
+            res.status(200).json({
+                error: null,
                 msg: "Successfully calculated average rating",
-                rating: averageRating
+                data: averageRating
             });
         } else
-            res.json({
-                success: false,
-                msg: "error finding Business"
+            res.status(404).json({
+                error: null,
+                msg: "Business not found",
+                data: null
             });
     });
 };
