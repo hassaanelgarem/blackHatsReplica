@@ -17,14 +17,14 @@ const uploadProfilePic = multer({
 equal to the paraams.userID and return it
 Calling route: '/api/user/profile/:userId'
 */
-module.exports.getOneUser = function (req, res) {
+module.exports.getOneUser = function(req, res) {
     var userId = req.params.userId;
 
     // finds user with the userId from the User model
     User
         .findById(userId)
         .select("-password")
-        .exec(function (err, doc) {
+        .exec(function(err, doc) {
             //if an error to find the user,I return the error message
             if (err) {
                 res.status(500).json({
@@ -55,7 +55,7 @@ module.exports.getOneUser = function (req, res) {
 /*Put function, to Update the User info in the User model.
 Calling route: '/api/user/profile/editInfo'
 */
-module.exports.updateOneUser = function (req, res) {
+module.exports.updateOneUser = function(req, res) {
     var userId = req.user._id;
 
 
@@ -73,7 +73,7 @@ module.exports.updateOneUser = function (req, res) {
         res.status(400).json({
             errors: errors,
             msg: "Fields shouldn't be empty",
-            data:null
+            data: null
         });
     } else {
         // finds user with the userId from the User model
@@ -81,7 +81,7 @@ module.exports.updateOneUser = function (req, res) {
         findById(userId)
             //exclude the arrays from the query as i won't update them
             .select("-favorites -reviews -bookings -password -username -email")
-            .exec(function (err, doc) {
+            .exec(function(err, doc) {
                 //if an error to find the user,I return the error message
                 if (err) {
                     res.status(500).json({
@@ -104,7 +104,7 @@ module.exports.updateOneUser = function (req, res) {
                     doc.birthDate = birthDate || doc.birthDate; //should be in the format mm-dd-yyyy or mm/dd/yyyy
 
                     //save the user instance to the database
-                    doc.save(function (err, updatedUser) {
+                    doc.save(function(err, updatedUser) {
                         //if an error saving the user instance
                         if (err) {
                             res.status(500).json({
@@ -133,9 +133,9 @@ model in profilePicture field, and return the
 filepath to the frontend to show the image.
 Calling route: '/api/user/profile/uploadProfilePicture'
 */
-module.exports.uploadProfilePicture = function (req, res) {
+module.exports.uploadProfilePicture = function(req, res) {
     //upload the image
-    uploadProfilePic(req, res, function (err) {
+    uploadProfilePic(req, res, function(err) {
         //if an error occurred, return the error
         if (err) {
             return res.json(err);
@@ -164,11 +164,11 @@ module.exports.uploadProfilePicture = function (req, res) {
             }
             //copy and rename the image to the following format and location
             var newPath = path.join(__dirname, "../", "../public/uploads/profilePictures/img" + Date.now() + "." + string);
-            fs.renameSync(req.file.path, newPath, function (err) {
+            fs.renameSync(req.file.path, newPath, function(err) {
                 if (err) throw err;
 
                 //delete the image with the old name
-                fs.unlink(req.file.path, function (err) {
+                fs.unlink(req.file.path, function(err) {
                     //don't care if file not found
                 });
             });
@@ -178,19 +178,19 @@ module.exports.uploadProfilePicture = function (req, res) {
             newPath = newPath.substring(newPath.length - nameLength);
 
             //save the image file path to the User model
-            User.findById(req.user._id, function (err, user) {
+            User.findById(req.user._id, function(err, user) {
                 if (user.profilePicture) {
                     var oldPP = path.join(__dirname, "../", "../public/uploads/profilePictures/", user.profilePicture);
                 }
                 user.profilePicture = newPath;
-                user.save(function (err) {
+                user.save(function(err) {
                     //couldn't save, return the error
                     if (err) {
                         res.json(err);
                     } else {
                         if (oldPP) {
                             //updated successfully, delete the old pp
-                            fs.unlink(oldPP, function (err) {
+                            fs.unlink(oldPP, function(err) {
                                 //don't care if file not found
                             });
                         }
