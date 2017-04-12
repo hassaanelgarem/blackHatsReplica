@@ -9,6 +9,7 @@ and displays them
 Returns: {
   error: "Error object if any"
   msg: "Success or failure message"
+  All reviews made by a user
 }
 Redirects to: Nothing
 Calling route: /api/review/user/:userId */
@@ -133,10 +134,11 @@ module.exports.addReview = function (req, res) {
 };
 
 
-/* Get function that retrieves the reviews made on a Business from the database
+/* GET function that retrieves the reviews made on a Business from the database
 Returns: {
   error: "Error object if any",
   msg: "Success or failure message"
+  All reviews made on a Bussines
 }
 Redirects to: Nothing
 Calling route: /api/review/:businessId */
@@ -171,6 +173,7 @@ Takes as a parameter the business ID in the route
 Returns: {
   error: "Error object if any"
   msg: "success or failure message"
+  Average rating of a business
 }
 Redirects to: Nothing
 Calling route: /api/review/averageRating/:businessId
