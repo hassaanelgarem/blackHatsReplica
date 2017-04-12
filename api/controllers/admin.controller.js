@@ -8,14 +8,14 @@ it allows the admin to verify the applying business
   Returns: Success or failure message along with the error if any
   Redirects to: Nothing.
 Calling Route: /api/admin/verify/:businessId */
-module.exports.verifyBusiness = function (req, res) {
+module.exports.verifyBusiness = function(req, res) {
     //Getting the business by its id
-    Business.findById(req.params.businessId, function (err, business) {
+    Business.findById(req.params.businessId, function(err, business) {
         if (err)
             res.status(500).json({
-              "error": err,
-	            "msg": "Error finding the business.",
-              "data": null
+                "error": err,
+                "msg": "Error finding the business.",
+                "data": null
             });
         else {
             if (business) {
@@ -30,7 +30,7 @@ module.exports.verifyBusiness = function (req, res) {
                 // else verifying the business
                 business.verified = true;
                 // updating the db
-                business.save(function (err) {
+                business.save(function(err) {
                     if (err) res.status(500).json({
                         "error": err,
                         "msg": "Was not able to verify business.",
@@ -39,7 +39,7 @@ module.exports.verifyBusiness = function (req, res) {
                     else {
                         var text = 'Hello ' + business.name + ',\n\nYour account has been verified.\n\nWelcome to Black Hats.';
                         var subject = 'Account Verified';
-                        emailSender.sendEmail(subject, business.email, text, function (err, info) {
+                        emailSender.sendEmail(subject, business.email, text, function(err, info) {
                             if (err) res.status(500).json({
                                 "error": err,
                                 "msg": "Business was not notified of verification.",
@@ -69,9 +69,9 @@ module.exports.verifyBusiness = function (req, res) {
  Returns: Success or failure message along with the error if any
  Redirects to: Nothing.
 Calling Route: /api/admin/delete/:businessId */
-module.exports.deleteBusiness = function (req, res) {
+module.exports.deleteBusiness = function(req, res) {
     // delete declined busiess
-    Business.findByIdAndRemove(req.params.businessId, function (err, business) {
+    Business.findByIdAndRemove(req.params.businessId, function(err, business) {
         if (err) {
             res.status(500).json({
                 "error": err,
@@ -87,7 +87,7 @@ module.exports.deleteBusiness = function (req, res) {
                     var text = 'Hello ' + business.name + ',\n\nUnfortunately, your application was rejected.\n\nThank you for considering Black Hats.';
                     var subject = 'Account Rejected';
                 }
-                emailSender.sendEmail(subject, business.email, text, function (err, info) {
+                emailSender.sendEmail(subject, business.email, text, function(err, info) {
                     if (err) {
                         res.status(500).json({
                             "error": err,
