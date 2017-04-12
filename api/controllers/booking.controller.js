@@ -14,7 +14,7 @@ const Business = mongoose.model("Business");
     activity: "id of the activity being booked",
     date: "date of the booking"
   }
-  Returns: success of failure message along with error object if any.
+  Returns: success or failure message along with error object if any.
   Redirect to: Nothing.
   Calling route: /api/activity/book
 */
@@ -72,7 +72,7 @@ module.exports.bookActivity = function(req, res) {
                     },
                     function(err, user) {
                         // If there is an error return it in response
-                        if (err) res.status(500).json({
+                        if (err) res.status(201).json({
                             error: err,
                             msg: "Error updating user",
                             data: null
@@ -91,7 +91,7 @@ module.exports.bookActivity = function(req, res) {
                             },
                             function(err, activity) {
                                 // If there is an error return it in response
-                                if (err) res.status(500).json({
+                                if (err) res.status(201).json({
                                     error: err,
                                     msg: "Error updating activity",
                                     data: null
