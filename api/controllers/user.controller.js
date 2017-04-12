@@ -110,15 +110,20 @@ Calling route: '/api/user/addFavorite/:businessId'
 module.exports.addFavorite = function(req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    User.findById(businessId, function(err, doc) {
-
+    Business.findById(businessId, function(err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
-            res.status(500).json(err);
+            res.status(500).json({
+                error: err,
+                msg: "Error retrieving desired business",
+                data: null
+            });
         } else if (!doc) {
             //if no business with that businessId was found,I return an error message
             res.status(404).json({
-                "message": "businessId not found " + businessId
+                error: null,
+                msg: "Business not found" + businessId,
+                data: null
             });
         }
         //if the business is found, add it to user's favorites
@@ -133,18 +138,19 @@ module.exports.addFavorite = function(req, res) {
                 function(err, result) {
                     //couldn't add to array, return the error
                     if (err) {
-                        res.json({
-                            success: false,
-                            msg: 'adding business to favorites failed'
+                        res.status(500).json({
+                            error: null,
+                            msg: "adding business to favorites failed",
+                            data: null
                         });
                     } else {
-                        res.json({
-                            success: true,
-                            msg: 'business added to favorites'
+                        res.status(200).json({
+                            error: null,
+                            msg: "business added to favorites",
+                            data: null
                         });
                     }
                 });
-
         }
     });
 };
@@ -166,23 +172,29 @@ module.exports.deleteFavorite = function(req, res) {
         }
     }, function(err, data) {
         if (err) {
-            res.json({
-                success: false,
-                msg: 'deleting favorite failed'
+            res.status(500).json({
+                error: err,
+                msg: "deleting favorite failed",
+                data: null
             });
         } else {
             //if business found in user favorites
             if (data.nModified > 0) {
+                res.status(200).json({
+                    error: null,
+                    msg: "business deleted successfully from favorites",
+                    data: null
+                });
+            } else {
+                //if business not found in user favorites
+                res.status(404).json({
+                    error: null,
+                    msg: "Business not found",
+                    data: null
+                });
+            }
 
-                res.json({
-                    success: true,
-                    msg: 'business deleted successfully from favorites'
-                });
-            } else
-                res.json({
-                    success: false,
-                    msg: 'business not found'
-                });
+
         }
     });
 };
