@@ -279,91 +279,94 @@ module.exports.deleteSlot = function(req, res) {
             data: null
         });
     } else {
-        if (activityBelongs(req.params.activityId, req.user._id)) {
-            //Create constants to save them as Date format
-            const start = new Date(req.body.startTime);
-            const end = new Date(req.body.endTime);
+        activityBelongs(req.params.activityId, req.user._id, function(flag) {
+          if (flag) {
+              //Create constants to save them as Date format
+              const start = new Date(req.body.startTime);
+              const end = new Date(req.body.endTime);
 
-            //Finding specified activity
-            Activity.findById(req.params.activityId, function(err, activity) {
+              //Finding specified activity
+              Activity.findById(req.params.activityId, function(err, activity) {
 
-                //If an error occurred, display a msg along with the error
-                if (err) {
-                    res.status(500).json({
-                        error: err,
-                        msg: "Error retrieving desired activity",
-                        data: null
-                    });
-                }
-                //If activity is found
-                else {
+                  //If an error occurred, display a msg along with the error
+                  if (err) {
+                      res.status(500).json({
+                          error: err,
+                          msg: "Error retrieving desired activity",
+                          data: null
+                      });
+                  }
+                  //If activity is found
+                  else {
 
-                    if (!activity) return res.status(404).json({
-                        error: null,
-                        msg: "Activity not found",
-                        data: null
-                    });
+                      if (!activity) return res.status(404).json({
+                          error: null,
+                          msg: "Activity not found",
+                          data: null
+                      });
 
-                    //Loop to find the slot in the slots array
-                    for (var i = 0; i < activity.slots.length; i++) {
+                      //Loop to find the slot in the slots array
+                      for (var i = 0; i < activity.slots.length; i++) {
 
-                        //Found flag
-                        var found = false;
+                          //Found flag
+                          var found = false;
 
-                        //Checking the specified time against the slots time
-                        if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)) {
+                          //Checking the specified time against the slots time
+                          if ((compareDate(start, activity.slots[i].startTime) == 0) && (compareDate(end, activity.slots[i].endTime) == 0)) {
 
-                            //Function to remove slot from array
-                            activity.slots.splice(i, 1);
+                              //Function to remove slot from array
+                              activity.slots.splice(i, 1);
 
-                            //Save changes
-                            activity.save(function(err, activity) {
+                              //Save changes
+                              activity.save(function(err, activity) {
 
-                                //If an error occurred, display a msg along with the error
-                                if (err) {
-                                    res.status(500).json({
-                                        error: err,
-                                        msg: "Error while deleting Slot",
-                                        data: null
-                                    });
-                                }
+                                  //If an error occurred, display a msg along with the error
+                                  if (err) {
+                                      res.status(500).json({
+                                          error: err,
+                                          msg: "Error while deleting Slot",
+                                          data: null
+                                      });
+                                  }
 
-                                //If no error occurrs, display msg
-                                else {
-                                    res.status(200).json({
-                                        error: null,
-                                        msg: "Slot Deleted Successfully",
-                                        data: null
-                                    });
-                                }
-                            });
+                                  //If no error occurrs, display msg
+                                  else {
+                                      res.status(200).json({
+                                          error: null,
+                                          msg: "Slot Deleted Successfully",
+                                          data: null
+                                      });
+                                  }
+                              });
 
-                            //Set flag and break
-                            found = true;
-                            break;
-                        }
-                    }
+                              //Set flag and break
+                              found = true;
+                              break;
+                          }
+                      }
 
-                    //If slot does not exist
-                    if (!found) {
-                        return res.status(404).json({
-                            error: null,
-                            msg: "Slot not found",
-                            data: null
-                        });
-                    }
+                      //If slot does not exist
+                      if (!found) {
+                          return res.status(404).json({
+                              error: null,
+                              msg: "Slot not found",
+                              data: null
+                          });
+                      }
 
 
-                }
-            });
+                  }
+              });
 
-        } else {
-            res.status(401).json({
-                error: null,
-                msg: "Business Login Required or Unauthorized Access",
-                data: null
-            });
-        }
+          } else {
+              res.status(401).json({
+                  error: null,
+                  msg: "Business Login Required or Unauthorized Access",
+                  data: null
+              });
+          }
+        });
+
     }
 
 
@@ -387,8 +390,8 @@ newSlot: "An object consist of two dates, startTime and endTime that will be add
 Redirects to: Nothing.
 Calling route: api/activity/:activityId/addSlot*/
 module.exports.addSlot = function(req, res) {
-
-    if (activityBelongs(req.params.activityId, req.user._id)) {
+  activityBelongs(req.params.activityId, req.user._id, function(flag) {
+    if (flag) {
         req.checkBody('startTime', 'Start Time is required').notEmpty();
         req.checkBody('endTime', 'End Time is required').notEmpty();
 
@@ -500,6 +503,7 @@ module.exports.addSlot = function(req, res) {
             data: null
         });
     }
+  });
 
 };
 
@@ -563,103 +567,107 @@ Calling route: '/api/activity/:activityId/addPhoto'
 */
 module.exports.addPhoto = function(req, res) {
     //Check if business is logged in
-    if (activityBelongs(req.params.activityId, req.user._id)) {
-        //upload the image
-        uploadPhotos(req, res, function(err) {
-            //if an error occurred, return the error
-            if (err) {
-                return res.status(500).json({
-                    error: err,
-                    msg: null,
-                    data: null
-                });
-            }
-            /*if multer found a file selected
-            and image was uploaded successfully,
-            multer will save the image in req.file*/
-            if (req.file) {
-                //get the image format
-                var string = req.file.originalname.substring(req.file.originalname.length - 3, req.file.originalname.length);
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+      if (flag) {
+          //upload the image
+          uploadPhotos(req, res, function(err) {
+              //if an error occurred, return the error
+              if (err) {
+                  return res.status(500).json({
+                      error: err,
+                      msg: null,
+                      data: null
+                  });
+              }
+              /*if multer found a file selected
+              and image was uploaded successfully,
+              multer will save the image in req.file*/
+              if (req.file) {
+                  //get the image format
+                  var string = req.file.originalname.substring(req.file.originalname.length - 3, req.file.originalname.length);
 
-                //if it was jpeg add a "j" to the returned "peg"
-                if (string === "peg")
-                    string = "j" + string;
+                  //if it was jpeg add a "j" to the returned "peg"
+                  if (string === "peg")
+                      string = "j" + string;
 
-                //check if it is not a valid image format
-                if (!(string === "png" || string === "jpg" || string === "jpeg")) {
-                    //delete the uploaded file
-                    fs.unlink(req.file.path);
+                  //check if it is not a valid image format
+                  if (!(string === "png" || string === "jpg" || string === "jpeg")) {
+                      //delete the uploaded file
+                      fs.unlink(req.file.path);
 
-                    //return the error message to frontend
-                    return res.status(500).json({
-                        error: err,
-                        msg: "File Format is Not Supported",
-                        data: null
-                    });
-                }
-                //copy and rename the image to the following format and location
-                var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/img" + Date.now() + "." + string);
-                fs.renameSync(req.file.path, newPath, function(err) {
-                    if (err) throw err;
+                      //return the error message to frontend
+                      return res.status(500).json({
+                          error: err,
+                          msg: "File Format is Not Supported",
+                          data: null
+                      });
+                  }
+                  //copy and rename the image to the following format and location
+                  var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/img" + Date.now() + "." + string);
+                  fs.renameSync(req.file.path, newPath, function(err) {
+                      if (err) throw err;
 
-                    //delete the image with the old name
-                    fs.unlink(req.file.path);
-                });
+                      //delete the image with the old name
+                      fs.unlink(req.file.path);
+                  });
 
-                //get the name part only from the uploaded image
-                var nameLength = ("img" + Date.now() + string).length + 1;
-                newPath = newPath.substring(newPath.length - nameLength);
+                  //get the name part only from the uploaded image
+                  var nameLength = ("img" + Date.now() + string).length + 1;
+                  newPath = newPath.substring(newPath.length - nameLength);
 
-                //add the image file name to the photos array of the Business model
-                Activity.update({
-                        "_id": req.params.activityId
-                    }, {
-                        $push: {
-                            "photos": newPath
-                        }
-                    },
-                    function(err, result) {
-                        //couldn't add to array, return the error
-                        if (err) {
-                            return res.status(500).json({
-                                error: err,
-                                msg: null,
-                                data: null
-                            });
-                        } else {
-                            //if updating is ok
-                            if (result) {
-                                //return the file path to the frontend to show the image
-                                res.status(200).json({
-                                    error: null,
-                                    msg: null,
-                                    data: newPath
-                                });
-                            } else
-                                res.status(404).json({
-                                    error: null,
-                                    msg: "Activity not found",
-                                    data: null
-                                });
-                        }
-                    });
-            }
-            //multer did not find a file selected to upload
-            else {
-                return res.status(500).json({
-                    error: err,
-                    msg: "Choose a Valid File",
-                    data: null
-                });
-            }
-        });
-    } else {
-        res.status(401).json({
-            error: null,
-            msg: "Business Login Required or Unauthorized Access",
-            data: null
-        });
-    }
+                  //add the image file name to the photos array of the Business model
+                  Activity.update({
+                          "_id": req.params.activityId
+                      }, {
+                          $push: {
+                              "photos": newPath
+                          }
+                      },
+                      function(err, result) {
+                          //couldn't add to array, return the error
+                          if (err) {
+                              return res.status(500).json({
+                                  error: err,
+                                  msg: null,
+                                  data: null
+                              });
+                          } else {
+                              //if updating is ok
+                              if (result) {
+                                  //return the file path to the frontend to show the image
+                                  res.status(200).json({
+                                      error: null,
+                                      msg: null,
+                                      data: newPath
+                                  });
+                              } else
+                                  res.status(404).json({
+                                      error: null,
+                                      msg: "Activity not found",
+                                      data: null
+                                  });
+                          }
+                      });
+              }
+              //multer did not find a file selected to upload
+              else {
+                  return res.status(500).json({
+                      error: err,
+                      msg: "Choose a Valid File",
+                      data: null
+                  });
+              }
+          });
+      } else {
+          res.status(401).json({
+              error: null,
+              msg: "Business Login Required or Unauthorized Access",
+              data: null
+          });
+      }
+    });
+
+
 };
 
 
@@ -690,7 +698,8 @@ module.exports.deletePhoto = function(req, res) {
             data: null
         });
     } else {
-        if (activityBelongs(req.params.activityId, req.user._id)) {
+        activityBelongs(req.params.activityId, req.user._id, function(flag){
+          if(flag) {
             var imagePath = req.params.photoPath;
             var activityId = req.params.activityId;
             Activity.update({
@@ -722,43 +731,29 @@ module.exports.deletePhoto = function(req, res) {
                     });
                 }
             });
-        } else {
+          }
+          else{
             res.status(401).json({
                 error: null,
                 msg: "Business Login Required or Unauthorized Access",
                 data: null
             });
-        }
+          }
+        });
     }
 
 };
 
-// function activityBelongs(activityId, businessId) {
-//     Business.findById(businessId, function(err, business) {
-//         if (business) {
-//             if (business.activities.indexOf(activityId) > -1) {
-//                 return true;
-//             } else {
-//                 return false;
-//             }
-//         } else {
-//             return false;
-//         }
-//     });
-// }
-
-
-function activityBelongs(activityId, businessId) {
+function activityBelongs(activityId, businessId, done) {
     Business.findById(businessId, function(err, business) {
         if (business) {
-          for (var i = 0; i < business.activities.length; i++) {
-              if (business.activities[i].activityId == activityId) {
-                return true;
-              }
-          }
-          return false;
+            if (business.activities.indexOf(activityId) > -1) {
+                done(true);
+            } else {
+                done(false);
+            }
         } else {
-            return false;
+            done(false);
         }
     });
 }
@@ -778,42 +773,54 @@ Body: {
 Redirects to: Nothing.
 Calling route: /api/activity/:activityId/delete */
 module.exports.deleteActivity = function(req, res) {
-    //Finding and deleting activity from database
-    Activity.findByIdAndRemove(req.params.activityId, function(err, activity) {
-        if (err) return rres.status(500).json({
-            error: err,
-            msg: "Error while deleting Activity",
-            data: null
-        });
-        if (activity) {
-
-            //Delete activity from activites array in corresponding business
-            Business.findByIdAndUpdate(activity.business, {
-                    $pull: {
-                        "activities": activity._id
-                    }
-                }, {
-                    safe: true,
-                    upsert: true,
-                    new: true
-                },
-                function(err, model) {
-                    if (err) return res.json({
-                        success: false
-                    });
-                    res.status(200).json({
-                        error: null,
-                        msg: "Activity Deleted Successfully",
-                        data: null
-                    });
-                });
-
-        } else {
-            res.status(404).json({
-                error: null,
-                msg: "Activity not found",
+    activityBelongs(req.params.activityId, req.user._id, function(flag){
+      if(flag) {
+        //Finding and deleting activity from database
+        Activity.findByIdAndRemove(req.params.activityId, function(err, activity) {
+            if (err) return rres.status(500).json({
+                error: err,
+                msg: "Error while deleting Activity",
                 data: null
             });
-        }
+            if (activity) {
+
+                //Delete activity from activites array in corresponding business
+                Business.findByIdAndUpdate(activity.business, {
+                        $pull: {
+                            "activities": activity._id
+                        }
+                    }, {
+                        safe: true,
+                        upsert: true,
+                        new: true
+                    },
+                    function(err, model) {
+                        if (err) return res.json({
+                            success: false
+                        });
+                        res.status(200).json({
+                            error: null,
+                            msg: "Activity Deleted Successfully",
+                            data: null
+                        });
+                    });
+
+            } else {
+                res.status(404).json({
+                    error: null,
+                    msg: "Activity not found",
+                    data: null
+                });
+            }
+        });
+      }
+      else {
+        res.status(401).json({
+            error: null,
+            msg: "Business Login Required or Unauthorized Access",
+            data: null
+        });
+      }
     });
+
 };
