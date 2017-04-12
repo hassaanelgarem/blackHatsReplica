@@ -16,7 +16,6 @@ const Business = mongoose.model("Business");
   price: "price of new activity",
   description: "description of new activity",
   bookingsPerSlot: "Maximum number of bookins per slot of new activity",
-  business: "od of busiess that the activity will be added to"
     }
     Returns: {
     error: "Error object if any",
@@ -102,10 +101,6 @@ module.exports.addActivity = function(req, res) {
 
 /*
   Get function that retrieves the activities offered by a Business from the database
-  Body: {
-      businessId:"id of business to find its activites"
-      activites: "array of activites in business"
-    }
     Returns: {
     error: "Error object if any",
     msg: "Success or failure message",
@@ -154,8 +149,8 @@ module.exports.getActivities = function(req, res) {
 /* Post method that takes as a parameters the date and the Activity ID and returns
 the free slots where the resgistered user can make a booking
 Body: {
-    actdate:"Date to find available slots in"
-    actID: "id of the activity tha will contain the slot to be added"
+    date:"Date to find available slots in"
+    activityID: "id of the activity tha will contain the slot to be added"
   }
   Returns: {
   error: "Error object if any",
@@ -257,7 +252,6 @@ module.exports.getAvailableSlots = function(req, res) {
 Body: {
     start: "start time of slot to be deleted"
     end: "end time of slot to be deleted"
-    activity: "id of the activity tha will contain the slot to be added"
   }
   Returns: {
   error: "Error object if any",
@@ -380,7 +374,6 @@ Body: {
 newSlot: "An object consist of two dates, startTime and endTime that will be added to the activity",
     start: "start time of newSlot"
     end: "end time of newSlot"
-    activity: "id of the activity tha will contain the slot to be added"
   }
   Returns: {
   error: "Error object if any",
@@ -759,11 +752,6 @@ function activityBelongs(activityId, businessId, done) {
 
 
 /* Delete function that finds and deletes a specific activity
-Body: {
-    business: "object containing the array of activites",
-    activity: "id of the activity being deleted",
-    activites: "array of activities inside business"
-  }
   Returns: {
   error: "Error object if any",
   msg: "Success or failure message",
