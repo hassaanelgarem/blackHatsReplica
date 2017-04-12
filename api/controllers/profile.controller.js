@@ -17,11 +17,6 @@ const uploadProfilePic = multer({
   Get function that gets all info of a user
    it gets User info from the User model with _id
   equal to the params.userID and return it
-  Query params:
-  	- userId
-  Body: {
-    nothing
-  }
   Returns: {
     error: "Error object if any",
     msg: "A message",
@@ -69,8 +64,6 @@ module.exports.getOneUser = function(req, res) {
   Put function that updates a user
    it updates the user's info in the User model
    with _id equal to the params.userID
-   Query params:
-  	- nothing
   Body: {
     firstName:"user's first name",
     lastName:"user's last name,
