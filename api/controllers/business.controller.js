@@ -356,28 +356,62 @@ module.exports.unVerifiedBusinesses = function(req, res) {
 
 /*
 Put function that increments the interactivity attribute of a certain business by 1
+Returns: {
+  error: "Error object if any",
+  msg: "A success or failure message"
+}
+Redirects to: Nothing.
 Calling route: /api/business/:businessId/interact
 */
 module.exports.updateInteractivity = function(req, res) {
     Business.findById(req.params.businessId, function(err, business) {
-        business.interactivity = business.interactivity + 1;
-        business.save(function(err) {
-            if (err) res.json({
-                success: false,
-                msg: 'Updating business interactivity failed'
+        if (err) {
+            res.status(500).json({
+                error: err,
+                msg: "Error retrieving business from database",
+                data: null
             });
-            else
-                res.json({
-                    success: true,
-                    msg: 'Business interactivity incremented'
+        } else {
+            if (!business) {
+                res.status(404).json({
+                    error: null,
+                    msg: "Business not found",
+                    data: null
                 });
-        });
+
+            } else {
+                business.interactivity = business.interactivity + 1;
+                business.save(function(err) {
+                    if (err) {
+                        res.status(500).json({
+                            error: err,
+                            msg: "Error retrieving business from database",
+                            data: null
+                        });
+                    } else {
+                        res.status(200).json({
+                            error: null,
+                            msg: "Business interactivity incremented",
+                            data: null
+                        });
+                    }
+
+                });
+            }
+        }
+
     });
 };
 
 
 /*
 Get function that returns the three most popular businesses based on their interactivity
+Returns: {
+    error: "Error object if any",
+    msg: "Succes or failure message",
+    data: "array of three business objects"
+  }
+Redirects to: Nothing.
 Calling route: /api/business/mostPopular
 */
 module.exports.getMostPopular = function(req, res) {
@@ -388,16 +422,17 @@ module.exports.getMostPopular = function(req, res) {
     // execute the above query
     query.exec(function(err, businesses) {
         // If there is an error return it in response
-        if (err) res.json({
-            success: false,
-            msg: 'Failed to retrieve most popular businesses'
+        if (err) res.status(500).json({
+            error: err,
+            msg: 'Failed to retrieve most popular businesses',
+            data: null
         });
         else
             // If no error return the list of businesses
-            res.json({
-                success: true,
+            res.status(200).json({
+                error: null,
                 msg: 'Got most popular businesses successfully',
-                businesses: businesses
+                data: businesses
             });
     });
 };

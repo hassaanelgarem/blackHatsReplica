@@ -10,9 +10,10 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 const advCtrl = require('../controllers/advertisement.controller');
 const adminCtrl = require('../controllers/admin.controller');
+const imagesCtrl = require("../controllers/images.controller");
 
 
-module.exports = function (passportConfig) {
+module.exports = function(passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/',
         failureRedirect: '/api/login',
@@ -51,6 +52,7 @@ module.exports = function (passportConfig) {
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
+    router.route('/image/:imageType/:imageName').get(imagesCtrl.getImage);
 
 
     //Available to logged in only routes
