@@ -123,7 +123,7 @@ module.exports.addFavorite = function(req, res) {
             //if no business with that businessId was found,I return an error message
             res.status(404).json({
                 error: null,
-                msg: "Business not found" + businessId,
+                msg: "Business not found",
                 data: null
             });
         }
