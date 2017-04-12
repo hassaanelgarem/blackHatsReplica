@@ -103,8 +103,9 @@ module.exports.deleteAccount = function(req, res) {
 
 
 /* Put function to Add business id to the favorites array in user model,
-and return success message if business added successfuly,
+returns success message if business added successfuly,
 else returns error message.
+Redirects to: Nothing
 Calling route: '/api/user/addFavorite/:businessId'
 */
 module.exports.addFavorite = function(req, res) {
@@ -159,6 +160,7 @@ module.exports.addFavorite = function(req, res) {
 /* delete function to delete business id from the favorites array in user model,
 and return success message if business removed successfuly,
 else returns error message.
+Redirects to: Nothing
 Calling route: '/api/user/deleteFavorite/:businessId'
 */
 module.exports.deleteFavorite = function(req, res) {
@@ -250,7 +252,7 @@ module.exports.searchByNameOrTag = function(req, res, next) {
             }
         });
     } else
-    //if he didn't search by name or tag call searchByLocationAndCategory
+        //if he didn't search by name or tag call searchByLocationAndCategory
         next();
 };
 
