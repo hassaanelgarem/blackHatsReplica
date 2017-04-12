@@ -72,7 +72,7 @@ module.exports.bookActivity = function(req, res) {
                     },
                     function(err, user) {
                         // If there is an error return it in response
-                        if (err) res.status(201).json({
+                        if (err) res.status(500).json({
                             error: err,
                             msg: "Error updating user",
                             data: null
@@ -91,7 +91,7 @@ module.exports.bookActivity = function(req, res) {
                             },
                             function(err, activity) {
                                 // If there is an error return it in response
-                                if (err) res.status(201).json({
+                                if (err) res.status(500).json({
                                     error: err,
                                     msg: "Error updating activity",
                                     data: null
@@ -187,7 +187,7 @@ module.exports.deleteBooking = function(req, res) {
                 },
                 //If error occurred, return it in response
                 function(err, model) {
-                    if (err) return res.status(201).json({
+                    if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
                         data: null
@@ -204,7 +204,7 @@ module.exports.deleteBooking = function(req, res) {
                         },
                         //If error occurred, return it in response
                         function(err, model) {
-                            if (err) return res.status(201).json({
+                            if (err) return res.status(500).json({
                                 error: err,
                                 msg: "Error occured while updating Activity concerned",
                                 data: null

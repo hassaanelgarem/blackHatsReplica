@@ -95,14 +95,14 @@ module.exports.addReview = function(req, res) {
                     new: true
                 },
                 function(err, model) {
-                    if (err) return res.status(201).json({
+                    if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
                         data: null
                     });
                     // Gets the business being reviewed
                     Business.findById(review.business, function(err, doc) {
-                        if (err) return res.status(201).json({
+                        if (err) return res.status(500).json({
                             error: err,
                             msg: "Error occured while updating Business concerned",
                             data: null
