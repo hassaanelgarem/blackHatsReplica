@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "sourceMap": false,
     "emitDecoratorMetadata": true,
@@ -9,7 +9,6 @@
   },
   "exclude": [
     "node_modules",
-    "public/js" 
+    "public/js"
      ]
 }
-
