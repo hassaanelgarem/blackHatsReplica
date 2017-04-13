@@ -12,13 +12,13 @@ const TempUser = mongoose.model('TempUser');
     Post Function, to register a new user into the temp users database and send the
     verification email.
     Takes:
-        body{  
+        body{
             firstName
             lastName
             email
             username
             password
-            confirmPassword 
+            confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
     Redirects to: Nothing.    
@@ -64,7 +64,7 @@ module.exports.registerUser = function (req, res) {
                     $options: "ix"
                 }
             }]
-        }, function (err, user) {
+        }, function(err, user) {
             //if there is an error, send an error message
             if (err) {
                 return res.status(500).json({
@@ -187,13 +187,14 @@ module.exports.registerUser = function (req, res) {
 };
 
 
-/*  
-    Delete function, to delete a user account by getting his username from the session 
+
+/*
+    Delete function, to delete a user account by getting his username from the session
     used when he logged in,and then removing his entry from the db and logging out.
     Takes: nothing.
     Returns: Errors in case of failure.
     Redirects to: '/' (Home Page).
-    Calling Route: '/api/user/deleteAccount' 
+    Calling Route: '/api/user/deleteAccount'
 */
 module.exports.deleteAccount = function (req, res) {
 
@@ -212,9 +213,9 @@ module.exports.deleteAccount = function (req, res) {
 };
 
 
-/*  
+/*
     Put function to Add business id to the favorites array in user model.
-    Takes: 
+    Takes:
         params{
             businessId
         }
@@ -222,38 +223,106 @@ module.exports.deleteAccount = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/user/addFavorite/:businessId'
 */
-module.exports.addFavorite = function (req, res) {
+module.exports.addFavorite = function(req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    User.findByIdAndUpdate(userId, {
-            $addToSet: {
-                favorites: businessId
-            }
-        }, //add the business id to the favorites array
-        function (err) {
-            //couldn't add to array, return the error
-            if (err) {
-                res.status(500).json({
-                    error: err,
-                    msg: null,
-                    data: null
+    Business.findById(businessId, function(err, doc) {
+        //if an error to find the business,I return the error message
+        if (err) {
+            res.status(500).json({
+                error: err,
+                msg: "Error retrieving desired business",
+                data: null
+            });
+        } else if (!doc) {
+            //if no business with that businessId was found,I return an error message
+            res.status(404).json({
+                error: null,
+                msg: "Business not found",
+                data: null
+            });
+        }
+        //if the business is found, add it to user's favorites
+        else {
+            User.update({
+                    "_id": userId
+                }, {
+                    $addToSet: {
+                        favorites: businessId
+                    }
+                }, //add the business id to the favorites array
+                function(err, result) {
+                    //couldn't add to array, return the error
+                    if (err) {
+                        res.status(500).json({
+                            error: null,
+                            msg: "adding business to favorites failed",
+                            data: null
+                        });
+                    } else {
+                        res.status(200).json({
+                            error: null,
+                            msg: "business added to favorites",
+                            data: null
+                        });
+                    }
                 });
-            } else {
-                res.status(200).json({
-                    error: null,
-                    msg: 'Business was added to favorites successfully.',
-                    data: null
-                });
-            }
-        });
+        }
+    });
 };
 
 
-/*  
+/* delete function to delete business id from the favorites array in user model,
+and return success message if business removed successfuly,
+else returns error message.
+Redirects to: Nothing
+Calling route: '/api/user/deleteFavorite/:businessId'
+*/
+module.exports.deleteFavorite = function(req, res) {
+    var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
+    var userId = req.user._id; //using passport, get the id of the signed in user
+
+    User.update({
+        "_id": userId
+    }, {
+        $pull: {
+            "favorites": businessId
+        }
+    }, function(err, data) {
+        if (err) {
+            res.status(500).json({
+                error: err,
+                msg: "deleting favorite failed",
+                data: null
+            });
+        } else {
+            //if business found in user favorites
+            if (data.nModified > 0) {
+                res.status(200).json({
+                    error: null,
+                    msg: "business deleted successfully from favorites",
+                    data: null
+                });
+            } else {
+                //if business not found in user favorites
+                res.status(404).json({
+                    error: null,
+                    msg: "Business not found",
+                    data: null
+                });
+            }
+
+
+        }
+    });
+};
+
+
+/*
     Get function, to Search the Business model for businesses with name or tag
     entered by the user, it gets all businesses with matching names
     and tags.
-    Takes: 
+    Takes:
         query{
             result: "used for name or tag search value",
             offset: "get businesses starting from number",
@@ -261,7 +330,7 @@ module.exports.addFavorite = function (req, res) {
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: Nothing.
-    Calling route: '/api/search' 
+    Calling route: '/api/search'
 */
 module.exports.searchByNameOrTag = function (req, res, next) {
     var offset = 0;
@@ -322,8 +391,8 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 };
 
 
-/*  
-    Get function, Search the Business model for businesses with location or category 
+/*
+    Get function, Search the Business model for businesses with location or category
     or both entered by the user.
     Takes:
         query{

@@ -18,8 +18,9 @@ const emailSender = require('../config/emailSender');
     Calling Route: '/api/admin/business/verify/:businessId'
 */
 module.exports.verifyBusiness = function (req, res) {
+
     //Getting the business by its id
-    Business.findById(req.params.businessId, function (err, business) {
+    Business.findById(req.params.businessId, function(err, business) {
         if (err)
             res.status(500).json({
                 error: err,

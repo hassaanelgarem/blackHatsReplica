@@ -12,9 +12,10 @@ const advCtrl = require('../controllers/advertisement.controller');
 const adminCtrl = require('../controllers/admin.controller');
 const passwordCtrl = require('../controllers/resetPassword.controller');
 const supportCtrl = require('../controllers/support.controller');
+const imagesCtrl = require("../controllers/images.controller");
 
 
-module.exports = function (passportConfig) {
+module.exports = function(passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/',
         failureRedirect: '/api/login',
@@ -60,6 +61,7 @@ module.exports = function (passportConfig) {
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
+    router.route('/image/:imageType/:imageName').get(imagesCtrl.getImage);
 
 
     //Available to logged in only routes
@@ -78,6 +80,7 @@ module.exports = function (passportConfig) {
     router.route('/activity/:activityId/deleteSlot').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deleteSlot);
     router.route('/activity/:activityId/addPhoto').post(passportConfig.isBusinessLoggedIn, activityCtrl.addPhoto);
     router.route('/activity/:activityId/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deletePhoto);
+    router.route('/activity/:activityId/delete').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deleteActivity);
 
 
     //Admin routes
@@ -99,6 +102,7 @@ module.exports = function (passportConfig) {
     router.route('/user/profile/uploadProfilePicture').post(passportConfig.isUserLoggedIn, profileCtrl.uploadProfilePicture);
     router.route('/user/deleteAccount').delete(passportConfig.isUserLoggedIn, userCtrl.deleteAccount);
     router.route('/user/addFavorite/:businessId').put(passportConfig.isUserLoggedIn, userCtrl.addFavorite);
+    router.route('/user/deleteFavorite/:businessId').delete(passportConfig.isUserLoggedIn, userCtrl.deleteFavorite);
     router.route('/activity/book').post(passportConfig.isUserLoggedIn, bookingCtrl.bookActivity);
     router.route('/activity/deleteBooking/:bookingId').delete(passportConfig.isUserLoggedIn, bookingCtrl.deleteBooking);
     //User review routes
