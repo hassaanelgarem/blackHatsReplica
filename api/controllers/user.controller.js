@@ -537,7 +537,7 @@ module.exports.changePassword = function (req, res) {
             data: null
         });
     } else {
-        Business.findById(req.user._id, function (err, business) {
+        User.findById(req.user._id, function (err, user) {
             if (err)
                 res.status(500).json({
                     error: err,
@@ -545,9 +545,9 @@ module.exports.changePassword = function (req, res) {
                     data: null
                 });
             else {
-                if (business) {
+                if (user) {
                     //check that the old password is correct
-                    Business.comparePassword(oldPassword, business.password, function (err, isMatched) {
+                    User.comparePassword(oldPassword, user.password, function (err, isMatched) {
                         if (err)
                             res.status(500).json({
                                 error: err,
@@ -568,8 +568,8 @@ module.exports.changePassword = function (req, res) {
 
                                 bcrypt.genSalt(10, function (err, salt) {
                                     bcrypt.hash(password, salt, function (err, hash) {
-                                        business.password = hash;
-                                        business.save(function (err) {
+                                        user.password = hash;
+                                        user.save(function (err) {
                                             if (err) {
                                                 res.status(500).json({
                                                     error: err,
@@ -597,7 +597,7 @@ module.exports.changePassword = function (req, res) {
                 } else
                     res.status(404).json({
                         error: null,
-                        msg: 'Business not found.',
+                        msg: 'User not found.',
                         data: null
                     });
             }
