@@ -21,7 +21,11 @@ app.enable('trust proxy')
 
 app.use(cors());
 
-// app.use(express.static(path.join(__dirname, '/public')));
+ //view engine setup
+app.set('views',path.join(__dirname, 'views'));
+app.set('view engine','hbs');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // ORDER OF THE MIDDLEWARE IS CRITICAL
@@ -73,21 +77,10 @@ const routes = require("./api/routes")(passportConfig);
 
 app.use("/api", routes);
 
-app.get('/', (req, res) => {
-	res.status(200).json({
-    error: null,
-    msg: 'Redirected to Home.',
-    data: null
-  });
-});
-
-// Ignore all http requests on unknown routes
-app.all('*', (req, res) => {
-	res.status(404).json({
-    error: null,
-    msg: 'TO-DO: Redirect on a page not found view.',
-    data: null
-  });
+//any request reaches this point means it failed to match any of the above routes
+app.use(function(req,res,next){
+  //to always give back the angular application
+  res.render('index');
 });
 
 
