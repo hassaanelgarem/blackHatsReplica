@@ -14,8 +14,21 @@ const uploadAdPhoto = multer({
 }).single('myfile');
 
 
-/*  POST method that adds a new advertisement slot and saves it in the database.
-    Calling route: api/advertisement/addAdvSlots   */
+/*  POST function that adds a new advertisement slot 
+    and saves it in the database.
+    Body: {
+    name: "the name of this adv slot"
+    price: "the booking price of the adv slot"
+    length: "the length of the adv slot"
+    width: "the width of the adv slot"
+    advSchedule: "an array of adv bookings that will be displayed on this adv slot"
+    }
+    Returns: {
+    error: "Error object if any",
+    msg: "A success or failure message"
+    }
+    Redirects to: Nothing.
+    Calling route: api/advertisement/addAdvSlots    */
 module.exports.addAdvSlots = function (req, res) {
 
     req.checkBody('name', 'Name is required').notEmpty();
@@ -59,8 +72,15 @@ module.exports.addAdvSlots = function (req, res) {
 }
 
 
-/*  Get function that retrieves the Adv Slots that appear on the homepage from the database.
-    Calling route: api/advertisement/getAdvSlots    */
+/*  GET function that retrieves all Adv Slots that appear 
+    on the homepage from the database.
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message"
+    All Adv slots in the database
+    }
+    Redirects to: Nothing
+    Calling route: api/advertisement/getAdvSlots */
 module.exports.getAdvSlots = function (req, res) {
     //  finds all advSlots that can appear on homepage
     AdvSlot.find({}, {
@@ -89,8 +109,21 @@ module.exports.getAdvSlots = function (req, res) {
 }
 
 
-/*  Post function that handles booking an advertisement slot.
-    Calling route: /api/advertisement/bookAdvSlot/:advSlot   */
+/*  POST function that books a specific adv slot for a certain business
+    by creating a new booking object and adding it to the database and 
+    also adding this new booking to the array of bookings of the chosen
+    adv slot. 
+    Body: {
+    image: "the advertisement image of the business"
+    startTime: "booking start time"
+    endTime: "booking end time"
+    }
+    Returns: {
+    error: "Error object if any",
+    msg: "A success or failure message"
+    }
+    Redirects to: Nothing.
+    Calling route: /api/advertisement/bookAdvSlot/:advSlot */
 module.exports.bookAdvSlot = function (req, res) {
 
     // check if advSlot exists
@@ -159,12 +192,18 @@ module.exports.bookAdvSlot = function (req, res) {
                 });
         });
     });
-};
+}
 
 
-/*  Get function that returns the current bookings of an advertisement slot ordered
-in ascending order and excluding any booking that is expired.
-Calling route: /advertisement/getCurrentBookings/:advSlotId */
+/*  GET function that returns the current bookings of an advertisement slot 
+    ordered in ascending order and excluding any booking that is expired.
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message"
+    current bookings of the chosen adv slot
+    }
+    Redirects to: Nothing
+    Calling route: /advertisement/getCurrentBookings/:advSlotId */
 module.exports.getCurrentBookings = function (req, res) {
 
     req.checkParams('advSlotId', 'Adv slot ID is required').notEmpty();
@@ -215,12 +254,18 @@ module.exports.getCurrentBookings = function (req, res) {
                     data: currentSlot.advSchedule
                     });
          })
-    }
-
+    };
 }
 
 
-/*  Get function that returns the first available slot for booking in a slot's schedule.
+/*  GET function that returns the first available slot for booking 
+    in a adv slot's schedule.   
+    Returns: {
+    error: "Error object if any",
+    msg: "Success or failure message"
+    first free slot of an adv slot available for booking
+    }
+    Redirects to: Nothing
     Calling route: /advertisement/getFreeSlot/:advSlotId    */
 module.exports.getFreeSlot = function (req, res) {
 
@@ -290,12 +335,11 @@ module.exports.getFreeSlot = function (req, res) {
                     });
                 }            
             })
-
-    }
-
+    };
 }
 
 
+/* Function that uploads a photo and saves it in the public folder */
 var uploadAdv = function (req, res, callback) {
     //upload the image
     uploadAdPhoto(req, res, function (err) {
@@ -350,4 +394,4 @@ var uploadAdv = function (req, res, callback) {
             callback(true, null);
         }
     });
-};
+}
