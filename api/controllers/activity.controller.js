@@ -146,7 +146,7 @@ module.exports.getActivities = function (req, res) {
 };
 
 
-/* 
+/*
     Post method that takes as a parameters the date and the Activity ID and returns
     the free slots where the resgistered user can make a booking
     Takes:
@@ -160,7 +160,7 @@ module.exports.getActivities = function (req, res) {
         data: "Available Slots in given date"
     }
     Redirects to: Nothing.
-    Calling route: '/api/activity/freeSlots' 
+    Calling route: '/api/activity/freeSlots'
 */
 module.exports.getAvailableSlots = function (req, res) {
 
@@ -257,7 +257,7 @@ module.exports.getAvailableSlots = function (req, res) {
 };
 
 
-/* 
+/*
     Delete function that finds and deletes a specific slot in a specific activity
     Takes:
         Body: {
@@ -376,7 +376,7 @@ module.exports.deleteSlot = function (req, res) {
 };
 
 
-/* 
+/*
     Post function that adds a slot in a specific activity
     Takes:
         Body: {
@@ -747,7 +747,7 @@ function activityBelongs(activityId, businessId, done) {
 }
 
 
-/* 
+/*
     Delete function that finds and deletes a specific activity
     Takes:
         params: {
@@ -784,8 +784,10 @@ module.exports.deleteActivity = function (req, res) {
                             new: true
                         },
                         function (err, model) {
-                            if (err) return res.json({
-                                success: false
+                            if (err) return res.status(500).json({
+                                error: err,
+                                msg: "Error occured while finding the business",
+                                data: null
                             });
                             if (model)
                                 res.status(200).json({

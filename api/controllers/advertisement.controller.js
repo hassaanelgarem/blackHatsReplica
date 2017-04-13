@@ -14,68 +14,7 @@ const uploadAdPhoto = multer({
 }).single('myfile');
 
 
-/*  
-    POST function that adds a new advertisement slot
-    and saves it in the database.
-    Takes:
-        Body: {
-            name: "the name of this adv slot according to it's position"
-            price: "the booking price of the adv slot"
-            length: "the length of the adv slot"
-            width: "the width of the adv slot"
-            advSchedule: "an array of adv bookings that will be displayed on this adv slot"
-        }
-    Returns: {
-        error: "Error object if any",
-        msg: "A success or failure message"
-    }
-    Redirects to: Nothing.
-    Calling route: '/api/advertisement/addAdvSlots'    
-*/
-module.exports.addAdvSlots = function (req, res) {
-
-    req.checkBody('name', 'Name is required').notEmpty();
-    req.checkBody('price', 'Price is required').notEmpty();
-    req.checkBody('length', 'Length is required').notEmpty();
-    req.checkBody('width', 'Width is required').notEmpty();
-
-    const errors = req.validationErrors();
-
-    if (errors) {
-        res.status(500).json({
-            error: errors,
-            msg: "Incomplete Input",
-            data: null
-        });
-    } else {
-        //  creates a new advertisement slot using values from the POST request
-        const newAdvSlot = new AdvSlot({
-            name: req.body.name,
-            price: req.body.price,
-            length: req.body.length,
-            width: req.body.width,
-            advSchedule: []
-        });
-        //  saves the new advertisement slot in the database
-        newAdvSlot.save(function (err, newSlot) {
-            //  If there is an error return it in response
-            if (err) return res.status(500).json({
-                error: err,
-                msg: "Error Adding the Advertisement Slot",
-                data: null
-            });
-            //  returns a success message
-            res.status(200).json({
-                error: null,
-                msg: "Advertisement Slot Added Successfully",
-                data: null
-            });
-        })
-    }
-}
-
-
-/*  
+/*
     GET function that retrieves all Adv Slots that appear
     on the homepage from the database.
     Takes: nothing.
@@ -85,7 +24,7 @@ module.exports.addAdvSlots = function (req, res) {
         All Adv slots in the database
     }
     Redirects to: Nothing
-    Calling route: '/api/advertisement/getAdvSlots' 
+    Calling route: '/api/advertisement/getAdvSlots'
 */
 module.exports.getAdvSlots = function (req, res) {
     //  finds all advSlots that can appear on homepage
@@ -115,7 +54,7 @@ module.exports.getAdvSlots = function (req, res) {
 };
 
 
-/*  
+/*
     POST function that books a specific adv slot for a certain business
     by creating a new booking object and adding it to the database and
     also adding this new booking to the array of bookings of the chosen
@@ -125,7 +64,7 @@ module.exports.getAdvSlots = function (req, res) {
             image: "the advertisement image of the business"
             startTime: "booking start time"
             endTime: "booking end time"
-        } 
+        }
         params: {
             advSlotId
         }
@@ -134,7 +73,7 @@ module.exports.getAdvSlots = function (req, res) {
         msg: "A success or failure message"
     }
     Redirects to: Nothing.
-    Calling route: '/api/advertisement/bookAdvSlot/:advSlotId'     
+    Calling route: '/api/advertisement/bookAdvSlot/:advSlotId'
 */
 module.exports.bookAdvSlot = function (req, res) {
 
@@ -228,7 +167,7 @@ module.exports.bookAdvSlot = function (req, res) {
 };
 
 
-/*  
+/*
     GET function that returns the current bookings of an advertisement slot
     ordered in ascending order and excluding any booking that is expired.
     Takes:
@@ -241,7 +180,7 @@ module.exports.bookAdvSlot = function (req, res) {
         current bookings of the chosen adv slot
     }
     Redirects to: Nothing
-    Calling route: '/api/advertisement/getCurrentBookings/:advSlotId' 
+    Calling route: '/api/advertisement/getCurrentBookings/:advSlotId'
 */
 module.exports.getCurrentBookings = function (req, res) {
     /*   A query that finds the advSchedule of the selected slot
@@ -284,7 +223,7 @@ module.exports.getCurrentBookings = function (req, res) {
 };
 
 
-/*  
+/*
     GET function that returns the first available slot for booking
     in a adv slot's schedule.
     Takes: {
@@ -296,7 +235,7 @@ module.exports.getCurrentBookings = function (req, res) {
         first free slot of an adv slot available for booking
     }
     Redirects to: Nothing
-    Calling route: '/api/advertisement/getFreeSlot/:advSlotId'    
+    Calling route: '/api/advertisement/getFreeSlot/:advSlotId'
 */
 module.exports.getFreeSlot = function (req, res) {
 

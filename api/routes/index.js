@@ -56,7 +56,6 @@ module.exports = function (passportConfig) {
     router.route('/activity/:businessId').get(activityCtrl.getActivities);
     router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
     router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
-    router.route('/advertisement/addAdvSlots').post(advCtrl.addAdvSlots);
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
@@ -93,7 +92,7 @@ module.exports = function (passportConfig) {
     router.route('/admin/support/user/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverUser);
     router.route('/admin/support/business/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
     router.route('/admin/support/deleteRequest/:requestId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteSupportRequest);
-
+    router.route('/admin/advertisement/addAdvSlots').post(passportConfig.isAdminLoggedIn, adminCtrl.addAdvSlots);
 
     //User routes
     router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);

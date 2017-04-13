@@ -7,14 +7,14 @@ const SupportRequest = mongoose.model("SupportRequest");
 const emailSender = require('../config/emailSender');
 
 
-/*  
+/*
     Put Function, to verify a business and notifies him.
     Takes:
-        params{  
+        params{
             businessId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/business/verify/:businessId'
 */
 module.exports.verifyBusiness = function (req, res) {
@@ -77,14 +77,14 @@ module.exports.verifyBusiness = function (req, res) {
 };
 
 
-/*  
+/*
     Delete function that deletes a business wether he was approved or not and notifies him.
     Takes:
-        params{  
+        params{
             businessId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/business/delete/:businessId'
 */
 module.exports.deleteBusiness = function (req, res) {
@@ -131,14 +131,14 @@ module.exports.deleteBusiness = function (req, res) {
 };
 
 
-/*  
+/*
     Put function that makes a user an admin.
     Takes:
-        params{  
+        params{
             userId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/makeAdmin/:userId'
 */
 module.exports.makeAdmin = function (req, res) {
@@ -187,14 +187,14 @@ module.exports.makeAdmin = function (req, res) {
 };
 
 
-/*  
+/*
     Put function that deletes an admin.
     Takes:
-        params{  
+        params{
             userId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/removeAdmin/:userId'
 */
 module.exports.removeAdmin = function (req, res) {
@@ -243,14 +243,14 @@ module.exports.removeAdmin = function (req, res) {
 };
 
 
-/*  
+/*
     Delete function that deletes a user and notifies him of suspending the account.
     Takes:
-        params{  
+        params{
             userId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/user/delete/:userId'
 */
 module.exports.deleteUser = function (req, res) {
@@ -304,17 +304,17 @@ module.exports.deleteUser = function (req, res) {
 };
 
 
-/*  
-    Put function that resets the business password to a temp password so he 
+/*
+    Put function that resets the business password to a temp password so he
     can access his account and change it later after reviewing his request by
     the admin and notifies him.
     Takes:
-        params{  
+        params{
             requestId
         }
-    Returns: In case of Success, returns the generated password to admin and a 
+    Returns: In case of Success, returns the generated password to admin and a
     success message, or in case of failure, a failure message along with errors.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/support/business/recoverAccount/:requestId'
 */
 module.exports.recoverBusiness = function (req, res) {
@@ -392,17 +392,17 @@ module.exports.recoverBusiness = function (req, res) {
 };
 
 
-/*  
-    Put function that resolves a request , resets the user password to a temp password so he 
+/*
+    Put function that resolves a request , resets the user password to a temp password so he
     can access his account and change it later after reviewing his request by
     the admin and notifies him.
     Takes:
-        params{  
+        params{
             requestId
         }
-    Returns: In case of Success, returns the generated password to admin and a 
+    Returns: In case of Success, returns the generated password to admin and a
     success message, or in case of failure, a failure message along with errors.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/support/user/recoverAccount/:requestId'
 */
 module.exports.recoverUser = function (req, res) {
@@ -480,14 +480,14 @@ module.exports.recoverUser = function (req, res) {
 };
 
 
-/*  
+/*
     Delete function, that deletes a request without resolving it if the request didn't match conditions.
     Takes:
-        params{  
+        params{
             requestId
         }
     Returns: Success, or a failure message along with errors.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/admin/support/deleteRequest/:requestId'
 */
 module.exports.deleteSupportRequest = function (req, res) {
@@ -516,12 +516,12 @@ module.exports.deleteSupportRequest = function (req, res) {
 };
 
 
-/*  
+/*
     Get function that returns all unverified businesses based on the value of the attribute verified
     Takes: Nothing
     Returns: Success and a list of unverifiedBusinesses or failure message along with the error if any
     Redirects to: Nothing.
-    Calling Route: '/api/admin/business/unVerifiedBusinesses'   
+    Calling Route: '/api/admin/business/unVerifiedBusinesses'
 */
 module.exports.unVerifiedBusinesses = function (req, res) {
     const query = Business.find({
@@ -541,3 +541,64 @@ module.exports.unVerifiedBusinesses = function (req, res) {
             });
     });
 };
+
+
+/*
+    POST function that adds a new advertisement slot
+    and saves it in the database.
+    Takes:
+        Body: {
+            name: "the name of this adv slot according to it's position"
+            price: "the booking price of the adv slot"
+            length: "the length of the adv slot"
+            width: "the width of the adv slot"
+            advSchedule: "an array of adv bookings that will be displayed on this adv slot"
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "A success or failure message"
+    }
+    Redirects to: Nothing.
+    Calling route: '/api/admin/advertisement/addAdvSlots'
+*/
+module.exports.addAdvSlots = function (req, res) {
+
+    req.checkBody('name', 'Name is required').notEmpty();
+    req.checkBody('price', 'Price is required').notEmpty();
+    req.checkBody('length', 'Length is required').notEmpty();
+    req.checkBody('width', 'Width is required').notEmpty();
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
+        });
+    } else {
+        //  creates a new advertisement slot using values from the POST request
+        const newAdvSlot = new AdvSlot({
+            name: req.body.name,
+            price: req.body.price,
+            length: req.body.length,
+            width: req.body.width,
+            advSchedule: []
+        });
+        //  saves the new advertisement slot in the database
+        newAdvSlot.save(function (err, newSlot) {
+            //  If there is an error return it in response
+            if (err) return res.status(500).json({
+                error: err,
+                msg: "Error Adding the Advertisement Slot",
+                data: null
+            });
+            //  returns a success message
+            res.status(200).json({
+                error: null,
+                msg: "Advertisement Slot Added Successfully",
+                data: null
+            });
+        })
+    }
+}
