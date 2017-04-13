@@ -74,12 +74,20 @@ const routes = require("./api/routes")(passportConfig);
 app.use("/api", routes);
 
 app.get('/', (req, res) => {
-	res.json('Redirected to Home');
+	res.status(200).json({
+    error: null,
+    msg: 'Redirected to Home.',
+    data: null
+  });
 });
 
 // Ignore all http requests on unknown routes
 app.all('*', (req, res) => {
-	res.json('TO-DO: Redirect on a page not found view');
+	res.status(404).json({
+    error: null,
+    msg: 'TO-DO: Redirect on a page not found view.',
+    data: null
+  });
 });
 
 

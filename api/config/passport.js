@@ -11,7 +11,7 @@ var configurePassport = function (passport) {
         usernameField: 'username',
         passwordField: 'password'
     }, function (username, password, done) { // Finding the user by his username
-        User.getUserByUsername(username, function (err, user) {
+        User.getUserByUsername(username.trim(), function (err, user) {
             if (err) return done(err);
             if (!user) {
                 return done(null, false, {
@@ -37,7 +37,7 @@ var configurePassport = function (passport) {
         passwordField: 'password',
     }, function (email, password, done) {
         // Finding the business by his email
-        Business.getBusinessByEmail(email, function (err, business) {
+        Business.getBusinessByEmail(email.trim(), function (err, business) {
             if (err) return done(err);
             if (!business) return done(null, false, {
                 msg: 'Invalid email.'
@@ -49,7 +49,7 @@ var configurePassport = function (passport) {
                 if (err) return done(err);
                 if (isMatch) return done(null, business);
                 done(null, false, {
-                    message: 'Invalid password.'
+                    msg: 'Invalid password.'
                 });
             });
         });
@@ -99,7 +99,7 @@ var isUserLoggedIn = function (req, res, next) {
 
 var isAdminLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
-        if (req.user.username === 'admin')
+        if (req.user.admin)
             return next();
     }
     res.status(401).json({

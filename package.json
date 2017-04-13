@@ -14,14 +14,15 @@
     "express": "*",
     "express-session": "^1.15.2",
     "express-validator": "^3.1.2",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
-    "passport-http": "*",
     "fs": "0.0.1-security",
+    "geoip-lite": "^1.2.0",
     "mongoose": "*",
     "multer": "*",
     "nodemailer": "^3.1.8",
-    "geoip-lite": "^1.2.0"
+    "passport": "^0.3.2",
+    "passport-http": "*",
+    "passport-local": "^1.0.0",
+    "rand-token": "^0.3.0"
   },
   "repository": {
     "type": "git",
