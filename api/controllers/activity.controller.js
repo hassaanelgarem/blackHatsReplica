@@ -7,25 +7,34 @@ const Activity = mongoose.model("Activity");
 const Business = mongoose.model("Business");
 
 
+/* Multer configuration to upload a single file from an
+html input with name "myfile" to public/uploads/activityPhotos folder*/
+const uploadPhotos = multer({
+    dest: path.join(__dirname, '../', '../public/uploads/activityPhotos')
+}).single('myfile');
+
+
+
 /*
-  Post function that handles adding an activity
-  It creates a new activity and saves it in the database
-  And updates Activites array in the coreesponding Business
-  Body: {
-  name: "name of new activity",
-  price: "price of new activity",
-  description: "description of new activity",
-  bookingsPerSlot: "Maximum number of bookins per slot of new activity",
-    }
+    Post function that handles adding an activity
+    It creates a new activity and saves it in the database
+    And updates Activites array in the coreesponding Business
+    Takes:
+        Body: {
+        name: "name of new activity",
+        price: "price of new activity",
+        description: "description of new activity",
+        bookingsPerSlot: "Maximum number of bookins per slot of new activity",
+        }
     Returns: {
-    error: "Error object if any",
-    msg: "Success or failure message",
-    data: "Nothing"
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Nothing"
     }
-  Redirects to: Nothing.
-  Calling route: '/api/activity/add'
+    Redirects to: Nothing.
+    Calling route: '/api/activity/add'
 */
-module.exports.addActivity = function(req, res) {
+module.exports.addActivity = function (req, res) {
     //check if logged in
     req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('price', 'Price is required').notEmpty();
@@ -50,7 +59,7 @@ module.exports.addActivity = function(req, res) {
             business: req.user._id
         });
         // Save new Activity in database
-        newActivity.save(function(err, activity) {
+        newActivity.save(function (err, activity) {
             // If there is an error return it in response
             if (err) return res.status(500).json({
                 error: err,
@@ -69,7 +78,7 @@ module.exports.addActivity = function(req, res) {
                     upsert: true,
                     new: true
                 },
-                function(err, business) {
+                function (err, business) {
                     // If there is an error return it in response
                     if (err) res.status(500).json({
                         error: err,
@@ -100,66 +109,60 @@ module.exports.addActivity = function(req, res) {
 
 
 /*
-  Get function that retrieves the activities offered by a Business from the database
+    Get function that retrieves the activities offered by a Business from the database
+    Takes:
+        params: {
+            businessId
+        }
     Returns: {
-    error: "Error object if any",
-    msg: "Success or failure message",
-    data: "Activities of a given business"
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Activities of a given business"
     }
-  Redirects to: Nothing.
-  Calling route: api/activity/:businessId
+    Redirects to: Nothing.
+    Calling route: api/activity/:businessId
 */
-module.exports.getActivities = function(req, res) {
+module.exports.getActivities = function (req, res) {
 
-    req.checkParams('businessId', 'Business ID is required').notEmpty();
+    //Finds all activities ofeered by a specific business according to its business ID
+    Activity.find({
+        "business": req.params.businessId
+    }, function (err, activities) {
 
-    const errors = req.validationErrors();
-
-    if (errors) {
-        res.status(500).json({
-            error: errors,
-            msg: "Incomplete Input",
+        //If an error occurred, display a msg along with the error
+        if (err) return res.status(500).json({
+            error: err,
+            msg: "Cannot Retrieve activities",
             data: null
         });
-    } else {
-        //Finds all activities ofeered by a specific business according to its business ID
-        Activity.find({
-            "business": req.params.businessId
-        }, function(err, activities) {
 
-            //If an error occurred, display a msg along with the error
-            if (err) return res.status(500).json({
-                error: err,
-                msg: "Cannot Retrieve activities",
-                data: null
-            });
-
-            //If no error return list of activities offered
-            else res.status(200).json({
-                error: null,
-                msg: "Successful Retrieval",
-                data: activites
-            });
+        //If no error return list of activities offered
+        else res.status(200).json({
+            error: null,
+            msg: "Successful Retrieval",
+            data: activites
         });
+    });
+};
+
+
+/* 
+    Post method that takes as a parameters the date and the Activity ID and returns
+    the free slots where the resgistered user can make a booking
+    Takes:
+        Body: {
+            date:"Date to find available slots in"
+            activityID: "id of the activity tha will contain the slot to be added"
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Available Slots in given date"
     }
-
-
-}
-
-/* Post method that takes as a parameters the date and the Activity ID and returns
-the free slots where the resgistered user can make a booking
-Body: {
-    date:"Date to find available slots in"
-    activityID: "id of the activity tha will contain the slot to be added"
-  }
-  Returns: {
-  error: "Error object if any",
-  msg: "Success or failure message",
-  data: "Available Slots in given date"
-  }
-Redirects to: Nothing.
-Calling route: /activity/freeSlots */
-module.exports.getAvailableSlots = function(req, res) {
+    Redirects to: Nothing.
+    Calling route: '/api/activity/freeSlots' 
+*/
+module.exports.getAvailableSlots = function (req, res) {
 
     req.checkBody('date', 'Date is required').notEmpty();
     req.checkBody('activityID', 'Activity ID is required').notEmpty();
@@ -188,7 +191,7 @@ module.exports.getAvailableSlots = function(req, res) {
                     date: actdate
                 }
             })
-            .exec(function(err, bookedSlots) {
+            .exec(function (err, bookedSlots) {
                 //If an error occured return it in response
                 if (err) return res.status(500).json({
                     error: err,
@@ -201,70 +204,82 @@ module.exports.getAvailableSlots = function(req, res) {
                     data: null
                 });
                 //retrieves the slots specified by the business for their activity
-                Activity.findById(actID, function(err, actSlots) {
+                Activity.findById(actID, function (err, actSlots) {
                     //If an error occured return it in response
-                    if (err) res.status(500).json({
+                    if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while retrieving Activity Slots",
                         data: null
                     });
-                    //Initializes the maxBookings according to the Activity
-                    maxBookings = actSlots.bookingsPerSlot;
-                    //Array that will contain all the available slots for booking
-                    var availableSlots = [];
-                    var counter = 0;
-                    //Loops over the array of slots specified by the business
-                    for (var i = 0; i < actSlots.slots.length; i++) {
-                        //counts the number of bookings made in that slot
-                        counter = 0;
-                        //Loops over the array of bookings made for that activity
-                        for (var j = 0; j < bookedSlots.bookings.length; j++) {
-                            //checks if the activity time is equal to the booking time
-                            const actStartTime = new Date(actSlots.slots[i].startTime);
-                            const bookingStartTime = new Date(bookedSlots.bookings[j].slot.startTime);
-                            const actEndTime = new Date(actSlots.slots[i].endTime);
-                            const bookingEndTime = new Date(bookedSlots.bookings[j].slot.endTime)
-                            if (actStartTime.getTime() == bookingStartTime.getTime()) {
-                                if (actEndTime.getTime() == bookingEndTime.getTime()) {
-                                    counter++;
+                    if (actSlots) {
+                        //Initializes the maxBookings according to the Activity
+                        maxBookings = actSlots.bookingsPerSlot;
+                        //Array that will contain all the available slots for booking
+                        var availableSlots = [];
+                        var counter = 0;
+                        //Loops over the array of slots specified by the business
+                        for (var i = 0; i < actSlots.slots.length; i++) {
+                            //counts the number of bookings made in that slot
+                            counter = 0;
+                            //Loops over the array of bookings made for that activity
+                            for (var j = 0; j < bookedSlots.bookings.length; j++) {
+                                //checks if the activity time is equal to the booking time
+                                const actStartTime = new Date(actSlots.slots[i].startTime);
+                                const bookingStartTime = new Date(bookedSlots.bookings[j].slot.startTime);
+                                const actEndTime = new Date(actSlots.slots[i].endTime);
+                                const bookingEndTime = new Date(bookedSlots.bookings[j].slot.endTime)
+                                if (actStartTime.getTime() == bookingStartTime.getTime()) {
+                                    if (actEndTime.getTime() == bookingEndTime.getTime()) {
+                                        counter++;
+                                    }
                                 }
                             }
+                            //Checks if the counter is less than the maximum number of bookings per slot
+                            if (counter < maxBookings)
+                                //adds the slot into the array of available slots
+                                availableSlots.push(actSlots.slots[i]);
                         }
-                        //Checks if the counter is less than the maximum number of bookings per slot
-                        if (counter < maxBookings)
-                            //adds the slot into the array of available slots
-                            availableSlots.push(actSlots.slots[i]);
-                    }
-                    //returns the array of available slots
-                    res.status(200).json({
-                        error: null,
-                        msg: "Successful Retrieval of Available Slots",
-                        data: availableSlots
-                    });
-                })
-            })
+                        //returns the array of available slots
+                        res.status(200).json({
+                            error: null,
+                            msg: "Successful Retrieval of Available Slots",
+                            data: availableSlots
+                        });
+                    } else
+                        res.status(404).json({
+                            error: null,
+                            msg: "Slots not found.",
+                            data: null
+                        });
+                });
+            });
     }
+};
 
-}
 
-
-/* Delete function that finds and deletes a specific slot in a specific activity
-Body: {
-    start: "start time of slot to be deleted"
-    end: "end time of slot to be deleted"
-  }
-  Returns: {
-  error: "Error object if any",
-  msg: "Success or failure message",
-  data: "Nothing"
-  }
-Redirects to: Nothing.
-Calling route: api/activity/:activityId/deleteSlot */
-module.exports.deleteSlot = function(req, res) {
+/* 
+    Delete function that finds and deletes a specific slot in a specific activity
+    Takes:
+        Body: {
+            start: "start time of slot to be deleted"
+            end: "end time of slot to be deleted"
+        }
+        params: {
+            activityId
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Nothing"
+    }
+    Redirects to: Nothing.
+    Calling route: '/api/activity/:activityId/deleteSlot'
+*/
+module.exports.deleteSlot = function (req, res) {
 
     req.checkBody('startTime', 'Start Time is required').notEmpty();
     req.checkBody('endTime', 'End Time is required').notEmpty();
-    req.checkParams('activityId', 'Activity ID is required').notEmpty();
+
     const errors = req.validationErrors();
     if (errors) {
         res.status(500).json({
@@ -273,14 +288,14 @@ module.exports.deleteSlot = function(req, res) {
             data: null
         });
     } else {
-        activityBelongs(req.params.activityId, req.user._id, function(flag) {
+        activityBelongs(req.params.activityId, req.user._id, function (flag) {
             if (flag) {
                 //Create constants to save them as Date format
                 const start = new Date(req.body.startTime);
                 const end = new Date(req.body.endTime);
 
                 //Finding specified activity
-                Activity.findById(req.params.activityId, function(err, activity) {
+                Activity.findById(req.params.activityId, function (err, activity) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
@@ -312,7 +327,7 @@ module.exports.deleteSlot = function(req, res) {
                                 activity.slots.splice(i, 1);
 
                                 //Save changes
-                                activity.save(function(err, activity) {
+                                activity.save(function (err, activity) {
 
                                     //If an error occurred, display a msg along with the error
                                     if (err) {
@@ -347,11 +362,8 @@ module.exports.deleteSlot = function(req, res) {
                                 data: null
                             });
                         }
-
-
                     }
                 });
-
             } else {
                 res.status(401).json({
                     error: null,
@@ -360,30 +372,31 @@ module.exports.deleteSlot = function(req, res) {
                 });
             }
         });
-
     }
-
-
-
-
 };
 
 
-/* Post function that adds a slot in a specific activity
-Body: {
-newSlot: "An object consist of two dates, startTime and endTime that will be added to the activity",
-    start: "start time of newSlot"
-    end: "end time of newSlot"
-  }
-  Returns: {
-  error: "Error object if any",
-  msg: "Success or failure message",
-  data: "Nothing"
-  }
-Redirects to: Nothing.
-Calling route: api/activity/:activityId/addSlot*/
-module.exports.addSlot = function(req, res) {
-    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+/* 
+    Post function that adds a slot in a specific activity
+    Takes:
+        Body: {
+            newSlot: "An object consist of two dates, startTime and endTime that will be added to the activity",
+            start: "start time of newSlot"
+            end: "end time of newSlot"
+        }
+        params: {
+            activityId
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Nothing"
+    }
+    Redirects to: Nothing.
+    Calling route: '/api/activity/:activityId/addSlot'
+*/
+module.exports.addSlot = function (req, res) {
+    activityBelongs(req.params.activityId, req.user._id, function (flag) {
         if (flag) {
             req.checkBody('startTime', 'Start Time is required').notEmpty();
             req.checkBody('endTime', 'End Time is required').notEmpty();
@@ -402,7 +415,7 @@ module.exports.addSlot = function(req, res) {
                 const end = new Date(req.body.endTime);
 
                 //Finding specified activity
-                Activity.findById(req.params.activityId, function(err, activity) {
+                Activity.findById(req.params.activityId, function (err, activity) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
@@ -454,7 +467,7 @@ module.exports.addSlot = function(req, res) {
                             activity.slots.push(newSlot);
 
                             //Save activity
-                            activity.save(function(err, activity) {
+                            activity.save(function (err, activity) {
 
                                 //If an error occurred, display a msg along with the error
                                 if (err) {
@@ -484,8 +497,6 @@ module.exports.addSlot = function(req, res) {
                                 data: null
                             });
                         }
-
-
                     }
                 });
             }
@@ -497,7 +508,6 @@ module.exports.addSlot = function(req, res) {
             });
         }
     });
-
 };
 
 
@@ -506,7 +516,6 @@ module.exports.addSlot = function(req, res) {
   date1 > date2 --> 1
   date1 < date2 --> -1 */
 function compareDate(date1, date2) {
-
 
     //Hours equal
     if (date1.getHours() == date2.getHours()) {
@@ -534,36 +543,33 @@ function compareDate(date1, date2) {
 }
 
 
-/* Multer configuration to upload a single file from an
-html input with name "myfile" to public/uploads/activityPhotos folder*/
-const uploadPhotos = multer({
-    dest: path.join(__dirname, '../', '../public/uploads/activityPhotos')
-}).single('myfile');
-
-
 /*
-Post function to upload photo using multer
-and store the uploaded image path in the Activity
-model in photos array, and return the
-filepath to the frontend to show the image.
-Body: {
-    newPath: "path of photo to be added",
-    activityId: "id of the activity tha will contain the photo to be added"
-  }
-  Returns: {
-  error: "Error object if any",
-  msg: "Success or failure message",
-  data: "Nothing"
-  }
-Redirects to: Nothing.
-Calling route: '/api/activity/:activityId/addPhoto'
+    Post function to upload photo using multer
+    and store the uploaded image path in the Activity
+    model in photos array, and return the
+    filepath to the frontend to show the image.
+    Takes:
+        Body: {
+            newPath: "path of photo to be added",
+            activityId: "id of the activity tha will contain the photo to be added"
+        }
+        params: {
+            activityId
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Nothing"
+    }
+    Redirects to: Nothing.
+    Calling route: '/api/activity/:activityId/addPhoto'
 */
-module.exports.addPhoto = function(req, res) {
-    //Check if business is logged in
-    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+module.exports.addPhoto = function (req, res) {
+
+    activityBelongs(req.params.activityId, req.user._id, function (flag) {
         if (flag) {
             //upload the image
-            uploadPhotos(req, res, function(err) {
+            uploadPhotos(req, res, function (err) {
                 //if an error occurred, return the error
                 if (err) {
                     return res.status(500).json({
@@ -582,7 +588,7 @@ module.exports.addPhoto = function(req, res) {
                     //if it was jpeg add a "j" to the returned "peg"
                     if (string === "peg")
                         string = "j" + string;
-
+                    string = string.toLowerCase();
                     //check if it is not a valid image format
                     if (!(string === "png" || string === "jpg" || string === "jpeg")) {
                         //delete the uploaded file
@@ -596,17 +602,13 @@ module.exports.addPhoto = function(req, res) {
                         });
                     }
                     //copy and rename the image to the following format and location
-                    var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/img" + Date.now() + "." + string);
-                    fs.renameSync(req.file.path, newPath, function(err) {
+                    var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/" + req.file.filename + "." + string);
+                    fs.renameSync(req.file.path, newPath, function (err) {
                         if (err) throw err;
 
                         //delete the image with the old name
                         fs.unlink(req.file.path);
                     });
-
-                    //get the name part only from the uploaded image
-                    var nameLength = ("img" + Date.now() + string).length + 1;
-                    newPath = newPath.substring(newPath.length - nameLength);
 
                     //add the image file name to the photos array of the Business model
                     Activity.update({
@@ -616,7 +618,7 @@ module.exports.addPhoto = function(req, res) {
                                 "photos": newPath
                             }
                         },
-                        function(err, result) {
+                        function (err, result) {
                             //couldn't add to array, return the error
                             if (err) {
                                 return res.status(500).json({
@@ -626,12 +628,12 @@ module.exports.addPhoto = function(req, res) {
                                 });
                             } else {
                                 //if updating is ok
-                                if (result) {
+                                if (result.nModified > 0) {
                                     //return the file path to the frontend to show the image
                                     res.status(200).json({
                                         error: null,
-                                        msg: null,
-                                        data: newPath
+                                        msg: 'Photo added successfully.',
+                                        data: req.file.filename + "." + string
                                     });
                                 } else
                                     res.status(404).json({
@@ -645,7 +647,7 @@ module.exports.addPhoto = function(req, res) {
                 //multer did not find a file selected to upload
                 else {
                     return res.status(500).json({
-                        error: err,
+                        error: null,
                         msg: "Choose a Valid File",
                         data: null
                     });
@@ -665,79 +667,73 @@ module.exports.addPhoto = function(req, res) {
 
 
 /*
-delete function that deletes photo from activity's
-photos array, and returns success message or error message.
-Body: {
-    imagePath: "path of photo to be deleted",
-    activityId: "id of the activity containg the photo to be deleted"
-  }
-  Returns: {
-  error: "Error object if any",
-  msg: "Success or failure message",
-  data: "Nothing"
-  }
-Redirects to: Nothing.
-Calling route: '/api/activity/:activityId/deletePhoto/:photoPath'
-*/
-module.exports.deletePhoto = function(req, res) {
-
-    req.checkParams('activityId', 'Activity ID is required').notEmpty();
-    req.checkParams('photoPath', 'Photo Path is required').notEmpty();
-    const errors = req.validationErrors();
-    if (errors) {
-        res.status(500).json({
-            error: errors,
-            msg: "Incomplete Input",
-            data: null
-        });
-    } else {
-        activityBelongs(req.params.activityId, req.user._id, function(flag) {
-            if (flag) {
-                var imagePath = req.params.photoPath;
-                var activityId = req.params.activityId;
-                Activity.update({
-                    "_id": activityId
-                }, {
-                    $pull: {
-                        "photos": imagePath
-                    }
-                }, function(err, data) {
-                    if (err) {
-                        res.status(500).json({
-                            error: err,
-                            msg: "Error while deleting Photo",
-                            data: null
-                        });
-                    } else {
-
-                        //add directory path to image name
-                        imagePath = path.join(__dirname, "../", "../public/uploads/activityPhotos/", req.params.photoPath);
-
-                        //delete the photo from filesystem
-                        fs.unlink(imagePath, function(err) {
-                            //don't care if file doesn't exist
-                        });
-                        res.status(200).json({
-                            error: null,
-                            msg: "Photo Deleted Successfully",
-                            data: null
-                        });
-                    }
-                });
-            } else {
-                res.status(401).json({
-                    error: null,
-                    msg: "Business Login Required or Unauthorized Access",
-                    data: null
-                });
-            }
-        });
+    Delete function that deletes photo from activity's
+    photos array, and returns success message or error message.
+    Takes:
+        Body: {
+            imagePath: "path of photo to be deleted",
+            activityId: "id of the activity containg the photo to be deleted"
+        }
+        params: {
+            activityId,
+            photoPath
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Nothing"
     }
+    Redirects to: Nothing.
+    Calling route: '/api/activity/:activityId/deletePhoto/:photoPath'
+*/
+module.exports.deletePhoto = function (req, res) {
 
+    activityBelongs(req.params.activityId, req.user._id, function (flag) {
+        if (flag) {
+            var imagePath = req.params.photoPath;
+            var activityId = req.params.activityId;
+            Activity.update({
+                "_id": activityId
+            }, {
+                $pull: {
+                    "photos": imagePath
+                }
+            }, function (err, data) {
+                if (err) {
+                    res.status(500).json({
+                        error: err,
+                        msg: "Error while deleting Photo",
+                        data: null
+                    });
+                } else {
+
+                    //add directory path to image name
+                    imagePath = path.join(__dirname, "../", "../public/uploads/activityPhotos/", req.params.photoPath);
+
+                    //delete the photo from filesystem
+                    fs.unlink(imagePath, function (err) {
+                        //don't care if file doesn't exist
+                    });
+                    res.status(200).json({
+                        error: null,
+                        msg: "Photo Deleted Successfully",
+                        data: null
+                    });
+                }
+            });
+        } else {
+            res.status(401).json({
+                error: null,
+                msg: "Business Login Required or Unauthorized Access",
+                data: null
+            });
+        }
+    });
 };
 
+
 function activityBelongs(activityId, businessId, done) {
-    Business.findById(businessId, function(err, business) {
+    Business.findById(businessId, function (err, business) {
         if (business) {
             if (business.activities.indexOf(activityId) > -1) {
                 done(true);
@@ -751,20 +747,26 @@ function activityBelongs(activityId, businessId, done) {
 }
 
 
-/* Delete function that finds and deletes a specific activity
-  Returns: {
-  error: "Error object if any",
-  msg: "Success or failure message",
-  data: "Nothing"
-  }
-Redirects to: Nothing.
-Calling route: /api/activity/:activityId/delete */
-module.exports.deleteActivity = function(req, res) {
-    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+/* 
+    Delete function that finds and deletes a specific activity
+    Takes:
+        params: {
+            activityId
+        }
+    Returns: {
+        error: "Error object if any",
+        msg: "Success or failure message",
+        data: "Nothing"
+    }
+    Redirects to: Nothing.
+    Calling route: '/api/activity/:activityId/delete'
+*/
+module.exports.deleteActivity = function (req, res) {
+    activityBelongs(req.params.activityId, req.user._id, function (flag) {
         if (flag) {
             //Finding and deleting activity from database
-            Activity.findByIdAndRemove(req.params.activityId, function(err, activity) {
-                if (err) return rres.status(500).json({
+            Activity.findByIdAndRemove(req.params.activityId, function (err, activity) {
+                if (err) return res.status(500).json({
                     error: err,
                     msg: "Error while deleting Activity",
                     data: null
@@ -781,15 +783,22 @@ module.exports.deleteActivity = function(req, res) {
                             upsert: true,
                             new: true
                         },
-                        function(err, model) {
+                        function (err, model) {
                             if (err) return res.json({
                                 success: false
                             });
-                            res.status(200).json({
-                                error: null,
-                                msg: "Activity Deleted Successfully",
-                                data: null
-                            });
+                            if (model)
+                                res.status(200).json({
+                                    error: null,
+                                    msg: "Activity Deleted Successfully",
+                                    data: null
+                                });
+                            else
+                                res.status(404).json({
+                                    error: null,
+                                    msg: "Activity was Deleted Successfully, however, it was not removed from business' activities.",
+                                    data: null
+                                });
                         });
 
                 } else {
@@ -808,5 +817,4 @@ module.exports.deleteActivity = function(req, res) {
             });
         }
     });
-
 };

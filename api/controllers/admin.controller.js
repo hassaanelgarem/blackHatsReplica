@@ -514,3 +514,30 @@ module.exports.deleteSupportRequest = function (req, res) {
         }
     });
 };
+
+
+/*  
+    Get function that returns all unverified businesses based on the value of the attribute verified
+    Takes: Nothing
+    Returns: Success and a list of unverifiedBusinesses or failure message along with the error if any
+    Redirects to: Nothing.
+    Calling Route: '/api/admin/business/unVerifiedBusinesses'   
+*/
+module.exports.unVerifiedBusinesses = function (req, res) {
+    const query = Business.find({
+        verified: false
+    });
+    query.exec(function (err, businesses) {
+        if (err) res.status(500).json({
+            "error": err,
+            "msg": "Can not retrieve unverified businesses.",
+            "data": null
+        });
+        else
+            res.status(200).json({
+                "error": null,
+                "msg": "Got unverified businesses successfully",
+                "data": businesses
+            });
+    });
+};
