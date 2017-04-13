@@ -220,7 +220,7 @@ module.exports.removeAdmin = function (req, res) {
                         if (err)
                             res.status(500).json({
                                 error: err,
-                                msg: 'Admin adding failed.',
+                                msg: 'Removing admin failed.',
                                 data: null
                             });
                         else

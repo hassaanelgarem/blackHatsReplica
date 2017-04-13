@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 
 /*
-  Function that takes subject, email. text, html and sends an email.
+  Function that takes subject, email, text, html and sends an email.
 */
 module.exports.sendEmail = function (subject, email, text, html, done) {
     var mailOptions = {
