@@ -1,12 +1,16 @@
 const mongoose = require("mongoose");
 const geoip = require('geoip-lite');
-const User = mongoose.model("User");
-const Business = mongoose.model("Business");
+const randtoken = require('rand-token');
+const emailSender = require('../config/emailSender');
+const bcrypt = require('bcryptjs');
+const User = mongoose.model('User');
+const Business = mongoose.model('Business');
+const TempUser = mongoose.model('TempUser');
 
 
-
-/*
-    Post Function, to register a new user into the users database
+/*  
+    Post Function, to register a new user into the temp users database and send the
+    verification email.
     Takes:
         body{
             firstName
@@ -17,17 +21,10 @@ const Business = mongoose.model("Business");
             confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.
-    Calling Route: /api/user/register
+    Redirects to: Nothing.    
+    Calling Route: '/api/user/register'  
 */
 module.exports.registerUser = function (req, res) {
-
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var email = req.body.email;
-    var username = req.body.username;
-    var password = req.body.password;
-    var confirmPassword = req.body.confirmPassword;
 
     //Validating entries
     req.checkBody('firstName', 'First Name is required.').notEmpty();
@@ -36,7 +33,9 @@ module.exports.registerUser = function (req, res) {
     req.checkBody('email', 'Email format is not correct.').isEmail();
     req.checkBody('username', 'Username is required.').notEmpty();
     req.checkBody('password', 'Password is required.').notEmpty();
-    req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
+    req.checkBody('password', 'Password must be at least 8 characters.').isAlphanumeric();
+    req.checkBody('password', 'Password must be at least 8 characters.').len(8);
+    req.checkBody('confirmPassword', 'Passwords do not match.').equals(req.body.password);
 
     var errors = req.validationErrors();
 
@@ -47,11 +46,23 @@ module.exports.registerUser = function (req, res) {
             data: null
         });
     } else {
+        req.body.username = req.body.username.trim();
+        req.body.email = req.body.email.trim();
         User.findOne({
             $or: [{
-                'username': username
+                'username': {
+                    //equal username
+                    $regex: '^' + req.body.username + '$',
+                    //Ignore whitespace characters and case insensitive
+                    $options: "ix"
+                }
             }, {
-                'email': email
+                'email': {
+                    //equal email
+                    $regex: '^' + req.body.email + '$',
+                    //Ignore whitespace characters and case insensitive
+                    $options: "ix"
+                }
             }]
         }, function(err, user) {
             //if there is an error, send an error message
@@ -63,45 +74,111 @@ module.exports.registerUser = function (req, res) {
                 });
             }
 
-            //if username or email already exists
+            //if username or email already exists in model
             if (user) {
-                if (user.username === req.body.username)
-                    res.status(500).json({
-                        error: null,
-                        msg: 'Username already exists, Username: ' + username + '. Please enter another username.',
-                        data: null
-                    });
-                else
-                    res.status(500).json({
-                        error: null,
-                        msg: 'Email already exists, Email: ' + email + '. Please enter another email.',
-                        data: null
-                    });
-            }
-            //Username and email are unique, create the user and save it in the database.
-            else {
-                //Pass the whole body and it will take whatever is not null
-                var newUser = new User(req.body);
-                User.createUser(newUser, function (err, user) {
-                    if (err) res.status(500).json({
-                        error: err,
-                        msg: null,
-                        data: null
-                    });
-                    else {
-                        if (user) {
+                var msg = 'Email already exists, Email: ' + req.body.email + '. Please enter another email.';
+                //check on username ignoring case
+                var regexp = new RegExp('^' + req.body.username + '$', 'i')
+                if (regexp.test(user.username))
+                    msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
 
-                            res.status(200).json({
-                                error: null,
-                                msg: 'Registration Successful.',
-                                data: null
-                            });
-                        } else
+                res.status(500).json({
+                    error: null,
+                    msg: msg,
+                    data: null
+                });
+            } else {
+
+                //check also in temp model of unverified users
+                TempUser.findOne({
+                    $or: [{
+                        'username': {
+                            //equal username
+                            $regex: '^' + req.body.username + '$',
+                            //Ignore whitespace characters and case insensitive
+                            $options: "ix"
+                        }
+                    }, {
+                        'email': {
+                            //equal email
+                            $regex: '^' + req.body.email + '$',
+                            //Ignore whitespace characters and case insensitive
+                            $options: "ix"
+                        }
+                    }]
+                }, function (err, tempUser) {
+                    if (err)
+                        return res.status(500).json({
+                            error: err,
+                            msg: null,
+                            data: null
+                        });
+                    else {
+                        if (tempUser) {
+                            var msg = 'Email already exists, Email: ' + req.body.email + '. Please enter another email.';
+                            //check on username ignoring case
+                            var regexp = new RegExp('^' + req.body.username + '$', 'i')
+                            if (regexp.test(tempUser.username))
+                                msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
+
                             res.status(500).json({
                                 error: null,
-                                msg: "Registration failed.",
+                                msg: msg,
                                 data: null
                             });
+                        } else {
+
+                            //Username and email are unique, create the user and save it in the database.
+
+                            //security check to protect against form injection of unwanted fields
+                            delete req.body.admin;
+                            delete req.body.reviews;
+                            delete req.body.favorites;
+                            delete req.body.bookings;
+                            delete req.body.profilePicture;
+                            delete req.body.createdAt;
+
+
+                            //Pass the whole body and it will take whatever is not null
+                            var newUser = new TempUser(req.body);
+                            var token = randtoken.generate(48);
+                            newUser.verificationToken = token;
+                            newUser.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
+                            TempUser.createUser(newUser, function (err, user) {
+                                if (err) res.status(500).json({
+                                    error: err,
+                                    msg: null,
+                                    data: null
+                                });
+                                else {
+                                    if (user) {
+                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/api/user/verifyAccount/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/api/user/verifyAccount/" + token + "</p>";
+                                        var subject = 'Account Verification';
+                                        emailSender.sendEmail(subject, req.body.email, "", html, function (err, info) {
+                                            if (err)
+                                                newUser.remove(function (err) {
+                                                    res.status(500).json({
+                                                        error: err,
+                                                        msg: 'Email address is not valid, registration failed.',
+                                                        data: null
+                                                    });
+                                                });
+                                            else
+                                                res.status(200).json({
+                                                    error: null,
+                                                    msg: "An Email was sent successfully to " + req.body.email + ", check your inbox.",
+                                                    data: null
+                                                });
+                                        });
+                                    } else
+                                        res.status(500).json({
+                                            error: null,
+                                            msg: "Registration failed.",
+                                            data: null
+                                        });
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -467,7 +544,11 @@ module.exports.searchByLocationAndCategory = function (req, res) {
 
         //if nothing was chosen return empty array
         else
-            return res.status(200).json([]);
+            return res.status(200).json({
+                error: null,
+                msg: 'No search parameters were entered.',
+                data: []
+            });
     }
 
     //execute the query
@@ -490,4 +571,285 @@ module.exports.searchByLocationAndCategory = function (req, res) {
             });
         }
     });
+};
+
+
+/*  
+    Put Function, to change the password of the user.
+    Takes:
+        body{  
+            oldPassword,
+            password,
+            confirmPassword 
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/user/changePassword'
+*/
+module.exports.changePassword = function (req, res) {
+    var oldPassword = req.body.oldPassword;
+    var password = req.body.password;
+    var confirmPassword = req.body.confirmPassword;
+
+    req.checkBody('oldPassword', 'Old Password is required.').notEmpty();
+    req.checkBody('password', 'Password is required.').notEmpty();
+    req.checkBody('password', 'Password must be at least 8 characters.').isAlphanumeric();
+    req.checkBody('password', 'Password must be at least 8 characters.').len(8);
+    req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: null,
+            data: null
+        });
+    } else {
+        User.findById(req.user._id, function (err, user) {
+            if (err)
+                res.status(500).json({
+                    error: err,
+                    msg: null,
+                    data: null
+                });
+            else {
+                if (user) {
+                    //check that the old password is correct
+                    User.comparePassword(oldPassword, user.password, function (err, isMatched) {
+                        if (err)
+                            res.status(500).json({
+                                error: err,
+                                msg: null,
+                                data: null
+                            });
+                        else {
+                            //hash and save the new password
+                            if (isMatched) {
+                                //check on username ignoring case
+                                var regex = new RegExp('^' + oldPassword.trim() + '$');
+                                if (regex.test(password.trim()))
+                                    return res.status(500).json({
+                                        error: null,
+                                        msg: 'You can not change your password to the currently existing one.',
+                                        data: null
+                                    });
+
+                                bcrypt.genSalt(10, function (err, salt) {
+                                    bcrypt.hash(password, salt, function (err, hash) {
+                                        user.password = hash;
+                                        user.save(function (err) {
+                                            if (err) {
+                                                res.status(500).json({
+                                                    error: err,
+                                                    msg: null,
+                                                    data: null
+                                                });
+                                            } else {
+                                                res.status(201).json({
+                                                    error: null,
+                                                    msg: 'Password was changed successfully.',
+                                                    data: null
+                                                });
+                                            }
+                                        });
+                                    });
+                                });
+                            } else
+                                res.status(500).json({
+                                    error: null,
+                                    msg: 'Your old password is not correct.',
+                                    data: null
+                                });
+                        }
+                    });
+                } else
+                    res.status(404).json({
+                        error: null,
+                        msg: 'User not found.',
+                        data: null
+                    });
+            }
+        });
+    }
+};
+
+
+/*  
+    Get Function, to check the validity of the token in the verification request.
+    Takes:
+        params{  
+            token: verification token sent to the user 
+        }
+    Returns: in case of Success, the token and the userId to verify, 
+            in case of failure, failure messages along with errors.
+    Redirects to: Nothing.    
+    Calling Route: '/api/user/verifyAccount/:token'
+*/
+module.exports.checkVerificationToken = function (req, res) {
+    TempUser.findOne({
+        verificationToken: req.params.token,
+        verificationTokenExpiry: {
+            $gt: Date.now()
+        }
+    }, function (err, tempUser) {
+        if (err) {
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        } else {
+            if (tempUser)
+                res.status(200).json({
+                    error: null,
+                    msg: "Token is valid.",
+                    data: {
+                        id: tempUser._id,
+                        token: req.params.token
+                    }
+                });
+            else
+                res.status(200).json({
+                    error: null,
+                    msg: "Token is invalid or has expired.",
+                    data: null
+                });
+        }
+    });
+};
+
+
+/*  
+    Post Function, to verify a temp user and add it to users model.
+    Takes:
+        params{  
+            userId: the temp user id to verify
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/user/verifyAccount/:userId'
+*/
+module.exports.confirmVerification = function (req, res) {
+    TempUser.findById(req.params.userId, function (err, tempUser) {
+        if (err) {
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        } else {
+            if (tempUser) {
+                //convert document to json object
+                var obj = tempUser.toObject();
+                //create new user with the object
+                var newUser = new User(obj);
+                newUser.save(function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            error: err,
+                            msg: null,
+                            data: null
+                        });
+                    } else {
+                        //remove from temp model if saving is done
+                        tempUser.remove();
+                        res.status(200).json({
+                            error: null,
+                            msg: 'You have successfully verified your account.',
+                            data: null
+                        });
+                    }
+                });
+            } else {
+                res.status(404).json({
+                    error: null,
+                    msg: "User was not found in the unverified users collection.",
+                    data: null
+                });
+            }
+        }
+    });
+};
+
+
+/*  
+    Post Function, to resend a verification email to the user.
+    Takes:
+        body{  
+            email 
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/user/resendVerification'
+*/
+module.exports.resendVerification = function (req, res) {
+
+    //validate email
+    req.checkBody('email', 'Email is required.').notEmpty();
+    req.checkBody('email', 'Enter a valid Email.').isEmail();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: null,
+            data: null
+        });
+    } else {
+        req.body.email = req.body.email.trim();
+        var email = req.body.email;
+
+        TempUser.findOne({
+            email: email
+        }, function (err, tempUser) {
+            if (err) {
+                res.status(500).json({
+                    error: err,
+                    msg: null,
+                    data: null
+                });
+            } else {
+                if (tempUser) {
+                    //generate a token and assign it to the temp user, expires in 24 hrs
+                    var token = randtoken.generate(48);
+                    tempUser.verificationToken = token;
+                    tempUser.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
+                    tempUser.save(function (err) {
+                        if (err) {
+                            res.status(500).json({
+                                error: err,
+                                msg: null,
+                                data: null
+                            });
+                        } else {
+                            //TO-DO replace the link with the angular route not server route.
+                            var html = "<p>Hello " + tempUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/api/user/verifyAccount/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/api/user/verifyAccount/" + token + "</p>";
+                            var subject = 'Account Verification';
+                            emailSender.sendEmail(subject, email, "", html, function (err, info) {
+                                if (err) res.status(500).json({
+                                    error: err,
+                                    msg: 'We could not send the verification email, resend it.',
+                                    data: null
+                                });
+                                else
+                                    res.status(200).json({
+                                        error: null,
+                                        msg: "An Email was sent successfully to " + email + ", check your inbox.",
+                                        data: null
+                                    });
+                            });
+                        }
+                    });
+                } else {
+                    res.status(404).json({
+                        error: null,
+                        msg: "The email you provided was not used for registration to the website, or the account which is associated to it, has already been verified.",
+                        data: null
+                    });
+                }
+            }
+        });
+    }
 };

@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 
-function toLower(str) {
-    return str.toLowerCase();
-}
-
-
 const businessSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -15,7 +10,7 @@ const businessSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        set: toLower,
+        lowercase: true,
         unique: true
     },
     password: {
@@ -41,7 +36,7 @@ const businessSchema = new mongoose.Schema({
     },
     location: {
         address: String,
-        city : String,
+        city: String,
         // Always store coordinates longitude (East/West), latitude (North/South) order.
         coordinates: {
             type: [Number],
@@ -96,27 +91,31 @@ const businessSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    createdAt: {
+		type: Date,
+		default: Date.now
+	},
     resetPasswordToken: String,
     resetPasswordTokenExpiry: Date
 });
 
 
 //Helper function to compare encrypted paswords
-businessSchema.statics.comparePassword = function(candidatePassword, hash, callback) {
-    bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+businessSchema.statics.comparePassword = function (candidatePassword, hash, callback) {
+    bcrypt.compare(candidatePassword, hash, function (err, isMatch) {
         callback(err, isMatch);
     });
 };
 
 
 //Helper function to get a business by its id
-businessSchema.statics.getBusinessById = function(id, callback) {
+businessSchema.statics.getBusinessById = function (id, callback) {
     this.findById(id, callback);
 };
 
 
 //Helper function to get a business by its email
-businessSchema.statics.getBusinessByEmail = function(email, callback) {
+businessSchema.statics.getBusinessByEmail = function (email, callback) {
     var query = {
         email: email
     };

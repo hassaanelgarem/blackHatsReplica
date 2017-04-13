@@ -20,100 +20,6 @@ const uploadBusinessLogo = multer({
 }).single('myfile');
 
 
-/*Put function, to save the choosen tags by the business in the database .
-  Calling route: '/api/business/addTags' */
-module.exports.addTags = function(req, res) {
-    Business.findOne({
-        _id: req.user._id
-    }, function(err, business) {
-        //if error occured
-        if (err) {
-            res.json(err);
-        } else {
-            // if business found
-            if (business) {
-                req.checkBody('tags', 'Tags is required.').notEmpty();
-                var errors = req.validationErrors();
-
-                if (errors) {
-                    res.json({
-                        success: false,
-                        msg: "Problem with submitted fields",
-                        errors: errors
-                    });
-                } else {
-                    var array = req.body.tags.split(",");
-                    for (var i = 0; i < array.length; i++) {
-                        business.tags.push(array[i]);
-                    }
-
-                    /*save the choosen tags in the database
-                    and return the updated object to frontend.
-                    */
-                    business.save(function(err) {
-                        if (err) {
-                            res.json(err);
-                        } else {
-                            res.json(business);
-                        }
-                    });
-                }
-            }
-            //business not found
-            else
-                res.json({
-                    error: "Business not found!"
-                });
-        }
-    });
-}
-
-
-/*Put function, to save the choosen Category by the business in the database .
-  business can choose only 1 Category
-  Calling route: '/api/business/addCategory' */
-module.exports.addCategory = function(req, res) {
-    Business.findOne({
-        _id: req.user._id
-    }, function(err, business) {
-        //if error occured
-        if (err) {
-            res.json(err);
-        } else {
-            // if business found
-            if (business) {
-                req.checkBody('category', 'Category is required.').notEmpty();
-                var errors = req.validationErrors();
-
-                if (errors) {
-                    res.json({
-                        success: false,
-                        msg: "Problem with submitted fields",
-                        errors: errors
-                    });
-                } else {
-                    business.category = req.body.category;
-
-                    business.save(function(err) {
-                        if (err) {
-                            res.json(err);
-                        } else {
-                            res.json(business);
-                        }
-                    });
-                }
-            }
-
-            //business not found
-            else
-                res.json({
-                    error: "Business not found!"
-                });
-        }
-    });
-};
-
-
 /*
 Post function, to Upload photo using multer
 and store the uploaded image path in the Business
@@ -259,7 +165,7 @@ module.exports.addBusiness = function(req, res) {
 
     //Validating inputs
     req.checkBody('name', 'Your business name is required.').notEmpty();
-    req.checkBody('password', 'password is required.').notEmpty();
+    req.checkBody('password', 'Password is required.').notEmpty();
     req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
     req.checkBody('email', 'Email is required.').notEmpty();
     req.checkBody('email', 'Email format is not correct.').isEmail();
@@ -438,19 +344,29 @@ module.exports.getMostPopular = function(req, res) {
 };
 
 
-/*
-Post function to Upload Logo using multer
-and store the uploaded image path in the Business
-model in photos array, and return the
-filepath to the frontend to show the image.
-Calling route: '/api/business/addLogo'
+/*  
+    Post function, to Upload Logo using multer
+    and store the uploaded image path in the Business
+    model in photos array, and return the
+    filepath to the frontend to show the image.    
+    Takes: 
+        body{
+            myfile: the image to be uploaded
+        }
+    Returns: Success along with image path or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/business/addLogo'
 */
 module.exports.uploadLogo = function(req, res) {
     //upload the image
     uploadBusinessLogo(req, res, function(err) {
         //if an error occurred, return the error
         if (err) {
-            return res.json(err);
+            return res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
         }
         /*if multer found a file selected
         and image was uploaded successfully,
@@ -462,35 +378,38 @@ module.exports.uploadLogo = function(req, res) {
             //if it was jpeg add a "j" to the returned "peg"
             if (string === "peg")
                 string = "j" + string;
-
+            string = string.toLowerCase();
             //check if it is not a valid image format
             if (!(string === "png" || string === "jpg" || string === "jpeg")) {
                 //delete the uploaded file
                 fs.unlink(req.file.path);
 
                 //return the error message to frontend
-                return res.json({
-                    error: "File format is not supported!"
+                return res.status(500).json({
+                    error: null,
+                    msg: 'File format is not supported.',
+                    data: null
                 });
             }
             //copy and rename the image to the following format and location
-            var newPath = path.join(__dirname, "../", "../public/uploads/businessLogos/img" + Date.now() + "." + string);
-            fs.renameSync(req.file.path, newPath, function(err) {
+            var newPath = path.join(__dirname, "../", "../public/uploads/businessLogos/" + req.file.filename + "." + string);
+            fs.renameSync(req.file.path, newPath, function (err) {
+
                 if (err) throw err;
 
                 //delete the image with the old name
                 fs.unlink(req.file.path);
             });
 
-            //get the name part only from the uploaded image
-            var nameLength = ("img" + Date.now() + string).length + 1;
-            newPath = newPath.substring(newPath.length - nameLength);
-
             //save the image file path to the Business model
             Business.findById(req.user._id, function(err, business) {
                 //if an error occurred, return the error
                 if (err)
-                    res.json(err);
+                    res.status(500).json({
+                        error: err,
+                        msg: null,
+                        data: null
+                    });
                 else {
                     //if found business
                     if (business) {
@@ -498,11 +417,15 @@ module.exports.uploadLogo = function(req, res) {
                         if (business.logo) {
                             var oldLogo = path.join(__dirname, "../", "../public/uploads/businessLogos/", business.logo);
                         }
-                        business.logo = newPath;
-                        business.save(function(err) {
+                        business.logo = req.file.filename + "." + string;
+                        business.save(function (err) {
                             //couldn't save, return the error
                             if (err) {
-                                res.json(err);
+                                res.status(500).json({
+                                    error: err,
+                                    msg: null,
+                                    data: null
+                                });
                             } else {
                                 //if he had a logo before
                                 if (oldLogo) {
@@ -512,144 +435,226 @@ module.exports.uploadLogo = function(req, res) {
                                     });
                                 }
                                 //return the file path to the frontend to show the image
-                                res.json(newPath);
+                                res.status(200).json({
+                                    error: null,
+                                    msg: 'Logo was updated successfully.',
+                                    data: business.logo
+                                });
                             }
                         });
                     } else
-                        res.json({
-                            error: "No business found"
+                        res.status(404).json({
+                            error: null,
+                            msg: 'Business not found.',
+                            data: null
                         });
                 }
             });
         }
         //multer did not find a file selected to upload
         else {
-            res.json({
-                error: "Choose a valid file"
+            res.status(500).json({
+                error: null,
+                msg: 'Please choose a valid file.',
+                data: null
             });
         }
     });
 };
 
 
-/* Get function that gets the current data of the business
-and pass business object to the frontend to display it.
- Returns: Succes or failure message along with error if any
- and the business object of the requested business.
- Redirects to: Nothing.
-Calling route: '/api/business/:businessId/getInfo' */
-module.exports.getCurrentInfo = function(req, res) {
-    //check if logged in
-    Business.findOne({
-        _id: req.params.businessId
-    }, function(err, business) {
+/*  
+    Get function, that gets the current data of the business
+    and pass business object to the frontend to display it.    Takes:
+    Takes:    
+        params{  
+            businessId
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/business/:businessId/getInfo'
+*/
+module.exports.getCurrentInfo = function (req, res) {
+    //select all fields except password
+    Business.findById(req.params.businessId).select('-password').exec(function (err, business) {
         //if error occured
         if (err) {
             res.status(500).json({
-                "error": err,
-                "msg": "Error finding business.",
-                "data": null
+                error: err,
+                msg: null,
+                data: null
+
             });
         } else {
-            // if business found
             if (business)
                 res.status(200).json({
-                    "error": null,
-                    "msg": "Business found.",
-                    "data": business
+                    error: null,
+                    msg: null,
+                    data: business
                 });
 
-            //business not found
             else
                 res.status(404).json({
-                    "error": null,
-                    "msg": "Business not found!",
-                    "data": null
+                    error: null,
+                    msg: 'Business not found.',
+                    data: null
                 });
         }
     });
 };
 
 
-/* Put function to save the edited business info in the database
-and returns updated object to frontend.
-Calling route: '/api/business/editInfo'  */
-module.exports.saveNewInfo = function(req, res) {
+/*  
+    Put Function, to save the edited business info in the database.
+    Takes:
+        body{  
+            name,
+            description,
+            tags,
+            category,
+            paymentRequired,
+            phoneNumbers,
+            workingDays
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/business/editInfo'
+*/
+module.exports.saveNewInfo = function (req, res) {
 
-    Business.findOne({
-        _id: req.user._id
-    }, function(err, business) {
-        //if an error occurred, return the error
+    //security checks to disable editing sensitive info
+    delete req.body.email;
+    delete req.body._id;
+    delete req.body.password;
+    delete req.body.verified;
+    delete req.body.createdAt;
+    delete req.body.interactivity;
+    delete req.body.totalRatings;
+    delete req.body.reviews;
+    delete req.body.activities;
+    delete req.body.logo;
+    //pass in the non null values in req.body to modify it only
+    Business.findByIdAndUpdate(req.user._id, req.body, function (err, business) {
         if (err) {
-            res.json(err);
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
         } else {
-            // if business found in database its basic info will be saved
             if (business) {
-                //Validating inputs
-                req.checkBody('name', 'Your business name is required.').notEmpty();
-                req.checkBody('phoneNumbers', 'Phone Number is required.');
-                req.checkBody('email', 'Email is required.').notEmpty();
-                req.checkBody('email', 'Email format is not correct.').isEmail();
-                req.checkBody('description', 'A brief description of your business is necessary to apply.').notEmpty();
-
-                var errors = req.validationErrors();
-                if (errors) {
-                    res.json({
-                        success: false,
-                        msg: "Problem with submitted fields",
-                        errors: errors
-                    });
-                } else {
-                    // Required fields
-                    business.name = req.body.name;
-                    business.email = req.body.email;
-                    business.phoneNumbers = req.body.phoneNumbers;
-                    business.description = req.body.description;
-
-                    // Not Required fields
-                    if (req.body.workingDays) {
-                        //Split workDays by "," to return an array of strings
-                        business.workingDays = req.body.workingDays.split(",");
-                    }
-                    if (req.body.from && req.body.to) {
-                        business.workingHours = {
-                            from: req.body.from,
-                            to: req.body.to
-                        };
-                    }
-
-                    var coordinates = [];
-                    if (req.body.coordinates) {
-                        coordinates = req.body.coordinates.split(",");
-                        coordinates[0] = parseFloat(coordinates[0]);
-                        coordinates[1] = parseFloat(coordinates[1]);
-                    }
-                    business.location = {
-                        address: req.body.address,
-                        coordinates: coordinates
-                    };
-                    if (req.body.paymentRequired) {
-                        business.paymentRequired = parseInt(req.body.paymentRequired);
-                    }
-                    if (req.body.deposit) {
-                        business.deposit = parseFloat(req.body.deposit);
-                    }
-
-                    business.save(function(err) {
-                        if (err) {
-                            res.json(err);
-                        } else {
-                            res.json(business);
-                        }
-                    });
-                }
-            }
-            //if business not found return this message to frontend
-            else {
-                res.json({
-                    error: "Business not found!"
+                res.status(201).json({
+                    error: null,
+                    msg: 'Business edited successfully.',
+                    data: null
                 });
-            }
+            } else
+                res.status(404).json({
+                    error: null,
+                    msg: 'Business not found.',
+                    data: null
+                });
         }
     });
+};
+
+
+/*  
+    Put Function, to change the password of the business.
+    Takes:
+        body{  
+            oldPassword,
+            password,
+            confirmPassword 
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.    
+    Calling Route: '/api/business/changePassword'
+*/
+module.exports.changePassword = function (req, res) {
+    var oldPassword = req.body.oldPassword;
+    var password = req.body.password;
+    var confirmPassword = req.body.confirmPassword;
+
+    req.checkBody('oldPassword', 'Old Password is required.').notEmpty();
+    req.checkBody('password', 'Password is required.').notEmpty();
+    req.checkBody('password', 'Password must be at least 8 characters.').isAlphanumeric();
+    req.checkBody('password', 'Password must be at least 8 characters.').len(8);
+    req.checkBody('confirmPassword', 'Passwords do not match.').equals(password);
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: null,
+            data: null
+        });
+    } else {
+        Business.findById(req.user._id, function (err, business) {
+            if (err)
+                res.status(500).json({
+                    error: err,
+                    msg: null,
+                    data: null
+                });
+            else {
+                if (business) {
+                    //check that the old password is correct
+                    Business.comparePassword(oldPassword, business.password, function (err, isMatched) {
+                        if (err)
+                            res.status(500).json({
+                                error: err,
+                                msg: null,
+                                data: null
+                            });
+                        else {
+                            //hash and save the new password
+                            if (isMatched) {
+                                //check on username ignoring case
+                                var regex = new RegExp('^' + oldPassword.trim() + '$');
+                                if (regex.test(password.trim()))
+                                    return res.status(500).json({
+                                        error: null,
+                                        msg: 'You can not change your password to the currently existing one.',
+                                        data: null
+                                    });
+
+                                bcrypt.genSalt(10, function (err, salt) {
+                                    bcrypt.hash(password, salt, function (err, hash) {
+                                        business.password = hash;
+                                        business.save(function (err) {
+                                            if (err) {
+                                                res.status(500).json({
+                                                    error: err,
+                                                    msg: null,
+                                                    data: null
+                                                });
+                                            } else {
+                                                res.status(201).json({
+                                                    error: null,
+                                                    msg: 'Password was changed successfully.',
+                                                    data: null
+                                                });
+                                            }
+                                        });
+                                    });
+                                });
+                            } else
+                                res.status(500).json({
+                                    error: null,
+                                    msg: 'Your old password is not correct.',
+                                    data: null
+                                });
+                        }
+                    });
+                } else
+                    res.status(404).json({
+                        error: null,
+                        msg: 'Business not found.',
+                        data: null
+                    });
+            }
+        });
+    }
 };

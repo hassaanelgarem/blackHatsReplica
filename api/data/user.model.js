@@ -1,10 +1,5 @@
 const mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
-
-
-function toLower(str) {
-	return str.toLowerCase();
-}
+const bcrypt = require('bcryptjs');
 
 
 const userSchema = new mongoose.Schema({
@@ -19,13 +14,13 @@ const userSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
-		set: toLower,
+		lowercase: true,
 		unique: true
 	},
 	username: {
 		type: String,
 		required: true,
-		set: toLower,
+		lowercase: true,
 		unique: true
 	},
 	password: {
@@ -50,6 +45,14 @@ const userSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Booking"
 	}],
+	admin: {
+		type: Boolean,
+		default: false
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now
+	},
 	resetPasswordToken: String,
 	resetPasswordTokenExpiry: Date
 });
@@ -91,7 +94,7 @@ userSchema.statics.getUserById = function (id, callback) {
 };
 
 
-userSchema.statics.comparePassword = function (candidatePassword, hash, callback){
+userSchema.statics.comparePassword = function (candidatePassword, hash, callback) {
 	bcrypt.compare(candidatePassword, hash, function (err, isMatch) {
 		callback(err, isMatch);
 	});

@@ -41,5 +41,7 @@ require("./activity.model");
 require("./booking.model");
 require("./review.model");
 require("./user.model");
+require("./tempUser.model");
 require("./advBooking.model");
 require("./advSlot.model");
+require("./supportRequest.model");

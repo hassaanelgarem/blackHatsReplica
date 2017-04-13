@@ -10,6 +10,8 @@ const businessCtrl = require('../controllers/business.controller');
 const profileCtrl = require('../controllers/profile.controller.js');
 const advCtrl = require('../controllers/advertisement.controller');
 const adminCtrl = require('../controllers/admin.controller');
+const passwordCtrl = require('../controllers/resetPassword.controller');
+const supportCtrl = require('../controllers/support.controller');
 const imagesCtrl = require("../controllers/images.controller");
 
 
@@ -30,7 +32,15 @@ module.exports = function(passportConfig) {
 
     //Not logged in only routes
     router.route('/user/login').post(passportConfig.isNotLoggedIn, authenticateUser);
+    router.route('/user/register').post(passportConfig.isNotLoggedIn, userCtrl.registerUser);
     router.route('/business/login').post(passportConfig.isNotLoggedIn, authenticateBusiness);
+    router.route('/user/verifyAccount/:token').get(passportConfig.isNotLoggedIn, userCtrl.checkVerificationToken);
+    router.route('/user/verifyAccount/:userId').post(passportConfig.isNotLoggedIn, userCtrl.confirmVerification);
+    router.route('/user/resendVerification').post(passportConfig.isNotLoggedIn, userCtrl.resendVerification);
+    router.route('/resetPassword/:token').get(passportConfig.isNotLoggedIn, passwordCtrl.checkResetPasswordToken);
+    router.route('/resetPassword/:id').put(passportConfig.isNotLoggedIn, passwordCtrl.resetPassword);
+    router.route('/forgotPassword').post(passportConfig.isNotLoggedIn, passwordCtrl.forgotPassword);
+    router.route('/contactSupport').post(passportConfig.isNotLoggedIn, supportCtrl.addRequest);
 
 
     //Available to all routes
@@ -40,7 +50,6 @@ module.exports = function(passportConfig) {
     router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
     router.route('/business/unVerifiedBusinesses').get(businessCtrl.unVerifiedBusinesses);
     router.route('/business/apply').post(businessCtrl.addBusiness);
-    router.route('/user/register').post(userCtrl.registerUser);
     router.route('/user/profile/:userId').get(profileCtrl.getOneUser);
     router.route('/review/user/:userId').get(reviewCtrl.getUserReviews);
     router.route('/review/averageRating/:businessId').get(reviewCtrl.getAverageRating);
@@ -57,10 +66,10 @@ module.exports = function(passportConfig) {
 
     //Available to logged in only routes
 
+
     //Business routes
-    router.route('/business/addTags').put(passportConfig.isBusinessLoggedIn, businessCtrl.addTags);
-    router.route('/business/addCategory').put(passportConfig.isBusinessLoggedIn, businessCtrl.addCategory);
     router.route('/business/editInfo').put(passportConfig.isBusinessLoggedIn, businessCtrl.saveNewInfo);
+    router.route('/business/changePassword').put(passportConfig.isBusinessLoggedIn, businessCtrl.changePassword);
     router.route('/business/addPhoto').post(passportConfig.isBusinessLoggedIn, businessCtrl.addPhoto);
     router.route('/business/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, businessCtrl.deletePhoto);
     router.route('/business/addLogo').post(passportConfig.isBusinessLoggedIn, businessCtrl.uploadLogo);
@@ -75,13 +84,21 @@ module.exports = function(passportConfig) {
 
 
     //Admin routes
-    router.route('/admin/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
-    router.route('/admin/delete/:businessId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteBusiness);
+    router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
+    router.route('/admin/business/delete/:businessId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteBusiness);
+    router.route('/admin/business/recoverAccount/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
+    router.route('/admin/makeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.makeAdmin);
+    router.route('/admin/removeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.removeAdmin);
+    router.route('/admin/user/delete/:userId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteUser);
+    router.route('/admin/support/user/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverUser);
+    router.route('/admin/support/business/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
+    router.route('/admin/support/deleteRequest/:requestId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteSupportRequest);
 
 
     //User routes
     router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);
     router.route('/user/profile/editInfo').put(passportConfig.isUserLoggedIn, profileCtrl.updateOneUser);
+    router.route('/user/changePassword').put(passportConfig.isUserLoggedIn, userCtrl.changePassword);
     router.route('/user/profile/uploadProfilePicture').post(passportConfig.isUserLoggedIn, profileCtrl.uploadProfilePicture);
     router.route('/user/deleteAccount').delete(passportConfig.isUserLoggedIn, userCtrl.deleteAccount);
     router.route('/user/addFavorite/:businessId').put(passportConfig.isUserLoggedIn, userCtrl.addFavorite);
