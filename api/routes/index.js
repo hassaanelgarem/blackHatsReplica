@@ -15,7 +15,7 @@ const supportCtrl = require('../controllers/support.controller');
 const imagesCtrl = require("../controllers/images.controller");
 
 
-module.exports = function(passportConfig) {
+module.exports = function (passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/',
         failureRedirect: '/api/login',
@@ -48,7 +48,6 @@ module.exports = function(passportConfig) {
     router.route('/business/:businessId/interact').put(businessCtrl.updateInteractivity);
     router.route('/business/:businessId/getInfo').get(businessCtrl.getCurrentInfo);
     router.route('/business/mostPopular').get(businessCtrl.getMostPopular);
-    router.route('/business/unVerifiedBusinesses').get(businessCtrl.unVerifiedBusinesses);
     router.route('/business/apply').post(businessCtrl.addBusiness);
     router.route('/user/profile/:userId').get(profileCtrl.getOneUser);
     router.route('/review/user/:userId').get(reviewCtrl.getUserReviews);
@@ -57,7 +56,6 @@ module.exports = function(passportConfig) {
     router.route('/activity/:businessId').get(activityCtrl.getActivities);
     router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
     router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
-    router.route('/advertisement/addAdvSlots').post(advCtrl.addAdvSlots);
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
@@ -87,13 +85,14 @@ module.exports = function(passportConfig) {
     router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
     router.route('/admin/business/delete/:businessId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteBusiness);
     router.route('/admin/business/recoverAccount/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
+    router.route('/admin/business/unVerifiedBusinesses').get(passportConfig.isAdminLoggedIn, adminCtrl.unVerifiedBusinesses);
     router.route('/admin/makeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.makeAdmin);
     router.route('/admin/removeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.removeAdmin);
     router.route('/admin/user/delete/:userId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteUser);
     router.route('/admin/support/user/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverUser);
     router.route('/admin/support/business/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
     router.route('/admin/support/deleteRequest/:requestId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteSupportRequest);
-
+    router.route('/admin/advertisement/addAdvSlots').post(passportConfig.isAdminLoggedIn, adminCtrl.addAdvSlots);
 
     //User routes
     router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);
