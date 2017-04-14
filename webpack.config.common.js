@@ -1,4 +1,4 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
 
 module.exports = {
     entry: {
@@ -21,7 +21,7 @@ module.exports = {
                 loader: 'html-loader'
             },
             {
-                test : /.css$/,
+                test : /\.css$/,
                 loader : 'raw-loader'
             }
 
