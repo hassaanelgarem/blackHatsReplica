@@ -13,6 +13,7 @@ const http_1 = require("@angular/http");
 const app_routing_1 = require("./app.routing");
 const app_component_1 = require("./app.component");
 const dummy_component_1 = require("./dummy/dummy.component");
+const business_component_1 = require("./business/business.component");
 const dummy_service_1 = require("./dummy/dummy.service");
 let AppModule = class AppModule {
 };
@@ -20,7 +21,8 @@ AppModule = __decorate([
     core_1.NgModule({
         declarations: [
             app_component_1.AppComponent,
-            dummy_component_1.DummyComponent
+            dummy_component_1.DummyComponent,
+            business_component_1.BusinessComponent
         ],
         imports: [
             platform_browser_1.BrowserModule,

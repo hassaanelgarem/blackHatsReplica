@@ -7,13 +7,15 @@ import { routing } from "./app.routing";
 
 import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
+import { BusinessComponent } from "./business/business.component";
 
 import { DummyService } from "./dummy/dummy.service";
 
 @NgModule({
     declarations : [
       AppComponent,
-      DummyComponent
+      DummyComponent,
+      BusinessComponent
     ],
     imports: [
       BrowserModule,
