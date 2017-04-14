@@ -7,16 +7,16 @@ import { routing } from "./app.routing";
 
 import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
-import { BusinessComponent } from "./business/business.component";
+import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 
 import { DummyService } from "./dummy/dummy.service";
-import { BusinessService } from "./business/business.service";
+import { BusinessService } from "./businessEdit/business.service";
 
 @NgModule({
     declarations : [
       AppComponent,
       DummyComponent,
-      BusinessComponent
+      BusinessEditComponent
     ],
     imports: [
       BrowserModule,

@@ -1,10 +1,10 @@
 import { Routes, RouterModule } from "@angular/router";
 
 import { DummyComponent } from "./dummy/dummy.component";
-import { BusinessComponent } from "./business/business.component";
+import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 
 const APP_ROUTES: Routes = [
-    { path: 'business', component: BusinessComponent },
+    { path: 'business', component: BusinessEditComponent },
     { path: 'dummy', component: DummyComponent }
 ];
 
