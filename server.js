@@ -21,7 +21,7 @@ app.enable('trust proxy')
 
 app.use(cors());
 
-// app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 
 // ORDER OF THE MIDDLEWARE IS CRITICAL
@@ -73,22 +73,15 @@ const routes = require("./api/routes")(passportConfig);
 
 app.use("/api", routes);
 
-app.get('/', (req, res) => {
-	res.status(200).json({
-    error: null,
-    msg: 'Redirected to Home.',
-    data: null
-  });
-});
+// Index Route
+app.get('/', (req, res) =>{
+	res.send('Invalid EndPoint');
+})
 
-// Ignore all http requests on unknown routes
-app.all('*', (req, res) => {
-	res.status(404).json({
-    error: null,
-    msg: 'TO-DO: Redirect on a page not found view.',
-    data: null
-  });
-});
+
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public/index.html'));
+})
 
 
 // Start Server
