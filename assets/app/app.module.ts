@@ -10,6 +10,7 @@ import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessComponent } from "./business/business.component";
 
 import { DummyService } from "./dummy/dummy.service";
+import { BusinessService } from "./business/business.service";
 
 @NgModule({
     declarations : [
@@ -23,7 +24,7 @@ import { DummyService } from "./dummy/dummy.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService],
+    providers: [DummyService, BusinessService],
     bootstrap : [AppComponent]
 })
 

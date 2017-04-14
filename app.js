@@ -26,7 +26,6 @@ app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(cors());
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -64,7 +63,7 @@ app.use(expressValidator({
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors());
 //pass passportConfiguration to routes for login and return the routes
 const routes = require("./api/routes")(passportConfig);
 app.use("/api", routes);
