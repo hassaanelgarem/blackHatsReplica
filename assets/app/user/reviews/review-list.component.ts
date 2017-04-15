@@ -20,6 +20,7 @@ export class ReviewListComponent implements OnInit {
 
     ngOnInit() {
         this.reviewService.getReviews()
+        //we need to subscribe to the reviewservice:
             .subscribe(
                 (reviews: Review[]) => {
                     this.reviews = reviews;
