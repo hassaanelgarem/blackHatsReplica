@@ -9,8 +9,11 @@ import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessComponent } from "./business/business.component";
 import { UserComponent } from "./user/user.component";
-import { HeaderComponent } from "./header.component"; 
-
+import { UserHeaderComponent } from "./user/header.component"; 
+import { ReviewsComponent } from "./user/reviews/reviews.component";
+import { ReviewListComponent } from "./user/reviews/review-list.component";
+import { ReviewComponent } from "./user/reviews/review.component"; 
+import { ReviewService } from "./user//reviews/review.service";
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./business/business.service";
 import { UserService } from "./user/user.service";
@@ -18,10 +21,18 @@ import { UserService } from "./user/user.service";
 @NgModule({
     declarations : [
       AppComponent,
-      HeaderComponent,
+      UserHeaderComponent,
       DummyComponent,
       BusinessComponent,
-      UserComponent
+      UserComponent,
+      ReviewsComponent,
+      ReviewListComponent,
+      ReviewComponent,
+      ReviewService,
+      DummyService,
+      BusinessService,
+      UserService
+
     ],
     imports: [
       BrowserModule,
@@ -29,7 +40,7 @@ import { UserService } from "./user/user.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService,UserService],
+    providers: [DummyService, BusinessService,UserService,ReviewService],
     bootstrap : [AppComponent]
 })
 

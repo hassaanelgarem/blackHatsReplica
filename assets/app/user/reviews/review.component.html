@@ -1,0 +1,15 @@
+<article class="panel panel-default">
+    <div class="panel-body">
+        {{ review.comment }} {{review.time}}
+    </div>
+    <footer class="panel-footer">
+        <div class="business">
+            {{ message.businessId }}
+        </div>
+
+        <div class="config">
+            <a (click)="onEdit()">Edit</a>
+            <a (click)="onDelete()">Delete</a>
+        </div>
+    </footer>
+</article>
