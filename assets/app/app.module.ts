@@ -17,6 +17,8 @@ import { RegisterComponent} from "./user/register/register.component";
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./business/business.service";
 import { HomepageService } from "./homepage/homepage.service";
+import { AppService } from "./app.service";
+
 
 
 
@@ -36,7 +38,7 @@ import { HomepageService } from "./homepage/homepage.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService,HomepageService],
+    providers: [DummyService, BusinessService,HomepageService,AppService],
     bootstrap : [AppComponent]
 })
 
