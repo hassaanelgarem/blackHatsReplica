@@ -1,5 +1,11 @@
 <head>
 
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
 	<!-- Fav and Touch Icons -->
 	<link rel="apple-touch-icon" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
@@ -18,6 +24,20 @@
 	<!-- Add your style -->
 	<link href="css/your-style.css" rel="stylesheet">
 
+	<!-- Core JS -->
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/core-plugins.js"></script>
+	<script type="text/javascript" src="js/customs.js"></script>
+
+	<!-- Detail Page JS -->
+	<script type="text/javascript" src="js/jquery.stickit.js"></script>
+	<script type="text/javascript" src="js/bootstrap-tokenfield.js"></script>
+	<script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
+	<script type="text/javascript" src="js/jquery.sumogallery.js"></script>
+	<script type="text/javascript" src="js/images-grid.js"></script>
+	<script type="text/javascript" src="js/jquery.bootstrap-touchspin.js"></script>
+	<script type="text/javascript" src="js/customs-detail.js"></script>
+	<script type="text/javascript" src="js/customs-result.js"></script>
 </head>
 
 
@@ -38,13 +58,12 @@
 
   									<ul class="common-menu-list">
 
-  										<li [class.active]="showDashboard"><a (click)="onDashboardClick()">Dashboard</a></li>
-  										<li [class.active]="showOther"><a (click)="onOtherClick()">Other</a></li>
-  										<li><a href="guide-detail-setting-guide-information.html">Guide Information</a></li>
-  										<li><a href="guide-detail-setting-change-pass.html">Change password</a></li>
-  										<li><a href="guide-detail-setting-my-tour.html">My tour</a></li>
-  										<li><a href="guide-detail-setting-my-wihslist.html">My wihslist</a></li>
-  										<li><a href="#">Logout</a></li>
+  										<li [class.active]="showActivities"><a (click)="onActivitiesClick()">Activities</a></li>
+  										<li [class.active]="showPhotos"><a (click)="onPhotosClick()">Photos</a></li>
+  										<li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
+  										<li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+  										<li [class.active]="showEdit"><a (click)="onEditClick()">Edit</a></li>
+  										<li [class.active]="showAds"><a (click)="onAdsClick()">Advertisments</a></li>
 
   									</ul>
 
@@ -54,32 +73,28 @@
 
   						</div>
 
-  						<div *ngIf="showDashboard" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-
-  							<div class="dashboard-wrapper">
-
-  								<h4 class="section-title">Hello Kalvin</h4>
-  								<p class="mmt-15 mb-20">Your last loged-in: <span class="text-primary">11:42:21 am - March 15, 2016</span></p>
-
-  								<div class="admin-empty-dashboard">
-
-  									<div class="icon">
-  										<i class="ion-ios-book-outline"></i>
-  									</div>
-
-  									<h4>You have no any activities yet!</h4>
-
-  									<a href="#" class="btn btn-primary">Create Tour Offer</a>
-  									<a href="#" class="btn btn-primary">Browse Tour Offer</a>
-
-  								</div>
-
-  							</div>
-
+  						<div *ngIf="showActivities" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+								<h1>Activities</h1>
   						</div>
 
-              <div *ngIf="showOther" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <h1> OTHER SHIT </h1>
+              <div *ngIf="showPhotos" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                <h1> Photos </h1>
+              </div>
+
+							<div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                <app-business-reviews></app-business-reviews>
+              </div>
+
+							<div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                <h1> Booking </h1>
+              </div>
+
+							<div *ngIf="showEdit" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                <h1> Edit Page </h1>
+              </div>
+
+							<div *ngIf="showAds" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                <h1> Advertisments </h1>
               </div>
 
   					</div>
@@ -87,27 +102,5 @@
   				</div>
 
   			</div>
-
-        <!-- Core JS -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/core-plugins.js"></script>
-  <script type="text/javascript" src="js/customs.js"></script>
-
-  <!-- Detail Page JS -->
-  <script type="text/javascript" src="js/jquery.stickit.js"></script>
-  <script type="text/javascript" src="js/bootstrap-tokenfield.js"></script>
-  <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
-  <script type="text/javascript" src="js/jquery.sumogallery.js"></script>
-  <script type="text/javascript" src="js/images-grid.js"></script>
-  <script type="text/javascript" src="js/jquery.bootstrap-touchspin.js"></script>
-  <script type="text/javascript" src="js/customs-detail.js"></script>
-
-
-
-
-
-
-
-
 
 </body>

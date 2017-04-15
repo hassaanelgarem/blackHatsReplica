@@ -5,8 +5,10 @@
     "sourceMap": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "compileOnSave": false
   },
+  "compileOnSave": false,
   "exclude": [
     "node_modules",
     "public/js"

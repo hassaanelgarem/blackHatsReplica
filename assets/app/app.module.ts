@@ -3,11 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from "./app.routing";
+import {MomentModule} from 'angular2-moment';
 
 
 import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
+import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
@@ -16,13 +18,15 @@ import { BusinessService } from "./businessEdit/business.service";
     declarations : [
       AppComponent,
       DummyComponent,
-      BusinessEditComponent
+      BusinessEditComponent,
+      BusinessReviewsComponent
     ],
     imports: [
       BrowserModule,
       FormsModule,
       HttpModule,
-      routing
+      routing,
+      MomentModule
     ],
     providers: [DummyService, BusinessService],
     bootstrap : [AppComponent]

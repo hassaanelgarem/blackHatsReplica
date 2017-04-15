@@ -7,24 +7,70 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BusinessEditComponent implements OnInit {
 
-  public showDashboard = true;
-  public showOther = false;
+  public showActivities = true;
+  public showPhotos = false;
+  public showReviews = false;
+  public showBookings = false;
+  public showEdit = false;
+  public showAds = false;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  onDashboardClick(){
-    this.showDashboard = true;
-    this.showOther = false;
-    console.log("On Dashboard");
+  onActivitiesClick(){
+    this.showActivities = true;
+    this.showPhotos = false;
+    this.showReviews = false;
+    this.showBookings = false;
+    this.showEdit = false;
+    this.showAds = false;
   }
 
-  onOtherClick(){
-    this.showDashboard = false;
-    this.showOther = true;
-    console.log("On Other");
+  onPhotosClick(){
+    this.showActivities = false;
+    this.showPhotos = true;
+    this.showReviews = false;
+    this.showBookings = false;
+    this.showEdit = false;
+    this.showAds = false;
+  }
+
+  onReviewsClick(){
+    this.showActivities = false;
+    this.showPhotos = false;
+    this.showReviews = true;
+    this.showBookings = false;
+    this.showEdit = false;
+    this.showAds = false;
+  }
+
+  onBookingsClick(){
+    this.showActivities = false;
+    this.showPhotos = false;
+    this.showReviews = false;
+    this.showBookings = true;
+    this.showEdit = false;
+    this.showAds = false;
+  }
+
+  onEditClick(){
+    this.showActivities = false;
+    this.showPhotos = false;
+    this.showReviews = false;
+    this.showBookings = false;
+    this.showEdit = true;
+    this.showAds = false;
+  }
+
+  onAdsClick(){
+    this.showActivities = false;
+    this.showPhotos = false;
+    this.showReviews = false;
+    this.showBookings = false;
+    this.showEdit = false;
+    this.showAds = true;
   }
 
 }
