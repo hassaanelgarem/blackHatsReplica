@@ -9,11 +9,11 @@ import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessComponent } from "./business/business.component";
 import { UserComponent } from "./user/user.component";
-import { UserHeaderComponent } from "./user/header.component"; 
-import { ReviewsComponent } from "./user/reviews/reviews.component";
-import { ReviewListComponent } from "./user/reviews/review-list.component";
-import { ReviewComponent } from "./user/reviews/review.component"; 
-import { ReviewService } from "./user//reviews/review.service";
+import { HeaderComponent }from "./user/header.component";
+import { ReviewComponent } from "./user/reviews/review.component";
+import { FavouritesComponent } from "./user/favourites/favourites.component";
+
+
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./business/business.service";
 import { UserService } from "./user/user.service";
@@ -21,18 +21,12 @@ import { UserService } from "./user/user.service";
 @NgModule({
     declarations : [
       AppComponent,
-      UserHeaderComponent,
       DummyComponent,
       BusinessComponent,
       UserComponent,
-      ReviewsComponent,
-      ReviewListComponent,
+      HeaderComponent,
       ReviewComponent,
-      ReviewService,
-      DummyService,
-      BusinessService,
-      UserService
-
+      FavouritesComponent
     ],
     imports: [
       BrowserModule,
@@ -40,7 +34,7 @@ import { UserService } from "./user/user.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService,UserService,ReviewService],
+    providers: [DummyService, BusinessService,UserService],
     bootstrap : [AppComponent]
 })
 
