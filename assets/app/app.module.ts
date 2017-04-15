@@ -10,6 +10,8 @@ import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessComponent } from "./business/business.component";
 import { HomepageComponent} from "./homepage/homepage.component";
 import { NavComponent} from "./navigation/nav.component";
+import { LoginComponent} from "./user/login.component";
+import { RegisterComponent} from "./user/register.component";
 
 
 import { DummyService } from "./dummy/dummy.service";
@@ -24,7 +26,9 @@ import { HomepageService } from "./homepage/homepage.service";
       DummyComponent,
       BusinessComponent,
       HomepageComponent,
-      NavComponent
+      NavComponent,
+      LoginComponent,
+      RegisterComponent
     ],
     imports: [
       BrowserModule,
