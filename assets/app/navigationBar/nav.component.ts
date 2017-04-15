@@ -9,7 +9,7 @@ import { AppService } from '../app.service';
 export class NavComponent implements OnInit {
 
 //to check for this part later
-  loggedin;
+  private loggedin;
 
   constructor(private appService: AppService) { }
 
@@ -19,6 +19,6 @@ export class NavComponent implements OnInit {
 
   logout(){
     this.loggedin=this.appService.logout();
-  }
+    }
 
 }

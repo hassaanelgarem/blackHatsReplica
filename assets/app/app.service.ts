@@ -9,10 +9,18 @@ export class AppService {
   // to do from the database
   login(){
 
+      //should add here the linking to database function
+
+      this.isLoggedin=true;
+      return this.isLoggedin;
   }
 
   logout(){
+      
+      //should add here the linking to database function
 
+      this.isLoggedin=false;
+      return this.isLoggedin;
   }
 
   status(){
