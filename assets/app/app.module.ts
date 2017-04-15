@@ -8,15 +8,18 @@ import { routing } from "./app.routing";
 import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessComponent } from "./business/business.component";
+import { BusinessPageComponent } from "./businessPage/businessPage.component";
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./business/business.service";
+import { BusinessPageService } from "./businessPage/businessPage.service";
 
 @NgModule({
     declarations : [
       AppComponent,
       DummyComponent,
-      BusinessComponent
+      BusinessComponent,
+      BusinessPageComponent
     ],
     imports: [
       BrowserModule,
@@ -24,7 +27,7 @@ import { BusinessService } from "./business/business.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService],
+    providers: [DummyService, BusinessService, BusinessPageService],
     bootstrap : [AppComponent]
 })
 

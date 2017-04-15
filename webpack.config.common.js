@@ -21,9 +21,16 @@ module.exports = {
                 loader: 'html-loader'
             },
             {
-                test : /\.css$/,
-                loader : 'raw-loader'
-            }
+                test: /\.css$/,
+                loader: 'raw-loader'
+            },
+            /*
+             * File loader for supporting images, for example, in CSS files.
+             */
+            {
+                test: /\.(jpg|png|gif)$/,
+                use: 'file-loader'
+            },
 
 
         ]
@@ -33,6 +40,11 @@ module.exports = {
             // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             './src' // location of your src
-        )
+        ),
+        new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+            $: 'jquery',
+            jquery: 'jquery'
+        })
     ]
 };
