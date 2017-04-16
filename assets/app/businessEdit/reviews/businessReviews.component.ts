@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class BusinessReviewsComponent implements OnInit {
     count: Number = 15;
     reviews: [Object];
-    businessId: String = "58e8fbfdf376d034c5cdbc09";
+    businessId: String = "58ed7913b3f3c31400258d66";
     averageString: String;
 
     constructor(

@@ -10,16 +10,21 @@ import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
+import { UserComponent } from "./user/user.component"
+import { UserBookingsComponent } from "./user/Bookings/userBookings.component"
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
+import { UserService } from "./user/user.service";
 
 @NgModule({
     declarations : [
       AppComponent,
       DummyComponent,
       BusinessEditComponent,
-      BusinessReviewsComponent
+      BusinessReviewsComponent,
+      UserComponent,
+      UserBookingsComponent
     ],
     imports: [
       BrowserModule,
@@ -28,7 +33,7 @@ import { BusinessService } from "./businessEdit/business.service";
       routing,
       MomentModule
     ],
-    providers: [DummyService, BusinessService],
+    providers: [DummyService, BusinessService, UserService],
     bootstrap : [AppComponent]
 })
 
