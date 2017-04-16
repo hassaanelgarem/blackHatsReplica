@@ -7,22 +7,21 @@ import { Business } from './business.model';
 
 @Injectable()
 export class SearchService {
-  private businesses: Business[] = [];
+    private businesses: Business[] = [];
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) { }
 
-   getBusinesses(result:string) {
-       console.log(result);
+    getBusinesses(result: string) {
         //need to modify here to take more than one word
-        return this.http.get('http://localhost:8080/api/search?result='+ result)
-        //map method to transform the response
+        return this.http.get('http://localhost:8080/api/search?result=' + result)
+            //map method to transform the response
             .map((response: Response) => {
                 const businesses = response.json().data;
                 let transformedBusiness: Business[] = [];
                 for (let business of businesses) {
-                    transformedBusiness.push(new Business(business.name,business.email,business.phoneNumbers,business.workingDays,business.workingHours,
-                                            business.address,business.location,business.tags,business.category,business.description,business.interactivity,
-                                            business.totalRatings,business.photos,business.paymentRequired,business.deposit,business.logo));
+                    transformedBusiness.push(new Business(business.name, business.email, business.phoneNumbers, business.workingDays, business.workingHours,
+                        business.address, business.location, business.tags, business.category, business.description, business.interactivity,
+                        business.totalRatings, business.photos, business.paymentRequired, business.deposit, business.logo));
                 }
                 this.businesses = transformedBusiness;
                 return transformedBusiness;
@@ -30,7 +29,27 @@ export class SearchService {
             .catch((error: Response) => Observable.throw(error.json()));
     }
 
-    viewBusinesses(){
+    getBusinessesExplore(location:string,category:string) {
+                console.log(location,category);
+                console.log('http://localhost:8080/api/search?location=' +location+'&category='+category);
+                 return this.http.get('http://localhost:8080/api/search?location=' +location+'&category='+category)
+            //map method to transform the response
+            .map((response: Response) => {
+                const businesses = response.json().data;
+                let transformedBusiness: Business[] = [];
+                for (let business of businesses) {
+                    transformedBusiness.push(new Business(business.name, business.email, business.phoneNumbers, business.workingDays, business.workingHours,
+                        business.address, business.location, business.tags, business.category, business.description, business.interactivity,
+                        business.totalRatings, business.photos, business.paymentRequired, business.deposit, business.logo));
+                }
+                this.businesses = transformedBusiness;
+                console.log(this.businesses);
+                return transformedBusiness;
+            })
+            .catch((error: Response) => Observable.throw(error.json()));
+    }
+
+    viewBusinesses() {
         return this.businesses;
     }
 

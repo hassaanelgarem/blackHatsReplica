@@ -8,7 +8,8 @@ import { Business } from './business.model';
 
 @Component({
   selector: 'homepage-search',
-  templateUrl: './search.component.html'
+  templateUrl: './search.component.html',
+  styleUrls :['./search.component.css']
 })
 export class SearchComponent implements OnInit {
 
@@ -24,6 +25,18 @@ export class SearchComponent implements OnInit {
       (business: Business[]) => {
         
         console.log(business)
+        this.router.navigate(['viewBusinessesSearch']);
+      });
+  }
+
+   exploreClicked(location: string,category:string) {
+    //i should render business page and then on init of the business should take the lead
+    this.searchService.getBusinessesExplore(location,category)
+      .subscribe(
+      (business: Business[]) => {
+        
+        console.log(business)
+        //to add here the location
         this.router.navigate(['viewBusinessesSearch']);
       });
   }

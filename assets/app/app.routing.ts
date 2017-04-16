@@ -7,6 +7,7 @@ import { NameOrTagComponent } from "./homepage/search/nameOrTagResult/result.com
 
 
 const APP_ROUTES: Routes = [
+    { path: '',redirectTo:'/homepage', pathMatch: 'full'},
     { path: 'homepage', component: HomepageComponent},
     { path: 'viewBusinessesSearch', component: NameOrTagComponent}
 
