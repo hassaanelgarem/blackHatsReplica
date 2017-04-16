@@ -1,27 +1,30 @@
 <!-- start hero-header -->
-			<div class="hero img-bg-01">
-				<div class="container">
+<div class="hero img-bg-01">
+	<div class="container">
 
-					<h1>Where do you want to go?</h1>
-					<p>Discover and book your unique travel experiences offered by local experts</p>
+		<h1>Where do you want to go?</h1>
+		<p>Discover and book your unique travel experiences offered by local experts</p>
 
-					<form>
-						<div class="form-group">
-							<input type="text" placeholder="eg: London, Paris, Rome" class="form-control flexdatalist" data-data="data/countries.json" data-search-in='["name","capital"]' data-visible-properties='["capital","name","continent"]' data-group-by="continent" data-selection-required="true" data-focus-first-result="true" data-min-length="1" data-value-property="iso2" data-text-property="{capital}, {name}" data-search-contain="false" name="countries" #result>
-							<button class="btn" (click)="searchClicked(result.value)"  [routerLink]="['/viewBusinessesSearch']"><i class="icon-magnifier"></i></button>
-						</div>
-					</form>
-					
-					<div class="top-search">
-						<span class="font700">Top Searches : </span>
-						<a href="#">Thailand</a>
-						<a href="#">Malaysia</a>
-						<a href="#">Japan</a>
-						<a href="#">Hong Kong</a>
-						<a href="#">Singapore</a>
-					</div>
-
-				</div>
-				
+		<form>
+			<div class="form-group">
+				<input type="text" placeholder="eg: London, Paris, Rome" class="form-control flexdatalist" data-data="data/countries.json"
+				    data-search-in='["name","capital"]' data-visible-properties='["capital","name","continent"]' data-group-by="continent"
+				    data-selection-required="true" data-focus-first-result="true" data-min-length="1" data-value-property="iso2" data-text-property="{capital}, {name}"
+				    data-search-contain="false" name="countries" #result>
+				<button class="btn" (click)="searchClicked(result.value)"><i class="icon-magnifier"></i></button>
 			</div>
+		</form>
+
+		<div class="top-search">
+			<span class="font700">Top Searches : </span>
+			<a href="#">Thailand</a>
+			<a href="#">Malaysia</a>
+			<a href="#">Japan</a>
+			<a href="#">Hong Kong</a>
+			<a href="#">Singapore</a>
+		</div>
+
+	</div>
+
+</div>
 <!-- end hero-header -->

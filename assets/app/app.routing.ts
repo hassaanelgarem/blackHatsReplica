@@ -1,10 +1,7 @@
 import { Routes, RouterModule } from "@angular/router";
-
-import { HomepageComponent } from "./homepage/homepage.component";
 import { NameOrTagComponent } from "./homepage/search/nameOrTagResult/result.component";
 
-
-
+import { HomepageComponent } from "./homepage/homepage.component";
 
 const APP_ROUTES: Routes = [
     { path: 'homepage', component: HomepageComponent},

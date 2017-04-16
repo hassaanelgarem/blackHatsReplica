@@ -5,18 +5,17 @@ import { Business } from '../business.model';
 
 
 @Component({
-    selector: 'homepage-business-result',
+    selector: 'homepage-search-result',
     templateUrl: './result.component.html'
 })
 export class NameOrTagComponent implements OnInit {
     private businesses: Business[] = [];
-
 
     constructor(private searchService: SearchService) { }
 
     ngOnInit() {
         this.businesses = this.searchService.viewBusinesses();
         console.log(this.businesses);
+        console.log('anahna');
     }
-
 }
