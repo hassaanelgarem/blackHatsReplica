@@ -5,9 +5,9 @@ import { Observable } from "rxjs";
 import { User } from "../user.model";
 
 @Injectable()
-export class registerService {
+export class RegisterService {
     constructor(private http: Http) { }
-    
+
     signUp(user: User) {
         const body = JSON.stringify(user);
         const headers = new Headers({ 'Content-Type': 'application/json' });
