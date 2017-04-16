@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import {registerService } from './register.service';
 @Component({
     selector : 'user-register',
     templateUrl: './register.component.html'
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 
 export class RegisterComponent{
-
+    constructor(private registerService: registerService){}
 }
