@@ -4,19 +4,29 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EditProfileService {
-  businessId: String = "58e8d68ce4a2cf7c06cff89a";
+    businessId: String = "58e8eb94b0283d09afa30176";
 
-  constructor(private http: Http) { }
+    constructor(private http: Http) { }
 
-getBusinessProfile(businessId){
-  let headers = new Headers();
-              headers.append('Content-Type', 'application/json');
-  return this.http.get('http://localhost:8080/api/business/' + businessId + '/getInfo', {headers: headers}).map(res => res.json());
-}
+    getBusinessProfile(businessId) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.get('http://localhost:8080/api/business/' + businessId + '/getInfo', { headers: headers }).map(res => res.json());
+    }
 
-editBusinessProfile(business){
-  let headers = new Headers();
-              headers.append('Content-Type', 'application/json');
-  return this.http.put('http://localhost:8080/api/business/editInfo', business, {headers: headers}).map(res => res.json());
-}
+    editBusinessProfile(name, wHours, wDays, category, description, phoneNumbers, tags, paymentRequired, deposit) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let body = {
+          name: name,
+          description: description,
+          tags: tags,
+          category: category,
+          paymentRequired: paymentRequired,
+          phoneNumbers: phoneNumbers,
+          workingDays: wDays,
+          workingHours: wHours
+        }
+        return this.http.put('http://localhost:8080/api/business/editInfo', body, { headers: headers }).map(res => res.json());
+    }
 }

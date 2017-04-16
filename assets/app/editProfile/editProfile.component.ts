@@ -25,7 +25,9 @@ export class EditProfileComponent implements OnInit {
     deposit: Number;
     depositFlag: boolean = false;
     phoneNumbers: String[];
+    workingDays: String[];
     tags: String[];
+    path: String = "http://localhost:8080/api/";
     businessId: String = "58e8eb94b0283d09afa30176";
 
     constructor(
@@ -39,7 +41,7 @@ export class EditProfileComponent implements OnInit {
       initialise() {
         this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {
             if (data.err) {
-                console.error(data.msg);
+              console.error(data.msg);
             }
             else {
                 this.name = data.data.name;
@@ -53,6 +55,7 @@ export class EditProfileComponent implements OnInit {
                 this.deposit = data.data.deposit;
                 this.phoneNumbers = data.data.phoneNumbers;
                 this.tags = data.data.tags;
+                this.workingDays = data.data.workingDays;
                 if (data.data.logo != null) {
                     this.logo = data.data.logo;
                 }
@@ -67,6 +70,21 @@ export class EditProfileComponent implements OnInit {
             });
           }
 
+    updateProfile() {
+      let workingHours = {
+        from: this.workingFrom,
+        to: this.workingTo
+      }
+      let finalTags = this.clean(this.tags);
+      let finalPhoneNumbers = this.clean(this.phoneNumbers);
+      let finalWorkingDays = this.clean(this.workingDays);
+      this.editProfileService.editBusinessProfile(this.name, workingHours, finalWorkingDays, this.category, this.description, finalPhoneNumbers, finalTags, this.paymentRequired, this.deposit).subscribe(data => {
+          if (data.err) {
+              console.error(data.msg);
+          }
+        });
+    }
+
     showDeposit(value) {
         if (value == 2) {
             this.depositFlag = true;
@@ -76,12 +94,22 @@ export class EditProfileComponent implements OnInit {
         }
     }
 
+    clean(array){
+      for(let i = 0; i < array.length; i++){
+        if(array[i] == ""){
+          array.splice(i,1);
+        }
+      }
+    }
+
     addPhoneNumber() {
         this.phoneNumbers.push("");
     }
 
     removePhoneNumber() {
-        this.phoneNumbers.splice(this.phoneNumbers.indexOf(this.phoneNumbers[this.phoneNumbers.length - 1], 1));
+      if(this.phoneNumbers.length > -1){
+        this.phoneNumbers.splice(this.phoneNumbers.indexOf(this.phoneNumbers[this.phoneNumbers.length -1], 1));
+      }
     }
 
     addTag() {
@@ -89,7 +117,19 @@ export class EditProfileComponent implements OnInit {
     }
 
     removeTag() {
+      if(this.tags.length > -1)
         this.tags.splice(this.tags.indexOf(this.tags[this.tags.length - 1], 1));
+    }
+
+    addWorkingDay() {
+        if(this.workingDays.length < 7){
+          this.workingDays.push("");
+        }
+    }
+
+    removeWorkingDay() {
+      if(this.workingDays.length > -1)
+        this.workingDays.splice(this.workingDays.indexOf(this.workingDays[this.workingDays.length - 1], 1));
     }
 
     onUpload() {
