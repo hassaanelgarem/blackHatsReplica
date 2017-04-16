@@ -13,6 +13,7 @@ const adminCtrl = require('../controllers/admin.controller');
 const passwordCtrl = require('../controllers/resetPassword.controller');
 const supportCtrl = require('../controllers/support.controller');
 const imagesCtrl = require("../controllers/images.controller");
+const paymentCtrl = require("../controllers/payment.controller");
 
 
 module.exports = function (passportConfig) {
@@ -29,6 +30,9 @@ module.exports = function (passportConfig) {
         failureFlash: false
     });
 
+    //For testing
+
+    router.route('/charge').post(paymentCtrl.charge);
 
     //Not logged in only routes
     router.route('/user/login').post(passportConfig.isNotLoggedIn, authenticateUser);

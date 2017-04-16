@@ -36,7 +36,7 @@ import { HomepageService } from "./homepage/homepage.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService,HomepageService],
+    providers: [DummyService, BusinessService, HomepageService],
     bootstrap : [AppComponent]
 })
 
