@@ -1,10 +1,15 @@
 import { Routes, RouterModule } from "@angular/router";
 
 import { HomepageComponent } from "./homepage/homepage.component";
+import { NameOrTagComponent } from "./homepage/search/nameOrTagResult/result.component";
+
+
 
 
 const APP_ROUTES: Routes = [
-    { path: 'homepage', component: HomepageComponent }
+    { path: 'homepage', component: HomepageComponent},
+    { path: 'viewBusinessesSearch', component: NameOrTagComponent}
+
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

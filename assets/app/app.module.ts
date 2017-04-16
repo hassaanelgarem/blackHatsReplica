@@ -10,10 +10,15 @@ import { HomepageComponent} from "./homepage/homepage.component";
 import { NavComponent} from "./navigationBar/nav.component";
 import { LoginComponent} from "./user/login/login.component";
 import { RegisterComponent} from "./user/register/register.component";
+import { SearchComponent} from "./homepage/search/search.component";
+import { NameOrTagComponent} from "./homepage/search/nameOrTagResult//result.component";
+
+
 
 
 import { HomepageService } from "./homepage/homepage.service";
 import { AppService } from "./app.service";
+import { SearchService } from "./homepage/search/search.service";
 
 
 
@@ -24,7 +29,9 @@ import { AppService } from "./app.service";
       HomepageComponent,
       NavComponent,
       LoginComponent,
-      RegisterComponent
+      RegisterComponent,
+      SearchComponent,
+      NameOrTagComponent
     ],
     imports: [
       BrowserModule,
@@ -32,7 +39,7 @@ import { AppService } from "./app.service";
       HttpModule,
       routing
     ],
-    providers: [HomepageService,AppService],
+    providers: [HomepageService,AppService,SearchService],
     bootstrap : [AppComponent]
 })
 
