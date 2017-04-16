@@ -5,6 +5,7 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 
+
 @Component({
   selector: 'user-profile',
    templateUrl: 'user.component.html',
@@ -14,6 +15,7 @@ export class UserComponent implements OnInit {
   public showReviews = false;
   public showFavorites = false;
   public showBookings = false;
+  private profilePicture: String;
 
   user: Object;
   userId: String = "58f2524179efae7640c1c949"; //get the id of the logged in user
@@ -23,6 +25,7 @@ export class UserComponent implements OnInit {
   email:String;
   birthDate:Date;
   createdAt:Date;
+  path: String = "http://localhost:8080/api/";
   //loggedIn = false;
 
   constructor(private userService: UserService,
@@ -36,11 +39,18 @@ export class UserComponent implements OnInit {
             }
             else {
               this.user = data.data;
-              this.firstName = this.user.firstName;
-              this.lastName = this.user.lastName;
-              this.email = this.user.email;
-              this.birthDate = this.user.birthDate;
-              this.createdAt = this.user.createdAt;
+              this.firstName = data.data.firstName;
+              this.lastName = data.data.lastName;
+              this.email = data.data.email;
+              this.birthDate = data.data.birthDate;
+              this.createdAt = data.data.createdAt;
+              if (data.data.profilePicture != null) {
+                    this.profilePicture = data.data.profilePicture;
+                }
+                else {
+                    this.profilePicture = "http://localhost:8080/api/image/ProfilePictures/defaultpp.jpg";
+                }
+              
 
               //this.favorites = this.user.favorites;
             }

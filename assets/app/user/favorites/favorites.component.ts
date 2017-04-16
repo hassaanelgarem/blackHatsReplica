@@ -14,7 +14,9 @@ export class FavoritesComponent {
     userId: String = "58f2524179efae7640c1c949"; //get the id of the logged in user
     count: Number = 15;
     user: Object;
-    favorites: Object[]; //array of business ids
+    favorites: string[]; //array of business ids
+    favBusinesses:[Object];
+    business:Object;
     
 
     constructor(private userService: UserService,
@@ -28,11 +30,29 @@ export class FavoritesComponent {
             }
             else {
               this.user = data.data;
-              //this.favorites = this.user.favorites;
+              this.favorites = data.data.favorites;
               //this.count = this.user.favorites.length;
              
             }
         });
+
+
+
+     for(var i = 0; i < this.favorites.length;i++){
+         this.userService.getFavBusiness(this.userId).subscribe(data => {
+            if (data.err) {
+                console.error(data.msg);
+            }
+            else {
+              this.business = data.data;
+              
+            }
+        }); 
+        this.favBusinesses.push(this.business);
+     }
+    
+
+     
   }   
 
 }

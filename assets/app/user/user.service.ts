@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 export class UserService {
     private reviews: Object[] = [];
     private user:Object;
+    private business:Object;
     //reviewIsEdit = new EventEmitter<Review>();
     private loggedin = true;
     //private user:User;
@@ -48,6 +49,14 @@ export class UserService {
     return this.http.get('http://localhost:8080/api/user/profile/' + userId, {headers: headers}).map(res => res.json());
 
   }
+
+  getFavBusiness(businessId){
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:8080/api/business/' +businessId+'/getInfo' , {headers: headers}).map(res => res.json());
+
+  }
+
   
 //getFavorites:
   /*getFavorites(userId){

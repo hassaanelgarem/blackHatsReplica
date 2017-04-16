@@ -56,7 +56,9 @@
                         <div class="inner-top">
 
                             <div class="image">
-                                <img src="/images/man/01.jpg" alt="image" />
+                                <br>
+                                <img class='img-circle' src="{{path}}image/profilePictures/{{profilePicture}}" alt="profile picture" style="width:200px;height:200px">
+                                <br>
                             </div>
 
                             <div class="GridLex-gap-20">
@@ -133,12 +135,11 @@
             <div class="row">
 
                 <div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                    <h4> Reviews </h4>
+                    <h2> Reviews </h2>
                     <user-review></user-review>
                 </div>
 
                 <div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                    <h4> Favorites </h4>
                     <user-favorites></user-favorites>
 
                 </div>

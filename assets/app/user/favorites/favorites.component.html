@@ -52,14 +52,9 @@
 
                     <div class="GridLex-col-9_sm-8_xs-12_xss-12">
 
-                        <div class="favorite-rating">
-                            <div class="number">{{averageString}}</div>
-                            <div class="rating-wrapper">
-                                <div class="rating-item rating-item-lg">
-                                    <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="4.5" />
-                                </div>
-                                {{count}} favorite
-                            </div>
+                        <div class="favorites-wrapper">
+
+                            <h4>Favorites</h4>
                         </div>
 
                     </div>
@@ -74,13 +69,13 @@
 
             <ul class="favorite-list">
 
-                <li class="clearfix" *ngFor="let favorite of user.favorites; let i = index">
+                <li class="clearfix" *ngFor="let favorite of favorites; let i = index">
 
                     <div class="row">
 
                         <div class="col-xs-12 col-sm-12 col-md-9">
                             <div class="favorites">
-                                <h4></h4>
+                                <h4>{{favorite}}</h4>
 
                             </div>
 
