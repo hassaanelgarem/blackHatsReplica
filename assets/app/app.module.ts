@@ -12,12 +12,13 @@ import { HomepageComponent} from "./homepage/homepage.component";
 import { NavComponent} from "./navigationBar/nav.component";
 import { LoginComponent} from "./user/login/login.component";
 import { RegisterComponent} from "./user/register/register.component";
-
+import { BusinessRegisterComponent} from "./business/register/businessRegister.component";
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./business/business.service";
 import { HomepageService } from "./homepage/homepage.service";
-
+import { UserRegisterService} from "./user/register/register.service";
+import { BusinessRegisterService} from "./business/register/businessRegister.service"
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { HomepageService } from "./homepage/homepage.service";
       HomepageComponent,
       NavComponent,
       LoginComponent,
-      RegisterComponent
+      RegisterComponent,
+      BusinessRegisterComponent
     ],
     imports: [
       BrowserModule,
@@ -36,7 +38,7 @@ import { HomepageService } from "./homepage/homepage.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService,HomepageService],
+    providers: [DummyService, BusinessService,HomepageService, UserRegisterService, BusinessRegisterService],
     bootstrap : [AppComponent]
 })
 

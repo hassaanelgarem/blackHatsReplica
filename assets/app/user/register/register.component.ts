@@ -1,5 +1,5 @@
 import { Component, Input} from '@angular/core';
-import {registerService } from './register.service';
+import {UserRegisterService} from './register.service';
 import { User } from '../user.model';
 @Component({
     selector : 'user-register',
@@ -16,7 +16,7 @@ export class RegisterComponent{
     email: string;
     birthDate: Date;
 
-    constructor(private registerService: registerService){}
+    constructor(private registerService: UserRegisterService){}
 
     onSubmit() {
         const user = new User(
