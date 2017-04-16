@@ -18,7 +18,9 @@ let BusinessPageComponent = class BusinessPageComponent {
         this.businessPageService = businessPageService;
         this.router = router;
         this.http = http;
-        this.businessId = "58f28a95701573fd750a9b1c";
+        this.businessId = "58ee4577fa669f51b6abf3ae";
+        this.path = "http://localhost:8080/api/";
+        this.loadDone = false;
     }
     ngOnInit() {
         this.businessPageService.getBusinessInfo(this.businessId).subscribe(info => {
@@ -26,18 +28,13 @@ let BusinessPageComponent = class BusinessPageComponent {
                 console.error(info.msg);
             }
             else {
+                console.log(info);
+                this.business = info.data;
                 this.name = info.data.name;
                 this.address = info.data.address;
                 this.phoneNumbers = info.data.phoneNumbers;
                 this.totalRatings = info.data.totalRatings;
-            }
-        });
-        this.businessPageService.getAverageRating(this.businessId).subscribe(info => {
-            if (info.err) {
-                console.error(info.msg);
-            }
-            else {
-                this.rating = info.data.toFixed(1);
+                this.loadDone = true;
             }
         });
         this.businessPageService.getActivities(this.businessId).subscribe(info => {
@@ -45,7 +42,7 @@ let BusinessPageComponent = class BusinessPageComponent {
                 console.error(info.msg);
             }
             else {
-                this.activties = info.data;
+                this.activities = info.data;
             }
         });
     }

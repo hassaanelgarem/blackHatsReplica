@@ -14,8 +14,11 @@ export class BusinessPageComponent implements OnInit {
   phoneNumbers: [String];
   totalRatings: Number;
   rating: String;
-  activties: [Object];
-  businessId: String = "58f28a95701573fd750a9b1c";
+  activities: [Object];
+  businessId: String = "58ee4577fa669f51b6abf3ae";
+  path: String = "http://localhost:8080/api/";
+  business: Object;
+  loadDone = false;
 
   constructor(
     private businessPageService: BusinessPageService,
@@ -28,28 +31,31 @@ export class BusinessPageComponent implements OnInit {
                 console.error(info.msg);
             }
             else {
+                console.log(info);
+                this.business = info.data;
                 this.name = info.data.name;
                 this.address = info.data.address;
                 this.phoneNumbers = info.data.phoneNumbers;
                 this.totalRatings = info.data.totalRatings;
+                this.loadDone = true;
             }
         });
-
-        this.businessPageService.getAverageRating(this.businessId).subscribe(info => {
-                if (info.err) {
-                    console.error(info.msg);
-                }
-                else {
-                    this.rating = info.data.toFixed(1);
-                }
-            });
-
+    //
+        // this.businessPageService.getAverageRating(this.businessId).subscribe(info => {
+        //         if (info.err) {
+        //             console.error(info.msg);
+        //         }
+        //         else {
+        //             this.rating = info.data.toFixed(1);
+        //         }
+        //     });
+    //
         this.businessPageService.getActivities(this.businessId).subscribe(info => {
                 if (info.err) {
                     console.error(info.msg);
                 }
                 else {
-                    this.activties = info.data;
+                    this.activities = info.data;
                 }
             });
 

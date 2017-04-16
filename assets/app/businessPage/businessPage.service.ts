@@ -11,7 +11,7 @@ export class BusinessPageService {
   getBusinessInfo(businessId){
     let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:8080//api/business/' + businessId + '/getInfo', {headers: headers}).map(res => res.json());
+    return this.http.get('http://localhost:8080/api/business/' + businessId + '/getInfo', {headers: headers}).map(res => res.json());
   }
 
   getReviews(businessId){
@@ -31,5 +31,5 @@ export class BusinessPageService {
 		headers.append('Content-Type', 'application/json');
     return this.http.get('http://localhost:8080/api/review/averageRating/' + businessId, {headers: headers}).map(res => res.json());
   }
-  
+
 }
