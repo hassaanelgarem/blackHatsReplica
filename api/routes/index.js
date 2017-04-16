@@ -70,7 +70,7 @@ module.exports = function (passportConfig) {
     router.route('/business/changePassword').put(passportConfig.isBusinessLoggedIn, businessCtrl.changePassword);
     router.route('/business/addPhoto').post(passportConfig.isBusinessLoggedIn, businessCtrl.addPhoto);
     router.route('/business/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, businessCtrl.deletePhoto);
-    router.route('/business/addLogo').post(passportConfig.isBusinessLoggedIn, businessCtrl.uploadLogo);
+    router.route('/business/addLogo').post(businessCtrl.uploadLogo); //passportConfig.isBusinessLoggedIn,
     router.route('/business/logout').get(passportConfig.isBusinessLoggedIn, passportConfig.logout);
     //Business activity routes
     router.route('/activity/add').post(passportConfig.isBusinessLoggedIn, activityCtrl.addActivity);

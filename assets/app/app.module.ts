@@ -3,20 +3,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from "./app.routing";
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
 
 
 import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
-import { BusinessComponent } from "./business/business.component";
+import { EditProfileComponent } from "./editProfile/editProfile.component";
 
 import { DummyService } from "./dummy/dummy.service";
-import { BusinessService } from "./business/business.service";
+import { EditProfileService } from "./editProfile/editProfile.service";
 
 @NgModule({
     declarations : [
       AppComponent,
       DummyComponent,
-      BusinessComponent
+      EditProfileComponent,
+      FileSelectDirective
     ],
     imports: [
       BrowserModule,
@@ -24,7 +26,7 @@ import { BusinessService } from "./business/business.service";
       HttpModule,
       routing
     ],
-    providers: [DummyService, BusinessService],
+    providers: [DummyService, EditProfileService],
     bootstrap : [AppComponent]
 })
 

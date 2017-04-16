@@ -1,10 +1,10 @@
 import { Routes, RouterModule } from "@angular/router";
 
 import { DummyComponent } from "./dummy/dummy.component";
-import { BusinessComponent } from "./business/business.component";
+import { EditProfileComponent } from "./editProfile/editProfile.component";
 
 const APP_ROUTES: Routes = [
-    { path: 'business', component: BusinessComponent },
+    { path: 'editProfile', component: EditProfileComponent },
     { path: 'dummy', component: DummyComponent }
 ];
 
