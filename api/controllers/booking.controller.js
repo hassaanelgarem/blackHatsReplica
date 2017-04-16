@@ -160,7 +160,7 @@ module.exports.getBookingHistory = function (req, res) {
 }
 
 
-/* 
+/*
     Delete function that finds and deletes a specific booking
     Takes:
         params: {
