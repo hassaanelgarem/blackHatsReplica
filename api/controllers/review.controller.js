@@ -25,8 +25,8 @@ module.exports.getUserReviews = function(req, res) {
     Review.find({
         "user": req.params.userId
     }).populate({
-        path: 'user',
-        select: 'firstName lastName'
+        path: 'business',
+        select: 'name'
     }).exec(function(err, reviews) {
         //If an error occurred, return an error
         if (err) {

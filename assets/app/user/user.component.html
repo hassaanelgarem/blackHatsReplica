@@ -110,18 +110,16 @@
                         <header class="row spacing">
                             <nav class="col-md-8 col-md-offset-2">
                                 <ul class="nav nav-tabs">
-                                    <li [class.active]="showReviews"><a [routerLink]="['reviews']" (click)="onReviewsClick()">Reviews</a></li>
-                                    <li [class.active]="showFavorites"><a [routerLink]="['favorites']" (click)="onFavoritesClick()">Favorites</a></li>
+
+                                    <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
+                                    <li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
                                     <li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+
 
                                 </ul>
                             </nav>
                         </header>
-                        <div class="row spacing">
-                            <router-outlet></router-outlet>
-                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -135,10 +133,12 @@
             <div class="row">
 
                 <div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <h4> Reviews </h4>
                     <user-review></user-review>
                 </div>
 
                 <div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <h4> Favorites </h4>
                     <user-favorites></user-favorites>
 
                 </div>
