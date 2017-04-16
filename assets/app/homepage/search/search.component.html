@@ -8,7 +8,7 @@
 					<form>
 						<div class="form-group">
 							<input type="text" placeholder="eg: London, Paris, Rome" class="form-control flexdatalist" data-data="data/countries.json" data-search-in='["name","capital"]' data-visible-properties='["capital","name","continent"]' data-group-by="continent" data-selection-required="true" data-focus-first-result="true" data-min-length="1" data-value-property="iso2" data-text-property="{capital}, {name}" data-search-contain="false" name="countries" #result>
-							<button class="btn" (click)="searchClicked(result.value)"  [routerLink]="['/viewBusinessesSearch']"><i class="icon-magnifier"></i></button>
+							<button class="btn" (click)="searchClicked(result.value)"><i class="icon-magnifier"></i></button>
 						</div>
 					</form>
 					

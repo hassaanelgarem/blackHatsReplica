@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 import { SearchService } from './search.service';
 import { Business } from './business.model';
@@ -10,7 +12,7 @@ import { Business } from './business.model';
 })
 export class SearchComponent implements OnInit {
 
-  constructor(private searchService: SearchService) { }
+  constructor(private searchService: SearchService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -22,6 +24,7 @@ export class SearchComponent implements OnInit {
       (business: Business[]) => {
         
         console.log(business)
+        this.router.navigate(['viewBusinessesSearch']);
       });
   }
 
