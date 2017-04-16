@@ -27,8 +27,11 @@ export class EditProfileComponent implements OnInit {
     phoneNumbers: String[];
     workingDays: String[];
     tags: String[];
-    path: String = "http://localhost:8080/api/";
-    businessId: String = "58e8eb94b0283d09afa30176";
+    extraNumber: String = "";
+    extraTag: String = "";
+    extraDay: String = "";
+    path: String = "";
+    businessId: String = "58e8d68ce4a2cf7c06cff89a";
 
     constructor(
         private editProfileService: EditProfileService,
@@ -36,12 +39,12 @@ export class EditProfileComponent implements OnInit {
         private http: Http) { }
 
     ngOnInit() {
-      this.initialise();
+        this.initialise();
     }
-      initialise() {
+    initialise() {
         this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {
             if (data.err) {
-              console.error(data.msg);
+                console.error(data.msg);
             }
             else {
                 this.name = data.data.name;
@@ -57,31 +60,30 @@ export class EditProfileComponent implements OnInit {
                 this.tags = data.data.tags;
                 this.workingDays = data.data.workingDays;
                 if (data.data.logo != null) {
+                    this.path = "http://localhost:8080/api/";
                     this.logo = data.data.logo;
                 }
                 else {
+                    this.path = "";
                     this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
                 this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
-                  this.initialise();
+                    this.initialise();
                 };
-              }
-            });
-          }
+            }
+        });
+    }
 
     updateProfile() {
-      let workingHours = {
-        from: this.workingFrom,
-        to: this.workingTo
-      }
-      let finalTags = this.clean(this.tags);
-      let finalPhoneNumbers = this.clean(this.phoneNumbers);
-      let finalWorkingDays = this.clean(this.workingDays);
-      this.editProfileService.editBusinessProfile(this.name, workingHours, finalWorkingDays, this.category, this.description, finalPhoneNumbers, finalTags, this.paymentRequired, this.deposit).subscribe(data => {
-          if (data.err) {
-              console.error(data.msg);
-          }
+        let workingHours = {
+            from: this.workingFrom,
+            to: this.workingTo
+        }
+        this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(data => {
+            if (data.err) {
+                console.error(data.msg);
+            }
         });
     }
 
@@ -94,42 +96,37 @@ export class EditProfileComponent implements OnInit {
         }
     }
 
-    clean(array){
-      for(let i = 0; i < array.length; i++){
-        if(array[i] == ""){
-          array.splice(i,1);
-        }
-      }
-    }
-
     addPhoneNumber() {
-        this.phoneNumbers.push("");
+        if (this.extraNumber != "") {
+            this.tags.push(this.extraNumber);
+            this.extraNumber = "";
+        }
     }
 
-    removePhoneNumber() {
-      if(this.phoneNumbers.length > -1){
-        this.phoneNumbers.splice(this.phoneNumbers.indexOf(this.phoneNumbers[this.phoneNumbers.length -1], 1));
-      }
+    removePhoneNumber(index) {
+        this.phoneNumbers.splice(index, 1);
     }
 
     addTag() {
-        this.tags.push("");
-    }
-
-    removeTag() {
-      if(this.tags.length > -1)
-        this.tags.splice(this.tags.indexOf(this.tags[this.tags.length - 1], 1));
-    }
-
-    addWorkingDay() {
-        if(this.workingDays.length < 7){
-          this.workingDays.push("");
+        if (this.extraTag != "") {
+            this.tags.push(this.extraTag);
+            this.extraTag = "";
         }
     }
 
-    removeWorkingDay() {
-      if(this.workingDays.length > -1)
-        this.workingDays.splice(this.workingDays.indexOf(this.workingDays[this.workingDays.length - 1], 1));
+    removeTag(index) {
+        this.tags.splice(index, 1);
+    }
+
+    addWorkingDay() {
+        if (this.extraDay != "") {
+            this.workingDays.push(this.extraDay);
+            this.extraDay = "";
+        }
+    }
+
+    removeWorkingDay(index) {
+        this.workingDays.splice(index, 1);
     }
 
     onUpload() {

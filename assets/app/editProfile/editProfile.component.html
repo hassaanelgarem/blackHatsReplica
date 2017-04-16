@@ -55,7 +55,7 @@
 											<div class="form-group bootstrap-fileinput-style-01">
 												<label>Logo</label>
 												<br>
-												<img class='img-circle' src="{{path}}image/businessLogos/{{logo}}" alt="Business Logo" style="width:200px;height:200px">
+													<img class='img-circle' src="{{path}}image/businessLogos/{{logo}}" alt="Business Logo" style="width:200px;height:200px">
 												<br>
 												<input type="file" class='form-control' name='businessLogo' ng2FileSelect [uploader]="uploader" >
 												<a class="btn btn-primary" (click)="onUpload()">Upload</a>
@@ -69,7 +69,7 @@
 
 											<div class="form-group">
 												<label>Name</label>
-												<input type="text" class="form-control" value={{name}}>
+												<input type="text" class="form-control" [(ngModel)]="name" name="name">
 											</div>
 
 										</div>
@@ -83,11 +83,11 @@
 												<div class="row gap-5">
 													<div class="col-xs-5 col-sm-5">
 														<label>From:</label>
-														<input type="text" class="form-control" value={{workingFrom}}>
+														<input type="text" class="form-control" [(ngModel)]="workingFrom" name="workingFrom">
 													</div>
 													<div class="col-xs-5 col-sm-5">
 														<label>To:</label>
-														<input type="text" class="form-control" value={{workingTo}}>
+														<input type="text" class="form-control" [(ngModel)]="workingTo" name="workingTo">
 													</div>
 												</div>
 											</div>
@@ -100,7 +100,7 @@
 
 											<div class="form-group">
 												<label>category</label>
-												<input type="text" class="form-control" value={{category}}>
+												<input type="text" class="form-control" [(ngModel)]="category" name="category" >
 											</div>
 
 										</div>
@@ -111,7 +111,7 @@
 
 											<div class="form-group">
 												<label>Description</label>
-												<input type="text" class="form-control" value={{description}}>
+												<input type="text" class="form-control" [(ngModel)]="description" name="description">
 											</div>
 
 										</div>
@@ -123,13 +123,14 @@
 											<label>Working Days</label>
 											<div class="row gap-5">
 												<div class="col-xs-5 col-sm-5">
-													<tr *ngFor = "let workingDay of workingDays">
+													<tr *ngFor = "let workingDay of workingDays; let i=index">
 														<input type="text" class="form-control" value={{workingDay}}>
+														<a class="btn btn-primary btn-border" (click)="removeWorkingDay(i)" ><i class="glyphicon glyphicon-minus"></i></a>
 													</tr>
 													<div class="col-sm-12">
+														<input type="text" class="form-control" [(ngModel)]="extraDay" name="extraDay">
 														<a class="btn btn-primary" (click)="addWorkingDay()" ><i class="glyphicon glyphicon-plus"></i></a>
-														<a class="btn btn-primary btn-border" (click)="removeWorkingDay()" ><i class="glyphicon glyphicon-minus"></i></a>
-													</div>
+														</div>
 												</div>
 											</div>
 
@@ -137,18 +138,19 @@
 
 										<div class="clear"></div>
 										<p>
-											
+
 										<div class="col-sm-6 col-md-4">
 
 											<label>Phone Numbers</label>
 											<div class="row gap-5">
 												<div class="col-xs-5 col-sm-5">
-													<tr *ngFor = "let phoneNumber of phoneNumbers">
+													<tr *ngFor = "let phoneNumber of phoneNumbers; let k=index">
 														<input type="text" class="form-control" value={{phoneNumber}}>
+														<a class="btn btn-primary btn-border" (click)="removePhoneNumber(k)" ><i class="glyphicon glyphicon-minus"></i></a>
 													</tr>
 													<div class="col-sm-12">
+														<input type="text" class="form-control" [(ngModel)]="extraNumber" name="extraNumber">
 														<a class="btn btn-primary" (click)="addPhoneNumber()" ><i class="glyphicon glyphicon-plus"></i></a>
-														<a class="btn btn-primary btn-border" (click)="removePhoneNumber()" ><i class="glyphicon glyphicon-minus"></i></a>
 													</div>
 												</div>
 											</div>
@@ -163,12 +165,13 @@
 											<label>Tags</label>
 											<div class="row gap-5">
 												<div class="col-xs-5 col-sm-5">
-													<tr *ngFor = "let tag of tags">
-														<input type="text" class="form-control" value={{tag}}>
+													<tr *ngFor = "let tag of tags; let j=index">
+															<input type="text" class="form-control" value={{tag}} readonly>
+															<a class="btn btn-primary" (click)="removeTag(j)" ><i class="glyphicon glyphicon-minus"></i></a>
 													</tr>
 													<div class="col-sm-12">
+														<input type="text" class="form-control" [(ngModel)]="extraTag" name="extraTag">
 														<a class="btn btn-primary" (click)="addTag()" ><i class="glyphicon glyphicon-plus"></i></a>
-														<a class="btn btn-primary btn-border" (click)="removeTag()" ><i class="glyphicon glyphicon-minus"></i></a>
 													</div>
 												</div>
 											</div>
@@ -183,7 +186,7 @@
 
 											<div class="form-group">
 												<label>Required payment</label>
-												<select class="selectpicker show-tick form-control" data-live-search="false" #t (change)="showDeposit(t.value)">
+												<select class="selectpicker show-tick form-control" data-live-search="false" #t (change)="showDeposit(t.value)" [(ngModel)]="paymentRequired" name="paymentRequired">
 													<option value="1">Full payment</option>
 													<option value="2">Deposit</option>
 													<option value="3" selected>No payment</option>
@@ -198,7 +201,7 @@
 
 											<div *ngIf = "depositFlag == true" class="form-group">
 												<label>Deposit</label>
-												<input type="number" class="form-control" value={{deposit}}>
+												<input type="number" class="form-control" [(ngModel)]="deposit" name="deposit">
 											</div>
 
 										</div>

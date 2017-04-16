@@ -76,7 +76,7 @@ module.exports.addPhoto = function (req, res) {
             });
 
             //add the image file name to the photos array of the Business model
-            Business.findByIdAndUpdate(req.user._id, {
+            Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", {
                     $push: {
                         "photos": req.file.filename + "." + string
                     }
@@ -412,7 +412,7 @@ module.exports.uploadLogo = function (req, res) {
             });
 
             //save the image file path to the Business model
-            Business.findById("58e8eb94b0283d09afa30176", function (err, business) {
+            Business.findById("58e8d68ce4a2cf7c06cff89a", function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.status(500).json({
@@ -544,7 +544,7 @@ module.exports.saveNewInfo = function (req, res) {
     delete req.body.activities;
     delete req.body.logo;
     //pass in the non null values in req.body to modify it only
-    Business.findByIdAndUpdate("58e8eb94b0283d09afa30176", req.body, function (err, business) {
+    Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", req.body, function (err, business) {
         if (err) {
             res.status(500).json({
                 error: err,
