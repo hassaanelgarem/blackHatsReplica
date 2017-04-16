@@ -64,7 +64,7 @@ module.exports.registerUser = function (req, res) {
                     $options: "ix"
                 }
             }]
-        }, function(err, user) {
+        }, function (err, user) {
             //if there is an error, send an error message
             if (err) {
                 return res.status(500).json({
@@ -223,10 +223,10 @@ module.exports.deleteAccount = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/user/addFavorite/:businessId'
 */
-module.exports.addFavorite = function(req, res) {
+module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    Business.findById(businessId, function(err, doc) {
+    Business.findById(businessId, function (err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
             res.status(500).json({
@@ -251,7 +251,7 @@ module.exports.addFavorite = function(req, res) {
                         favorites: businessId
                     }
                 }, //add the business id to the favorites array
-                function(err, result) {
+                function (err, result) {
                     //couldn't add to array, return the error
                     if (err) {
                         res.status(500).json({
@@ -278,7 +278,7 @@ else returns error message.
 Redirects to: Nothing
 Calling route: '/api/user/deleteFavorite/:businessId'
 */
-module.exports.deleteFavorite = function(req, res) {
+module.exports.deleteFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
 
@@ -288,7 +288,7 @@ module.exports.deleteFavorite = function(req, res) {
         $pull: {
             "favorites": businessId
         }
-    }, function(err, data) {
+    }, function (err, data) {
         if (err) {
             res.status(500).json({
                 error: err,
@@ -324,31 +324,18 @@ module.exports.deleteFavorite = function(req, res) {
     and tags.
     Takes:
         query{
-            result: "used for name or tag search value",
-            offset: "get businesses starting from number",
-            count: "how many businesses to get"
+            result: "used for name or tag search value"
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: Nothing.
     Calling route: '/api/search'
 */
 module.exports.searchByNameOrTag = function (req, res, next) {
-    var offset = 0;
-    var count = 10;
 
     //Check for query string Ex: "/api/search?result=omar"
     if (req.query && req.query.result) {
         var nameOrTag = req.query.result;
-
-
-        if (req.query.offset) {
-            offset = parseInt(req.query.offset, 10);
-        }
-
-        if (req.query.count) {
-            count = parseInt(req.query.count, 10);
-        }
-
+    
         //Find businesses from the database excluding password in returned document
         Business.find({
             $or: [{
@@ -368,7 +355,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 
                 }
             ]
-        }).select('-password').skip(offset).limit(count).exec(function (err, businesses) {
+        }).select('-password').exec(function (err, businesses) {
             //If an error occured return it to the frontend
             if (err) {
                 res.status(500).json({
@@ -397,28 +384,17 @@ module.exports.searchByNameOrTag = function (req, res, next) {
     Takes:
         query{
             location: "used for location search value",
-            category: "used for category search value",
-            offset: "get businesses starting from number",
-            count: "how many businesses to get"
+            category: "used for category search value"
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: nothing.
     Calling route: '/api/search'
 */
 module.exports.searchByLocationAndCategory = function (req, res) {
-    var offset = 0;
-    var count = 10;
     var location = "All";
     var category = "All";
 
-    //Check for query string Ex: "/api/search?location=Cairo&category=Escape&offset=2&count=10"
-    if (req.query && req.query.offset) {
-        offset = parseInt(req.query.offset, 10);
-    }
-
-    if (req.query && req.query.count) {
-        count = parseInt(req.query.count, 10);
-    }
+    //Check for query string Ex: "/api/search?location=Cairo&category=Escape"
 
     if (req.query && req.query.category) {
         category = req.query.category;
@@ -552,7 +528,7 @@ module.exports.searchByLocationAndCategory = function (req, res) {
     }
 
     //execute the query
-    Business.find(findQuery).select('-password').skip(offset).limit(count).exec(function (err, businesses) {
+    Business.find(findQuery).select('-password').exec(function (err, businesses) {
 
         //if an error occurred, return the error
         if (err)

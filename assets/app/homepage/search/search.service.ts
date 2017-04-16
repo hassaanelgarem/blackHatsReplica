@@ -13,7 +13,7 @@ export class SearchService {
 
     getBusinesses(result: string) {
         //need to modify here to take more than one word
-        return this.http.get('http://localhost:8080/api/search?result=' + result)
+        return this.http.get('http://localhost:8080/api/search?result=' + result+"&& ")
             //map method to transform the response
             .map((response: Response) => {
                 const businesses = response.json().data;
@@ -27,9 +27,5 @@ export class SearchService {
                 return transformedBusiness;
             })
             .catch((error: Response) => Observable.throw(error.json()));
-    }
-
-    viewBusinesses() {
-        return this.businesses;
     }
 }

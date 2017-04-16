@@ -10,7 +10,7 @@ export class Business {
                 public category:string,
                 public description:string,
                 public interactivity:number,
-                public totalsRatings:number,
+                public totalRatings:number,
                 public photos:string[],
                 public paymentRequired:number,
                 public deposit:number,

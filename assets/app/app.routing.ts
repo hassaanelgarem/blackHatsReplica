@@ -4,8 +4,9 @@ import { NameOrTagComponent } from "./homepage/search/nameOrTagResult/result.com
 import { HomepageComponent } from "./homepage/homepage.component";
 
 const APP_ROUTES: Routes = [
-    { path: 'homepage', component: HomepageComponent},
-    { path: 'viewBusinessesSearch', component: NameOrTagComponent}
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'home', component: HomepageComponent },
+    { path: 'search', component: NameOrTagComponent }
 
 ];
 

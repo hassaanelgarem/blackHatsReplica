@@ -1,8 +1,5 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-
-import { SearchService } from './search.service';
-import { Business } from './business.model';
 
 
 @Component({
@@ -11,17 +8,12 @@ import { Business } from './business.model';
 })
 export class SearchComponent implements OnInit {
 
-  constructor(private searchService: SearchService, private router: Router) { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
 
   searchClicked(result: string) {
-    //i should render business page and then on init of the business should take the lead
-    this.searchService.getBusinesses(result)
-      .subscribe(
-      (business: Business[]) => {
-        console.log(business);
-        this.router.navigate(['viewBusinessesSearch']);
-      });
-  }
+    this.router.navigate(['search'], {queryParams: {result: result, page: "1"}});
+  };
+
 }
