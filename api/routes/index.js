@@ -13,22 +13,25 @@ const adminCtrl = require('../controllers/admin.controller');
 const passwordCtrl = require('../controllers/resetPassword.controller');
 const supportCtrl = require('../controllers/support.controller');
 const imagesCtrl = require("../controllers/images.controller");
+const testCtrl = require("../controllers/test.controller");
 
 
 module.exports = function (passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
-        successRedirect: '/',
+        successRedirect: '/api/testUser',
         failureRedirect: '/api/login',
         failureFlash: false
     });
 
 
     var authenticateBusiness = passportConfig.passport.authenticate('local-business', {
-        successRedirect: '/',
+        successRedirect: '/api/testBusiness',
         failureRedirect: '/api/login',
         failureFlash: false
     });
 
+    router.route('/testUser').get(testCtrl.testLogin);
+    router.route('/testBusiness').get(testCtrl.testLogin);
 
     //Not logged in only routes
     router.route('/user/login').post(passportConfig.isNotLoggedIn, authenticateUser);

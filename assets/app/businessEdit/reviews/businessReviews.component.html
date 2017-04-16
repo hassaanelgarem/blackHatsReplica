@@ -41,27 +41,6 @@
 
 <body>
     <div class="review-wrapper">
-      <div class="GridLex-inner">
-													<div class="heading clearfix">
-														<h3>Robert Kalvin</h3>
-														<span class="label label-success"><i class="fa fa-check mr-3"></i> Verified</span>
-														<span class="label label-info"><i class="fa fa-trophy mr-3"></i> Certified Guide</span>
-													</div>
-													<ul class="user-meta">
-														<li><i class="fa fa-map-marker"></i> 264, Carson Street Lexington, KY 40539 <span class="mh-5 text-muted">|</span> <i class="fa fa-phone"></i> +4 8547 985</li>
-														<li>
-															<div class="user-social inline-block">
-																<a href="#"><i class="icon-social-twitter" data-toggle="tooltip" data-placement="top" title="twitter"></i></a>
-																<a href="#"><i class="icon-social-facebook" data-toggle="tooltip" data-placement="top" title="facebook"></i></a>
-																<a href="#"><i class="icon-social-gplus" data-toggle="tooltip" data-placement="top" title="google plus"></i></a>
-																<a href="#"><i class="icon-social-instagram" data-toggle="tooltip" data-placement="top" title="instrgram"></i></a>
-															</div>
-															<a href="#" class="btn btn-primary btn-xs btn-border">Follow</a>
-														</li>
-														<li>
-														</li>
-													</ul>
-												</div>
 
         <div class="review-header">
 
@@ -93,7 +72,7 @@
 
             <ul class="review-list">
 
-                <li class="clearfix" *ngFor = "let review of reviews; let i = index">
+                <li class="clearfix" *ngFor="let review of reviews; let i = index">
 
                     <div class="row">
 
@@ -109,15 +88,15 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-9">
-<div class="review-replied">
-                            <div class="review-content">
+                            <div class="review-replied">
+                                <div class="review-content">
 
-                                <h4>{{review.comment}}</h4>
+                                    <h4>{{review.comment}}</h4>
+
+                                </div>
 
                             </div>
-
                         </div>
-</div>
                     </div>
 
                 </li>
