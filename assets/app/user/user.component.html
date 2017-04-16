@@ -39,58 +39,115 @@
 	<script type="text/javascript" src="js/customs-detail.js"></script>
 </head>
 
-
-
 <body>
+    <div class="user-profile-wrapper">
 
-  <div class="pt-30 pb-50">
+        <div class="user-header">
 
-  				<div class="container">
+            <div class="content">
 
-  					<div class="row">
+                <div class="content-top">
 
-  						<div class="col-xs-12 col-sm-4 col-md-3 mt-20">
+                    <div class="container">
 
-  							<aside class="sidebar-wrapper pr-15 pr-0-xs">
+                        <div class="inner-top">
 
-  								<div class="common-menu-wrapper">
+                            <div class="image">
+															<img src="/images/man/01.jpg" alt="image" />
+                            </div>
 
-  									<ul class="common-menu-list">
+                            <div class="GridLex-gap-20">
 
-  										<li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
-  										<li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
-  										<li [class.active]="showEdit"><a (click)="onEditClick()">Edit</a></li>
-  										<li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
+                                <div class="GridLex-grid-noGutter-equalHeight GirdLex-grid-bottom">
 
-  									</ul>
+                                    <div class="GridLex-col-7_sm-12_xs-12_xss-12">
 
-  								</div>
+                                        <div class="GridLex-inner">
+                                            <div class="heading clearfix">
 
-  							</aside>
-
-  						</div>
+                                                <h3>Hard Code</h3>
 
 
-							<div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <h1> Reviews </h1>
-              </div>
+                                            </div>
+                                            <ul class="user-meta">
+                                                <li> email: hard@code.com<span class="mh-5 text-muted"></span></li>
+                                                <li> born: 09/09/1996<span class="mh-5 text-muted"></span></li>
+                                                <li> joined: 09/09/2017<span class="mh-5 text-muted"></span></li>
 
-							<div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <app-user-bookings></app-user-bookings>
-              </div>
 
-							<div *ngIf="showEdit" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <h1> Edit Page </h1>
-              </div>
 
-							<div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <h1> Favourites </h1>
-              </div>
 
-  					</div>
 
-  				</div>
+                                            </ul>
+                                        </div>
 
-  			</div>
+                                    </div>
+
+                                    <div class="GridLex-col-5_sm-12_xs-12_xss-12">
+
+                                        <div class="GridLex-inner">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="content-bottom">
+
+                    <div class="container">
+                        <header class="row spacing">
+                            <nav class="col-md-8 col-md-offset-2">
+                                <ul class="nav nav-tabs">
+																	<li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
+																	<li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+																	<li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
+
+                                </ul>
+                            </nav>
+                        </header>
+                        <div class="row spacing">
+                            <router-outlet></router-outlet>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pt-30 pb-50">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <h1> Reviews </h1>
+                </div>
+
+                <div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <h1> Favorites </h1>
+
+                </div>
+
+                <div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-user-bookings></app-user-bookings>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
