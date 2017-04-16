@@ -1,0 +1,100 @@
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Fav and Touch Icons -->
+    <link rel="apple-touch-icon" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="images/ico/favicon.png">
+
+    <!-- CSS Plugins -->
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" media="screen">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/plugin.css" rel="stylesheet">
+
+    <!-- CSS Custom -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Add your style -->
+    <link href="css/your-style.css" rel="stylesheet">
+
+    <!-- Core JS -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/core-plugins.js"></script>
+    <script type="text/javascript" src="js/customs.js"></script>
+
+    <!-- Detail Page JS -->
+    <script type="text/javascript" src="js/jquery.stickit.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tokenfield.js"></script>
+    <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="js/jquery.sumogallery.js"></script>
+    <script type="text/javascript" src="js/images-grid.js"></script>
+    <script type="text/javascript" src="js/jquery.bootstrap-touchspin.js"></script>
+    <script type="text/javascript" src="js/customs-detail.js"></script>
+    <script type="text/javascript" src="js/customs-result.js"></script>
+
+</head>
+
+<body>
+    <div class="favorite-wrapper">
+
+        <div class="favorite-header">
+
+            <div class="GridLex-gap-30">
+
+                <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+                    <div class="GridLex-col-9_sm-8_xs-12_xss-12">
+
+                        <div class="favorite-rating">
+                            <div class="number">{{averageString}}</div>
+                            <div class="rating-wrapper">
+                                <div class="rating-item rating-item-lg">
+                                    <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="4.5" />
+                                </div>
+                                {{count}} favorite
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="favorite-content">
+
+            <ul class="favorite-list">
+
+                <li class="clearfix" *ngFor="let favorite of user.favorites; let i = index">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-9">
+                            <div class="favorites">
+                                <h4></h4>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </li>
+
+            </ul>
+
+            <!-- <a href="#" class="review-load-more mb-40">load more...</a> -->
+
+        </div>
+
+    </div>
+
+</body>

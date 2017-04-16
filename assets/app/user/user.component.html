@@ -1,6 +1,156 @@
-<div class="container">
-    <app-header></app-header>
-    <div class="row spacing">
-        <router-outlet></router-outlet>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Fav and Touch Icons -->
+    <link rel="apple-touch-icon" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="images/ico/favicon.png">
+
+    <!-- CSS Plugins -->
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" media="screen">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/plugin.css" rel="stylesheet">
+
+    <!-- CSS Custom -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Add your style -->
+    <link href="css/your-style.css" rel="stylesheet">
+
+    <!-- Core JS -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/core-plugins.js"></script>
+    <script type="text/javascript" src="js/customs.js"></script>
+
+    <!-- Detail Page JS -->
+    <script type="text/javascript" src="js/jquery.stickit.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tokenfield.js"></script>
+    <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="js/jquery.sumogallery.js"></script>
+    <script type="text/javascript" src="js/images-grid.js"></script>
+    <script type="text/javascript" src="js/jquery.bootstrap-touchspin.js"></script>
+    <script type="text/javascript" src="js/customs-detail.js"></script>
+    <script type="text/javascript" src="js/customs-result.js"></script>
+</head>
+
+
+
+<body>
+    <div class="user-profile-wrapper">
+
+        <div class="user-header">
+
+            <div class="content">
+
+                <div class="content-top">
+
+                    <div class="container">
+
+                        <div class="inner-top">
+
+                            <div class="image">
+                                <img src="/images/man/01.jpg" alt="image" />
+                            </div>
+
+                            <div class="GridLex-gap-20">
+
+                                <div class="GridLex-grid-noGutter-equalHeight GirdLex-grid-bottom">
+
+                                    <div class="GridLex-col-7_sm-12_xs-12_xss-12">
+
+                                        <div class="GridLex-inner">
+                                            <div class="heading clearfix">
+
+                                                <h3>{{firstName +" " + lastName}}</h3>
+
+
+                                            </div>
+                                            <ul class="user-meta">
+                                                <li> email: {{email}}<span class="mh-5 text-muted"></span></li>
+                                                <li> born: {{birthDate | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
+                                                <li> joined: {{createdAt | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
+
+
+
+
+
+                                            </ul>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="GridLex-col-5_sm-12_xs-12_xss-12">
+
+                                        <div class="GridLex-inner">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="content-bottom">
+
+                    <div class="container">
+                        <header class="row spacing">
+                            <nav class="col-md-8 col-md-offset-2">
+                                <ul class="nav nav-tabs">
+                                    <li [class.active]="showReviews"><a [routerLink]="['reviews']" (click)="onReviewsClick()">Reviews</a></li>
+                                    <li [class.active]="showFavorites"><a [routerLink]="['favorites']" (click)="onFavoritesClick()">Favorites</a></li>
+                                    <li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+
+                                </ul>
+                            </nav>
+                        </header>
+                        <div class="row spacing">
+                            <router-outlet></router-outlet>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+
+    <div class="pt-30 pb-50">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <user-review></user-review>
+                </div>
+
+                <div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <user-favorites></user-favorites>
+
+                </div>
+
+                <div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <h1> Booking </h1>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
