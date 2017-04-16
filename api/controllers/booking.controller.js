@@ -141,10 +141,7 @@ module.exports.getBookingHistory = function (req, res) {
     //Finds history of bookings for a specific user given his id
     Booking.find({
         "user": req.params.userId
-    }).populate('activity').populate({
-      path: 'user',
-      select: 'firstName lastName'
-    }).exec(function (err, bookings) {
+    }).populate('activity').exec(function (err, bookings) {
 
         //If an error occurred, display a message along with the error
         if (err) return res.status(500).json({

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class UserBookingsComponent implements OnInit {
     count: Number = 0;
     bookings: [Object];
-    userId: String = "58e8d26b86e48c253b2c3c1e";
+    userId: String = "58f252bd9037f62725ddf62c";
 
     constructor(
         private userService: UserService,
