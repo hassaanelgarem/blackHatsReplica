@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 
 
 @Component({
-    selector: 'app-business-reviews',
+    selector: 'app-businessEdit-reviews',
     templateUrl: './businessReviews.component.html'
   })
 export class BusinessReviewsComponent implements OnInit {

@@ -10,6 +10,7 @@ import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
+import { BusinessActivitiesComponent} from "./businessEdit/activities/businessActivities.component"
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
@@ -19,7 +20,8 @@ import { BusinessService } from "./businessEdit/business.service";
       AppComponent,
       DummyComponent,
       BusinessEditComponent,
-      BusinessReviewsComponent
+      BusinessReviewsComponent,
+      BusinessActivitiesComponent
     ],
     imports: [
       BrowserModule,

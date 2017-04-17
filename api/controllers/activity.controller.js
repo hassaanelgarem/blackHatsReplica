@@ -90,7 +90,7 @@ module.exports.addActivity = function (req, res) {
                         res.status(200).json({
                             error: null,
                             msg: "Activity Added Successfully",
-                            data: null
+                            data: activity
                         });
                     } else {
                         res.status(404).json({
@@ -140,7 +140,7 @@ module.exports.getActivities = function (req, res) {
         else res.status(200).json({
             error: null,
             msg: "Successful Retrieval",
-            data: activites
+            data: activities
         });
     });
 };
@@ -615,7 +615,7 @@ module.exports.addPhoto = function (req, res) {
                             "_id": req.params.activityId
                         }, {
                             $push: {
-                                "photos": newPath
+                                "photos": req.file.filename + "." + string
                             }
                         },
                         function (err, result) {

@@ -4,7 +4,7 @@ import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 
 const APP_ROUTES: Routes = [
-    { path: 'business', component: BusinessEditComponent },
+    { path: 'businessEdit', component: BusinessEditComponent },
     { path: 'dummy', component: DummyComponent }
 ];
 

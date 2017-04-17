@@ -1,0 +1,12 @@
+.buttonSize {
+    height: 38px;
+    width: 78px;
+}
+
+.add-button {
+    width: 50%;
+}
+
+.add-button-wrapper {
+    text-align: center;
+}
