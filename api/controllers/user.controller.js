@@ -162,8 +162,9 @@ module.exports.registerUser = function (req, res) {
                                         emailSender.sendEmail(subject, req.body.email, "", html, function (err, info) {
                                             if (err)
                                                 newUser.remove(function (err) {
+                                                    var newError = {"msg": 'Email address is not valid, registration failed.'};
                                                     res.status(500).json({
-                                                        error: err,
+                                                        error: null,
                                                         msg: 'Email address is not valid, registration failed.',
                                                         data: null
                                                     });

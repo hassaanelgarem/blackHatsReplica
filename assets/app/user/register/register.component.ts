@@ -15,10 +15,10 @@ export class RegisterComponent{
     confirmPassword: string;
     email: string;
     birthDate: Date;
-    
     constructor(private registerService: UserRegisterService){}
-
+    
     onSubmit() {
+        var err = false;
         const user = new User(
             this.firstName,
             this.lastName,
@@ -30,8 +30,8 @@ export class RegisterComponent{
         )
         this.registerService.signUp(user)
             .subscribe(
-                data => console.log(data),
-                error => alert(error.error.msg),
+                data => alert(data.msg),
+                error => alert(error.error.msg)
             );
     };
 }
