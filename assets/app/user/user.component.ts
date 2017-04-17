@@ -25,7 +25,7 @@ export class UserComponent implements OnInit {
   email:String;
   birthDate:Date;
   createdAt:Date;
-  path: String = "http://localhost:8080/api/";
+  path: String = "";
   //loggedIn = false;
 
   constructor(private userService: UserService,
@@ -45,10 +45,12 @@ export class UserComponent implements OnInit {
               this.birthDate = data.data.birthDate;
               this.createdAt = data.data.createdAt;
               if (data.data.profilePicture != null) {
+                    this.path = "http://localhost:8080/api/image/profilePictures/";
                     this.profilePicture = data.data.profilePicture;
                 }
                 else {
-                    this.profilePicture = "http://localhost:8080/api/image/ProfilePictures/defaultpp.jpg";
+                    this.path = "";
+                    this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
               
 
