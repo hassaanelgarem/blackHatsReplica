@@ -1,0 +1,115 @@
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Title Of Site -->
+  <title>Togoby - Tour hosting</title>
+  <meta name="description" content="HTML template for multiple tour agency, local agency, traveller, tour hosting based on Twitter Bootstrap 3.x.x" />
+  <meta name="keywords" content="tour agency, tour guide, travel, trip, holiday, vocation, relax, adventure, virtual tour, tour planner" />
+  <meta name="author" content="crenoveative">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Fav and Touch Icons -->
+  <link rel="apple-touch-icon" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon" href="images/ico/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="images/ico/favicon.png">
+
+  <!-- CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" media="screen">
+  <link href="css/main.css" rel="stylesheet">
+  <link href="css/plugin.css" rel="stylesheet">
+
+  <!-- CSS Custom -->
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- Add your style -->
+  <link href="css/your-style.css" rel="stylesheet">
+
+  <!-- Core JS -->
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/core-plugins.js"></script>
+  <script type="text/javascript" src="js/customs.js"></script>
+
+  <!-- Detail Page JS -->
+  <script type="text/javascript" src="js/jquery.stickit.js"></script>
+  <script type="text/javascript" src="js/bootstrap-tokenfield.js"></script>
+  <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
+  <script type="text/javascript" src="js/jquery.sumogallery.js"></script>
+  <script type="text/javascript" src="js/images-grid.js"></script>
+  <script type="text/javascript" src="js/jquery.bootstrap-touchspin.js"></script>
+  <script type="text/javascript" src="js/customs-detail.js"></script>
+
+
+</head>
+
+<body>
+
+  <div class="pt-30 pb-50">
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-8 col-md-9 mt-20">
+
+          <h4 class="section-title">Booking history:</h4>
+          <p class="mmt-15 mb-20">{{count}} Bookings</p>
+
+          <div class="trip-list-wrapper no-bb-last">
+
+            <div class="trip-list-item" *ngFor="let booking of bookings; let i = index">
+              <div class="image-absolute">
+                <div class="image image-object-fit image-object-fit-cover">
+                  <img src="/images/man/01.jpg" alt="image" />
+                </div>
+              </div>
+              <div class="content">
+
+                <div class="GridLex-gap-20 mb-5">
+
+                  <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+                    <div class="GridLex-col-6_sm-12_xs-12_xss-12">
+
+                      <div class="GridLex-inner">
+                        <h6>{{booking.activity.name}}</h6>
+                        <span class="font-italic font14"><b>Price:</b> ${{booking.activity.price}}</span>
+                        <span class="font-italic font14"><br/><b>Start Time:</b> {{booking.slot.startTime | date:'hh:mm'}} &ensp;&ensp;<b>End Time:</b> {{booking.slot.endTime | date:'hh:mm'}}</span>
+
+                      </div>
+
+                    </div>
+
+                    <div class="GridLex-col-3_sm-6_xs-7_xss-12">
+                      <div class="GridLex-inner line-1 font14 text-muted spacing-1">
+                        Booking date
+                        <span class="block text-primary font16 font700 mt-1">{{booking.date | date:'MMM d, y'}}</span>
+                      </div>
+                    </div>
+
+                    <div class="GridLex-col-3_sm-6_xs-5_xss-12">
+                      <div class="GridLex-inner text-center text-left-xss dropdown">
+                        <strong>Description:</strong> <br/>{{booking.activity.description}}
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</body>

@@ -11,7 +11,8 @@ import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
 import { UserComponent } from "./user/user.component"
-import { UserBookingsComponent } from "./user/Bookings/userBookings.component"
+import { UserBookingsComponent } from "./user/bookings/userBookings.component"
+import { UserFavoritesComponent } from "./user/favorites/userFavorites.component"
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
@@ -24,7 +25,8 @@ import { UserService } from "./user/user.service";
       BusinessEditComponent,
       BusinessReviewsComponent,
       UserComponent,
-      UserBookingsComponent
+      UserBookingsComponent,
+      UserFavoritesComponent
     ],
     imports: [
       BrowserModule,
