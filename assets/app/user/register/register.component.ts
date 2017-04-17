@@ -31,7 +31,7 @@ export class RegisterComponent{
         this.registerService.signUp(user)
             .subscribe(
                 data => console.log(data),
-                error => alert(error.error.msg)
+                error => alert(error.error.msg),
             );
     };
 }
