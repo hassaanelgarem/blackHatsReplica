@@ -15,7 +15,7 @@ export class RegisterComponent{
     confirmPassword: string;
     email: string;
     birthDate: Date;
-
+    
     constructor(private registerService: UserRegisterService){}
 
     onSubmit() {
@@ -28,12 +28,10 @@ export class RegisterComponent{
             this.email,
             this.birthDate
         )
-
         this.registerService.signUp(user)
             .subscribe(
                 data => console.log(data),
-                error => console.error(error)
+                error => alert(error.error.msg)
             );
     };
-    
 }

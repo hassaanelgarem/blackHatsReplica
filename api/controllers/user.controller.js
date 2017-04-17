@@ -40,8 +40,12 @@ module.exports.registerUser = function (req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
+        for(i = 1; i< errors.length; i++)
+        {
+            errors[0].msg += "\n" + errors[i].msg;
+        }
         res.status(500).json({
-            error: errors,
+            error: errors[0],
             msg: null,
             data: null
         });
@@ -81,9 +85,9 @@ module.exports.registerUser = function (req, res) {
                 var regexp = new RegExp('^' + req.body.username + '$', 'i')
                 if (regexp.test(user.username))
                     msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
-
+                var newError = {"msg": msg};
                 res.status(500).json({
-                    error: null,
+                    error: newError,
                     msg: msg,
                     data: null
                 });
