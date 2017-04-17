@@ -18,7 +18,7 @@ export class ReviewComponent implements OnInit {
     //reviews: Review[];
     userId: String = "58f2524179efae7640c1c949";
     averageString: String;
-    loggedin = true;
+    loggedIn = true;
 
     constructor(
         private userService: UserService,
@@ -46,6 +46,16 @@ export class ReviewComponent implements OnInit {
               this.count = this.reviews.length;
             }
         });
+    }
+
+
+    onDeleteClick(){
+
+    }
+
+
+    onEditClick(){
+        
     }
 }
 

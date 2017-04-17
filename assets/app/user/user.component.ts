@@ -15,6 +15,8 @@ export class UserComponent implements OnInit {
   public showReviews = false;
   public showFavorites = false;
   public showBookings = false;
+  public editProfile = false;
+
   private profilePicture: String;
 
   user: Object;
@@ -26,14 +28,14 @@ export class UserComponent implements OnInit {
   birthDate:Date;
   createdAt:Date;
   path: String = "";
-  //loggedIn = false;
+  loggedIn = true;
 
   constructor(private userService: UserService,
         private router: Router,
         private http: Http) { }
 
   ngOnInit() {
-    this.userService.getUser(this.userId).subscribe(data => {
+    this.userService.getOneUser(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
             }
@@ -63,18 +65,29 @@ export class UserComponent implements OnInit {
     this.showReviews = true;
     this.showFavorites = false;
     this.showBookings = false;
+    this.editProfile = false;
   }
 
   onFavoritesClick(){
     this.showReviews = false;
     this.showFavorites = true;
     this.showBookings = false;
+    this.editProfile = false;
   }
 
   onBookingsClick(){
     this.showReviews = false;
     this.showFavorites =false;
     this.showBookings = true;
+    this.editProfile = false;
+  }
+
+  onEditProfileClick(){
+    this.showReviews = false;
+    this.showFavorites =false;
+    this.showBookings = false;
+    this.editProfile = true;
+
   }
 
 }

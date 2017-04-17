@@ -99,14 +99,16 @@
                                 </div>
 
                             </div>
-                            <footer class="panel-footer">
-                                <div class="config">
 
-                                    <li *ngIf="loggedin"><a href="#" (click)="onEdit()">Edit</a></li>
-                                    <li *ngIf="loggedin"><a href="#" (click)="onDelete()">Delete</a></li>
+                            <div *ngIf="loggedIn">
+                                <footer class="panel-footer">
+                                    <div class="config">
+                                        <a (click)="onEdit()">Edit</a>
+                                        <a (click)="onDelete()">Delete</a>
+                                    </div>
+                                </footer>
+                            </div>
 
-                                </div>
-                            </footer>
                         </div>
                     </div>
 

@@ -74,15 +74,11 @@
 
                                                 <h3>{{firstName +" " + lastName}}</h3>
 
-
                                             </div>
                                             <ul class="user-meta">
                                                 <li> email: {{email}}<span class="mh-5 text-muted"></span></li>
                                                 <li> born: {{birthDate | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
                                                 <li> joined: {{createdAt | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
-
-
-
 
 
                                             </ul>
@@ -117,8 +113,8 @@
 
                                     <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
                                     <li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
-                                    <li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
-
+                                    <li *ngIf="loggedIn" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+                                    <li *ngIf="loggedIn" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
 
                                 </ul>
                             </nav>
@@ -142,12 +138,16 @@
                 </div>
 
                 <div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                    <user-favorites></user-favorites>
+                    <app-user-favorites></app-user-favorites>
 
                 </div>
 
                 <div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                    <h1> Booking </h1>
+                    <app-user-bookings></app-user-bookings>
+                </div>
+
+                <div *ngIf="editProfile" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-editProfile></app-editProfile>
                 </div>
 
             </div>

@@ -42,19 +42,25 @@ export class UserService {
     return this.http.get('http://localhost:8080/api/review/user/' + userId, {headers: headers}).map(res => res.json());
   }
 
-//get the user's info:
-  getUser(userId){
+  //get the user's info:
+  getOneUser(userId){
     let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
     return this.http.get('http://localhost:8080/api/user/profile/' + userId, {headers: headers}).map(res => res.json());
-
   }
 
-  getFavBusiness(businessId){
+
+  getCurrentInfo(businessId){
     let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:8080/api/business/' +businessId+'/getInfo' , {headers: headers}).map(res => res.json());
+    return this.http.get('http://localhost:8080/api/business/' + businessId + '/getInfo', {headers: headers}).map(res => res.json());
+  }
 
+
+  getBookingHistory(userId){
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:8080/api/booking/history/' + userId, {headers: headers}).map(res => res.json());
   }
 
   
