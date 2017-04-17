@@ -5,29 +5,26 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EditProfileService {
-    businessId: String = "58e8d68ce4a2cf7c06cff89a";
-
+    
+    userId: String = "58f2524179efae7640c1c949";
+    
     constructor(private http: Http) { }
 
-    getBusinessProfile(businessId) {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        return this.http.get('http://localhost:8080/api/business/' + businessId + '/getInfo', { headers: headers }).map(res => res.json());
-    }
+    getOneUser(userId){
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:8080/api/user/profile/' + userId, {headers: headers}).map(res => res.json());
+  }
 
-    editBusinessProfile(name, wHours, wDays, category, description, phoneNumbers, tags, paymentRequired, deposit) {
+    editUserProfile(firstName, lastName, birthDate) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let body = {
-          name: name,
-          description: description,
-          tags: tags,
-          category: category,
-          paymentRequired: paymentRequired,
-          phoneNumbers: phoneNumbers,
-          workingDays: wDays,
-          workingHours: wHours
+          firstName: firstName,
+          lastName: lastName,
+          birthDate: birthDate,
+          
         }
-        return this.http.put('http://localhost:8080/api/business/editInfo', body, { headers: headers }).map(res => res.json());
+        return this.http.put('http://localhost:8080/api/user/profile/editInfo', body, { headers: headers }).map(res => res.json());
     }
 }

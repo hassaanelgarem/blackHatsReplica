@@ -14,24 +14,14 @@ import 'rxjs/add/operator/map';
 })
 
 export class EditProfileComponent implements OnInit {
-    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
-    private logo: String;
-    name: String;
-    workingFrom: String;
-    workingTo: String;
-    category: String;
-    description: String;
-    paymentRequired: Number;
-    deposit: Number;
-    depositFlag: boolean = false;
-    phoneNumbers: String[];
-    workingDays: String[];
-    tags: String[];
-    extraNumber: String = "";
-    extraTag: String = "";
-    extraDay: String = "";
+    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
+    private profilePicture: String;
+    firstName: String;
+    lastName: String;
+    birthDate: Date;
+   
     path: String = "";
-    businessId: String = "58e8d68ce4a2cf7c06cff89a";
+    userId: String = "58f2524179efae7640c1c949";
 
     constructor(
         private editProfileService: EditProfileService,
@@ -42,32 +32,24 @@ export class EditProfileComponent implements OnInit {
         this.initialise();
     }
     initialise() {
-        this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {
+        this.editProfileService.getOneUser(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
             }
             else {
-                this.name = data.data.name;
-                if (data.data.workingHours != null) {
-                    this.workingFrom = data.data.workingHours.from;
-                    this.workingTo = data.data.workingHours.to;
-                }
-                this.category = data.data.category;
-                this.description = data.data.description;
-                this.paymentRequired = data.data.paymentRequired;
-                this.deposit = data.data.deposit;
-                this.phoneNumbers = data.data.phoneNumbers;
-                this.tags = data.data.tags;
-                this.workingDays = data.data.workingDays;
-                if (data.data.logo != null) {
-                    this.path = "http://localhost:8080/api/";
-                    this.logo = data.data.logo;
+                this.firstName = data.data.firstName;
+                this.lastName = data.data.lastName;
+                this.birthDate = data.data.birthDate;
+                
+                if (data.data.profilePicture != null) {
+                    this.path = "http://localhost:8080/api/image/profilePictures/";
+                    this.profilePicture = data.data.profilePicture;
                 }
                 else {
                     this.path = "";
-                    this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
+                    this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
-                this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
+                this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
                 this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
                     this.initialise();
                 };
@@ -76,37 +58,15 @@ export class EditProfileComponent implements OnInit {
     }
 
     updateProfile() {
-        let workingHours = {
-            from: this.workingFrom,
-            to: this.workingTo
-        }
-        this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(data => {
+        
+        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
             }
         });
     }
 
-    showDeposit(value) {
-        if (value == 2) {
-            this.depositFlag = true;
-        }
-        else {
-            this.depositFlag = false;
-        }
-    }
-
-    addPhoneNumber() {
-        if (this.extraNumber != "") {
-            this.tags.push(this.extraNumber);
-            this.extraNumber = "";
-        }
-    }
-
-    removePhoneNumber(index) {
-        this.phoneNumbers.splice(index, 1);
-    }
-
+    /*
     addTag() {
         if (this.extraTag != "") {
             this.tags.push(this.extraTag);
@@ -128,6 +88,7 @@ export class EditProfileComponent implements OnInit {
     removeWorkingDay(index) {
         this.workingDays.splice(index, 1);
     }
+    */
 
     onUpload() {
         this.uploader.uploadAll();
