@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SearchService } from '../search.service';
-import { Business } from '../business.model';
+import { Business } from '../../business.model';
 
 
 @Component({

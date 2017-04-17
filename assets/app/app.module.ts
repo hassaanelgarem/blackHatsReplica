@@ -12,6 +12,8 @@ import { LoginComponent} from "./user/login/login.component";
 import { RegisterComponent} from "./user/register/register.component";
 import { SearchComponent} from "./homepage/search/search.component";
 import { NameOrTagComponent} from "./homepage/search/nameOrTagResult//result.component";
+import { TopBusinessesComponent } from "./homepage/topBusinesses/topBusinesses.component";
+import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component"
 
 
 
@@ -31,7 +33,9 @@ import { SearchService } from "./homepage/search/search.service";
       LoginComponent,
       RegisterComponent,
       SearchComponent,
-      NameOrTagComponent
+      NameOrTagComponent,
+      TopBusinessesComponent,
+      AdSlotsComponent
     ],
     imports: [
       BrowserModule,

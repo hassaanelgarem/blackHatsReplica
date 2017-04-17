@@ -266,7 +266,7 @@ module.exports.addBusiness = function (req, res) {
         });
     }
 };
-
+//here to use use this
 
 /*
     Put function that increments the interactivity attribute of a certain business by 1
