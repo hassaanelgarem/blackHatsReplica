@@ -67,7 +67,10 @@
                                     <div class="user-long-sm-item bg-light border pl-15 pt-15 pr-15 pb-5 clearfix">
 
                                         <div class="image">
-                                            <img src="/images/man/01.jpg" alt="image" />
+
+                                            <img class='img-circle' *ngIf="business.logo == null" src="http://localhost:8080/api/image/businessLogos/defaultLogo.jpg" />
+
+                                            <img class='img-circle' *ngIf="business.logo != null" src="{{path}}{{business.logo}}" />
                                         </div>
 
                                         <div class="content">
