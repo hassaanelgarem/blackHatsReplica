@@ -69,7 +69,7 @@ module.exports = function (passportConfig) {
     router.route('/business/editInfo').put(businessCtrl.saveNewInfo); //passportConfig.isBusinessLoggedIn,
     router.route('/business/changePassword').put(passportConfig.isBusinessLoggedIn, businessCtrl.changePassword);
     router.route('/business/addPhoto').post(businessCtrl.addPhoto); //passportConfig.isBusinessLoggedIn,
-    router.route('/business/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, businessCtrl.deletePhoto);
+    router.route('/business/deletePhoto/:photoPath').delete(businessCtrl.deletePhoto); //passportConfig.isBusinessLoggedIn, 
     router.route('/business/addLogo').post(businessCtrl.uploadLogo); //passportConfig.isBusinessLoggedIn,
     router.route('/business/logout').get(passportConfig.isBusinessLoggedIn, passportConfig.logout);
     //Business activity routes

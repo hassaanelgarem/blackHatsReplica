@@ -133,7 +133,7 @@ module.exports.addPhoto = function (req, res) {
 */
 module.exports.deletePhoto = function (req, res) {
     var imagePath = req.params.photoPath;
-    var businessId = req.user._id;
+    var businessId = "58e8d68ce4a2cf7c06cff89a";
     Business.update({
         _id: businessId
     }, {

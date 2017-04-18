@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { Router } from '@angular/router';
-import {Http, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { EditProfileService } from "../editProfile/editProfile.service";
+import { AddPhotoService } from "./addPhoto.service";
 
 @Component({
   selector: 'app-addPhoto',
@@ -17,6 +18,7 @@ export class AddPhotoComponent implements OnInit {
 
   constructor(
     private editProfileService: EditProfileService,
+    private addPhotoService: AddPhotoService,
     private router: Router,
     private http: Http) { }
 
@@ -41,5 +43,14 @@ export class AddPhotoComponent implements OnInit {
 
   onUpload() {
       this.uploader.uploadAll();
+  }
+
+  deletePhoto(index){
+    this.addPhotoService.deletePhoto(this.photos[index]).subscribe(data => {
+      if (data.err) {
+        console.error(data.msg);
+      }
+    });
+    this.showPhotos();
   }
 }

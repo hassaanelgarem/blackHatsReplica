@@ -3,7 +3,6 @@ import { FileUploader } from 'ng2-file-upload';
 import { EditProfileService} from "./editProfile.service"
 import { Router } from '@angular/router';
 import {Http, Headers } from '@angular/http';
-//import { Business } from "../../../api/data/business.model";
 import 'rxjs/add/operator/map';
 
 
@@ -55,12 +54,18 @@ export class EditProfileComponent implements OnInit {
                 this.category = data.data.category;
                 this.description = data.data.description;
                 this.paymentRequired = data.data.paymentRequired;
+                if(data.data.paymentRequired == 2){
+                  this.depositFlag = true;
+                }
+                else{
+                  this.depositFlag = false;
+                }
                 this.deposit = data.data.deposit;
                 this.phoneNumbers = data.data.phoneNumbers;
                 this.tags = data.data.tags;
                 this.workingDays = data.data.workingDays;
                 if (data.data.logo != null) {
-                    this.path = "http://localhost:8080/api/";
+                    this.path = "http://localhost:8080/api/image/businessLogos/";
                     this.logo = data.data.logo;
                 }
                 else {
@@ -85,6 +90,10 @@ export class EditProfileComponent implements OnInit {
                 console.error(data.msg);
             }
         });
+    }
+
+    cancel(){
+      this.initialise();
     }
 
     showDeposit(value) {
