@@ -12,35 +12,37 @@ import { Business } from '../business.model';
   styleUrls :['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-   result:string;
-   location:string;
-   category:string;
+  //  result:string;
+  //  location:string;
+  //  category:string;
 
   constructor(private searchService: SearchService, private router: Router) { }
 
   ngOnInit() {
   }
 
-  searchClicked() {
+  searchClicked(result:string) {
     //i should render business page and then on init of the business should take the lead
-    this.searchService.getBusinesses(this.result)
+    console.log(result);
+    this.searchService.getBusinesses(result)
       .subscribe(
       (business: Business[]) => {
-        console.log(this.result);
+        console.log(result);
         // console.log(business);
         this.router.navigate(['viewBusinessesSearch']);
       });
   }
 
-   exploreClicked() {
+   exploreClicked(location:string,category:string) {
     //i should render business page and then on init of the business should take the lead
-    this.searchService.getBusinessesExplore(this.location,this.category)
+    console.log(category,location);
+    this.searchService.getBusinessesExplore(location,category)
       .subscribe(
       (business: Business[]) => {
         
-        // console.log(business);
+        console.log(business);
         //to add here the location
-        this.router.navigate(['viewBusinessesSearch']);
+        // this.router.navigate(['viewBusinessesSearch']);
       });
   }
 

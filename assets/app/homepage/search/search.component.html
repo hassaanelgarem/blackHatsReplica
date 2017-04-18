@@ -7,28 +7,22 @@
 	</div>
 	<form>
 		<div class="form-group">
-			<input type="text" placeholder="Search by name or tag" class="form-control flexdatalist" data-data="data/countries.json"
-			    data-search-in='["name","capital"]' data-visible-properties='["capital","name","continent"]' data-group-by="continent"
-			    data-selection-required="true" data-focus-first-result="true" data-min-length="1" data-value-property="iso2" data-text-property="{capital}, {name}"
-			    data-search-contain="false" name="countries" [(ngModel)]="result">
-			<button class="btn" (click)="searchClicked()"><i class="icon-magnifier"></i></button>
-											{{result}}
-		</div>
+					 <input type="text" placeholder="Search by name or tag" class="form-control" data-min-length="1" name="results"  #result>
+ 				<button class="btn" (click)="searchClicked(result.value)"><i class="icon-magnifier"></i></button>
+ 			</div>
 	</form>
-	<!--<div class="col-xs-12 col-sm-12 col-md-8">-->
 	<div class="row">
 		<div class="col-xs-6 col-sm-6 mb-20-xs">
 
 			<div class="form-group">
 				<label>Where are you?</label>
-				<select class="selectpicker show-tick form-control" title="Choose Location" [(ngModel)]="location" selected="selected">
+				<select class="selectpicker show-tick form-control" title="Choose Location" #location >
 									<option value="All"></option>
 									<option value="nearby">near by</option>
 									<option value="mansora">Mansora</option>
 									<option value="alexandria">Alexandria</option>
 									<option value="cairo">Cairo</option>
 								</select>
-								{{location}}
 
 			</div>
 		</div>
@@ -37,25 +31,22 @@
 
 			<div class="form-group">
 				<label>What do you feel like doing</label>
-				<select class="selectpicker show-tick form-control" title="Choose Category" [(ngModel)]="category" selected="selected">
+				<select class="selectpicker show-tick form-control" title="Choose Category" #category>
 									<option value="All"></option>
 									<option value="categorya">A</option>
 									<option value="categoryb">B</option>
 									<option value="categoryc">C</option>
 									<option value="categoryd">D</option>
 								</select>
-																{{category}}
 			</div>
 
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-12">
 
 			<div class="fearured-join-item mb-0">
-				<a (click)="exploreClicked()" class="btn btn-primary btn-lg">Explore</a>
+				<a (click)="exploreClicked(location.value,category.value)" class="btn btn-primary btn-lg">Explore</a>
 			</div>
 		</div>
 	</div>
-
-	<!--</div>-->
 </div>
 <!-- end hero-header -->

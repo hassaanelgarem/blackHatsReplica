@@ -33,17 +33,17 @@ export class SearchService {
     }
 
     getBusinessesExplore(location:string,category:string) {
-                console.log(location,category);
-               // console.log( ' route http://localhost:8080/api/search?location=' +location+'&category='+category);
+                // console.log(location,category);
+               console.log( ' route http://localhost:8080/api/search?location=' +location+'&category='+category);
                  return this.http.get('http://localhost:8080/api/search?location=' +location+'&category='+category)
             //map method to transform the response
             .map((response: Response) => {
                 const businesses = response.json().data;
                 let transformedBusiness: Business[] = [];
                 for (let business of businesses) {
-                    transformedBusiness.push(new Business(business.name, business.email, business.phoneNumbers, business.workingDays, business.workingHours,
+                    transformedBusiness.push(new Business(business._id,business.name,business.logo, business.email, business.phoneNumbers, business.workingDays, business.workingHours,
                         business.address, business.location, business.tags, business.category, business.description, business.interactivity,
-                        business.totalRatings, business.photos, business.paymentRequired, business.deposit, business.logo));
+                        business.totalRatings, business.photos, business.paymentRequired, business.deposit));
                 }
                 this.businesses = transformedBusiness;
                 // console.log(this.businesses);
