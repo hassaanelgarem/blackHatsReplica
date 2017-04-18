@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output ,EventEmitter} from '@angular/core';
 
 @Component({
     selector : 'user-login',
@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
 })
 
 export class LoginComponent{
+    @Output() loginClicked =new EventEmitter<boolean>();
 
+    onLogin(){
+            this.loginClicked.emit(true);
+    }
 }
