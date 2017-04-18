@@ -77,16 +77,6 @@ module.exports.getAdvSlots = function (req, res) {
 */
 module.exports.bookAdvSlot = function (req, res) {
 
-
-    const errors = req.validationErrors();
-
-    if (errors) {
-        res.status(500).json({
-            error: errors,
-            msg: "Incomplete Input",
-            data: null
-        });
-    } else {
         // check if advSlot exists
         AdvSlot.findById(req.params.advSlotId, function (err, slot) {
             if (err) return res.status(500).json({
@@ -161,7 +151,7 @@ module.exports.bookAdvSlot = function (req, res) {
                     });
             });
         });
-    }
+
 };
 
 

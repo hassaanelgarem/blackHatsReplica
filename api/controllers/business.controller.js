@@ -20,7 +20,7 @@ const uploadBusinessLogo = multer({
 }).single('myfile');
 
 
-/*  
+/*
     Post function that adds a photo to business photos.
     Takes:
         body: {
@@ -121,7 +121,7 @@ module.exports.addPhoto = function (req, res) {
 };
 
 
-/*  
+/*
     Delete function that deletes a photo from business photos.
     Takes:
         params: {
@@ -173,7 +173,7 @@ module.exports.deletePhoto = function (req, res) {
 };
 
 
-/* 
+/*
     Post function that adds the business's name, password, email & description to the db on applying
     Takes:
         Body: {
@@ -185,7 +185,7 @@ module.exports.deletePhoto = function (req, res) {
         }
     Returns: Success or failure message along with the error if any
     Redirects to: Nothing.
-    Calling Route: '/api/business/apply' 
+    Calling Route: '/api/business/apply'
 */
 module.exports.addBusiness = function (req, res) {
 
@@ -266,7 +266,6 @@ module.exports.addBusiness = function (req, res) {
         });
     }
 };
-//here to use use this
 
 /*
     Put function that increments the interactivity attribute of a certain business by 1
@@ -354,17 +353,17 @@ module.exports.getMostPopular = function (req, res) {
 };
 
 
-/*  
+/*
     Post function, to Upload Logo using multer
     and store the uploaded image path in the Business
     model in photos array, and return the
-    filepath to the frontend to show the image.    
-    Takes: 
+    filepath to the frontend to show the image.
+    Takes:
         body{
             myfile: the image to be uploaded
         }
     Returns: Success along with image path or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/addLogo'
 */
 module.exports.uploadLogo = function (req, res) {
@@ -473,15 +472,15 @@ module.exports.uploadLogo = function (req, res) {
 };
 
 
-/*  
+/*
     Get function, that gets the current data of the business
     and pass business object to the frontend to display it.
-    Takes:    
-        params{  
+    Takes:
+        params{
             businessId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/:businessId/getInfo'
 */
 module.exports.getCurrentInfo = function (req, res) {
@@ -514,10 +513,10 @@ module.exports.getCurrentInfo = function (req, res) {
 };
 
 
-/*  
+/*
     Put Function, to save the edited business info in the database.
     Takes:
-        body{  
+        body{
             name,
             description,
             tags,
@@ -527,7 +526,7 @@ module.exports.getCurrentInfo = function (req, res) {
             workingDays
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/editInfo'
 */
 module.exports.saveNewInfo = function (req, res) {
@@ -569,16 +568,16 @@ module.exports.saveNewInfo = function (req, res) {
 };
 
 
-/*  
+/*
     Put Function, to change the password of the business.
     Takes:
-        body{  
+        body{
             oldPassword,
             password,
-            confirmPassword 
+            confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/changePassword'
 */
 module.exports.changePassword = function (req, res) {

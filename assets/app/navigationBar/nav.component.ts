@@ -14,6 +14,7 @@ export class NavComponent implements OnInit {
   constructor(private appService: AppService) { }
 
   ngOnInit() {
+    // call current user backend function
     this.loggedin=this.appService.status();
   }
 
