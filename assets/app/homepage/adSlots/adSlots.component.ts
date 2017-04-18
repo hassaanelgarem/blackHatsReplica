@@ -22,13 +22,15 @@ export class AdSlotsComponent implements OnInit {
       .subscribe((adSlots: AdSlot[]) => {
         this.adSlots = adSlots;
         // console.log(this.adSlots)
-
-        for (let i = 0; i < this.adSlots.length; i++) {
+        let count=0;
+        for (let i = 0; i < this.adSlots.length && count<3; i++) {
+          
           this.adSlotsService.getBookedSlots(adSlots[i].adSlotId)
             .subscribe((bookingSlot: BookingSlot[]) => {
                       // console.log(bookingSlot);
               if(bookingSlot.length>0 && bookingSlot[0].adSlotId==adSlots[i].adSlotId){
               this.bookingSlots.push(bookingSlot[0]);
+              count++;
               }
             });
 

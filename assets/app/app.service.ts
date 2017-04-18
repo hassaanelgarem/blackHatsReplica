@@ -15,7 +15,7 @@ export class AppService {
       return this.isLoggedin;
   }
 
-  logout(){
+  logout(){ 
 
       //should add here the linking to backend function
 
