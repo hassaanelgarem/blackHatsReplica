@@ -40,8 +40,7 @@ module.exports.registerUser = function (req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
-        for(i = 1; i< errors.length; i++)
-        {
+        for (i = 1; i < errors.length; i++) {
             errors[0].msg += "\n" + errors[i].msg;
         }
         res.status(500).json({
@@ -68,7 +67,7 @@ module.exports.registerUser = function (req, res) {
                     $options: "ix"
                 }
             }]
-        }, function(err, user) {
+        }, function (err, user) {
             //if there is an error, send an error message
             if (err) {
                 return res.status(500).json({
@@ -124,8 +123,8 @@ module.exports.registerUser = function (req, res) {
                             var regexp = new RegExp('^' + req.body.username + '$', 'i')
                             if (regexp.test(tempUser.username))
                                 msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
-                           
-                           var newError = {"msg": msg};
+
+                            var newError = {"msg": msg};
                             res.status(500).json({
                                 error: newError,
                                 msg: msg,
@@ -229,10 +228,10 @@ module.exports.deleteAccount = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/user/addFavorite/:businessId'
 */
-module.exports.addFavorite = function(req, res) {
+module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    Business.findById(businessId, function(err, doc) {
+    Business.findById(businessId, function (err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
             res.status(500).json({
@@ -257,7 +256,7 @@ module.exports.addFavorite = function(req, res) {
                         favorites: businessId
                     }
                 }, //add the business id to the favorites array
-                function(err, result) {
+                function (err, result) {
                     //couldn't add to array, return the error
                     if (err) {
                         res.status(500).json({
@@ -284,7 +283,7 @@ else returns error message.
 Redirects to: Nothing
 Calling route: '/api/user/deleteFavorite/:businessId'
 */
-module.exports.deleteFavorite = function(req, res) {
+module.exports.deleteFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
 
@@ -294,7 +293,7 @@ module.exports.deleteFavorite = function(req, res) {
         $pull: {
             "favorites": businessId
         }
-    }, function(err, data) {
+    }, function (err, data) {
         if (err) {
             res.status(500).json({
                 error: err,
