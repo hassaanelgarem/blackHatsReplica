@@ -1,11 +1,13 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { DummyComponent } from "./dummy/dummy.component";
-import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
+import { AppComponent } from "./app.component";
+// import { AdminComponent } from './admin/admin.component';
+
+import { ADMIN_ROUTES } from './admin/admin.routing';
 
 const APP_ROUTES: Routes = [
-    { path: 'business', component: BusinessEditComponent },
-    { path: 'dummy', component: DummyComponent }
+    { path: '', component: AppComponent },
+    { path: 'admin', children: ADMIN_ROUTES }
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

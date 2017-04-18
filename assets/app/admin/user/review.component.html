@@ -1,0 +1,73 @@
+<div class="nav-md footer_fixed">
+    <div class="container body">
+        <div class="main_container">
+            <app-admin-navbar></app-admin-navbar>
+            <app-admin-sidebar></app-admin-sidebar>
+            <link href="/admin/iCheck/skins/flat/green.css" rel="stylesheet">
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="page-title">
+                        <div class="title_left">
+                            <h3>Registered Users</h3>
+                            <div class="alert alert-success alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Indicates a successful or positive action.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="x_panel">
+                                <div class="x_content">
+
+                                    <!-- start project list -->
+                                    <table class="table table-striped projects">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 20%">username</th>
+                                                <th>Email</th>
+                                                <th>Member Since</th>
+                                                <th>Status</th>
+                                                <th style="width: 20%">Admin Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let user of users" #{{user._id}}>
+                                                <td>
+                                                    <p>{{user.username}}</p>
+                                                    <br />
+                                                </td>
+                                                <td>
+                                                    <p>{{user.email}}</p>
+                                                </td>
+                                                <td>
+                                                    {{user.createdAt}}
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-success btn-xs">Verified</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Recover </button>
+                                                    <button class="btn btn-danger btn-xs" (click)="deleteUser(user._id)"><i class="fa fa-trash-o"></i> Suspend </button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <!-- end project list -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+            <app-admin-footer></app-admin-footer>
+        </div>
+    </div>
+</div>

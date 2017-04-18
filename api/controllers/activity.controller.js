@@ -615,7 +615,7 @@ module.exports.addPhoto = function (req, res) {
                             "_id": req.params.activityId
                         }, {
                             $push: {
-                                "photos": newPath
+                                "photos": req.file.filename + "." + string
                             }
                         },
                         function (err, result) {

@@ -24,8 +24,7 @@ app.set('view engine', 'hbs');
 
 // ORDER OF THE MIDDLEWARE IS IMPORTANT
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

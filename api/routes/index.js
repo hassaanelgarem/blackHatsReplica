@@ -88,7 +88,12 @@ module.exports = function (passportConfig) {
     router.route('/admin/business/unVerifiedBusinesses').get(passportConfig.isAdminLoggedIn, adminCtrl.unVerifiedBusinesses);
     router.route('/admin/makeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.makeAdmin);
     router.route('/admin/removeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.removeAdmin);
-    router.route('/admin/user/delete/:userId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteUser);
+    router.route('/admin/user/delete/:userId').delete(adminCtrl.deleteUser);
+    
+    //To do add login check after testing
+    router.route('/admin/user/getAll').get(adminCtrl.getUsers);
+    router.route('/admin/user/getAdmins').get(adminCtrl.getAdmins);
+    router.route('/admin/user/getNonAdmins').get(adminCtrl.getNonAdmins);
     router.route('/admin/support/user/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverUser);
     router.route('/admin/support/business/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
     router.route('/admin/support/deleteRequest/:requestId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteSupportRequest);

@@ -20,7 +20,7 @@ const emailSender = require('../config/emailSender');
 module.exports.verifyBusiness = function (req, res) {
 
     //Getting the business by its id
-    Business.findById(req.params.businessId, function(err, business) {
+    Business.findById(req.params.businessId, function (err, business) {
         if (err)
             res.status(500).json({
                 error: err,
@@ -602,3 +602,60 @@ module.exports.addAdvSlots = function (req, res) {
         })
     }
 }
+
+module.exports.getUsers = function(req, res) {
+    User.find({}).select('-password').exec(function (err, users) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: users
+            });
+    })
+};
+
+
+module.exports.getNonAdmins = function(req, res) {
+    User.find({
+        admin: false
+    }).select('-password').exec(function (err, users) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: users
+            });
+    })
+};
+
+
+module.exports.getAdmins = function(req, res) {
+    User.find({
+        admin: true
+    }).select('-password').exec(function (err, users) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: users
+            });
+    })
+};
