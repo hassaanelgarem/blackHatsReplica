@@ -4,7 +4,7 @@ const Business = mongoose.model('Business');
 const Review = mongoose.model('Review');
 
 
-/* 
+/*
     Get function that retrieves the reviews made by a user from the database
     and displays them
     Takes:
@@ -43,7 +43,7 @@ module.exports.getUserReviews = function (req, res) {
 };
 
 
-/* 
+/*
     Post function that adds a review by a registered user on a business
     to the database
     Takes:
@@ -72,7 +72,7 @@ module.exports.addReview = function (req, res) {
 
     if (errors) {
         res.status(500).json({
-            error: err,
+            error: errors,
             msg: null,
             data: null
         });
@@ -150,7 +150,7 @@ module.exports.addReview = function (req, res) {
 };
 
 
-/* 
+/*
     GET function that retrieves the reviews made on a Business from the database
     Takes:
         params: {
@@ -339,9 +339,9 @@ module.exports.editReview = function (req, res) {
 };
 
 
-/* 
+/*
     Delete function that finds and deletes a specific review
-    Takes: 
+    Takes:
         params: {
             reviewId
         }
