@@ -10,7 +10,7 @@ import { Business } from '../business.model';
     selector: 'homepage-search-result',
     templateUrl: './result.component.html'
 })
-export class NameOrTagComponent implements OnInit {
+export class SearchResultComponent implements OnInit {
     private businesses: Business[] = [];
     private temp: Observable<Business[]>;
     private sliced: Business[] = [];

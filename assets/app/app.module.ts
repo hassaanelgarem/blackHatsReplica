@@ -11,7 +11,7 @@ import { NavComponent } from "./navigationBar/nav.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
 import { SearchComponent } from "./homepage/search/search.component";
-import { NameOrTagComponent } from "./homepage/search/nameOrTagResult//result.component";
+import { SearchResultComponent } from "./homepage/search/SearchResult/result.component";
 
 
 import { HomepageService } from "./homepage/homepage.service";
@@ -27,7 +27,7 @@ import { SearchService } from './homepage/search/search.service';
     LoginComponent,
     RegisterComponent,
     SearchComponent,
-    NameOrTagComponent
+    SearchResultComponent
   ],
   imports: [
     BrowserModule,
