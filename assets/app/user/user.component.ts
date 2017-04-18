@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   private profilePicture: String;
 
   user: Object;
-  userId: String = "58f2524179efae7640c1c949"; //get the id of the logged in user
+  userId: String = "58f252bd9037f62725ddf62c"; //get the id of the logged in user
   favorites:Object[];
   firstName:String;
   lastName:String;
@@ -54,7 +54,7 @@ export class UserComponent implements OnInit {
                     this.path = "";
                     this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
-              
+
 
               //this.favorites = this.user.favorites;
             }
@@ -91,5 +91,3 @@ export class UserComponent implements OnInit {
   }
 
 }
-
-

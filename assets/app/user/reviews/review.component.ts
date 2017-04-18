@@ -9,14 +9,14 @@ import 'rxjs/add/operator/map';
 @Component({
     selector: 'user-review',
     templateUrl: './review.component.html',
-    
+
 })
 
 export class ReviewComponent implements OnInit {
-    count: Number = 15;
+    count: Number = 0;
     reviews: Object[];
     //reviews: Review[];
-    userId: String = "58f2524179efae7640c1c949";
+    userId: String = "58f252bd9037f62725ddf62c";
     averageString: String;
     loggedIn = true;
 
@@ -55,7 +55,6 @@ export class ReviewComponent implements OnInit {
 
 
     onEditClick(){
-        
+
     }
 }
-

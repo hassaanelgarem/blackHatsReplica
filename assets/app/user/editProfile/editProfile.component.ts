@@ -19,9 +19,9 @@ export class EditProfileComponent implements OnInit {
     firstName: String;
     lastName: String;
     birthDate: Date;
-   
+
     path: String = "";
-    userId: String = "58f2524179efae7640c1c949";
+    userId: String = "58f252bd9037f62725ddf62c";
 
     constructor(
         private editProfileService: EditProfileService,
@@ -40,7 +40,7 @@ export class EditProfileComponent implements OnInit {
                 this.firstName = data.data.firstName;
                 this.lastName = data.data.lastName;
                 this.birthDate = data.data.birthDate;
-                
+
                 if (data.data.profilePicture != null) {
                     this.path = "http://localhost:8080/api/image/profilePictures/";
                     this.profilePicture = data.data.profilePicture;
@@ -58,7 +58,7 @@ export class EditProfileComponent implements OnInit {
     }
 
     updateProfile() {
-        
+
         this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
