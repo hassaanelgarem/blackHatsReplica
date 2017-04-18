@@ -21,6 +21,8 @@ import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component"
 import { HomepageService } from "./homepage/homepage.service";
 import { AppService } from "./app.service";
 import { SearchService } from "./homepage/search/search.service";
+import { AdSlotsService } from "./homepage/adSlots/adSlots.service";
+import { TopBusinessesService } from "./homepage/topBusinesses/topBusinesses.service";
 
 
 
@@ -43,7 +45,7 @@ import { SearchService } from "./homepage/search/search.service";
       HttpModule,
       routing
     ],
-    providers: [HomepageService,AppService,SearchService],
+    providers: [HomepageService,AppService,SearchService,AdSlotsService,TopBusinessesService],
     bootstrap : [AppComponent]
 })
 

@@ -77,8 +77,6 @@ module.exports.getAdvSlots = function (req, res) {
 */
 module.exports.bookAdvSlot = function (req, res) {
 
-    req.checkBody('startTime', 'Start Time is required.').notEmpty();
-    req.checkBody('endTime', 'End Time is required.').notEmpty();
 
     const errors = req.validationErrors();
 
@@ -215,7 +213,7 @@ module.exports.getCurrentBookings = function (req, res) {
             });
             //return a success message
             return res.status(200).json({
-                error: errors,
+                error: err,
                 msg: "Current Bookings Retrieved Successfully",
                 data: currentSlot.advSchedule
             });

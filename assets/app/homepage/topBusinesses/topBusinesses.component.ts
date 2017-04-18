@@ -6,7 +6,8 @@ import { Business } from '../business.model';
 
 @Component({
   selector: 'homepage-topBusinesses',
-  templateUrl: './topBusinesses.component.html'
+  templateUrl: './topBusinesses.component.html',
+  styleUrls : ['topBusinesses.component.css']
 })
 export class TopBusinessesComponent implements OnInit {
   private businesses: Business[] = [];
