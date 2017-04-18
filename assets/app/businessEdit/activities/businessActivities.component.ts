@@ -15,12 +15,12 @@ import 'rxjs/add/operator/map';
 export class BusinessActivitiesComponent implements OnInit {
 
     activities: Activity[] = [];
-    businessId: String = "58ee4577fa669f51b6abf3ae";
+    business: Object;
     path: String = "http://localhost:8080/api/";
     currentIndex = 0;
     showEdit = false;
-    hideModal = false;
     addDone = false;
+    editDone = false;
 
 
     //warning Flags
@@ -30,22 +30,40 @@ export class BusinessActivitiesComponent implements OnInit {
     addPriceWarning = false;
     addPerSlotWarning = false;
 
+    editNameWarning = false;
+    editDescriptionWarning = false;
+    editPriceWarning = false;
+    editPerSlotWarning = false;
+
+
     //Add attributes
 
     addName: String;
     addDescription: String;
     addPrice: Number;
     addPerSlot: Number;
+    //Edit attributes
+
+    editName: String;
+    editDescription: String;
+    editPrice: Number;
+    editPerSlot: Number;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private businessService: BusinessService
+        private businessService: BusinessService,
+        private router: Router
     ) { }
 
     ngOnInit() {
-        this.businessService.getActivities(this.businessId).subscribe((acts: Activity[]) => {
-            this.activities = acts;
+        this.businessService.getCurrentUser().subscribe(res => {
+          console.log(res);
+          this.business = res.business;
+          this.businessService.getActivities(this.business._id).subscribe((acts: Activity[]) => {
+              this.activities = acts;
+          });
         });
+
     }
 
     truncate(text) {
@@ -60,6 +78,8 @@ export class BusinessActivitiesComponent implements OnInit {
     onEdit(index) {
         this.currentIndex = index;
         this.showEdit = true;
+        this.router.navigate(["/businessEdit/activity/" + this.activities[index].id]);
+
     }
 
     onDelete() {
@@ -77,7 +97,6 @@ export class BusinessActivitiesComponent implements OnInit {
     }
 
     onAddSubmit() {
-        console.log("TRYING")
         if (!this.addName || this.addName.length == 0) {
             this.addNameWarning = true;
         }
@@ -158,6 +177,22 @@ export class BusinessActivitiesComponent implements OnInit {
         this.addPerSlotWarning = false;
     }
 
+    hideEditNameWarning() {
+        this.editNameWarning = false;
+    }
+
+    hideEditDescriptionWarning() {
+        this.editDescriptionWarning = false;
+    }
+
+    hideEditPriceWarning() {
+        this.editPriceWarning = false;
+    }
+
+    hideEditPerSlotWarning() {
+        this.editPerSlotWarning = false;
+    }
+
     onAddDone() {
         setTimeout(() => {
             this.addDone = false;
@@ -169,6 +204,24 @@ export class BusinessActivitiesComponent implements OnInit {
         this.addDescription = null;
         this.addPrice = null;
         this.addPerSlot = null;
+        this.addDone = false;
+        this.addNameWarning = false;
+        this.addDescriptionWarning = false;
+        this.addPriceWarning = false;
+        this.addPerSlotWarning = false;
+    }
+
+    onSave(){
+      this.editDone = true;
+    }
+
+    onSaveDone(){
+
+    }
+
+    onEditCancel(){
+      this.editDone = false;
+      this.showEdit = false;
     }
 
 }

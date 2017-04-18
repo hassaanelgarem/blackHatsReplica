@@ -10,6 +10,12 @@ export class BusinessService {
 
     constructor(private http: Http) { }
 
+    getCurrentUser(){
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return this.http.get('http://localhost:8080/api/currentUser', {headers: headers}).map(res => res.json());
+    }
+
     getAverageRating(businessId) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');

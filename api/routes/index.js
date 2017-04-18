@@ -63,6 +63,7 @@ module.exports = function (passportConfig) {
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
     router.route('/image/:imageType/:imageName').get(imagesCtrl.getImage);
+    router.route('/currentUser').get(userCtrl.currentUser);
 
 
     //Available to logged in only routes

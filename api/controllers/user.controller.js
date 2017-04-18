@@ -8,7 +8,7 @@ const Business = mongoose.model('Business');
 const TempUser = mongoose.model('TempUser');
 
 
-/*  
+/*
     Post Function, to register a new user into the temp users database and send the
     verification email.
     Takes:
@@ -21,8 +21,8 @@ const TempUser = mongoose.model('TempUser');
             confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
-    Calling Route: '/api/user/register'  
+    Redirects to: Nothing.
+    Calling Route: '/api/user/register'
 */
 module.exports.registerUser = function (req, res) {
 
@@ -574,16 +574,16 @@ module.exports.searchByLocationAndCategory = function (req, res) {
 };
 
 
-/*  
+/*
     Put Function, to change the password of the user.
     Takes:
-        body{  
+        body{
             oldPassword,
             password,
-            confirmPassword 
+            confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/changePassword'
 */
 module.exports.changePassword = function (req, res) {
@@ -675,15 +675,15 @@ module.exports.changePassword = function (req, res) {
 };
 
 
-/*  
+/*
     Get Function, to check the validity of the token in the verification request.
     Takes:
-        params{  
-            token: verification token sent to the user 
+        params{
+            token: verification token sent to the user
         }
-    Returns: in case of Success, the token and the userId to verify, 
+    Returns: in case of Success, the token and the userId to verify,
             in case of failure, failure messages along with errors.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/verifyAccount/:token'
 */
 module.exports.checkVerificationToken = function (req, res) {
@@ -720,14 +720,14 @@ module.exports.checkVerificationToken = function (req, res) {
 };
 
 
-/*  
+/*
     Post Function, to verify a temp user and add it to users model.
     Takes:
-        params{  
+        params{
             userId: the temp user id to verify
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/verifyAccount/:userId'
 */
 module.exports.confirmVerification = function (req, res) {
@@ -773,14 +773,14 @@ module.exports.confirmVerification = function (req, res) {
 };
 
 
-/*  
+/*
     Post Function, to resend a verification email to the user.
     Takes:
-        body{  
-            email 
+        body{
+            email
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/resendVerification'
 */
 module.exports.resendVerification = function (req, res) {
@@ -853,3 +853,26 @@ module.exports.resendVerification = function (req, res) {
         });
     }
 };
+/*
+Get function that returns the logged in user or business if they exist
+Returns: {
+  success: indicated whether there's a log in session or no,
+  user: User object of logged in user,
+  business: Business object of logged in business
+}
+Redirects to: Nothing.
+Calling Route: '/api/currentUser'
+*/
+module.exports.currentUser = function (req, res) {
+  if(req.isAuthenticated()){
+    if(req.user.constructor.modelName === "User"){
+      res.json({succes: true, user: req.user, business: null});
+    }
+    else{
+      res.json({succes: true, user: null, business: req.user});
+    }
+  }
+  else{
+    res.json({succes: false, user: null, business: null});
+  }
+}

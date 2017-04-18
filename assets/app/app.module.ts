@@ -11,6 +11,7 @@ import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
 import { BusinessActivitiesComponent} from "./businessEdit/activities/businessActivities.component"
+import { EditActivityComponent} from "./businessEdit/activities/editActivity.component"
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
@@ -21,7 +22,8 @@ import { BusinessService } from "./businessEdit/business.service";
       DummyComponent,
       BusinessEditComponent,
       BusinessReviewsComponent,
-      BusinessActivitiesComponent
+      BusinessActivitiesComponent,
+      EditActivityComponent
     ],
     imports: [
       BrowserModule,
