@@ -12,9 +12,6 @@ import { Business } from '../business.model';
   styleUrls :['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  //  result:string;
-  //  location:string;
-  //  category:string;
 
   constructor(private searchService: SearchService, private router: Router) { }
 
@@ -27,7 +24,7 @@ export class SearchComponent implements OnInit {
     this.searchService.getBusinesses(result)
       .subscribe(
       (business: Business[]) => {
-        console.log(result);
+        // console.log(result);
         // console.log(business);
         this.router.navigate(['viewBusinessesSearch']);
       });
@@ -40,7 +37,7 @@ export class SearchComponent implements OnInit {
       .subscribe(
       (business: Business[]) => {
         
-        console.log(business);
+        // console.log(business);
         //to add here the location
         // this.router.navigate(['viewBusinessesSearch']);
       });
