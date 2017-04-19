@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from "@angular/router";
 
 import { HomepageComponent } from "./homepage/homepage.component";
-import { NameOrTagComponent } from "./homepage/search/nameOrTagResult/result.component";
+import { SearchResultComponent } from "./homepage/search/SearchResult/result.component";
 
 
 
@@ -10,7 +10,7 @@ const APP_ROUTES: Routes = [
     { path: '**',redirectTo:'/homepage'},
     { path: '',redirectTo:'/homepage', pathMatch: 'full'},
     { path: 'homepage', component: HomepageComponent},
-    { path: 'viewBusinessesSearch', component: NameOrTagComponent}
+    { path: 'search', component: SearchResultComponent}
 
 ];
 

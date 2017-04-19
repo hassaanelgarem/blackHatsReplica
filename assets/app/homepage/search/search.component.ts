@@ -19,28 +19,11 @@ export class SearchComponent implements OnInit {
   }
 
   searchClicked(result:string) {
-    //i should render business page and then on init of the business should take the lead
-    console.log(result);
-    this.searchService.getBusinesses(result)
-      .subscribe(
-      (business: Business[]) => {
-        // console.log(result);
-        // console.log(business);
-        this.router.navigate(['viewBusinessesSearch']);
-      });
+    this.router.navigate(['search'],{queryParams :{ result : result ,page :"1"}});
   }
 
    exploreClicked(location:string,category:string) {
-    //i should render business page and then on init of the business should take the lead
-    console.log(category,location);
-    this.searchService.getBusinessesExplore(location,category)
-      .subscribe(
-      (business: Business[]) => {
-        
-        // console.log(business);
-        //to add here the location
-        // this.router.navigate(['viewBusinessesSearch']);
-      });
+   
   }
 
 }

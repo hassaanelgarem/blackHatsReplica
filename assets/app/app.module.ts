@@ -11,7 +11,7 @@ import { NavComponent} from "./navigationBar/nav.component";
 import { LoginComponent} from "./user/login/login.component";
 import { RegisterComponent} from "./user/register/register.component";
 import { SearchComponent} from "./homepage/search/search.component";
-import { NameOrTagComponent} from "./homepage/search/nameOrTagResult//result.component";
+import { SearchResultComponent} from "./homepage/search/SearchResult/result.component";
 import { TopBusinessesComponent } from "./homepage/topBusinesses/topBusinesses.component";
 import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component"
 
@@ -35,7 +35,7 @@ import { TopBusinessesService } from "./homepage/topBusinesses/topBusinesses.ser
       LoginComponent,
       RegisterComponent,
       SearchComponent,
-      NameOrTagComponent,
+      SearchResultComponent,
       TopBusinessesComponent,
       AdSlotsComponent
     ],
