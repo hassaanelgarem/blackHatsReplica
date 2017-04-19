@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { SearchService } from '../search.service';
-import { Business } from '../business.model';
+import { Business } from '../../business.model';
 
 
 @Component({
@@ -26,6 +26,11 @@ export class SearchResultComponent implements OnInit {
             .subscribe(params => {
                 this.pageNumber = +params['page'];
                 this.searchQuery = params['result'];
+                if(!this.searchQuery){
+                    this.searchQuery="location="+params['location']+"&&category="+params['category']; 
+                }
+                else
+                    this.searchQuery="result="+this.searchQuery;
                 this.searchService.getBusinesses(this.searchQuery).subscribe(businesses => {
                     this.businesses = businesses;
                     this.sliced = this.businesses.slice(this.pageNumber - 1, this.pageNumber * 16 + 15);

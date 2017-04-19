@@ -4,8 +4,8 @@ import { SearchResultComponent } from "./homepage/search/SearchResult/result.com
 import { HomepageComponent } from "./homepage/homepage.component";
 
 const APP_ROUTES: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomepageComponent },
+    { path: '', redirectTo: '/homepage', pathMatch: 'full' },
+    { path: 'homepage', component: HomepageComponent },
     { path: 'search', component: SearchResultComponent }
 
 ];
