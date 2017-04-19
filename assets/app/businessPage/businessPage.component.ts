@@ -1,69 +1,130 @@
 import { Component, OnInit } from '@angular/core';
 import {BusinessPageService} from './businessPage.service';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import { Http, Headers } from '@angular/http';
 
+
 @Component({
-  selector: 'app-business-page',
-  templateUrl: './businessPage.component.html'
+    selector: 'app-business-page',
+    templateUrl: './businessPage.component.html',
+    styleUrls: ['./businessPage.component.css']
 })
 export class BusinessPageComponent implements OnInit {
 
-  name: String;
-  address: String;
-  email: String;
-  phoneNumbers: [String];
-  workingDays: [String];
-  workingHours: Object;
-  totalRatings: Number;
-  description: String;
-  rating: String;
-  activities: [Object];
-  businessId: String = "58f28a95701573fd750a9b1c";
-  path: String = "http://localhost:8080/api/";
-  business: Object;
-  reviews: [Object];
-  loadDone = false;
-  ownerLoggedIn = false;
-  userLoggedIn = false;
-  otherBusinessLoggedIn = false;
-  noLogIn = false;
+    name: String = "";
+    logo: String = "";
+    address: String = "";
+    addressAvailable = false;
+    email: String = "";
+    phoneNumbers: String[] = [];
+    phoneNumbersAvailable = false;
+    workingDays: String[] = [];
+    workingDaysAvailable = false;
+    workingFrom: String = "";
+    workingTo: String = "";
+    workingHoursAvailable = false;
+    totalRatings: Number = 0;
+    description: String = "";
+    rating: any = "";
+    ratingNumber: Number = 0;
+    activities: Object[] = new Array<Object>();
+    category: String;
+    categoryAvailable = false;
+    businessId: String = "";
+    path: String = "http://localhost:8080/api/";
+    reviews: Object[] = new Array<Object>();
+    photos: String[] = [];
+    paymentRequired: Number;
+    paymentStatus: String;
+    deposit: Number;
+    depositAvailable = false;
+    loadDone = false;
+    ownerLoggedIn = false;
+    userLoggedIn = false;
+    otherBusinessLoggedIn = false;
+    noLogIn = false;
 
-  constructor(
-    private businessPageService: BusinessPageService,
-    private router: Router,
-    private http: Http) { }
+    config: Object = {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        spaceBetween: 30
+    }
 
-  ngOnInit() {
-    this.businessPageService.getBusinessInfo(this.businessId).subscribe(info => {
-            if (info.err) {
-                console.error(info.msg);
-            }
-            else {
-                console.log(info);
-                this.business = info.data;
-                this.name = info.data.name;
-                this.address = info.data.address;
-                this.phoneNumbers = info.data.phoneNumbers;
-                this.totalRatings = info.data.totalRatings;
-                this.description = info.data.description;
-                this.workingDays = info.data.workingDays;
-                this.email = info.data.email;
-                this.workingHours = info.data.workingHours;
-                this.loadDone = true;
-            }
-        });
+    constructor(
+        private businessPageService: BusinessPageService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private http: Http) { }
 
-         this.businessPageService.getAverageRating(this.businessId).subscribe(info => {
-                 if (info.err) {
-                     console.error(info.msg);
-                 }
-                 else {
-                     this.rating = info.data.toFixed(1);
-                 }
-             });
+    ngOnInit() {
 
-        this.businessPageService.getActivities(this.businessId).subscribe(info => {
+        this.activatedRoute.params.subscribe((params: Params) => {
+            this.businessId = params['businessId'];
+
+
+
+
+            this.businessPageService.getBusinessInfo(this.businessId).subscribe(info => {
+                if (info.err) {
+                    console.error(info.msg);
+                }
+                else {
+                    console.log(info);
+                    this.name = info.data.name;
+                    this.logo = info.data.logo;
+                    if (info.data.address != null) {
+                        this.address = info.data.address;
+                        this.addressAvailable = true;
+                    }
+                    if (info.data.phoneNumbers.length != 0) {
+                        this.phoneNumbers = info.data.phoneNumbers;
+                        this.phoneNumbersAvailable = true;
+                    }
+                    this.totalRatings = info.data.totalRatings;
+                    this.description = info.data.description;
+                    if (info.data.workingDays.length != 0) {
+                        this.workingDays = info.data.workingDays;
+                        this.workingDaysAvailable = true;
+                    }
+                    this.email = info.data.email;
+                    if (info.data.category != null) {
+                        this.category = info.data.category;
+                        this.categoryAvailable = true;
+                    }
+                    if (info.data.workingHours != null) {
+                        this.workingFrom = info.data.workingHours.from;
+                        this.workingTo = info.workingHours.to;
+                        this.workingHoursAvailable = true;
+                    }
+                    this.photos = info.data.photos;
+                    this.paymentRequired = info.data.paymentRequired;
+                    if (info.data.deposit != null) {
+                        this.deposit = info.data.deposit * 100;
+                        this.depositAvailable = true;
+                    }
+                    switch (this.paymentRequired) {
+                        case 1: this.paymentStatus = "Full payment needed in advance."; break;
+                        case 2: this.paymentStatus = "A " + this.deposit + "% deposit needed in advance."; break;
+                        case 3: this.paymentStatus = "No payment needed in advance."; break;
+                        default: this.paymentStatus = "No payment needed in advance.";
+                    }
+                    this.loadDone = true;
+                }
+            });
+
+            this.businessPageService.getAverageRating(this.businessId).subscribe(info => {
+                if (info.err) {
+                    console.error(info.msg);
+                }
+                else {
+                    this.rating = info.data.toFixed(1);
+                    this.ratingNumber += this.rating;
+                }
+            });
+
+            this.businessPageService.getActivities(this.businessId).subscribe(info => {
                 if (info.err) {
                     console.error(info.msg);
                 }
@@ -72,7 +133,7 @@ export class BusinessPageComponent implements OnInit {
                 }
             });
 
-        this.businessPageService.getReviews(this.businessId).subscribe(info => {
+            this.businessPageService.getReviews(this.businessId).subscribe(info => {
                 if (info.err) {
                     console.error(info.msg);
                 }
@@ -81,7 +142,20 @@ export class BusinessPageComponent implements OnInit {
                 }
             });
 
+            this.businessPageService.updateInteractivity(this.businessId).subscribe(info => {
+                if (info.err) {
+                    console.error(info.msg);
+                }
+            });
+        });
+    }
 
-  }
+    addFavorite(){
+      this.businessPageService.addFavorite(this.businessId).subscribe(info => {
+            if (info.err) {
+                console.error(info.msg);
+            }
+        });
 
+      }
 }

@@ -32,4 +32,12 @@ export class BusinessPageService {
     return this.http.get('http://localhost:8080/api/review/averageRating/' + businessId, {headers: headers}).map(res => res.json());
   }
 
+  updateInteractivity(businessId){
+    return this.http.put('http://localhost:8080/api/business/' + businessId + '/interact', null, null).map(res => res.json());
+  }
+
+  addFavorite(businessId){
+    return this.http.post('http://localhost:8080/api/user/addFavorite/' + businessId, null, null).map(res => res.json());
+  }
+
 }
