@@ -40,4 +40,4 @@ jspm_packages
 public/uploads/
 
 # Compiled Angular2 Webpack bundle
-public/js/app
+public/js/app/
