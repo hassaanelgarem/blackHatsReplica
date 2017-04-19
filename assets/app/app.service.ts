@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class AppService {
-  private isLoggedin = true;
+  private isLoggedin = false;
 
   constructor() { }
 
@@ -15,7 +15,7 @@ export class AppService {
       return this.isLoggedin;
   }
 
-  logout(){ 
+  logout(){
 
       //should add here the linking to backend function
 

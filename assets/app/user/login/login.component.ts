@@ -1,7 +1,7 @@
 import { Component, Output ,EventEmitter} from '@angular/core';
 
 @Component({
-    selector : 'user-login',
+    selector : 'app-signin',
     templateUrl: './login.component.html'
 
 })
