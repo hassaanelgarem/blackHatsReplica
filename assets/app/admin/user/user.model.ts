@@ -7,5 +7,6 @@ export class User {
         public username: string,
         public birthDate: Date,
         public admin: boolean,
-        public createdAt: Date) { }
+        public createdAt: Date,
+        public verified: boolean) { }
 }

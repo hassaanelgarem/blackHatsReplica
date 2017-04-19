@@ -1,0 +1,65 @@
+<div class="nav-md footer_fixed">
+    <div class="container body">
+        <div class="main_container">
+            <app-admin-navbar></app-admin-navbar>
+            <app-admin-sidebar></app-admin-sidebar>
+            <link href="/admin/iCheck/skins/flat/green.css" rel="stylesheet">
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="page-title">
+                        <div class="title_left">
+                            <h3>Registered Users</h3>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="x_panel">
+                                <div class="x_content">
+
+                                    <!-- start project list -->
+                                    <table class="table table-striped projects">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 20%">username</th>
+                                                <th>Email</th>
+                                                <th>Member Since</th>
+                                                <th style="width: 20%">Admin Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let user of users">
+                                                <td>
+                                                    <p>{{user.username}}</p>
+                                                    <br />
+                                                </td>
+                                                <td>
+                                                    <p>{{user.email}}</p>
+                                                </td>
+                                                <td>
+                                                    {{user.createdAt}}
+                                                </td>
+                                            
+                                                <td>
+                                                    <button class="btn btn-primary btn-xs" (click)="assignAdmin(user._id)"><i class="fa fa-user"></i> Assign </button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <!-- end project list -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+            <app-admin-footer></app-admin-footer>
+        </div>
+    </div>
+</div>

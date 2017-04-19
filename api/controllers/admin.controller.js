@@ -3,6 +3,7 @@ const randtoken = require('rand-token');
 const bcrypt = require('bcryptjs');
 const Business = mongoose.model("Business");
 const User = mongoose.model("User");
+const TempUser = mongoose.model("TempUser");
 const SupportRequest = mongoose.model("SupportRequest");
 const emailSender = require('../config/emailSender');
 
@@ -254,7 +255,6 @@ module.exports.removeAdmin = function (req, res) {
     Calling Route: '/api/admin/user/delete/:userId'
 */
 module.exports.deleteUser = function (req, res) {
-
     User.findById(req.params.userId, function (err, user) {
         if (err)
             res.status(500).json({
@@ -265,6 +265,7 @@ module.exports.deleteUser = function (req, res) {
         else {
             if (user) {
                 var email = user.email;
+                var username = user.firstName;
                 user.remove(function (err) {
                     if (err)
                         res.status(500).json({
@@ -273,7 +274,58 @@ module.exports.deleteUser = function (req, res) {
                             data: null
                         });
                     else {
-                        var text = 'Hello ' + user.firstName + ',\n\nUnfortunately, your account was suspended for not meeting our terms and conditions.\n\nThank you for considering Black Hats.';
+                        var text = 'Hello ' + username + ',\n\nUnfortunately, your account was suspended for not meeting our terms and conditions.\n\nThank you for considering Black Hats.';
+                        var subject = 'Account Suspended';
+
+                        emailSender.sendEmail(subject, email, text, null, function (err, info) {
+                            if (err) {
+                                res.status(500).json({
+                                    error: null,
+                                    msg: 'User was deleted, however the user was not notified.',
+                                    data: null
+                                });
+                            } else {
+                                res.status(200).json({
+                                    error: null,
+                                    msg: 'User was deleted and notified.',
+                                    data: null
+                                });
+                            }
+                        });
+                    }
+                });
+            } else
+                res.status(404).json({
+                    error: null,
+                    msg: 'User not found.',
+                    data: null
+                });
+        }
+    });
+};
+
+
+module.exports.deleteTempUser = function (req, res) {
+    TempUser.findById(req.params.userId, function (err, user) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            if (user) {
+                var email = user.email;
+                var username = user.firstName;
+                user.remove(function (err) {
+                    if (err)
+                        res.status(500).json({
+                            error: err,
+                            msg: null,
+                            data: null
+                        });
+                    else {
+                        var text = 'Hello ' + username + ',\n\nUnfortunately, your account was suspended for not meeting our terms and conditions.\n\nThank you for considering Black Hats.';
                         var subject = 'Account Suspended';
 
                         emailSender.sendEmail(subject, email, text, null, function (err, info) {
@@ -527,7 +579,7 @@ module.exports.unVerifiedBusinesses = function (req, res) {
     const query = Business.find({
         verified: false
     });
-    query.exec(function (err, businesses) {
+    query.select('-password').exec(function (err, businesses) {
         if (err) res.status(500).json({
             "error": err,
             "msg": "Can not retrieve unverified businesses.",
@@ -603,7 +655,8 @@ module.exports.addAdvSlots = function (req, res) {
     }
 }
 
-module.exports.getUsers = function(req, res) {
+
+module.exports.getUsers = function (req, res) {
     User.find({}).select('-password').exec(function (err, users) {
         if (err)
             res.status(500).json({
@@ -611,17 +664,37 @@ module.exports.getUsers = function(req, res) {
                 msg: null,
                 data: null
             });
-        else
+        else {
             res.status(200).json({
                 error: null,
                 msg: null,
                 data: users
             });
-    })
+        }
+    });
 };
 
 
-module.exports.getNonAdmins = function(req, res) {
+module.exports.getUnverifiedUsers = function (req, res) {
+    TempUser.find({}).select('-password').exec(function (err, tempUsers) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: tempUsers
+            });
+        }
+    });
+};
+
+
+module.exports.getNonAdmins = function (req, res) {
     User.find({
         admin: false
     }).select('-password').exec(function (err, users) {
@@ -641,7 +714,7 @@ module.exports.getNonAdmins = function(req, res) {
 };
 
 
-module.exports.getAdmins = function(req, res) {
+module.exports.getAdmins = function (req, res) {
     User.find({
         admin: true
     }).select('-password').exec(function (err, users) {
@@ -658,4 +731,22 @@ module.exports.getAdmins = function(req, res) {
                 data: users
             });
     })
+};
+
+
+module.exports.getBusinesses = function(req, res) {
+    Business.find({}).select('-password').exec(function (err, businesses) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: businesses
+            });
+    });
 };

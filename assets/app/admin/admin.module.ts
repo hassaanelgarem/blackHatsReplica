@@ -1,8 +1,8 @@
-import { UserService } from './user/user.service';
 import { NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from './shared.module';
 import { UserModule } from './user/user.module';
+import { BusinessModule } from './business/business.module';
 
 import { AdminComponent } from './admin.component';
 
@@ -13,9 +13,9 @@ import { AdminComponent } from './admin.component';
   imports: [
     CommonModule,
     SharedModule,
-    UserModule
-  ],
-  providers: [UserService]
+    UserModule,
+    BusinessModule
+  ]
 })
 
 export class AdminModule {

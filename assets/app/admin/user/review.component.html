@@ -10,10 +10,6 @@
                     <div class="page-title">
                         <div class="title_left">
                             <h3>Registered Users</h3>
-                            <div class="alert alert-success alert-dismissable">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <strong>Success!</strong> Indicates a successful or positive action.
-                            </div>
                         </div>
                     </div>
 
@@ -36,7 +32,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let user of users" #{{user._id}}>
+                                            <tr *ngFor="let user of users">
                                                 <td>
                                                     <p>{{user.username}}</p>
                                                     <br />
@@ -48,11 +44,13 @@
                                                     {{user.createdAt}}
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-success btn-xs">Verified</button>
+                                                    <button type="button" class="btn btn-success btn-xs" *ngIf="user.verified">Verified</button>
+                                                                                                        <button type="button" class="btn btn-danger btn-xs" *ngIf="!user.verified">Unverified</button>
+
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Recover </button>
-                                                    <button class="btn btn-danger btn-xs" (click)="deleteUser(user._id)"><i class="fa fa-trash-o"></i> Suspend </button>
+                                                    <button class="btn btn-primary btn-xs" (click)="viewUser(user._id)"><i class="fa fa-user"></i> View </button>
+                                                    <button class="btn btn-danger btn-xs" (click)="deleteUser(user._id, user.verified)"><i class="fa fa-trash-o"></i> Suspend </button>
                                                 </td>
                                             </tr>
 
