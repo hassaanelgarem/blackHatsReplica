@@ -1,8 +1,9 @@
 import { NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from './shared.module';
+import { SharedModule } from './shared/shared.module';
 import { UserModule } from './user/user.module';
 import { BusinessModule } from './business/business.module';
+import { SupportModule } from './support/support.module';
 
 import { AdminComponent } from './admin.component';
 
@@ -14,7 +15,8 @@ import { AdminComponent } from './admin.component';
     CommonModule,
     SharedModule,
     UserModule,
-    BusinessModule
+    BusinessModule,
+    SupportModule
   ]
 })
 

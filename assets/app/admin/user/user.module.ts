@@ -1,7 +1,7 @@
 import { UserService } from './user.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../shared.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { ReviewComponent } from './review.component';
 import { UnAssignAdminComponent } from './unAssignAdmin.component';

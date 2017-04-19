@@ -1,7 +1,6 @@
 import { Routes, RouterModule } from "@angular/router";
 
 import { AppComponent } from "./app.component";
-// import { AdminComponent } from './admin/admin.component';
 
 import { ADMIN_ROUTES } from './admin/admin.routing';
 

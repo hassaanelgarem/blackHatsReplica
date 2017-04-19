@@ -12,6 +12,7 @@ import { User } from './user.model';
 
 export class UnAssignAdminComponent implements OnInit {
     private users: User[] = [];
+    private loading: boolean = false;
     constructor(private userService: UserService) { }
     ngOnInit() {
         this.userService.getAdmins().subscribe(users => {
@@ -19,10 +20,32 @@ export class UnAssignAdminComponent implements OnInit {
         });
     }
 
+    isLoading() {
+        return this.loading;
+    }
+
     unAssignAdmin(userId: string) {
-        this.userService.unAssignAdmin(userId).subscribe(msg => {
-            alert(msg);
-            location.reload();
+        bootbox.confirm({
+            title: "Unassign Admin?",
+            message: "Are you sure you want to unassign this user from admin position?",
+            buttons: {
+                cancel: {
+                    label: '<i class="fa fa-times"></i> Cancel'
+                },
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Unassign'
+                }
+            },
+            callback: (result) => {
+                if (result) {
+                    this.loading = true;
+                    this.userService.unAssignAdmin(userId).subscribe(msg => {
+                        bootbox.alert(msg, () => {
+                            location.reload();
+                        });
+                    });
+                }
+            }
         });
     }
 };

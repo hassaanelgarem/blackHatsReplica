@@ -82,6 +82,7 @@ module.exports = function (passportConfig) {
 
 
     //Admin routes
+    //TO-DO: add login check after testing
     router.route('/admin/business/verify/:businessId').put(adminCtrl.verifyBusiness);
     router.route('/admin/business/delete/:businessId').delete(adminCtrl.deleteBusiness);
     router.route('/admin/business/recoverAccount/:businessId').put(adminCtrl.recoverBusiness);
@@ -91,16 +92,15 @@ module.exports = function (passportConfig) {
     router.route('/admin/removeAdmin/:userId').put(adminCtrl.removeAdmin);
     router.route('/admin/user/delete/:userId').delete(adminCtrl.deleteUser);
     router.route('/admin/user/deleteTemp/:userId').delete(adminCtrl.deleteTempUser);
-
-    //To do add login check after testing
     router.route('/admin/user/getVerified').get(adminCtrl.getUsers);
     router.route('/admin/user/getUnverified').get(adminCtrl.getUnverifiedUsers);
     router.route('/admin/user/getAdmins').get(adminCtrl.getAdmins);
     router.route('/admin/user/getNonAdmins').get(adminCtrl.getNonAdmins);
+    router.route('/admin/support/getRequests').get(adminCtrl.getRequests);
     router.route('/admin/support/user/recoverAccount/:requestId').put(adminCtrl.recoverUser);
-    router.route('/admin/support/business/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
-    router.route('/admin/support/deleteRequest/:requestId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteSupportRequest);
-    router.route('/admin/advertisement/addAdvSlots').post(passportConfig.isAdminLoggedIn, adminCtrl.addAdvSlots);
+    router.route('/admin/support/business/recoverAccount/:requestId').put(adminCtrl.recoverBusiness);
+    router.route('/admin/support/deleteRequest/:requestId').delete(adminCtrl.deleteSupportRequest);
+    router.route('/admin/advertisement/addAdvSlots').post(adminCtrl.addAdvSlots);
 
     //User routes
     router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);

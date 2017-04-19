@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from './user.service';
 import { User } from './user.model';
-import $ = require('jquery')
 
 
 @Component({
@@ -14,6 +13,7 @@ import $ = require('jquery')
 
 export class ReviewComponent implements OnInit {
   private users: User[] = [];
+  private loading: boolean = false;
   constructor(private userService: UserService, private router: Router) { }
   ngOnInit() {
     this.userService.getUsers().subscribe(users => {
@@ -23,17 +23,38 @@ export class ReviewComponent implements OnInit {
     });
   }
 
-  deleteUser(userId: string) {
-    this.userService.deleteUser(userId).subscribe(msg => {
-      alert(msg);
-      location.reload();
+  isLoading() {
+    return this.loading;
+  }
 
+  deleteUser(userId: string, verified: boolean) {
+    bootbox.confirm({
+      title: "Delete User?",
+      message: "Are you sure you want to delete this user? This cannot be undone.",
+      buttons: {
+        cancel: {
+          label: '<i class="fa fa-times"></i> Cancel'
+        },
+        confirm: {
+          label: '<i class="fa fa-check"></i> Delete'
+        }
+      },
+      callback: (result) => {
+        if (result) {
+          this.loading = true;
+          this.userService.deleteUser(userId, verified).subscribe(msg => {
+            bootbox.alert(msg, () => {
+              location.reload();
+            });
+          });
+        }
+      }
     });
   }
 
   viewUser(userId: string) {
     //To be adjusted for the user profile route.
-    alert('To be redirected to profile');
+    bootbox.alert('To be redirected to profile');
     // this.router.navigate(['admin', userId]);
   }
 };

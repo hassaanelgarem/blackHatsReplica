@@ -735,7 +735,9 @@ module.exports.getAdmins = function (req, res) {
 
 
 module.exports.getBusinesses = function(req, res) {
-    Business.find({}).select('-password').exec(function (err, businesses) {
+    Business.find({
+        verified: true
+    }).select('-password').exec(function (err, businesses) {
         if (err)
             res.status(500).json({
                 error: err,
@@ -747,6 +749,24 @@ module.exports.getBusinesses = function(req, res) {
                 error: null,
                 msg: null,
                 data: businesses
+            });
+    });
+};
+
+
+module.exports.getRequests = function(req, res){
+    SupportRequest.find({}).exec(function(err, requests){
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: requests
             });
     });
 };

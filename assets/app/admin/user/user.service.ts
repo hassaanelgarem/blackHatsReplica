@@ -9,7 +9,6 @@ import { User } from './user.model';
 @Injectable()
 export class UserService {
     private alertMsg: string;
-    private requestSuccess: boolean = false;
     constructor(private http: Http) { }
 
     getUsers() {
@@ -91,8 +90,6 @@ export class UserService {
             return this.http.delete('http://localhost:8080/api/admin/user/delete/' + userId)
                 //map method to transform the response
                 .map((response: Response) => {
-                    if (response.status != 200)
-                        this.requestSuccess = false;
                     this.alertMsg = response.json().msg;
                     return this.alertMsg;
                 })
@@ -102,8 +99,6 @@ export class UserService {
             return this.http.delete('http://localhost:8080/api/admin/user/deleteTemp/' + userId)
                 //map method to transform the response
                 .map((response: Response) => {
-                    if (response.status != 200)
-                        this.requestSuccess = false;
                     this.alertMsg = response.json().msg;
                     return this.alertMsg;
                 })
@@ -119,8 +114,6 @@ export class UserService {
         return this.http.put('http://localhost:8080/api/admin/makeAdmin/' + userId, body)
             //map method to transform the response
             .map((response: Response) => {
-                if (response.status != 200)
-                    this.requestSuccess = false;
                 this.alertMsg = response.json().msg;
                 return this.alertMsg;
             })
@@ -134,8 +127,6 @@ export class UserService {
         return this.http.put('http://localhost:8080/api/admin/removeAdmin/' + userId, body)
             //map method to transform the response
             .map((response: Response) => {
-                if (response.status != 200)
-                    this.requestSuccess = false;
                 this.alertMsg = response.json().msg;
                 return this.alertMsg;
             })

@@ -9,7 +9,6 @@ import { Observable } from "rxjs";
 @Injectable()
 export class BusinessService {
     private alertMsg: string;
-    private requestSuccess: boolean = false;
     constructor(private http: Http) { }
 
     getBusinesses() {
@@ -49,8 +48,6 @@ export class BusinessService {
         return this.http.delete('http://localhost:8080/api/admin/business/delete/' + businessId)
             //map method to transform the response
             .map((response: Response) => {
-                if (response.status != 200)
-                    this.requestSuccess = false;
                 this.alertMsg = response.json().msg;
                 return this.alertMsg;
             })
@@ -61,8 +58,6 @@ export class BusinessService {
         return this.http.put('http://localhost:8080/api/admin/business/verify/' + businessId, {verified: true})
             //map method to transform the response
             .map((response: Response) => {
-                if (response.status != 200)
-                    this.requestSuccess = false;
                 this.alertMsg = response.json().msg;
                 return this.alertMsg;
             })
