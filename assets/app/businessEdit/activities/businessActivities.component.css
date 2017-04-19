@@ -15,3 +15,22 @@
     width: 90px;
     height: 90px;
 }
+
+.bottomLine {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgb(230, 230, 230);
+}
+
+.img-wrap {
+    position: relative;
+
+}
+.topRight {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+.content {
+  all: revert;
+}

@@ -332,10 +332,10 @@
 
         <div class="modal-body">
             <div *ngIf="!addDone">
-                <div>
+                <div class="create-tour-wrapper">
                     <div class="row gap-20">
                       <div>
-                        <div >
+                        <div class="create-tour-inner">
                             <div class="col-sm-12 col-md-12">
 
                                 <div class="form-group">
@@ -382,7 +382,7 @@
                                         <a class="close" (click)="hidePerSlotWarning()" aria-label="close">&times;</a> Please choose the number of bookings per slot!
                                     </div>
                                     <label>Bookings per slot</label>
-                                    <input class="form-control form-spin" placeholder="Maximum number of bookings for one slot" type="text" [(ngModel)]="addPerSlot" name="addPerSlot" value="1">
+                                    <input class="form-control" placeholder="Maximum number of bookings for one slot" type="number" [(ngModel)]="addPerSlot" name="addPerSlot" value="1">
                                 </div>
 
                             </div>

@@ -59,6 +59,7 @@ module.exports = function (passportConfig) {
     router.route('/activity/:businessId').get(activityCtrl.getActivities);
     router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
     router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
+    router.route('/activity/:activityId/getActivity').get(activityCtrl.getActivity);
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);

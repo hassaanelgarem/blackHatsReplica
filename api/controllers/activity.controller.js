@@ -34,7 +34,7 @@ const uploadPhotos = multer({
     Redirects to: Nothing.
     Calling route: '/api/activity/add'
 */
-module.exports.addActivity = function (req, res) {
+module.exports.addActivity = function(req, res) {
     //check if logged in
     req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('price', 'Price is required').notEmpty();
@@ -59,7 +59,7 @@ module.exports.addActivity = function (req, res) {
             business: req.user._id
         });
         // Save new Activity in database
-        newActivity.save(function (err, activity) {
+        newActivity.save(function(err, activity) {
             // If there is an error return it in response
             if (err) return res.status(500).json({
                 error: err,
@@ -78,7 +78,7 @@ module.exports.addActivity = function (req, res) {
                     upsert: true,
                     new: true
                 },
-                function (err, business) {
+                function(err, business) {
                     // If there is an error return it in response
                     if (err) res.status(500).json({
                         error: err,
@@ -122,12 +122,12 @@ module.exports.addActivity = function (req, res) {
     Redirects to: Nothing.
     Calling route: api/activity/:businessId
 */
-module.exports.getActivities = function (req, res) {
+module.exports.getActivities = function(req, res) {
 
     //Finds all activities ofeered by a specific business according to its business ID
     Activity.find({
         "business": req.params.businessId
-    }, function (err, activities) {
+    }, function(err, activities) {
 
         //If an error occurred, display a msg along with the error
         if (err) return res.status(500).json({
@@ -162,7 +162,7 @@ module.exports.getActivities = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/activity/freeSlots'
 */
-module.exports.getAvailableSlots = function (req, res) {
+module.exports.getAvailableSlots = function(req, res) {
 
     req.checkBody('date', 'Date is required').notEmpty();
     req.checkBody('activityID', 'Activity ID is required').notEmpty();
@@ -191,7 +191,7 @@ module.exports.getAvailableSlots = function (req, res) {
                     date: actdate
                 }
             })
-            .exec(function (err, bookedSlots) {
+            .exec(function(err, bookedSlots) {
                 //If an error occured return it in response
                 if (err) return res.status(500).json({
                     error: err,
@@ -204,7 +204,7 @@ module.exports.getAvailableSlots = function (req, res) {
                     data: null
                 });
                 //retrieves the slots specified by the business for their activity
-                Activity.findById(actID, function (err, actSlots) {
+                Activity.findById(actID, function(err, actSlots) {
                     //If an error occured return it in response
                     if (err) return res.status(500).json({
                         error: err,
@@ -275,7 +275,7 @@ module.exports.getAvailableSlots = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/activity/:activityId/deleteSlot'
 */
-module.exports.deleteSlot = function (req, res) {
+module.exports.deleteSlot = function(req, res) {
 
     req.checkBody('startTime', 'Start Time is required').notEmpty();
     req.checkBody('endTime', 'End Time is required').notEmpty();
@@ -288,14 +288,14 @@ module.exports.deleteSlot = function (req, res) {
             data: null
         });
     } else {
-        activityBelongs(req.params.activityId, req.user._id, function (flag) {
+        activityBelongs(req.params.activityId, req.user._id, function(flag) {
             if (flag) {
                 //Create constants to save them as Date format
                 const start = new Date(req.body.startTime);
                 const end = new Date(req.body.endTime);
 
                 //Finding specified activity
-                Activity.findById(req.params.activityId, function (err, activity) {
+                Activity.findById(req.params.activityId, function(err, activity) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
@@ -327,7 +327,7 @@ module.exports.deleteSlot = function (req, res) {
                                 activity.slots.splice(i, 1);
 
                                 //Save changes
-                                activity.save(function (err, activity) {
+                                activity.save(function(err, activity) {
 
                                     //If an error occurred, display a msg along with the error
                                     if (err) {
@@ -395,8 +395,8 @@ module.exports.deleteSlot = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/activity/:activityId/addSlot'
 */
-module.exports.addSlot = function (req, res) {
-    activityBelongs(req.params.activityId, req.user._id, function (flag) {
+module.exports.addSlot = function(req, res) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
         if (flag) {
             req.checkBody('startTime', 'Start Time is required').notEmpty();
             req.checkBody('endTime', 'End Time is required').notEmpty();
@@ -415,7 +415,7 @@ module.exports.addSlot = function (req, res) {
                 const end = new Date(req.body.endTime);
 
                 //Finding specified activity
-                Activity.findById(req.params.activityId, function (err, activity) {
+                Activity.findById(req.params.activityId, function(err, activity) {
 
                     //If an error occurred, display a msg along with the error
                     if (err) {
@@ -467,7 +467,7 @@ module.exports.addSlot = function (req, res) {
                             activity.slots.push(newSlot);
 
                             //Save activity
-                            activity.save(function (err, activity) {
+                            activity.save(function(err, activity) {
 
                                 //If an error occurred, display a msg along with the error
                                 if (err) {
@@ -564,12 +564,12 @@ function compareDate(date1, date2) {
     Redirects to: Nothing.
     Calling route: '/api/activity/:activityId/addPhoto'
 */
-module.exports.addPhoto = function (req, res) {
+module.exports.addPhoto = function(req, res) {
 
-    activityBelongs(req.params.activityId, req.user._id, function (flag) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
         if (flag) {
             //upload the image
-            uploadPhotos(req, res, function (err) {
+            uploadPhotos(req, res, function(err) {
                 //if an error occurred, return the error
                 if (err) {
                     return res.status(500).json({
@@ -603,7 +603,7 @@ module.exports.addPhoto = function (req, res) {
                     }
                     //copy and rename the image to the following format and location
                     var newPath = path.join(__dirname, "../", "../public/uploads/activityPhotos/" + req.file.filename + "." + string);
-                    fs.renameSync(req.file.path, newPath, function (err) {
+                    fs.renameSync(req.file.path, newPath, function(err) {
                         if (err) throw err;
 
                         //delete the image with the old name
@@ -618,7 +618,7 @@ module.exports.addPhoto = function (req, res) {
                                 "photos": req.file.filename + "." + string
                             }
                         },
-                        function (err, result) {
+                        function(err, result) {
                             //couldn't add to array, return the error
                             if (err) {
                                 return res.status(500).json({
@@ -686,9 +686,9 @@ module.exports.addPhoto = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/activity/:activityId/deletePhoto/:photoPath'
 */
-module.exports.deletePhoto = function (req, res) {
+module.exports.deletePhoto = function(req, res) {
 
-    activityBelongs(req.params.activityId, req.user._id, function (flag) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
         if (flag) {
             var imagePath = req.params.photoPath;
             var activityId = req.params.activityId;
@@ -698,7 +698,7 @@ module.exports.deletePhoto = function (req, res) {
                 $pull: {
                     "photos": imagePath
                 }
-            }, function (err, data) {
+            }, function(err, data) {
                 if (err) {
                     res.status(500).json({
                         error: err,
@@ -711,7 +711,7 @@ module.exports.deletePhoto = function (req, res) {
                     imagePath = path.join(__dirname, "../", "../public/uploads/activityPhotos/", req.params.photoPath);
 
                     //delete the photo from filesystem
-                    fs.unlink(imagePath, function (err) {
+                    fs.unlink(imagePath, function(err) {
                         //don't care if file doesn't exist
                     });
                     res.status(200).json({
@@ -733,7 +733,7 @@ module.exports.deletePhoto = function (req, res) {
 
 
 function activityBelongs(activityId, businessId, done) {
-    Business.findById(businessId, function (err, business) {
+    Business.findById(businessId, function(err, business) {
         if (business) {
             if (business.activities.indexOf(activityId) > -1) {
                 done(true);
@@ -761,11 +761,11 @@ function activityBelongs(activityId, businessId, done) {
     Redirects to: Nothing.
     Calling route: '/api/activity/:activityId/delete'
 */
-module.exports.deleteActivity = function (req, res) {
-    activityBelongs(req.params.activityId, req.user._id, function (flag) {
+module.exports.deleteActivity = function(req, res) {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
         if (flag) {
             //Finding and deleting activity from database
-            Activity.findByIdAndRemove(req.params.activityId, function (err, activity) {
+            Activity.findByIdAndRemove(req.params.activityId, function(err, activity) {
                 if (err) return res.status(500).json({
                     error: err,
                     msg: "Error while deleting Activity",
@@ -783,7 +783,7 @@ module.exports.deleteActivity = function (req, res) {
                             upsert: true,
                             new: true
                         },
-                        function (err, model) {
+                        function(err, model) {
                             if (err) return res.status(500).json({
                                 error: err,
                                 msg: "Error occured while finding the business",
@@ -820,3 +820,54 @@ module.exports.deleteActivity = function (req, res) {
         }
     });
 };
+/*
+    Get function, that gets the info of an activity
+    and pass activity object to the frontend to display it.
+    Takes:
+        params{
+            activityId
+        }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.
+    Calling Route: '/api/activity/:activityId/get'
+*/
+module.exports.getActivity = function(req, res) {
+    //select all fields except password
+    Activity.findById(req.params.activityId).exec(function(err, activity) {
+        //if error occured
+        if (err) {
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+
+            });
+        } else {
+            if (activity) {
+              var act = activity.toObject();
+              act.slots.sort(function(a, b){
+                var one = new Date(b.startTime);
+                var two = new Date(a.startTime);
+                one.setDate(12);
+                one.setMonth(12);
+                one.setFullYear(2012);
+                two.setDate(12);
+                two.setMonth(12);
+                two.setFullYear(2012);
+                return two - one;
+              });
+                res.status(200).json({
+                    error: null,
+                    msg: null,
+                    data: act
+                });
+            } else {
+                res.status(404).json({
+                    error: null,
+                    msg: 'Activity not found.',
+                    data: null
+                });
+            }
+        }
+    });
+}

@@ -3,7 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from "./app.routing";
-import {MomentModule} from 'angular2-moment';
+import { MomentModule } from 'angular2-moment';
+import { DateTimePickerModule } from 'ng2-date-time-picker';
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 
 
 import { AppComponent } from "./app.component";
@@ -15,6 +18,10 @@ import { EditActivityComponent} from "./businessEdit/activities/editActivity.com
 
 import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
+
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+  acceptedFiles: 'image/*'
+};
 
 @NgModule({
     declarations : [
@@ -30,7 +37,9 @@ import { BusinessService } from "./businessEdit/business.service";
       FormsModule,
       HttpModule,
       routing,
-      MomentModule
+      MomentModule,
+      DateTimePickerModule,
+      DropzoneModule.forRoot(DROPZONE_CONFIG)
     ],
     providers: [DummyService, BusinessService],
     bootstrap : [AppComponent]
