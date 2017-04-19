@@ -1,6 +1,11 @@
 <!-- start Register Modal -->
 <div id="userRegisterModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
 
+
+<div *ngIf="success" class="alert alert-success">{{ message }}</div>
+
+<div *ngIf="failure" class="alert alert-danger">{{ message }}</div>
+
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h4 class="modal-title text-center">Create your account</h4>

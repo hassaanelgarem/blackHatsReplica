@@ -14,8 +14,9 @@ import { BusinessRegisterComponent} from "./business/register/businessRegister.c
 import { SearchComponent} from "./homepage/search/search.component";
 import { SearchResultComponent} from "./homepage/search/SearchResult/result.component";
 import { TopBusinessesComponent } from "./homepage/topBusinesses/topBusinesses.component";
-import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component"
-
+import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component";
+import { FooterComponent } from "./footer/footer.component";
+ 
 
 
 
@@ -41,7 +42,8 @@ import { TopBusinessesService } from "./homepage/topBusinesses/topBusinesses.ser
       SearchComponent,
       SearchResultComponent,
       TopBusinessesComponent,
-      AdSlotsComponent
+      AdSlotsComponent,
+      FooterComponent
     ],
     imports: [
       BrowserModule,

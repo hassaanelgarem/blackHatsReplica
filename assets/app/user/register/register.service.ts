@@ -15,6 +15,10 @@ export class UserRegisterService {
         //Adds a header to indicate that the body is a JSON object to pass to the register post route
         return this.http.post('http://localhost:8080/api/user/register', body, { headers: headers })
             .map((response: Response) => response.json())
-            .catch((error: Response) => Observable.throw(error.json()));
+            //.catch((error: Response) => Observable.throw(error.json()));
+            .catch((error: Response) => Observable.throw(
+               // console.log(error)
+               error.json()
+            ));
     }
 }

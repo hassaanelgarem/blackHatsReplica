@@ -16,6 +16,9 @@ export class RegisterComponent {
     confirmPassword: string;
     email: string;
     birthDate: Date;
+    success: boolean = false;
+    failure: boolean = false;
+    message: string;
 
     constructor(private registerService: UserRegisterService) { }
 
@@ -37,8 +40,16 @@ export class RegisterComponent {
         */
         this.registerService.signUp(user)
             .subscribe(
-            data => alert(data.msg),
-            error => alert(error.error.msg)
+            data => {
+                    this.failure= false;
+                    this.success = true;
+                    this.message = data.msg;
+              },
+              error => {
+                        this.success= false;
+                        this.failure = true;
+                        this.message = error.error.msg;
+                    }
             );
     };
 }
