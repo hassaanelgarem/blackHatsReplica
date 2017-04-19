@@ -123,7 +123,7 @@
                                           <div class="form-horizontal">
                                             <div class="form-group">
                                               <div class="col-sm-7 col-md-7">
-                                                <input type="text" class="form-control" placeholder="No. of Days" [(ngModel)]="noOfDays" name="noOfDays">
+                                                <input type="number" class="form-control" placeholder="No. of Days" [(ngModel)]="noOfDays[i]" name="noOfDays[i]">
                                               </div>
                                               <div class="col-sm-3 col-md-2">
                                                 <a class="btn btn-primary btn-sm" ng2FileSelect [uploader]="uploader" (click)="bookAdv(advertisement._id,i)">Book</a>

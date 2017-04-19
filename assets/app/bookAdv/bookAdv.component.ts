@@ -14,7 +14,7 @@ export class BookAdvComponent implements OnInit {
   advertisements: Object[];
   availableSlots: Date[] = [];
   date: Date;
-  noOfDays: number = 0;
+  noOfDays: number[] = [];
   public uploader: FileUploader;
   startTime : Date = new Date();
   endTime: Date = new Date();
@@ -66,18 +66,14 @@ export class BookAdvComponent implements OnInit {
 
 
   bookAdv(advId, index){
-    // changed this line
     this.startTimeValue = new Date(this.availableSlots[index]);
-    console.log(this.startTimeValue);
-    this.endTimeValue.setDate(this.startTimeValue.getDate() + 2);
-    console.log(this.endTimeValue);
-    this.uploader = new FileUploader({ url: 'http://localhost:8080/api/api/advertisement/bookAdvSlot/' + advId, itemAlias: "myfile" });
+    this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
+    this.uploader = new FileUploader({ url: 'http://localhost:8080/api/advertisement/bookAdvSlot/' + advId, itemAlias: "myfile" });
     this.uploader.onBuildItemForm = (item, form) => {
-      form.append(this.startTime, this.startTimeValue);
-      form.append(this.endTime, this.endTimeValue);
+      form.append("startTime", this.startTimeValue);
+      form.append("endTime" , this.endTimeValue);
     };
     this.uploader.uploadAll();
   }
-
 
 }

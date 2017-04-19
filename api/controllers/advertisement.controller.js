@@ -76,7 +76,7 @@ module.exports.getAdvSlots = function (req, res) {
     Calling route: '/api/advertisement/bookAdvSlot/:advSlotId'
 */
 module.exports.bookAdvSlot = function (req, res) {
-
+    console.log("hello");
     req.checkBody('startTime', 'Start Time is required.').notEmpty();
     req.checkBody('endTime', 'End Time is required.').notEmpty();
 
