@@ -332,6 +332,10 @@ module.exports.deleteFavorite = function (req, res) {
 */
 module.exports.searchByNameOrTag = function (req, res, next) {
 
+    var sort = "interactivity";
+    if(req.query && req.query.sort ==="totalRatings"){
+        sort= "totalRatings";
+    }
     //Check for query string Ex: "/api/search?result=omar"
     if (req.query && req.query.result) {
         var nameOrTag = req.query.result;
@@ -355,7 +359,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 
                 }
             ]
-        }).select('-password').exec(function (err, businesses) {
+        }).sort(sort).select('-password').exec(function (err, businesses) {
             //If an error occured return it to the frontend
             if (err) {
                 res.status(500).json({

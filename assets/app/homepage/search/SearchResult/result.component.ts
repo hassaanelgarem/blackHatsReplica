@@ -17,6 +17,7 @@ export class SearchResultComponent implements OnInit {
     private pagingIndex: number[] = [];
     private pageNumber: number;
     private searchQuery: string;
+    private sort:string;
 
     constructor(private searchService: SearchService, private route: ActivatedRoute, private router: Router) { }
 
@@ -26,12 +27,15 @@ export class SearchResultComponent implements OnInit {
             .subscribe(params => {
                 this.pageNumber = +params['page'];
                 this.searchQuery = params['result'];
+                this.sort=params['sort'];
+
                 if(!this.searchQuery){
                     this.searchQuery="location="+params['location']+"&&category="+params['category']; 
                 }
                 else
                     this.searchQuery="result="+this.searchQuery;
-                this.searchService.getBusinesses(this.searchQuery).subscribe(businesses => {
+                    this.searchQuery=this.searchQuery+"&&sort="+this.sort;
+                    this.searchService.getBusinesses(this.searchQuery).subscribe(businesses => {
                     this.businesses = businesses;
                     this.sliced = this.businesses.slice(this.pageNumber - 1, this.pageNumber * 16 + 15);
                     this.pagingIndex = new Array(Math.ceil(this.businesses.length / 16));
