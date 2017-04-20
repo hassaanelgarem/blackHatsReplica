@@ -3,6 +3,7 @@ const randtoken = require('rand-token');
 const bcrypt = require('bcryptjs');
 const Business = mongoose.model("Business");
 const User = mongoose.model("User");
+const AdvSlot = mongoose.model("AdvSlot");
 const SupportRequest = mongoose.model("SupportRequest");
 const emailSender = require('../config/emailSender');
 

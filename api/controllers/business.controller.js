@@ -202,10 +202,13 @@ module.exports.addBusiness = function (req, res) {
     var errors = req.validationErrors();
 
     if (errors) {
+        for (i = 1; i < errors.length; i++) {
+            errors[0].msg += "\n" + errors[i].msg;
+        }
         res.status(500).json({
-            "error": errors,
-            "msg": "Problem with submitted fields.",
-            "data": null
+            error: errors[0],
+            msg: "Problem with submitted fields.",
+            data: null
         });
     } else {
         req.body.email = req.body.email.trim();
@@ -219,16 +222,20 @@ module.exports.addBusiness = function (req, res) {
             'email': email
         }, (err, business) => {
             if (err) return res.status(500).json({
-                "error": err,
-                "msg": "Error finding business.",
-                "data": null
+                error: err,
+                msg: "Error finding business.",
+                data: null
             });
-            if (business) res.status(500).json({
-                "error": null,
-                "msg": "Email already used. Please enter another email.",
-                "data": null
-            });
-            else {
+            if (business) {
+                var msg = "Email already used. Please enter another email.";
+                var newError = {"msg": msg};
+
+                res.status(500).json({
+                    error: newError,
+                    msg: msg,
+                    data: null
+                });
+            } else {
 
                 let newBusiness = new Business({
                     name: name,
@@ -241,23 +248,27 @@ module.exports.addBusiness = function (req, res) {
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newBusiness.password, salt, (err, hash) => {
                         if (err) return res.status(500).json({
-                            "error": err,
-                            "msg": "An error occurred while encrypting.",
-                            "data": null
+                            error: {
+                                "msg": "An error occurred while encrypting."
+                            },
+                            msg: "An error occurred while encrypting.",
+                            data: null
                         });
                         newBusiness.password = hash;
 
                         //Adding business to the db after making sure all inputs are valid and the password is encrypted
                         newBusiness.save(function (err) {
                             if (err) return res.status(500).json({
-                                "error": err,
-                                "msg": "Was not able to save your business, please try again.",
-                                "data": null
+                                error: {
+                                    "msg": "Was not able to save your business, please try again."
+                                },
+                                msg: "Was not able to save your business, please try again.",
+                                data: null
                             });
                             res.status(200).json({
-                                "error": null,
-                                "msg": "Your application is successfully submitted!",
-                                "data": null
+                                error: null,
+                                msg: "Your application was successfully submitted!",
+                                data: null
                             });
                         });
                     });
@@ -266,7 +277,6 @@ module.exports.addBusiness = function (req, res) {
         });
     }
 };
-
 
 /*
     Put function that increments the interactivity attribute of a certain business by 1

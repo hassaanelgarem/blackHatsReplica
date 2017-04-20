@@ -1,0 +1,54 @@
+	<!-- start Container Wrapper -->
+
+	<div class="container-wrapper">
+
+		<!-- start Header -->
+
+		<header id="header">
+
+			<!-- start Navbar (Header) -->
+			<nav class="navbar navbar-default navbar-fixed-top navbar-sticky-function navbar-arrow">
+
+				<div class="container">
+
+					<div class="logo-wrapper">
+						<div class="logo">
+							<a href="/"><h1>BlackHats</h1></a>
+						</div>
+					</div>
+
+					<div id="navbar" class="navbar-nav-wrapper">
+
+						<ul class="nav navbar-nav" id="responsive-menu">
+							<li>
+								<a href="#">Explore</a>
+							</li>
+						</ul>
+
+					</div>
+					<!--/.nav-collapse -->
+
+					<div class="nav-mini-wrapper">
+						<ul class="nav-mini">
+							<li *ngIf="!loggedin"><a data-toggle="modal" href="#userRegisterModal"><i class="icon-user-follow" data-toggle="tooltip" data-placement="bottom" title="Sign Up"></i></a></li>
+							<li *ngIf="!loggedin"><a data-toggle="modal" href="#userLoginModal"><i class="icon-login" data-toggle="tooltip" data-placement="bottom" title="Login"></i> </a></li>
+							<li *ngIf="loggedin"><a href="#" (click)="logout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
+						</ul>
+					</div>
+
+				</div>
+			</nav>
+			<!-- end Navbar (Header) -->
+
+		</header>
+	</div>
+
+	<!-- end Header -->
+
+	<!--loading the login component-->
+	<app-signin (loginClicked)="loggedin=$event"></app-signin>
+
+
+	<!--loading the register component-->
+	<user-register></user-register>
+	<business-register></business-register>

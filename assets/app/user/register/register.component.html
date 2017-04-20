@@ -1,0 +1,105 @@
+<!-- start Register Modal -->
+<div id="userRegisterModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false"
+    data-replace="true">
+
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title text-center">Create your account</h4>
+	</div>
+	<div *ngIf="success" class="alert alert-success">{{ message }}</div>
+
+	<div *ngIf="failure" class="alert alert-danger">{{ message }}</div>
+
+
+	<div class="modal-body">
+
+		<div class="row gap-20">
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>First Name</label>
+					<input class="form-control" placeholder="Enter your First Name" type="text" [(ngModel)]="firstName" name="firstName" required>
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>Last Name</label>
+					<input class="form-control" placeholder="Enter your Last Name" type="text" [(ngModel)]="lastName" name="lastName" required>
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>Username</label>
+					<input class="form-control" placeholder="Enter your username" type="text" [(ngModel)]="username" name="username" required>
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>Password</label>
+					<input class="form-control" placeholder="Minimum 8 characters" type="password" [(ngModel)]="password" name="password" required>
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>Confirm Password</label>
+					<input class="form-control" placeholder="Re-type password again" type="password" [(ngModel)]="confirmPassword" name="confirmPassword"
+					    required>
+				</div>
+
+			</div>
+
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>Email Address</label>
+					<input class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="email" name="email" required>
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div class="form-group">
+					<label>Birth Date</label>
+					<input class="form-control" placeholder="" type="date" [(ngModel)]="birthDate" name="birthDate">
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="login-box-box-action">
+					Already have account? <a data-toggle="modal" href="#userLoginModal">Log-in</a>
+				</div>
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="login-box-box-action">
+					Not a User? <a data-toggle="modal" href="#businessRegisterModal">Register as Business</a>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="modal-footer text-center">
+		<button type="button" class="btn btn-primary" (click)="onSubmit()">Register</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border">Close</button>
+	</div>
+
+</div>

@@ -13,6 +13,20 @@ import { RatingModule } from "ngx-rating";
 
 
 import { AppComponent } from "./app.component";
+import { HomepageComponent} from "./homepage/homepage.component";
+import { NavComponent} from "./navigationBar/nav.component";
+import { RegisterComponent} from "./user/register/register.component";
+import { BusinessRegisterComponent} from "./business/register/businessRegister.component";
+import { SearchComponent} from "./homepage/search/search.component";
+import { SearchResultComponent} from "./homepage/search/SearchResult/result.component";
+import { TopBusinessesComponent } from "./homepage/topBusinesses/topBusinesses.component";
+import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component";
+import { FooterComponent } from "./footer/footer.component";
+import { LoginComponent} from "./user/login/login.component";
+import { ResetPasswordComponent } from "./user/resetPassword/resetPassword.component";
+import { TermsComponent } from "./terms/terms.component";
+import { PolicyComponent } from "./policy/policy.component";
+import { VerifyComponent } from "./user/verify/verify.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
 import { BusinessActivitiesComponent} from "./businessEdit/activities/businessActivities.component"
@@ -23,6 +37,16 @@ import { BookAdvComponent } from "./businessEdit/bookAdv/bookAdv.component";
 import { ActivityBookingsComponent } from "./businessEdit/activityBookings/activityBookings.component";
 
 
+import { HomepageService } from "./homepage/homepage.service";
+import { UserRegisterService} from "./user/register/register.service";
+import { BusinessRegisterService} from "./business/register/businessRegister.service"
+import { AppService } from "./app.service";
+import { SearchService } from "./homepage/search/search.service";
+import { AdSlotsService } from "./homepage/adSlots/adSlots.service";
+import { TopBusinessesService } from "./homepage/topBusinesses/topBusinesses.service";
+import { LoginService } from "./user/login/login.service";
+import { ResetPasswordService } from "./user/resetPassword/resetPassword.service";
+import { VerifyService } from "./user/verify/verify.service";
 import { BusinessService } from "./businessEdit/business.service";
 import { EditProfileService } from "./businessEdit/editProfile/editProfile.service";
 import { AddPhotoService } from "./businessEdit/addPhoto/addPhoto.service";
@@ -40,6 +64,20 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ActivityBookingsComponent,
       AddPhotoComponent,
       AppComponent,
+      HomepageComponent,
+      NavComponent,
+      LoginComponent,
+      ResetPasswordComponent,
+      TermsComponent,
+      PolicyComponent,
+      RegisterComponent,
+      BusinessRegisterComponent,
+      SearchComponent,
+      SearchResultComponent,
+      TopBusinessesComponent,
+      AdSlotsComponent,
+      FooterComponent,
+      VerifyComponent,
       BookAdvComponent,
       BusinessActivitiesComponent,
       BusinessEditComponent,
@@ -59,9 +97,25 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       DateTimePickerModule,
       DropzoneModule.forRoot(DROPZONE_CONFIG),
       RatingModule
-
     ],
-    providers: [BusinessService, EditProfileService, AddPhotoService, BookAdvService, ActivityBookingsService],
+    providers: [
+      HomepageService,
+      AppService,
+      SearchService,
+      AdSlotsService,
+      TopBusinessesService,
+      UserRegisterService,
+      BusinessRegisterService,
+      LoginService,
+      BusinessService,
+      EditProfileService,
+      AddPhotoService,
+      BookAdvService,
+      ActivityBookingsService,
+      ResetPasswordService,
+      VerifyService
+    ],
+
     bootstrap : [AppComponent]
 })
 
