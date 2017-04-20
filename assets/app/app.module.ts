@@ -8,17 +8,15 @@ import { DateTimePickerModule } from 'ng2-date-time-picker';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { FocusDirective } from './directives/focus.directive';
-import {RatingModule} from "ngx-rating";
+import { RatingModule } from "ngx-rating";
 
 
 import { AppComponent } from "./app.component";
-import { DummyComponent } from "./dummy/dummy.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
 import { BusinessActivitiesComponent} from "./businessEdit/activities/businessActivities.component"
 import { EditActivityComponent} from "./businessEdit/activities/editActivity.component"
 
-import { DummyService } from "./dummy/dummy.service";
 import { BusinessService } from "./businessEdit/business.service";
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -28,7 +26,6 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
 @NgModule({
     declarations : [
       AppComponent,
-      DummyComponent,
       BusinessEditComponent,
       BusinessReviewsComponent,
       BusinessActivitiesComponent,
@@ -46,7 +43,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       RatingModule
 
     ],
-    providers: [DummyService, BusinessService],
+    providers: [BusinessService],
     bootstrap : [AppComponent]
 })
 

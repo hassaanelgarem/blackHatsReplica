@@ -75,11 +75,5 @@ export class BusinessEditComponent implements OnInit {
     this.showAds = true;
   }
 
-  onTestBusinessLogin(){
-    console.log("onTestBusinessLogin");
-    this.businessService.testBusinessLogin().subscribe(data => {
-      console.log(data);
-    })
-  }
 
 }
