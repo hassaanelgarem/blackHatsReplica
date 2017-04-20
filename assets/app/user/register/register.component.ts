@@ -16,6 +16,9 @@ export class RegisterComponent {
     confirmPassword: string;
     email: string;
     birthDate: Date;
+    success: boolean = false;
+    failure: boolean = false;
+    message: string;
 
     constructor(private registerService: UserRegisterService) { }
 
@@ -33,12 +36,21 @@ export class RegisterComponent {
 
         /*
         Calling the signUp function from the service to handle the register operation
-        Gets back data and error and then handling them by pop up alerts
+        Gets back data and error messages then handling them by bootstrap alerts
+        Setting the success and failure booleans to check on them in the html file
         */
         this.registerService.signUp(user)
             .subscribe(
-            data => alert(data.msg),
-            error => alert(error.error.msg)
+            data => {
+                    this.failure= false;
+                    this.success = true;
+                    this.message = data.msg;
+              },
+              error => {
+                        this.success= false;
+                        this.failure = true;
+                        this.message = error.error.msg;
+                    }
             );
     };
 }
