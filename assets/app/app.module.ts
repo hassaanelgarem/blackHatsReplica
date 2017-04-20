@@ -19,7 +19,7 @@ import { LoginComponent} from "./user/login/login.component";
 import { ResetPasswordComponent } from "./user/resetPassword/resetPassword.component";
 import { TermsComponent } from "./terms/terms.component";
 import { PolicyComponent } from "./policy/policy.component";
-
+import { VerifyComponent } from "./user/verify/verify.component";
  
 
 
@@ -33,7 +33,7 @@ import { AdSlotsService } from "./homepage/adSlots/adSlots.service";
 import { TopBusinessesService } from "./homepage/topBusinesses/topBusinesses.service";
 import { LoginService } from "./user/login/login.service";
 import { ResetPasswordService } from "./user/resetPassword/resetPassword.service";
-
+import { VerifyService } from "./user/verify/verify.service";
 
 
 @NgModule({
@@ -51,7 +51,8 @@ import { ResetPasswordService } from "./user/resetPassword/resetPassword.service
       SearchResultComponent,
       TopBusinessesComponent,
       AdSlotsComponent,
-      FooterComponent
+      FooterComponent,
+      VerifyComponent
     ],
     imports: [
       BrowserModule,
@@ -68,7 +69,8 @@ import { ResetPasswordService } from "./user/resetPassword/resetPassword.service
       UserRegisterService,
       BusinessRegisterService, 
       LoginService, 
-      ResetPasswordService],
+      ResetPasswordService,
+      VerifyService],
       
     bootstrap : [AppComponent]
 })
