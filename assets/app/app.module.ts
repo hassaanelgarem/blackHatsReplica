@@ -15,6 +15,8 @@ import { ReviewComponent } from "./user/reviews/review.component";
 import { UserFavoritesComponent } from "./user/favorites/favorites.component";
 import { UserBookingsComponent } from "./user/bookings/userBookings.component";
 import { EditProfileComponent } from "./user/editProfile/editProfile.component";
+import { FourofourComponent } from "./errors/404.component";
+import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 
 
 import { DummyService } from "./dummy/dummy.service";
@@ -26,12 +28,16 @@ import { EditProfileService } from "./user/editProfile/editProfile.service";
     declarations : [
       AppComponent,
       DummyComponent,
+      FourofourComponent,
       UserComponent,
       HeaderComponent,
       ReviewComponent,
       UserFavoritesComponent,
       UserBookingsComponent,
-      EditProfileComponent
+      EditProfileComponent,
+      FileSelectDirective,
+      NotAuthorizedErrorComponent
+      
     ],
     imports: [
       BrowserModule,

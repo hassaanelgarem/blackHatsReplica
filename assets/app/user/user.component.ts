@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  public showReviews = false;
+  public showReviews = true;
   public showFavorites = false;
   public showBookings = false;
   public editProfile = false;
@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   private profilePicture: String;
 
   user: Object;
-  userId: String = "58f252bd9037f62725ddf62c"; //get the id of the logged in user
+  userId: String = "58f2524179efae7640c1c949"; //get the id of the logged in user
   favorites:Object[];
   firstName:String;
   lastName:String;

@@ -46,6 +46,29 @@
         <form class="post-form-wrapper">
 
             <div class="row gap-20">
+                <div class="col-sm-6 col-md-4">
+
+                    <div class="form-group bootstrap-fileinput-style-01">
+                        <label>Change your profile</label>
+                        <br>
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-9 col-md-9">
+                                    <input type="file" class='form-control' name='profilePicture' ng2FileSelect [uploader]="uploader">
+                                </div>
+                                <div class="col-sm-3 col-md-2">
+                                    <a class="btn btn-primary" (click)="onUpload()">Upload</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <br>
+                <hr>
+
 
                 <div class="clear"></div>
 

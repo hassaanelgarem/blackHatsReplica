@@ -21,7 +21,7 @@ export class EditProfileComponent implements OnInit {
     birthDate: Date;
 
     path: String = "";
-    userId: String = "58f252bd9037f62725ddf62c";
+    userId: String = "58f2524179efae7640c1c949";
 
     constructor(
         private editProfileService: EditProfileService,
@@ -61,6 +61,7 @@ export class EditProfileComponent implements OnInit {
 
         this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
             if (data.err) {
+                
                 console.error(data.msg);
             }
         });

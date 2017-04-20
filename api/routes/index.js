@@ -15,7 +15,7 @@ const supportCtrl = require('../controllers/support.controller');
 const imagesCtrl = require("../controllers/images.controller");
 
 
-module.exports = function (passportConfig) {
+module.exports = function(passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/',
         failureRedirect: '/api/login',
