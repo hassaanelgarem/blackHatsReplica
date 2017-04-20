@@ -112,7 +112,7 @@ var isUserLoggedIn = function (req, res, next) {
 
 var isAdminLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
-        if (req.user.admin)
+        if (req.user.constructor.modelName === "User" && req.user.admin)
             return next();
     }
     res.status(401).json({
