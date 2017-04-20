@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Review } from './reviews.model';
+
 
 @Injectable()
 export class ReviewsService {
@@ -29,14 +31,13 @@ export class ReviewsService {
     return this.http.post('http://localhost:8080/api/user/addFavorite/' + businessId, null, null).map(res => res.json());
   }
 
-  addReview(comment, rating, businessId){
+  addReview(review: Review){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let body = {
-            "comment": '"comment"',
-            "rating": '"rating"'
-        };
-    return this.http.post('http://localhost:8080/api/review/' + businessId + 'add/', body, {headers: headers}).map(res => res.json());
+    const body = JSON.stringify(review);
+    console.log(body);
+    let businessId = review.business;
+    return this.http.post('http://localhost:8080/api/review/' + businessId + '/add', body, {headers: headers}).map(res => res.json());
   }
 
 }

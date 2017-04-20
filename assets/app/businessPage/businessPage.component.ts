@@ -34,6 +34,7 @@ export class BusinessPageComponent implements OnInit {
     path: String = "http://localhost:8080/api/";
     reviews: Object[] = new Array<Object>();
     photos: String[] = [];
+    firstPhoto: String = "";
     paymentRequired: Number;
     paymentStatus: String;
     deposit: Number;
@@ -43,14 +44,6 @@ export class BusinessPageComponent implements OnInit {
     userLoggedIn = false;
     otherBusinessLoggedIn = false;
     noLogIn = false;
-
-    config: Object = {
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        spaceBetween: 30
-    }
 
     constructor(
         private businessPageService: BusinessPageService,
@@ -93,12 +86,19 @@ export class BusinessPageComponent implements OnInit {
                         this.category = info.data.category;
                         this.categoryAvailable = true;
                     }
+                    console.log("abl wh");
                     if (info.data.workingHours != null) {
+                      console.log("working hours");
                         this.workingFrom = info.data.workingHours.from;
-                        this.workingTo = info.workingHours.to;
+                        this.workingTo = info.data.workingHours.to;
                         this.workingHoursAvailable = true;
                     }
-                    this.photos = info.data.photos;
+                    this.photos.length = info.data.photos.length - 1;
+                    this.photos[0] = info.data.photos[1];
+                    for(var _i = 1; _i < this.photos.length; _i++){
+                      this.photos[_i] = info.data.photos[_i + 1];
+                    }
+                    this.firstPhoto = info.data.photos[0];
                     this.paymentRequired = info.data.paymentRequired;
                     if (info.data.deposit != null) {
                         this.deposit = info.data.deposit * 100;

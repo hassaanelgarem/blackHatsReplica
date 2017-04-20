@@ -40,23 +40,45 @@
 
         <div class="main-wrapper scrollspy-container">
 
-            <!-- start hero-header -->
-            <div class="hero img-bg-01">
-                <div class="container">
+          <div class="blog-item" style="height: 300pt; margin-bottom: 0;">
 
-									<swiper [config]="config">
-    									<div class="swiper-wrapper">
-        									<img class="swiper-slide" *ngFor="let businessPhoto of businessPhotos" src="{{path}}image/businessPhotos/{{businessPhoto}}">
-    									</div>
-    									<div class="swiper-pagination"></div>
-    									<div class="swiper-button-next"></div>
-    									<div class="swiper-button-prev"></div>
-									</swiper>
+              <div class="blog-media">
+                  <div id="bootstrap-carousel-slider" class="carousel slide" data-ride="carousel" data-interval="5000">
 
-                </div>
+                      <!-- Wrapper for slides -->
+                      <div class="carousel-inner" role="listbox">
 
-            </div>
-            <!-- end hero-header -->
+                          <!-- First slide -->
+                          <div class="item active">
+                              <div class="image">
+                                  <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" />
+                              </div>
+                          </div>
+                          <!-- /.item -->
+
+                          <div class="item" *ngFor="let businessPhoto of businessPhotos; let i = index">
+                              <div class="image">
+                                  <img src="{{path}}image/businessPhotos/{{businessPhoto}}" alt="Image" />
+                              </div>
+                          </div>
+
+                      </div>
+                      <!-- /.carousel-inner -->
+
+                      <!-- Controls -->
+                      <a class="left carousel-control" href="#bootstrap-carousel-slider" role="button" data-slide="prev">
+                          <span class="carousel-control-left"><i class="pe-7s-angle-left" aria-hidden="true"></i></span>
+                          <span class="sr-only">Previous</span>
+                      </a>
+                      <a class="right carousel-control" href="#bootstrap-carousel-slider" role="button" data-slide="next">
+                          <span class="carousel-control-right"><i class="pe-7s-angle-right" aria-hidden="true"></i></span>
+                          <span class="sr-only">Next</span>
+                      </a>
+                  </div>
+                  <!-- /.carousel -->
+
+              </div>
+          </div>
 
             <div class="user-profile-wrapper">
 
@@ -128,12 +150,16 @@
                   <div class="col-xs-12 col-sm-6 col-md-4">
 
                     <div class="form-group">
-                      <label>Your rating: </label>
-                      <div class="rating-wrapper mt-5">
-                        <div class="rating-item">
-                          <input type="hidden" class="rating-label" data-filled="fa fa-star" data-empty="fa fa-star-o" data-fractions="2" value="0" />
-                        </div>
-                      </div>
+                      <div class="col-xs-12 col-sm-4">
+          							<div class="form-group" style="width: 200pt;">
+          								<label>Rating:</label>
+                          <rating [(ngModel)]="addRating" name="addRating" [titles]="false"></rating>
+                          <div *ngIf="addRatingWarning" class="alert alert-danger alert-dismissable" style="margin-top: 15pt;">
+                            <a class="close" (click)="hideRatingWarning()" aria-label="close">&times;</a> Please choose a rating!
+                          </div>
+          							</div>
+          						</div>
+
                     </div>
 
                   </div>
@@ -142,9 +168,12 @@
 
                   <div class="col-sm-12 col-md-12">
 
-                    <div class="form-group">
+                    <div class="form-group" style="padding-left: 15px;">
                       <label>Your Review: </label>
-                      <textarea class="form-control form-control-sm" placeholder="Maximum 200 characters" rows="4"></textarea>
+                      <textarea [(ngModel)]="addComment" name="addComment" class="form-control form-control-sm" placeholder="Maximum 200 characters" maxlength="200" rows="4" style="width: 400pt;"></textarea>
+                      <div *ngIf="addCommentWarning" class="alert alert-danger alert-dismissable" style="width: 400pt; margin-top: 15pt;">
+                          <a class="close" (click)="hideCommentWarning()" aria-label="close">&times;</a> Please write a review!
+                      </div>
                     </div>
                   </div>
 
@@ -175,7 +204,7 @@
                                         <div class="number">{{rating}}</div>
                                         <div class="rating-wrapper">
                                             <div class="rating-item rating-item-lg">
-                                                <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="{{ratingNumber}}" />
+                                              <rating [(ngModel)]="rating" [readonly]="true" [float]="true" [titles]="false"></rating>
                                             </div>
                                             {{totalRatings}} reviews
                                         </div>
@@ -199,11 +228,11 @@
 
                                     <div class="col-xs-12 col-sm-12 col-md-3">
                                         <div class="review-header">
-                                            <h6>{{review.user.firstName + " " + review.user.lastName}}</h6>
+                                            <h6><a href="user/review.user._id">{{review.user.firstName + " " + review.user.lastName}}</a></h6>
                                             <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span>
 
                                             <div class="rating-item">
-                                                <input type="hidden" class="rating" data-filled="fa fa-star" data-empty="fa fa-star-o" data-fractions="2" data-readonly value={{review.rating}} />
+                                              <rating [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
                                             </div>
                                         </div>
                                     </div>

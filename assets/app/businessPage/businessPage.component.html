@@ -38,53 +38,45 @@
 
         <!-- start Main Wrapper -->
 
-        <div class="main-wrapper scrollspy-container">
+            <div class="blog-item" style="height: 300pt; margin-bottom: 0;">
 
-            <!-- start hero-header
-            <div class="hero img-bg-01">
-                <div class="container">
+                <div class="blog-media">
+                    <div id="bootstrap-carousel-slider" class="carousel slide" data-ride="carousel" data-interval="5000">
 
-									<swiper [config]="config">
-    									<div class="swiper-wrapper">
-        									<img class="swiper-slide" *ngFor="let photo of photos" src="{{path}}image/businessPhotos/{{photo}}">
-    									</div>
-    									<div class="swiper-pagination"></div>
-    									<div class="swiper-button-next"></div>
-    									<div class="swiper-button-prev"></div>
-									</swiper>
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+
+                            <!-- First slide -->
+                            <div class="item active">
+                                <div class="image">
+                                    <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" />
+                                </div>
+                            </div>
+                            <!-- /.item -->
+
+                            <div class="item" *ngFor="let photo of photos; let i = index">
+                                <div class="image">
+                                    <img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.carousel-inner -->
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#bootstrap-carousel-slider" role="button" data-slide="prev">
+                            <span class="carousel-control-left"><i class="pe-7s-angle-left" aria-hidden="true"></i></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#bootstrap-carousel-slider" role="button" data-slide="next">
+                            <span class="carousel-control-right"><i class="pe-7s-angle-right" aria-hidden="true"></i></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                    <!-- /.carousel -->
 
                 </div>
-
             </div>
-           end hero-header -->
-           <div class="blog-media">
-           										<div id="bootstrap-carousel-slider" class="carousel slide" data-ride="carousel" data-interval="5000">
-
-           											<!-- Wrapper for slides -->
-           											<div class="carousel-inner" role="listbox">
-
-           												<!-- First slide -->
-           												<div class="item active" *ngFor="let photo of photos">
-           													<div class="image">
-           														<img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" />
-           													</div>
-           												</div> <!-- /.item -->
-
-
-           											</div><!-- /.carousel-inner -->
-
-           											<!-- Controls -->
-           											<a class="left carousel-control" href="#bootstrap-carousel-slider" role="button" data-slide="prev">
-           												<span class="carousel-control-left"><i class="pe-7s-angle-left" aria-hidden="true"></i></span>
-           												<span class="sr-only">Previous</span>
-           											</a>
-           											<a class="right carousel-control" href="#bootstrap-carousel-slider" role="button" data-slide="next">
-           												<span class="carousel-control-right"><i class="pe-7s-angle-right" aria-hidden="true"></i></span>
-           												<span class="sr-only">Next</span>
-           											</a>
-           										</div><!-- /.carousel -->
-
-           									</div>
             <div class="user-profile-wrapper">
 
                 <div class="user-header">
@@ -100,7 +92,7 @@
                                     <div class="image" *ngIf="loadDone">
                                         <!-- changethis -->
                                         <!-- "{{path}}image/businessLogos/{{logo}}" -->
-                                        <img src="{{path}}image/businessLogos/{{logo}}" alt="image"/>
+                                        <img src="{{path}}image/businessLogos/{{logo}}" alt="image" />
                                     </div>
 
                                     <div class="GridLex-gap-20">
@@ -117,9 +109,9 @@
                                                     <ul class="user-meta">
                                                         <li><i *ngIf="addressAvailable" class="fa fa-map-marker"></i> {{address}} <span class="mh-5 text-muted">|</span> <i *ngIf="phoneNumbersAvailable" class="fa fa-phone"></i> {{phoneNumbers}}</li>
                                                         <li>
-                                                            <a *ngIf="userLoggedIn" href="#" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
+                                                            <a *ngIf="userLoggedIn" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
                                                             <a *ngIf="noLogIn" href="#" class="btn btn-primary btn-xs btn-border">Favorite</a>
-                                                            <a *ngIf="userLoggedIn" href="{{businessId}}/reviews" class="btn btn-primary btn-xs btn-border">Rate and Review</a>
+                                                            <a *ngIf="userLoggedIn" href="business/{{businessId}}/reviews" class="btn btn-primary btn-xs btn-border">Rate and Review</a>
                                                             <a *ngIf="noLogIn" href="#" class="btn btn-primary btn-xs btn-border">Rate and Review</a>
                                                         </li>
                                                         <li>
@@ -135,13 +127,14 @@
 
                                                     <div class="row gap-20">
                                                         <div class="col-xss-6 col-xs-6 col-sm-6 col-md-12 text-right text-left-sm">
-                                                            <div class="number">{{rating}}</div>
-                                                            <div class="rating-wrapper mb-10">
-                                                                <div class="rating-item rating-item-lg">
-                                                                    <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly value={{ratingNumber}} />
-                                                                    <span class="block line14">based on <a href="{{businessId}}/reviews">{{totalRatings}} reviews</a></span>
-                                                                </div>
-                                                            </div>
+                                                          <div class="review-rating">
+                                                              <div class="rating-wrapper">
+                                                                  <div class="rating-item rating-item-lg">
+                                                                    <rating [(ngModel)]="rating" [readonly]="true" [float]="true" [titles]="false"></rating>
+                                                                  </div>
+                                                                  <a href="business/{{businessId}}/reviews">{{totalRatings}} reviews</a>
+                                                              </div>
+                                                          </div>
                                                         </div>
                                                     </div>
 
@@ -170,7 +163,7 @@
 
                 <div class="container">
 
-                    <div class="row">
+                    <div class="row" style="margin-top: 30pt;">
 
                         <div class="col-xs-12 col-sm-7 col-md-8 mt-20">
                             <h4 class="section-title">Description:</h4>
@@ -209,7 +202,7 @@
                                             <h5><i class="ti-flag-alt text-primary mr-5"></i> Working Hours</h5>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-6 mt-sm">
-                                            <span class="pl-sm">{{workingHours.from + " - " + workingHours.to}}</span>
+                                            <span class="pl-sm">{{workingFrom + " - " + workingTo}}</span>
                                         </div>
                                     </div>
                                 </li>
@@ -295,12 +288,10 @@
                                             <div class="row gap-10">
                                                 <div class="col-xs-12 col-sm-6">
                                                     <div class="trip-guide-price">
-                                                        <span class="block inline-block-xs">LE {{activity.price}}</span>
+                                                        <span class="block inline-block-xs">{{activity.price}} EGP</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 text-right text-left-xs">
-                                                    <a *ngIf="noLogIn" href="#" class="btn btn-primary">Book</a>
-                                                    <a *ngIf="userLoggedIn" href="#" class="btn btn-primary">Book</a>
                                                     <a data-toggle="modal" href="#activityModal" class="btn btn-primary">Details</a>
                                                 </div>
                                             </div>
@@ -347,47 +338,47 @@
                         </div>
                         <div class="pt-30 pb-50">
 
-                  				<div class="container">
+                            <div class="container">
 
-                  					<div class="wanted-trip-wrapper">
+                                <div class="wanted-trip-wrapper">
 
-                  						<div class="GridLex-gap-20 GridLex-gap-15-mdd GridLex-gap-10-xs">
+                                    <div class="GridLex-gap-20 GridLex-gap-15-mdd GridLex-gap-10-xs">
 
-                  							<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-center">
+                                        <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-center">
 
-                  								<div class="GridLex-col-3_mdd-4_sm-6_xs-6_xss-12" *ngFor="let review of reviews; let i = index">
-                                    <div *ngIf="i<4">
+                                            <div class="GridLex-col-3_mdd-4_sm-6_xs-6_xss-12" *ngFor="let review of reviews; let i = index">
+                                                <div *ngIf="i<4">
 
-                  									<div class="wanted-trip-item ">
+                                                    <div class="wanted-trip-item ">
 
-                  										<div class="wanted-trip-header">
-                  											<h3 style="min-height: 100pt;">{{review.comment}}</h3>
-                  											<p>{{review.rating}} <span class="mh-5 text-light">|</span> <i class="icon-directions"></i> for business</p>
+                                                        <div class="wanted-trip-header">
+                                                            <h3 style="min-height: 100pt;">{{review.comment}}</h3>
+                                                            <p><rating [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating><span class="mh-5 text-light"></span></p>
 
-                  										</div>
+                                                        </div>
 
-                  										<div class="wanted-trip-person clearfix">
-                  											<div class="image">
-                  												<img src="{{path}}image/profilePictures/{{review.user.profilePicture}}" class="img-circle" alt="images" />
-                  											</div>
-                  											<p class="name">By: <a href="#">{{review.user.firstName + " " + review.user.lastName}}</a></p>
-                  											<p> on {{review.time | date:'hh:mm - MMM d, y'}}</p>
-                  										</div>
+                                                        <div class="wanted-trip-person clearfix">
+                                                            <div class="image">
+                                                                <img src="{{path}}image/profilePictures/{{review.user.profilePicture}}" class="img-circle" alt="images" style="height: 30pt;"/>
+                                                            </div>
+                                                            <p class="name">By: <a href="user/review.user._id">{{review.user.firstName + " " + review.user.lastName}}</a></p>
+                                                            <p> on {{review.time | date:'hh:mm - MMM d, y'}}</p>
+                                                        </div>
 
-                  									</div>
-                                  </div>
-                  								</div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                  							</div>
-                                <a href="{{businessId}}/reviews" class="btn-blog">View all reviews <i class="fa fa-long-arrow-right"></i></a>
+                                        </div>
+                                        <a href="business/{{businessId}}/reviews" class="btn-blog">View all reviews <i class="fa fa-long-arrow-right"></i></a>
 
-                  						</div>
+                                    </div>
 
-                  					</div>
+                                </div>
 
-                  				</div>
+                            </div>
 
-                  			</div>
+                        </div>
 
 
                     </div>
@@ -398,11 +389,10 @@
 
             <!-- end Main Wrapper -->
 
-        </div>
 
+        </div>
         <!-- end Container Wrapper -->
 
-    </div>
 
     <!-- start Back To Top -->
 

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from "./app.routing";
 
-import { SwiperModule } from 'angular2-useful-swiper';
+import { RatingModule } from 'ngx-rating';
 
 import { AppComponent } from "./app.component";
 import { DummyComponent } from "./dummy/dummy.component";
@@ -30,7 +30,7 @@ import { ReviewsService } from "./reviews/reviews.service";
       FormsModule,
       HttpModule,
       routing,
-      SwiperModule
+      RatingModule
     ],
     providers: [DummyService, BusinessService, BusinessPageService, ReviewsService],
     bootstrap : [AppComponent]

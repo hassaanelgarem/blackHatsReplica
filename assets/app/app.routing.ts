@@ -8,8 +8,8 @@ import { ReviewsComponent } from "./reviews/reviews.component";
 const APP_ROUTES: Routes = [
     { path: 'business', component: BusinessComponent },
     { path: 'dummy', component: DummyComponent },
-    { path: 'businessPage/:businessId', component: BusinessPageComponent },
-    { path: ':businessId/reviews', component: ReviewsComponent }
+    { path: 'business/:businessId', component: BusinessPageComponent },
+    { path: 'business/:businessId/reviews', component: ReviewsComponent }
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);
