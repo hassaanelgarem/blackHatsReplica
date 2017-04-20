@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+
+<body>
+
+    <div class="pt-30 pb-50">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-4 col-md-3 mt-20">
+
+                    <aside class="sidebar-wrapper pr-5 pr-0-xs">
+
+                        <div class="common-menu-wrapper">
+
+                            <ul class="common-menu-list">
+
+                                <li><a href="guide-detail-setting.html">Dashboard</a></li>
+                                <li><a href="guide-detail-setting-edit-profile.html">Edit profile</a></li>
+                                <li><a href="guide-detail-setting-guide-information.html">Guide Information</a></li>
+                                <li><a href="guide-detail-setting-change-pass.html">Change password</a></li>
+                                <li><a href="guide-detail-setting-my-tour.html">My tour</a></li>
+                                <li class="active"><a href="guide-detail-setting-my-wihslist.html">Book advertisement</a></li>
+                                <li><a href="#">Logout</a></li>
+
+                            </ul>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-8 col-md-9 mt-20">
+
+                    <div class="dashboard-wrapper">
+
+                        <h4 class="section-title">Book Advertisment</h4>
+
+                        <div class="row gap-20">
+
+                            <div class="col-sm-6 col-md-4">
+
+                                <label>Advertisment photo</label>
+                                <br>
+                                <img class='img' src="{{path}}{{advPicture}}" alt="business Ad" style="width:250px;height:200px">
+                            </div>
+                            <br><br><br><br>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-5 col-md-5">
+                                            <input type="file" class='form-control' name='businessPhoto' ng2FileSelect [uploader]="uploader">
+                                        </div>
+                                        <div class="col-sm-3 col-md-2">
+                                            <a class="btn btn-primary" (click)="uploadAdvPicture()">Upload</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+
+                        <br>
+                        <hr>
+
+                        <div *ngFor="let advertisement of advertisements; let i=index">
+                            <div class="content">
+
+                                <div class="GridLex-gap-20 mb-5">
+
+                                    <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+                                        <div class="GridLex-col-9_sm-12_xs-12_xss-12">
+
+                                            <div class="GridLex-inner">
+                                                <h4>{{advertisement.name}}</h4>
+                                                <span class="font-italic font14">Available Date: {{availableSlots[i]}}</span>
+                                                <div>
+                                                    <span class="font-italic font14">Length: {{advertisement.length}}</span>
+                                                    <div class="divider"></div>
+                                                    <span class="font-italic font14">Width: {{advertisement.width}}</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="GridLex-col-3_sm-4_xs-4_xss-4">
+                                            <div class="GridLex-inner text-center text-left-sm line-1 font14 text-muted spacing-1">
+                                                Price<span class="block text-primary font22 font700 mb-1"> {{advertisement.price}}$ </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="GridLex-col-4_sm-8_xs-8_xss-8">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-7 col-md-7">
+                                                        <input type="number" class="form-control" placeholder="No. of Days" [(ngModel)]="noOfDays[i]" name="noOfDays[i]">
+                                                    </div>
+                                                    <div class="col-sm-3 col-md-2">
+                                                        <a class="btn btn-primary btn-sm" ng2FileSelect [uploader]="uploader" (click)="bookAdv(advertisement._id, i)">Book</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>

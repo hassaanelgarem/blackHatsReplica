@@ -20,7 +20,7 @@ const uploadBusinessLogo = multer({
 }).single('myfile');
 
 
-/*  
+/*
     Post function that adds a photo to business photos.
     Takes:
         body: {
@@ -76,7 +76,7 @@ module.exports.addPhoto = function (req, res) {
             });
 
             //add the image file name to the photos array of the Business model
-            Business.findByIdAndUpdate(req.user._id, {
+            Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", {
                     $push: {
                         "photos": req.file.filename + "." + string
                     }
@@ -121,7 +121,7 @@ module.exports.addPhoto = function (req, res) {
 };
 
 
-/*  
+/*
     Delete function that deletes a photo from business photos.
     Takes:
         params: {
@@ -133,7 +133,7 @@ module.exports.addPhoto = function (req, res) {
 */
 module.exports.deletePhoto = function (req, res) {
     var imagePath = req.params.photoPath;
-    var businessId = req.user._id;
+    var businessId = "58e8d68ce4a2cf7c06cff89a";
     Business.update({
         _id: businessId
     }, {
@@ -173,7 +173,7 @@ module.exports.deletePhoto = function (req, res) {
 };
 
 
-/* 
+/*
     Post function that adds the business's name, password, email & description to the db on applying
     Takes:
         Body: {
@@ -185,7 +185,7 @@ module.exports.deletePhoto = function (req, res) {
         }
     Returns: Success or failure message along with the error if any
     Redirects to: Nothing.
-    Calling Route: '/api/business/apply' 
+    Calling Route: '/api/business/apply'
 */
 module.exports.addBusiness = function (req, res) {
 
@@ -354,17 +354,17 @@ module.exports.getMostPopular = function (req, res) {
 };
 
 
-/*  
+/*
     Post function, to Upload Logo using multer
     and store the uploaded image path in the Business
     model in photos array, and return the
-    filepath to the frontend to show the image.    
-    Takes: 
+    filepath to the frontend to show the image.
+    Takes:
         body{
             myfile: the image to be uploaded
         }
     Returns: Success along with image path or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/addLogo'
 */
 module.exports.uploadLogo = function (req, res) {
@@ -412,7 +412,7 @@ module.exports.uploadLogo = function (req, res) {
             });
 
             //save the image file path to the Business model
-            Business.findById(req.user._id, function (err, business) {
+            Business.findById("58e8d68ce4a2cf7c06cff89a", function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.status(500).json({
@@ -473,15 +473,15 @@ module.exports.uploadLogo = function (req, res) {
 };
 
 
-/*  
+/*
     Get function, that gets the current data of the business
     and pass business object to the frontend to display it.
-    Takes:    
-        params{  
+    Takes:
+        params{
             businessId
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/:businessId/getInfo'
 */
 module.exports.getCurrentInfo = function (req, res) {
@@ -514,10 +514,10 @@ module.exports.getCurrentInfo = function (req, res) {
 };
 
 
-/*  
+/*
     Put Function, to save the edited business info in the database.
     Takes:
-        body{  
+        body{
             name,
             description,
             tags,
@@ -527,7 +527,7 @@ module.exports.getCurrentInfo = function (req, res) {
             workingDays
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/editInfo'
 */
 module.exports.saveNewInfo = function (req, res) {
@@ -544,7 +544,7 @@ module.exports.saveNewInfo = function (req, res) {
     delete req.body.activities;
     delete req.body.logo;
     //pass in the non null values in req.body to modify it only
-    Business.findByIdAndUpdate(req.user._id, req.body, function (err, business) {
+    Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", req.body, function (err, business) {
         if (err) {
             res.status(500).json({
                 error: err,
@@ -569,16 +569,16 @@ module.exports.saveNewInfo = function (req, res) {
 };
 
 
-/*  
+/*
     Put Function, to change the password of the business.
     Takes:
-        body{  
+        body{
             oldPassword,
             password,
-            confirmPassword 
+            confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/business/changePassword'
 */
 module.exports.changePassword = function (req, res) {

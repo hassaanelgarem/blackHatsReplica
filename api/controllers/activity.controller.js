@@ -56,7 +56,7 @@ module.exports.addActivity = function(req, res) {
             price: req.body.price,
             description: req.body.description,
             bookingsPerSlot: req.body.bookingsPerSlot,
-            business: req.user._id
+            business: "58e8d68ce4a2cf7c06cff89a"
         });
         // Save new Activity in database
         newActivity.save(function(err, activity) {
@@ -105,6 +105,7 @@ module.exports.addActivity = function(req, res) {
             );
         });
     }
+
 };
 
 
@@ -143,6 +144,48 @@ module.exports.getActivities = function(req, res) {
             data: activities
         });
     });
+};
+
+
+//Calling route: api/activity/getActivity/:businessId
+module.exports.getActivityBookings = function(req, res) {
+
+    //Finds all activities offered by a specific business according to its business ID
+    Activity.find({
+            "business": req.params.businessId
+        })
+        .populate({
+            path: 'bookings'
+        })
+        .select('name')
+        .select('bookings')
+        .exec(function(err, activities) {
+            //If an error occurred, display a msg along with the error
+            if (err) return res.status(500).json({
+                error: err,
+                msg: "Cannot Retrieve activities",
+                data: null
+            });
+            else if (!activities) return res.status(404).json({
+                error: null,
+                msg: "Business has no activities",
+                data: null
+            });
+            //If no error return list of activities offered
+            else {
+                var options = {
+                    path: 'bookings.user',
+                    model: 'User'
+                }
+                Activity.populate(activities, options, function(err, populatedActvities) {
+                    return res.status(200).json({
+                        error: null,
+                        msg: "Successful Retrieval",
+                        data: activities
+                    });
+                });
+            }
+        });
 };
 
 
