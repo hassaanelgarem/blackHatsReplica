@@ -5,7 +5,7 @@ import { SearchResultComponent } from "./homepage/search/SearchResult/result.com
 import { TermsComponent } from "./terms/terms.component";
 import { PolicyComponent } from "./policy/policy.component";
 import { ResetPasswordComponent } from "./user/resetPassword/resetPassword.component";
-
+import { VerifyComponent } from "./user/verify/verify.component";
 
 
 
@@ -17,6 +17,7 @@ const APP_ROUTES: Routes = [
     { path: 'terms', component: TermsComponent },
     { path: 'policy', component: PolicyComponent },
     { path: 'resetPassword/:token', component: ResetPasswordComponent},
+    { path: 'verify/:token', component: VerifyComponent},
     { path: '**',redirectTo:'/homepage'}
 
 ];
