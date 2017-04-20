@@ -103,8 +103,7 @@
                             <div *ngIf="loggedIn">
                                 <footer class="panel-footer">
                                     <div class="config">
-                                        <a (click)="onEdit()">Edit</a>
-                                        <a (click)="onDelete()">Delete</a>
+                                      <a href="#editReviewModal" data-toggle="modal"  (click)="onEdit(i)">Edit</a>
                                     </div>
                                 </footer>
                             </div>
@@ -121,5 +120,74 @@
         </div>
 
     </div>
+
+    <!-- start Edit Modal -->
+
+    <div id="editReviewModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" data-replace="true">
+        <div class="modal-header">
+            <h4 class="modal-title2 text-center">Edit Review</h4>
+        </div>
+
+        <div class="modal-body">
+            <div *ngIf="!editDone">
+                <div>
+                    <div class="row gap-20">
+                      <div>
+                        <div >
+                            <div class="col-sm-12 col-md-12">
+
+                                <div class="form-group">
+                                    <div *ngIf="editCommentWarning" class="alert alert-danger alert-dismissable">
+                                        <a class="close" (click)="hideEditCommentWarning()" aria-label="close">&times;</a> Please fill out your Comment!
+                                    </div>
+                                    <label>Comment</label>
+                                    <textarea style="resize: none;" class="form-control" type="text" rows="4" [(ngModel)]="editComment" name="editComment"></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-12">
+
+                                <div class="form-group">
+                                    <div *ngIf="editRatingWarning" class="alert alert-danger alert-dismissable">
+                                        <a class="close" (click)="hideEditRatingWarning()" aria-label="close">&times;</a> Please Rate!
+                                    </div>
+                                    <label>Rating</label>
+                                    <div class="input-group mb-15">
+                                    <input class="form-control" type="number" [(ngModel)]="editRating" name="editRating">
+                                  </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="editDone">
+                <div class="create-done-wrapper">
+                    <div class="icon">
+                        <div class="icon-inner">
+                            <i class="ti-check"></i>
+                        </div>
+                    </div>
+
+                    <h1 class="text-lowercase">Congratulations!</h1>
+                    <p class="lead">Your Review has been successfully edited</p>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer text-center">
+            <button *ngIf="!editDone" type="button" class="btn btn-primary buttonSize" (click)="onSave(i)"> Save </button>
+            <button *ngIf="!editDone" type="button" data-dismiss="modal" class="btn btn-primary btn-border buttonSize" (click)="onDelete(i)">Delete</button>
+            <button *ngIf="editDone" type="button" (click)="onCancel()" data-dismiss="modal" class="btn btn-primary btn-border buttonSize">Cancel</button>
+        </div>
+    </div>
+    <!-- end Edit Modal -->
 
 </body>

@@ -34,7 +34,7 @@ export class UserService {
 		headers.append('Content-Type', 'application/json');
     return this.http.get('http://localhost:8080/api/review/averageRating/' + businessId, {headers: headers}).map(res => res.json());
   }
-  
+
   //get the user's reviews:
   getReviews(userId){
     let headers = new Headers();
@@ -63,7 +63,19 @@ export class UserService {
     return this.http.get('http://localhost:8080/api/booking/history/' + userId, {headers: headers}).map(res => res.json());
   }
 
-  
+  deleteReview(reviewId){
+    let headers = new Headers();
+    headers.append('Content-Type', 'applictaion/json');
+    return this.http.delete('http://localhost:8080/api/review/' + reviewId + '/delete', {headers: headers}).map(res => res.json());
+  }
+
+  editReview(reviewId){
+    let headers = new Headers();
+    headers.append('Content-Type', 'applictaion/json');
+    return this.http.put('http://localhost:8080/api/review/' + reviewId + '/edit', {headers: headers}).map(res => res.json());
+  }
+
+
 //getFavorites:
   /*getFavorites(userId){
     let headers = new Headers();
@@ -78,7 +90,7 @@ export class UserService {
         //to tranform the response
             .map((response: Response) => {
                 const reviews = response.json().data;  //the data of the json object returned by the backend
-                //the problem is the reviews have different fields than the ones in the backend, 
+                //the problem is the reviews have different fields than the ones in the backend,
                 //so we need to transform it:
                 let transformedReviews: Review[] = [];
                 //looping through the reviews i have from the backend
@@ -116,5 +128,5 @@ export class UserService {
     */
 
 
-  
+
 }
