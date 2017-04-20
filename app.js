@@ -10,7 +10,6 @@ const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
-const forloop = require('forloop');
 
 //require passport.js for configuration
 const passportConfig = require('./api/config/passport');

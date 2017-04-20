@@ -91,20 +91,35 @@
 
                         <div class="col-xs-12 col-sm-12 col-md-9">
                             <div class="review-replied">
-                                <div class="review-content">
+                                <div class="review-content" *ngIf="!editing[i]">
 
                                     <h4>{{review.comment}}</h4>
                                     <h4>Rating: {{review.rating}}</h4>
 
                                 </div>
+                                <div class="review-content" *ngIf="editing[i]">
+
+                                  <input type="text" class="form-control" [(ngModel)]="editComment" name="editComment">
+                                  <input type="text" class="form-control" [(ngModel)]="editRating" name="editRating">
+
+                                </div>
 
                             </div>
 
-                            <div *ngIf="loggedIn">
+                            <div *ngIf="loggedIn && !editing[i]">
                                 <footer class="panel-footer">
                                     <div class="config">
-                                        <a (click)="onEdit()">Edit</a>
-                                        <a (click)="onDelete()">Delete</a>
+                                        <a (click)="onEdit(i)">Edit</a>
+                                    </div>
+                                </footer>
+                            </div>
+
+                            <div *ngIf="loggedIn && editing[i]">
+                                <footer class="panel-footer">
+                                    <div class="config">
+                                        <a (click)="onSave(i)">Save</a>
+                                        <a (click)="onDelete(i)">Delete</a>
+                                        <a (click)="onCancel(i)">Cancel</a>
                                     </div>
                                 </footer>
 
