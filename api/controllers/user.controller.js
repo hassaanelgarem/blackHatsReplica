@@ -860,6 +860,31 @@ module.exports.resendVerification = function (req, res) {
 };
 
 
+/*
+Get function that returns the logged in user or business if they exist
+Returns: {
+  success: indicated whether there's a log in session or no,
+  user: User object of logged in user,
+  business: Business object of logged in business
+}
+Redirects to: Nothing.
+Calling Route: '/api/currentUser'
+*/
+module.exports.currentUser = function (req, res) {
+  if(req.isAuthenticated()){
+    if(req.user.constructor.modelName === "User"){
+      res.json({succes: true, user: req.user, business: null});
+    }
+    else{
+      res.json({succes: true, user: null, business: req.user});
+    }
+  }
+  else{
+    res.json({succes: false, user: null, business: null});
+  }
+}
+
+
 module.exports.successLogin = function (req, res) {
     return res.json({ success: true });
 };

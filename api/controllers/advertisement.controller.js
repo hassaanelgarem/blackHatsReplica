@@ -26,7 +26,7 @@ const uploadAdPhoto = multer({
     Redirects to: Nothing
     Calling route: '/api/advertisement/getAdvSlots'
 */
-module.exports.getAdvSlots = function (req, res) {
+module.exports.getAdvSlots = function(req, res) {
     //  finds all advSlots that can appear on homepage
     AdvSlot.find({}, {
         //    projection to show specific fields of Adv Slots
@@ -34,7 +34,7 @@ module.exports.getAdvSlots = function (req, res) {
         price: 1,
         length: 1,
         width: 1
-    }, function (err, advSlot) {
+    }, function(err, advSlot) {
         //  If there is an error return it in response
         if (err) {
             return res.status(500).json({
@@ -75,10 +75,22 @@ module.exports.getAdvSlots = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/advertisement/bookAdvSlot/:advSlotId'
 */
-module.exports.bookAdvSlot = function (req, res) {
+module.exports.bookAdvSlot = function(req, res) {
+    req.checkBody('startTime', 'Start Time is required.').notEmpty();
+    req.checkBody('endTime', 'End Time is required.').notEmpty();
+    req.checkBody('image', 'Image path is required.').notEmpty();
 
+    const errors = req.validationErrors();
+
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
+            data: null
+        });
+    } else {
         // check if advSlot exists
-        AdvSlot.findById(req.params.advSlotId, function (err, slot) {
+        AdvSlot.findById(req.params.advSlotId, function(err, slot) {
             if (err) return res.status(500).json({
                 error: err,
                 msg: "Error Searching For Advertisement Slot",
@@ -90,67 +102,59 @@ module.exports.bookAdvSlot = function (req, res) {
                 msg: "Advertisement Slot Not Found",
                 data: null
             });
-            // Upload the adv image
-            uploadAdv(req, res, function (flag, image) {
-                if (flag)
-                    return res.status(500).json({
-                        error: err,
-                        msg: "Choose A Valid File",
-                        data: null
-                    });
-                // Create new AdvBooking object using parameters from post request
-                const newAdvBooking = new AdvBooking({
-                    business: req.user._id,
-                    advSlot: req.params.advSlotId,
-                    image: image,
-                    startTime: req.body.startTime,
-                    endTime: req.body.endTime
-                });
+            // Create new AdvBooking object using parameters from post request
+            const newAdvBooking = new AdvBooking({
+                business: "58e8eb94b0283d09afa30176",
+                advSlot: req.params.advSlotId,
+                image: req.body.image,
+                startTime: req.body.startTime,
+                endTime: req.body.endTime
+            });
 
-                // Save new booking in database
-                newAdvBooking.save(function (err, booking) {
-                    // If there is an error return it in response
+            // Save new booking in database
+            newAdvBooking.save(function(err, booking) {
+                // If there is an error return it in response
+                if (err) return res.status(500).json({
+                    error: err,
+                    msg: "Error Adding the Booking",
+                    data: null
+                });
+            });
+
+            //Adds the new booking to the advSchedule array in advSlot
+            AdvSlot.findByIdAndUpdate(
+                newAdvBooking.advSlot, {
+                    $push: {
+                        "advSchedule": newAdvBooking._id
+                    }
+                }, {
+                    safe: true,
+                    upsert: true,
+                    new: true
+                },
+                function(err, adv) {
+                    //If there is an error, return it in response
                     if (err) return res.status(500).json({
                         error: err,
-                        msg: "Error Adding the Booking",
+                        msg: "Error While Updating Advertisement Slot",
                         data: null
                     });
-                });
-
-                //Adds the new booking to the advSchedule array in advSlot
-                AdvSlot.findByIdAndUpdate(
-                    newAdvBooking.advSlot, {
-                        $push: {
-                            "advSchedule": newAdvBooking._id
-                        }
-                    }, {
-                        safe: true,
-                        upsert: true,
-                        new: true
-                    },
-                    function (err, adv) {
-                        //If there is an error, return it in response
-                        if (err) return res.status(500).json({
-                            error: err,
-                            msg: "Error While Updating Advertisement Slot",
+                    if (adv)
+                        //return a success message
+                        res.status(200).json({
+                            error: null,
+                            msg: "Booking Added To the Advertisement Slot Successfully",
                             data: null
                         });
-                        if (adv)
-                            //return a success message
-                            res.status(200).json({
-                                error: null,
-                                msg: "Booking Added To the Advertisement Slot Successfully",
-                                data: null
-                            });
-                        else
-                            res.status(500).json({
-                                error: null,
-                                msg: "Booking was saved, however, it was not added to the schedule of the slot, slot was not found.",
-                                data: null
-                            });
-                    });
-            });
+                    else
+                        res.status(500).json({
+                            error: null,
+                            msg: "Booking was saved, however, it was not added to the schedule of the slot, slot was not found.",
+                            data: null
+                        });
+                });
         });
+    }
 
 };
 
@@ -170,7 +174,7 @@ module.exports.bookAdvSlot = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/advertisement/getCurrentBookings/:advSlotId'
 */
-module.exports.getCurrentBookings = function (req, res) {
+module.exports.getCurrentBookings = function(req, res) {
     /*   A query that finds the advSchedule of the selected slot
     and sorts it ascendingly by startTime and excludes any expired ads */
     AdvSlot.findById(req.params.advSlotId)
@@ -189,7 +193,7 @@ module.exports.getCurrentBookings = function (req, res) {
                 }
             }
         })
-        .exec(function (err, currentSlot) {
+        .exec(function(err, currentSlot) {
             //if an error occured, return it in response
             if (err) return res.status(500).json({
                 error: err,
@@ -225,7 +229,7 @@ module.exports.getCurrentBookings = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/advertisement/getFreeSlot/:advSlotId'
 */
-module.exports.getFreeSlot = function (req, res) {
+module.exports.getFreeSlot = function(req, res) {
 
     /*   A query that finds the advSchedule of the selected slot
      and sorts them descendingly by endTime to get the last occupied slot  */
@@ -243,7 +247,7 @@ module.exports.getFreeSlot = function (req, res) {
             }
         });
 
-    query.exec(function (err, lastSlot) {
+    query.exec(function(err, lastSlot) {
         //If an error occured return it in response
         if (err) return res.status(500).json({
             error: err,
@@ -285,9 +289,10 @@ module.exports.getFreeSlot = function (req, res) {
 
 
 /* Function that uploads a photo and saves it in the public folder */
-var uploadAdv = function (req, res, callback) {
+module.exports.uploadAdv = function(req, res) {
+
     //upload the image
-    uploadAdPhoto(req, res, function (err) {
+    uploadAdPhoto(req, res, function(err) {
         //if an error occurred, return the error
         if (err) {
             return res.status(500).json({
@@ -321,18 +326,29 @@ var uploadAdv = function (req, res, callback) {
             }
             //copy and rename the image to the following format and location
             var newPath = path.join(__dirname, "../", "../public/uploads/businessAds/" + req.file.filename + "." + string);
-            fs.renameSync(req.file.path, newPath, function (err) {
+            fs.renameSync(req.file.path, newPath, function(err) {
                 if (err) throw err;
 
                 //delete the image with the old name
                 fs.unlink(req.file.path);
             });
 
-            callback(false, req.file.filename + "." + string);
+            //return the file path to the frontend to show the image
+            res.status(200).json({
+                error: null,
+                msg: 'Advertisement photo uploaded successfully',
+                data: req.file.filename + '.' + string
+            });
         }
         //multer did not find a file selected to upload
         else {
-            callback(true, null);
+            res.status(500).json({
+                error: null,
+                msg: 'Please choose a valid file.',
+                data: null
+            });
         }
+
     });
+
 }

@@ -422,7 +422,7 @@ module.exports.uploadLogo = function (req, res) {
             });
 
             //save the image file path to the Business model
-            Business.findById(req.user._id, function (err, business) {
+            Business.findById(req.user._id , function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.status(500).json({
