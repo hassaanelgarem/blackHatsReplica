@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<div class="pt-30 pb-50">
+
+	<div class="container">
+
+		<div class="row">
+
+			<div class="col-xs-12 col-sm-7 col-md-8 mt-20">
+				<h4 class="section-title">Photos:</h4>
+
+				<div class="gallery-wrapper">
+
+					<div class="GridLex-gap-5">
+
+						<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+							<div *ngFor="let photo of photos; let i=index">
+								<div class="GridLex-col-4_sm-4_xs-4_xss-6">
+									<div class="sumi-gallery-wrapper clearfix">
+										<div class="gallery-item image-object-fit image-object-fit-cover">
+											<div class="img-wrap">
+												<span class="close" (click)="deletePhoto(i)">&times;</span>
+												<img data-sgallery="guideGallery" src="{{path}}image/businessPhotos/{{photo}}" alt="Business photo" style="width:200px;height:200px">
+											</div>
+										</div>
+									</div>
+								</div>
+								<br>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+<div class="form-horizontal">
+	<div class="form-group">
+		<div class="col-sm-5 col-md-5">
+			<input type="file" class='form-control' name='businessPhoto' ng2FileSelect [uploader]="uploader">
+		</div>
+		<div class="col-sm-3 col-md-2">
+			<a class="btn btn-primary" (click)="onUpload()">Upload</a>
+		</div>
+	</div>
+</div>
+
+</html>
