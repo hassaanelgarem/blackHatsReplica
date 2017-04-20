@@ -95,6 +95,14 @@
                                             </div>
 
                                         </div>
+                                        <div *ngIf="loggedIn">
+                                            <footer class="panel-footer">
+                                                <div class="config">
+                                                    <button type="button" class="btn btn-danger" (click)="deleteFavorite(i)"> Delete </button>
+
+                                                </div>
+                                            </footer>
+                                        </div>
 
                                     </div>
 

@@ -17,6 +17,7 @@ import { UserBookingsComponent } from "./user/bookings/userBookings.component";
 import { EditProfileComponent } from "./user/editProfile/editProfile.component";
 import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
+import { SomethingWrongComponent } from "./errors/500.component";
 
 
 import { DummyService } from "./dummy/dummy.service";
@@ -36,7 +37,8 @@ import { EditProfileService } from "./user/editProfile/editProfile.service";
       UserBookingsComponent,
       EditProfileComponent,
       FileSelectDirective,
-      NotAuthorizedErrorComponent
+      NotAuthorizedErrorComponent,
+      SomethingWrongComponent
       
     ],
     imports: [

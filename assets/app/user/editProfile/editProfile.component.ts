@@ -65,6 +65,9 @@ export class EditProfileComponent implements OnInit {
                 console.error(data.msg);
             }
         });
+
+        //this.router.navigateByUrl('dummy');
+        //this.router.navigateByUrl('user');
     }
 
     /*

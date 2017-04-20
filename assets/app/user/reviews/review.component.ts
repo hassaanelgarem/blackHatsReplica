@@ -27,16 +27,7 @@ export class ReviewComponent implements OnInit {
 
     //hassaan:
     ngOnInit() {
-        /*this.businessService.getAverageRating(this.businessId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
-                this.averageString = data.data.toFixed(1);
-            }
-        });
-        */
-
+      
         this.userService.getReviews(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
@@ -47,7 +38,6 @@ export class ReviewComponent implements OnInit {
             }
         });
     }
-
 
     onDeleteClick(){
 

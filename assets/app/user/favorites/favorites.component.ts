@@ -10,10 +10,12 @@ import 'rxjs/add/operator/map';
   templateUrl: './favorites.component.html'
 })
 export class UserFavoritesComponent implements OnInit {
-  ids: [String];
+  favorites: [String];
   businesses: [Object];
   userId: String = "58f2524179efae7640c1c949";
   logoPath :String = "http://localhost:8080/api/image/businessLogos/";
+  loggedIn = true;
+  user: Object;
 
   constructor(
     private userService: UserService,
@@ -27,10 +29,11 @@ export class UserFavoritesComponent implements OnInit {
         console.error(data.msg);
       }
       else {
-        this.ids = data.data.favorites;
+        this.user = data.data;
+        this.favorites = data.data.favorites;
         var businesses = [];
-        for (var i = 0; i < this.ids.length; i++){
-          this.userService.getCurrentInfo(this.ids[i]).subscribe(data => {
+        for (var i = 0; i < this.favorites.length; i++){
+          this.userService.getCurrentInfo(this.favorites[i]).subscribe(data => {
             if (data.err) {
               console.error(data.msg);
             }
@@ -44,4 +47,34 @@ export class UserFavoritesComponent implements OnInit {
     });
 
   }
+  
+   deleteFavorite(i){
+
+    this.userService.deleteFavorite(this.favorites[i]).subscribe(
+      (data) => {
+        console.log("no error");
+        this.favorites.splice(i, 1);
+      },
+      (err) => {
+        switch(err.status){
+              case 404:
+                //console.log("404 not found");
+                this.router.navigateByUrl('404-error');
+                break;
+              case 401:
+                //console.log("Unauthorized");
+                this.router.navigateByUrl('notAuthorized-error');
+                break;
+              default:
+                //console.log("Oops somethings went wrong");
+                this.router.navigateByUrl('500-error');
+                break;
+            }
+        
+      }
+    );
+    
+  }
+ 
+
 }
