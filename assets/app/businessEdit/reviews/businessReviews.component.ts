@@ -15,6 +15,7 @@ export class BusinessReviewsComponent implements OnInit {
     reviews: [Object];
     businessId: String = "58e8fbfdf376d034c5cdbc09";
     averageString: String;
+    averageRating: Number;
 
     constructor(
         private businessService: BusinessService,
