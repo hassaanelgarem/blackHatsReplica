@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
+import { LoginService } from '../user/login/login.service';
 
 @Component({
   selector: 'app-nav',
@@ -11,15 +12,22 @@ export class NavComponent implements OnInit {
 //to check for this part later
   private loggedin;
 
-  constructor(private appService: AppService) { }
+  constructor(
+    private appService: AppService,
+    private loginService: LoginService
+  ) { }
 
   ngOnInit() {
-    // call current user backend function
-    this.loggedin=this.appService.status();
+    // to call hassaan's service
   }
 
-  logout(){
-    this.loggedin=this.appService.logout();
+  onLogout(){
+    this.loginService.logout().subscribe(data => {
+      console.log('loggedout');
+      this.loggedin = false;
+    }, err => {
+      console.log('loggedout failed');
+    });
     }
 
 }

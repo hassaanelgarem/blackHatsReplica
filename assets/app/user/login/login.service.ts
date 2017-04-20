@@ -39,11 +39,10 @@ export class LoginService {
   }
 
 
-//user wala business?? mesh lazem 3amatan
   logout() {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:8080/api/logout', {headers: headers}).map(res => res.json());
+    return this.http.get('http://localhost:8080/api/logout', {headers: headers}).map(res => res.json());
   }
   
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Output ,EventEmitter } from '@angular/core';
 import { LoginService } from './login.service';
+import { AppService } from '../../app.service';
 import {Router} from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -42,15 +43,17 @@ export class LoginComponent implements OnInit {
     private resetFailureWarning: boolean = false;
     private resetBusinessSuccessWarning: boolean = false;
     private resetBusinessFailureWarning: boolean = false;
+    private loggedin: boolean = false;
 
     constructor(
         private loginService: LoginService,
         private router: Router,
-        private http: Http
+        private http: Http,
+        private appService: AppService
         ){ }
     
 
-    ngOnInit() { }
+    ngOnInit() {}
 
 
     onUserLogin(){
@@ -70,10 +73,10 @@ export class LoginComponent implements OnInit {
         if(!this.userUsernameWarning && !this.userPasswordWarning){
             this.loginService.userLogin(this.username, this.userPassword).subscribe(data => {
             if(data.success){
-            console.log("login");
-            this.router.navigate(['/']);
-            location.reload();
+           // console.log("login");
+           this.loggedin = true;
             this.loginClicked.emit(true);
+            this.appService.login();
             }
             else{
             this.incorrectUserWarning = true;
@@ -106,9 +109,9 @@ export class LoginComponent implements OnInit {
 
             this.loginService.businessLogin(this.businessEmail, this.businessPassword).subscribe(data => {
             if(data.success){
-            this.router.navigate(['/']);
-            location.reload();
+            this.loggedin = true;
             this.loginClicked.emit(true);
+            this.appService.login();
             }
             else{
                this.incorrectBusinessWarning = true;
@@ -182,11 +185,6 @@ export class LoginComponent implements OnInit {
     }
 
 
-    onLogout() {
-        console.log("Logged out!!");
-    }
-
-
     hideuserUsernameWarning() {
         this.userUsernameWarning = false;
     }
@@ -237,6 +235,7 @@ export class LoginComponent implements OnInit {
         this.resetUserEmailWarning = false;
         this.resetFailureWarning = false;
         this.resetSuccessWarning = false;
+        this.loggedin = false;
     }
 
 
@@ -249,6 +248,7 @@ export class LoginComponent implements OnInit {
         this.incorrectBusinessWarning = false;
         this.resetFailureWarning = false;
         this.resetSuccessWarning = false;
+        this.loggedin = false;
     }
 
     onUserForgetPassCancel() {

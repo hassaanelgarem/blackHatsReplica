@@ -6,7 +6,13 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserLoginCancel()">&times;</button>
 		<h4 class="modal-title text-center">Login To Your User Account</h4>
 	</div>
+
+	<div *ngIf="loggedin" class="alert alert-success alert-dismissable">
+					Login Successfull
+	</div>
 	
+	<div *ngIf="!loggedin">
+
 	<div class="modal-body">
 		<div class="row gap-20">
 			
@@ -75,6 +81,8 @@
 	<div class="modal-footer text-center">
 		<button type="button" class="btn btn-primary" (click)="onUserLogin()">Login</button>
 		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onUserLoginCancel()">Close</button>
+	</div>
+
 	</div>
 	
 </div>
