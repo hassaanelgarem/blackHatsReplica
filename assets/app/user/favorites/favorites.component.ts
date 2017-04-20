@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class UserFavoritesComponent implements OnInit {
   favorites: [String];
   businesses: [Object];
-  userId: String = "58f2524179efae7640c1c949";
+  userId: String = "58f8e785d563aa23994def50";
   logoPath :String = "http://localhost:8080/api/image/businessLogos/";
   loggedIn = true;
   user: Object;
@@ -53,7 +53,7 @@ export class UserFavoritesComponent implements OnInit {
     this.userService.deleteFavorite(this.favorites[i]).subscribe(
       (data) => {
         console.log("no error");
-        this.favorites.splice(i, 1);
+        this.businesses.splice(i, 1);
       },
       (err) => {
         switch(err.status){

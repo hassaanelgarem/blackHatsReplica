@@ -21,7 +21,7 @@ export class EditProfileComponent implements OnInit {
     birthDate: Date;
 
     path: String = "";
-    userId: String = "58f2524179efae7640c1c949";
+    userId: String = "58f8e785d563aa23994def50";
 
     constructor(
         private editProfileService: EditProfileService,
@@ -70,32 +70,23 @@ export class EditProfileComponent implements OnInit {
         //this.router.navigateByUrl('user');
     }
 
-    /*
-    addTag() {
-        if (this.extraTag != "") {
-            this.tags.push(this.extraTag);
-            this.extraTag = "";
-        }
-    }
-
-    removeTag(index) {
-        this.tags.splice(index, 1);
-    }
-
-    addWorkingDay() {
-        if (this.extraDay != "") {
-            this.workingDays.push(this.extraDay);
-            this.extraDay = "";
-        }
-    }
-
-    removeWorkingDay(index) {
-        this.workingDays.splice(index, 1);
-    }
-    */
-
+    
     onUpload() {
         this.uploader.uploadAll();
+    }
+
+    deleteAccount(){
+        this.editProfileService.deleteAccount().subscribe(
+        (data) => {
+           this.router.navigateByUrl('/'); 
+        },
+        (err) => {
+            //TODO:
+            //handle and redirect
+        }
+        );
+        
+
     }
 
 }

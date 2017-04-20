@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class EditProfileService {
     
-    userId: String = "58f2524179efae7640c1c949";
+    userId: String = "58f8e785d563aa23994def50";
     
     constructor(private http: Http) { }
 
@@ -26,5 +26,11 @@ export class EditProfileService {
           
         }
         return this.http.put('http://localhost:8080/api/user/profile/editInfo', body, { headers: headers }).map(res => res.json());
+    }
+
+    deleteAccount(){
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return this.http.delete('http://localhost:8080/api/user/deleteAccount', {headers: headers}).map(res => res.json());
     }
 }

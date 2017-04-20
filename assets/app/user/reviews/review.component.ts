@@ -16,7 +16,7 @@ export class ReviewComponent implements OnInit {
     count: Number = 0;
     reviews: Object[];
     //reviews: Review[];
-    userId: String = "58f2524179efae7640c1c949";
+    userId: String = "58f8e785d563aa23994def50";
     averageString: String;
     loggedIn = true;
 
