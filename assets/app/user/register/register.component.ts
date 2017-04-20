@@ -36,7 +36,8 @@ export class RegisterComponent {
 
         /*
         Calling the signUp function from the service to handle the register operation
-        Gets back data and error and then handling them by pop up alerts
+        Gets back data and error messages then handling them by bootstrap alerts
+        Setting the success and failure booleans to check on them in the html file
         */
         this.registerService.signUp(user)
             .subscribe(
