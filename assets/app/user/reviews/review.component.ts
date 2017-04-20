@@ -13,12 +13,18 @@ import 'rxjs/add/operator/map';
 })
 
 export class ReviewComponent implements OnInit {
+   
     count: Number = 0;
     reviews: Object[];
     //reviews: Review[];
-    userId: String = "58f8e785d563aa23994def50";
+    userId: String = "58f923c4fae7424824625eec";
     averageString: String;
     loggedIn = true;
+    editing: Boolean[] = [];
+    editIndex = 0;
+    editComment: String;
+    editRating: Number;
+
 
     constructor(
         private userService: UserService,
@@ -39,12 +45,46 @@ export class ReviewComponent implements OnInit {
         });
     }
 
-    onDeleteClick(){
+    onDelete(i){
+      this.editIndex = i;
+      this.userService.deleteReview(this.reviews[i]._id).subscribe(
+        (data) => {
+        console.log("no error");
+        this.reviews.splice(i,1);
+      },
+      (err) => {
+      console.log("error");
+      });
+      this.editing[i] = false;
+    }
 
+    onSave(i){
+      this.editIndex = i;
+      this.userService.editReview(this.reviews[i]._id, this.editComment, this.editRating).subscribe(
+        (data) => {
+          console.log("no error");
+          this.reviews[i].comment = this.editComment;
+          this.reviews[i].rating = this.editRating;
+          this.editing[i] = false;
+          this.editComment = null;
+          this.editRating = null;
+        },
+        (err) => {
+          console.log("error");
+        });
+    }
+
+    onCancel(i){
+      this.editIndex = i;
+      this.editing[i] = false;
+    }
+
+    onEdit(i){
+      this.editing[i] = true;
+      this.editComment = this.reviews[i].comment;
+      this.editRating = this.reviews[i].rating;
     }
 
 
-    onEditClick(){
-
-    }
+    
 }

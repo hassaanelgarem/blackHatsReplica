@@ -29,6 +29,12 @@ export class UserService {
 //fixed:
 
   //get the user's reviews:
+  getAverageRating(businessId) {
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:8080/api/review/averageRating/' + businessId, {headers: headers}).map(res => res.json());
+  }
+  
   getReviews(userId){
     let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
@@ -62,6 +68,20 @@ export class UserService {
       return this.http.delete('http://localhost:8080/api/user/deleteFavorite/' + businessId, {headers: headers}).map(res => res.json());
       
     }
-  
+  deleteReview(reviewId){
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    return this.http.delete('http://localhost:8080/api/review/' + reviewId + '/delete', {headers: headers}).map(res => res.json());
+  }
+
+  editReview(reviewId, comment, rating){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let body = {
+      "comment": comment,
+      "rating": rating
+    }
+    return this.http.put('http://localhost:8080/api/review/' + reviewId + '/edit', body, {headers: headers}).map(res => res.json());
+  }
 
 }
