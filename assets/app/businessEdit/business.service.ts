@@ -10,10 +10,10 @@ export class BusinessService {
 
     constructor(private http: Http) { }
 
-    getCurrentUser(){
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      return this.http.get('http://localhost:8080/api/currentUser', {headers: headers}).map(res => res.json());
+    getCurrentUser() {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.get('http://localhost:8080/api/currentUser', { headers: headers }).map(res => res.json());
     }
 
     getAverageRating(businessId) {
@@ -29,9 +29,9 @@ export class BusinessService {
     }
 
     getActivity(activityId) {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      return this.http.get('http://localhost:8080/api/activity/' + activityId + '/getActivity', { headers: headers }).map(res => res.json());
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.get('http://localhost:8080/api/activity/' + activityId + '/getActivity', { headers: headers }).map(res => res.json());
 
     }
 
@@ -69,43 +69,55 @@ export class BusinessService {
             );
     }
 
-    deleteActivity(activity: Activity){
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      return this.http.delete('http://localhost:8080/api/activity/' + activity.id + "/delete" , {headers: headers}).map(res => res.json());
+    deleteActivity(activity: Activity) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.delete('http://localhost:8080/api/activity/' + activity.id + "/delete", { headers: headers }).map(res => res.json());
     }
 
-    deleteSlot(slot: Slot, activity: Activity){
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      let body = {
-        "startTime": slot.startTime,
-        "endTime": slot.endTime
-      }
-      return this.http.delete('http://localhost:8080/api/activity/' + activity.id + "/deleteSlot", {body: body, headers: headers}).map(res => res.json());
+    editActivity(activity: Activity) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let body = {
+            "name": activity.name,
+            "price": activity.price,
+            "description": activity.description,
+            "bookingsPerSlot": activity.bookingsPerSlot
+        };
+        return this.http.post('http://localhost:8080/api/activity/' + activity.id + "/edit", body, {headers: headers }).map(res => res.json());
     }
 
-    addSlot(slot: Slot, activity: Activity){
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      let body = {
-        "startTime": slot.startTime,
-        "endTime": slot.endTime
-      }
-      return this.http.post('http://localhost:8080/api/activity/' + activity.id + "/addSlot", body, {headers: headers}).map(res => res.json());
+    deleteSlot(slot: Slot, activity: Activity) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let body = {
+            "startTime": slot.startTime,
+            "endTime": slot.endTime
+        }
+        return this.http.delete('http://localhost:8080/api/activity/' + activity.id + "/deleteSlot", { body: body, headers: headers }).map(res => res.json());
     }
 
-    deleteActivityPhoto(path, activity: Activity){
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      return this.http.delete('http://localhost:8080/api/activity/' + activity.id + '/deletePhoto/' + path, {headers: headers}).map(res => res.json());
+    addSlot(slot: Slot, activity: Activity) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let body = {
+            "startTime": slot.startTime,
+            "endTime": slot.endTime
+        }
+        return this.http.post('http://localhost:8080/api/activity/' + activity.id + "/addSlot", body, { headers: headers }).map(res => res.json());
     }
 
-    addActivity(activity: Activity){
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      const body = JSON.stringify(activity);
-      return this.http.post('http://localhost:8080/api/activity/add', body, {headers: headers}).map(res => res.json());
+    deleteActivityPhoto(path, activity: Activity) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.delete('http://localhost:8080/api/activity/' + activity.id + '/deletePhoto/' + path, { headers: headers }).map(res => res.json());
+    }
+
+    addActivity(activity: Activity) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        const body = JSON.stringify(activity);
+        return this.http.post('http://localhost:8080/api/activity/add', body, { headers: headers }).map(res => res.json());
 
     }
 

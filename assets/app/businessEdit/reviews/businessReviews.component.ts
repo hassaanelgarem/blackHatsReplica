@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {BusinessService} from '../business.service';
 import {Router} from '@angular/router';
 import { Http, Headers } from '@angular/http';
+import {RatingModule} from "ngx-rating";
 import 'rxjs/add/operator/map';
 
 
@@ -26,6 +27,7 @@ export class BusinessReviewsComponent implements OnInit {
                 console.error(data.msg);
             }
             else {
+                this.averageRating = data.data;
                 this.averageString = data.data.toFixed(1);
             }
         });

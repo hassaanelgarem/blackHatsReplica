@@ -110,7 +110,7 @@
 
 												<div class="form-group form-group-lg">
 													<label>Activity name:</label>
-													<input type="text" class="form-control" [(ngModel)]="name" name="name" />
+													<input type="text" class="form-control" [(ngModel)]="name" name="name"/>
 												</div>
 
 											</div>
@@ -253,6 +253,8 @@
 											</div>
 
 										</div>
+										<input style="border-width: 0px; outline: none; width: 0px; height: 0px;" type="text" [focus]="myFocusTriggeringEventEmitterOne" [(ngModel)]="fakeVaribaleOne" name="fakeVaribaleOne"/>
+										<input style="border-width: 0px; outline: none; width: 0px; height: 0px;" type="text" [focus]="myFocusTriggeringEventEmitterTwo" [(ngModel)]="fakeVaribaleTwo" name="fakeVaribaleTwo"/>
 
 									</div>
 
@@ -260,8 +262,11 @@
 
 										<div class="mb-25"></div>
 
-										<button type="button" class="btn btn-primary" (click)="onDone()"> Add </button>
-										<a href="#" class="btn btn-primary btn-wide btn-border">Save as draft</a>
+										<div class="text-center">
+						            <button type="button" class="btn btn-primary buttonSize" (click)="onSave()"> Save </button>
+						            <button type="button" class="btn btn-danger buttonSize" (click)="onDelete()">Delete</button>
+						            <button type="button" class="btn btn-primary btn-border buttonSize" (click)="onCancel()">Cancel</button>
+						        </div>
 
 									</div>
 

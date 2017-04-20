@@ -84,7 +84,7 @@ module.exports = function (passportConfig) {
     router.route('/activity/:activityId/addPhoto').post(passportConfig.isBusinessLoggedIn, activityCtrl.addPhoto);
     router.route('/activity/:activityId/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deletePhoto);
     router.route('/activity/:activityId/delete').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deleteActivity);
-
+    router.route('/activity/:activityId/edit').post(passportConfig.isBusinessLoggedIn, activityCtrl.editActivity);
 
     //Admin routes
     router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);

@@ -7,6 +7,8 @@ import { MomentModule } from 'angular2-moment';
 import { DateTimePickerModule } from 'ng2-date-time-picker';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { FocusDirective } from './directives/focus.directive';
+import {RatingModule} from "ngx-rating";
 
 
 import { AppComponent } from "./app.component";
@@ -30,7 +32,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       BusinessEditComponent,
       BusinessReviewsComponent,
       BusinessActivitiesComponent,
-      EditActivityComponent
+      EditActivityComponent,
+      FocusDirective
     ],
     imports: [
       BrowserModule,
@@ -39,7 +42,9 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       routing,
       MomentModule,
       DateTimePickerModule,
-      DropzoneModule.forRoot(DROPZONE_CONFIG)
+      DropzoneModule.forRoot(DROPZONE_CONFIG),
+      RatingModule
+
     ],
     providers: [DummyService, BusinessService],
     bootstrap : [AppComponent]

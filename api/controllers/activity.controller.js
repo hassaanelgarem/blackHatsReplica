@@ -871,3 +871,82 @@ module.exports.getActivity = function(req, res) {
         }
     });
 }
+
+/*
+    Post function, that updates an activity
+    Takes:
+        params{
+            activityId
+        }
+        body{
+          name,
+          price,
+          description,
+          bookingsPerSlot
+      }
+    Returns: Success or failure messages along with errors in case of failure.
+    Redirects to: Nothing.
+    Calling Route: '/api/activity/:activityId/edit'
+*/
+module.exports.editActivity = function(req, res){
+
+  req.checkBody('name', 'Name is required.').notEmpty();
+  req.checkBody('price', 'Price is required.').notEmpty();
+  req.checkBody('description', 'Description is required.').notEmpty();
+  req.checkBody('bookingsPerSlot', 'Bookings Per Slot is required.').notEmpty();
+
+  const errors = req.validationErrors();
+
+  if(errors) {
+    res.status(500).json({
+        error: errors,
+        msg: "Incomplete Input",
+        data: null
+    });
+  }
+  else {
+    activityBelongs(req.params.activityId, req.user._id, function(flag) {
+      if(flag) {
+        Activity.findByIdAndUpdate(req.params.activityId,
+          {
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            bookingsPerSlot: req.body.bookingsPerSlot
+          }, {}, function(err, activity) {
+            if(err) {
+              res.status(500).json({
+                  error: err,
+                  msg: "Error updating databse",
+                  data: null
+              });
+            }
+            else{
+              if(!activity){
+                res.status(500).json({
+                    error: null,
+                    msg: "Activity not found",
+                    data: null
+                });
+              }
+              else{
+                res.status(200).json({
+                    error: null,
+                    msg: "Activity updated Successfully",
+                    data: null
+                });
+              }
+            }
+          });
+      }
+      else{
+        res.status(401).json({
+            error: null,
+            msg: "Business Login Required or Unauthorized Access",
+            data: null
+        });
+      }
+    });
+  }
+
+}
