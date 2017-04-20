@@ -101,6 +101,7 @@ module.exports = function (passportConfig) {
     router.route('/admin/support/business/recoverAccount/:requestId').put(adminCtrl.recoverBusiness);
     router.route('/admin/support/deleteRequest/:requestId').delete(adminCtrl.deleteSupportRequest);
     router.route('/admin/advertisement/addAdvSlots').post(adminCtrl.addAdvSlots);
+    router.route('/admin/advertisement/deleteAdvSlot/:slotId').delete(adminCtrl.deleteAdvSlot);
 
     //User routes
     router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);

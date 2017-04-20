@@ -1,70 +1,75 @@
 <div class="nav-md">
     <div class="container body">
         <div class="main_container">
-            <app-admin-navbar></app-admin-navbar>
-            <app-admin-sidebar></app-admin-sidebar>
-            <link href="/admin/iCheck/skins/flat/green.css" rel="stylesheet">
-            <!-- page content -->
-            <div class="right_col" role="main">
-                <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>Registered Users</h3>
-                        </div>
-                    </div>
+            <div class="container">
+                <app-admin-sidebar></app-admin-sidebar>
 
-                    <div class="clearfix"></div>
+                <div class="col-md-12">
+                    <app-admin-navbar></app-admin-navbar>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="x_panel">
-                                <div class="x_content">
+                    <!-- page content -->
+                    <div class="right_col" role="main">
+                        <div class="">
+                            <div class="page-title">
+                                <div class="title_left">
+                                    <h3>Registered Users</h3>
+                                </div>
+                            </div>
 
-                                    <table id="datatable" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 20%">Username</th>
-                                                <th>Email</th>
-                                                <th>Member Since</th>
-                                                <th>Status</th>
-                                                <th style="width: 20%">Admin Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let user of users">
-                                                <td>
-                                                    <p>{{user.username}}</p>
-                                                    <br />
-                                                </td>
-                                                <td>
-                                                    <p>{{user.email}}</p>
-                                                </td>
-                                                <td>
-                                                    {{user.createdAt}}
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success btn-xs" *ngIf="user.verified">Verified</button>
-                                                                                                        <button type="button" class="btn btn-danger btn-xs" *ngIf="!user.verified">Unverified</button>
+                            <div class="clearfix"></div>
 
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-xs" [disabled]="isLoading()" (click)="viewUser(user._id)"><i class="fa fa-user"></i> View </button>
-                                                    <button class="btn btn-danger btn-xs" [disabled]="isLoading()" (click)="deleteUser(user._id, user.verified)"><i class="fa fa-trash-o"></i> Suspend </button>
-                                                </td>
-                                            </tr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="x_panel">
+                                        <div class="x_content">
 
-                                        </tbody>
-                                    </table>
-                                    <!-- end project list -->
+                                            <table id="datatable" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 20%">Username</th>
+                                                        <th>Email</th>
+                                                        <th>Member Since</th>
+                                                        <th>Status</th>
+                                                        <th style="width: 20%">Admin Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let user of users">
+                                                        <td>
+                                                            <p>{{user.username}}</p>
+                                                            <br />
+                                                        </td>
+                                                        <td>
+                                                            <p>{{user.email}}</p>
+                                                        </td>
+                                                        <td>
+                                                            {{user.createdAt}}
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs" *ngIf="user.verified">Verified</button>
+                                                            <button type="button" class="btn btn-danger btn-xs" *ngIf="!user.verified">Unverified</button>
 
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary btn-xs" [disabled]="isLoading()" (click)="viewUser(user._id)"><i class="fa fa-user"></i> View </button>
+                                                            <button class="btn btn-danger btn-xs" [disabled]="isLoading()" (click)="deleteUser(user._id, user.verified)"><i class="fa fa-trash-o"></i> Suspend </button>
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                            <!-- end project list -->
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /page content -->
+                    <app-admin-footer></app-admin-footer>
                 </div>
             </div>
-            <!-- /page content -->
-            <app-admin-footer></app-admin-footer>
         </div>
     </div>
 </div>

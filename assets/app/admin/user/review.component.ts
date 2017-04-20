@@ -53,8 +53,6 @@ export class ReviewComponent implements OnInit {
   }
 
   viewUser(userId: string) {
-    //To be adjusted for the user profile route.
-    bootbox.alert('To be redirected to profile');
-    // this.router.navigate(['admin', userId]);
+    this.router.navigate(['user', userId]);
   }
 };

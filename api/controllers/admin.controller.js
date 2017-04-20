@@ -6,6 +6,7 @@ const User = mongoose.model("User");
 const TempUser = mongoose.model("TempUser");
 const SupportRequest = mongoose.model("SupportRequest");
 const emailSender = require('../config/emailSender');
+const AdvSlot = mongoose.model('AdvSlot');
 
 
 /*
@@ -634,8 +635,7 @@ module.exports.addAdvSlots = function (req, res) {
             name: req.body.name,
             price: req.body.price,
             length: req.body.length,
-            width: req.body.width,
-            advSchedule: []
+            width: req.body.width
         });
         //  saves the new advertisement slot in the database
         newAdvSlot.save(function (err, newSlot) {
@@ -734,7 +734,7 @@ module.exports.getAdmins = function (req, res) {
 };
 
 
-module.exports.getBusinesses = function(req, res) {
+module.exports.getBusinesses = function (req, res) {
     Business.find({
         verified: true
     }).select('-password').exec(function (err, businesses) {
@@ -754,8 +754,8 @@ module.exports.getBusinesses = function(req, res) {
 };
 
 
-module.exports.getRequests = function(req, res){
-    SupportRequest.find({}).exec(function(err, requests){
+module.exports.getRequests = function (req, res) {
+    SupportRequest.find({}).exec(function (err, requests) {
         if (err)
             res.status(500).json({
                 error: err,
@@ -768,5 +768,31 @@ module.exports.getRequests = function(req, res){
                 msg: null,
                 data: requests
             });
+    });
+};
+
+
+module.exports.deleteAdvSlot = function (req, res) {
+    AdvSlot.findByIdAndRemove(req.params.slotId, function (err, slot) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            if (slot) {
+                res.status(200).json({
+                    error: null,
+                    msg: 'Slot was deleted successfully.',
+                    data: null
+                });
+            } else
+                res.status(404).json({
+                    error: null,
+                    msg: 'Slot was not found.',
+                    data: null
+                });
+        }
     });
 };

@@ -1,5 +1,6 @@
 import { Business } from './business.model';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BusinessService } from './business.service';
 
@@ -14,7 +15,7 @@ export class ReviewComponent implements OnInit {
   private businesses: Business[] = [];
   private loading: boolean = false;
 
-  constructor(private businessService: BusinessService) { }
+  constructor(private businessService: BusinessService, private router: Router) { }
   ngOnInit() {
     this.businessService.getBusinesses().subscribe(businesses => {
       this.businesses = businesses
@@ -51,8 +52,6 @@ export class ReviewComponent implements OnInit {
   }
 
   viewBusiness(businessId: string) {
-    //To be adjusted for the user profile route.
-    bootbox.alert('To be redirected to profile');
-    // this.router.navigate(['admin', userId]);
+    this.router.navigate(['business', businessId]);
   }
 };
