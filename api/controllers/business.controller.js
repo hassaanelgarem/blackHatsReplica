@@ -76,7 +76,7 @@ module.exports.addPhoto = function (req, res) {
             });
 
             //add the image file name to the photos array of the Business model
-            Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", {
+            Business.findByIdAndUpdate(req.user._id, {
                     $push: {
                         "photos": req.file.filename + "." + string
                     }
@@ -133,7 +133,7 @@ module.exports.addPhoto = function (req, res) {
 */
 module.exports.deletePhoto = function (req, res) {
     var imagePath = req.params.photoPath;
-    var businessId = "58e8d68ce4a2cf7c06cff89a";
+    var businessId = req.user._id;
     Business.update({
         _id: businessId
     }, {
@@ -412,7 +412,7 @@ module.exports.uploadLogo = function (req, res) {
             });
 
             //save the image file path to the Business model
-            Business.findById("58e8d68ce4a2cf7c06cff89a", function (err, business) {
+            Business.findById(req.user._id , function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.status(500).json({
@@ -544,7 +544,7 @@ module.exports.saveNewInfo = function (req, res) {
     delete req.body.activities;
     delete req.body.logo;
     //pass in the non null values in req.body to modify it only
-    Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", req.body, function (err, business) {
+    Business.findByIdAndUpdate(req.user._id, req.body, function (err, business) {
         if (err) {
             res.status(500).json({
                 error: err,
