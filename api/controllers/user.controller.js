@@ -858,3 +858,13 @@ module.exports.resendVerification = function (req, res) {
         });
     }
 };
+
+
+module.exports.successLogin = function (req, res) {
+    return res.json({ success: true });
+};
+
+
+module.exports.failedLogin = function (req, res) {
+    return res.json({ success: false });
+};

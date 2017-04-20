@@ -17,15 +17,15 @@ const imagesCtrl = require("../controllers/images.controller");
 
 module.exports = function (passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
-        successRedirect: '/',
-        failureRedirect: '/api/login',
+        successRedirect: '/api/successLogin',
+        failureRedirect: '/api/failedLogin',
         failureFlash: false
     });
 
 
     var authenticateBusiness = passportConfig.passport.authenticate('local-business', {
-        successRedirect: '/',
-        failureRedirect: '/api/login',
+        successRedirect: '/api/successLogin',
+        failureRedirect: '/api/failedLogin',
         failureFlash: false
     });
 
@@ -41,7 +41,8 @@ module.exports = function (passportConfig) {
     router.route('/resetPassword/:id').put(passportConfig.isNotLoggedIn, passwordCtrl.resetPassword);
     router.route('/forgotPassword').post(passportConfig.isNotLoggedIn, passwordCtrl.forgotPassword);
     router.route('/contactSupport').post(passportConfig.isNotLoggedIn, supportCtrl.addRequest);
-
+    router.route('/successLogin').get(userCtrl.successLogin);
+    router.route('/failedLogin').get(userCtrl.failedLogin);
 
     //Available to all routes
     router.route('/search').get(userCtrl.searchByNameOrTag, userCtrl.searchByLocationAndCategory);
