@@ -79,7 +79,6 @@ module.exports.bookAdvSlot = function(req, res) {
     req.checkBody('startTime', 'Start Time is required.').notEmpty();
     req.checkBody('endTime', 'End Time is required.').notEmpty();
     req.checkBody('image', 'Image path is required.').notEmpty();
-
     const errors = req.validationErrors();
 
     if (errors) {

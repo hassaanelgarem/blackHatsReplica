@@ -1,8 +1,12 @@
 <div class="row">
 
-    <div class="col-xs-12 col-sm-4">
+
+  <h4 class="section-title">Bookings</h4>
+
+    <div class="col-md-12">
         <div class="form-group">
           <select select class="selectpicker show-tick form-control" data-live-search="false" #t (change)="getBookings(t.value)">
+            <option value="0" selected disabled>Choose an activity</option>
             <option *ngFor="let activityName of activityNames; let i=index" value={{i}}>{{activityName}}</option>
           </select>
         </div>
@@ -29,9 +33,9 @@
                     <tbody>
                       <tr *ngFor="let currentBooking of currentBookings">
                         <th>{{currentBooking.user.firstName}}</th>
-                        <th>{{currentBooking.slot.startTime}}</th>
-                        <th>{{currentBooking.slot.endTime}}</th>
-                        <th>{{currentBooking.date}}</th>
+                        <th>{{currentBooking.slot.startTime | date:'hh:mm'}}</th>
+                        <th>{{currentBooking.slot.endTime | date:'hh:mm'}}</th>
+                        <th>{{currentBooking.date | date:'MMM d, y'}}</th>
                       </tr>
                     </tbody>
                 </table>

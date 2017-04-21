@@ -23,6 +23,10 @@ export class BookAdvComponent implements OnInit {
   path: String;
   advPicture: String;
 
+  private advNoOfDaysWarning: boolean = false;
+  private advImgWarning: boolean = false;
+  private successfulBooking: boolean = false;
+
   constructor(
     private bookAdvService: BookAdvService,
     private router: Router,
@@ -64,18 +68,64 @@ export class BookAdvComponent implements OnInit {
     this.uploader.uploadAll();
     this.uploader.onCompleteItem = (item: any, response: any, status:any, headers:any) => {
     this.advPicture = JSON.parse(response).data;
+    console.log(this.advPicture);
     this.path = "http://localhost:8080/api/image/businessAds/";
     }
   }
 
 
   bookAdv(advId, index){
-    this.startTimeValue = new Date(this.availableSlots[index]);
-    this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
-    this.bookAdvService.bookAdvSlot(this.startTimeValue, this.endTimeValue, this.path, advId).subscribe(data => {
-      if (data.err) {
-          console.error(data.msg);
-      }
-    });
+    if(!this.noOfDays || this.noOfDays.length == 0){
+      this.advNoOfDaysWarning = true;
+    }
+    else {
+      this.advNoOfDaysWarning = false;
+    }
+    if(!this.advPicture || this.advPicture.length == 0){
+      this.advImgWarning = true;
+    }
+    else {
+      this.advImgWarning = false;
+    }
+    if(!this.advImgWarning && !this.advImgWarning){
+      this.startTimeValue = new Date(this.availableSlots[index]);
+      this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
+      console.log("I am here");
+      console.log(this.startTimeValue);
+      console.log(this.endTimeValue);
+      console.log(this.noOfDays[index]);
+      console.log(this.advPicture);
+      this.bookAdvService.bookAdvSlot(this.startTimeValue, this.endTimeValue, this.advPicture, advId).subscribe(
+        (data) => {
+          bootbox.alert(data.msg);
+        },
+        (err) => {
+          switch (err.status) {
+              case 404:
+                  console.log("404 not found");
+                  break;
+              case 401:
+                  console.log("Unauthorized");
+                  break;
+              default:
+                  console.log("Oops something went wrong");
+                  break;
+          }
+        }
+      );
+    }
   }
+
+  hideAdvImgWarning(){
+    this.advImgWarning = false;
+  }
+
+  hideNoOfDaysWarning(){
+    this.advNoOfDaysWarning = false;
+  }
+
+
+
+
+
 }
