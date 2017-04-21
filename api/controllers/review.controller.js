@@ -4,7 +4,7 @@ const Business = mongoose.model('Business');
 const Review = mongoose.model('Review');
 
 
-/* 
+/*
     Get function that retrieves the reviews made by a user from the database
     and displays them
     Takes:
@@ -48,7 +48,7 @@ module.exports.getUserReviews = function(req, res) {
 };
 
 
-/* 
+/*
     Post function that adds a review by a registered user on a business
     to the database
     Takes:
@@ -77,7 +77,7 @@ module.exports.addReview = function(req, res) {
 
     if (errors) {
         res.status(500).json({
-            error: err,
+            error: errors,
             msg: null,
             data: null
         });
@@ -155,7 +155,7 @@ module.exports.addReview = function(req, res) {
 };
 
 
-/* 
+/*
     GET function that retrieves the reviews made on a Business from the database
     Takes:
         params: {
@@ -174,9 +174,9 @@ module.exports.getReviews = function(req, res) {
     Review.find({
         "business": req.params.businessId
     }).populate({
-        path: 'user',
-        select: 'firstName lastName'
-    }).exec(function(err, reviews) {
+      path: 'user',
+      select: 'firstName lastName profilePicture'
+    }).exec(function (err, reviews) {
         //If an error occurred, return an error
         if (err) {
             res.status(500).json({
@@ -224,8 +224,10 @@ module.exports.getAverageRating = function(req, res) {
         if (doc) {
             // Calculate average rating using totalRating and count of reviews
             const reviewsCount = doc.reviews.length;
-            let averageRating = doc.totalRatings / reviewsCount;
-
+            var averageRating = 0;
+            if(reviewsCount != 0){
+              averageRating = doc.totalRatings / reviewsCount;
+            }
             // Return average rating in response
             res.status(200).json({
                 error: null,
@@ -347,9 +349,9 @@ module.exports.editReview = function(req, res) {
 };
 
 
-/* 
+/*
     Delete function that finds and deletes a specific review
-    Takes: 
+    Takes:
         params: {
             reviewId
         }

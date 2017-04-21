@@ -8,7 +8,7 @@ const Business = mongoose.model('Business');
 const TempUser = mongoose.model('TempUser');
 
 
-/*  
+/*
     Post Function, to register a new user into the temp users database and send the
     verification email.
     Takes:
@@ -21,8 +21,8 @@ const TempUser = mongoose.model('TempUser');
             confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
-    Calling Route: '/api/user/register'  
+    Redirects to: Nothing.
+    Calling Route: '/api/user/register'
 */
 module.exports.registerUser = function(req, res) {
 
@@ -33,15 +33,18 @@ module.exports.registerUser = function(req, res) {
     req.checkBody('email', 'Email format is not correct.').isEmail();
     req.checkBody('username', 'Username is required.').notEmpty();
     req.checkBody('password', 'Password is required.').notEmpty();
-    req.checkBody('password', 'Password must be at least 8 characters.').isAlphanumeric();
+    req.checkBody('password', 'Password must contain letters and numbers.').isAlphanumeric();
     req.checkBody('password', 'Password must be at least 8 characters.').len(8);
     req.checkBody('confirmPassword', 'Passwords do not match.').equals(req.body.password);
 
     var errors = req.validationErrors();
 
     if (errors) {
+        for (i = 1; i < errors.length; i++) {
+            errors[0].msg += "\n" + errors[i].msg;
+        }
         res.status(500).json({
-            error: errors,
+            error: errors[0],
             msg: null,
             data: null
         });
@@ -64,7 +67,7 @@ module.exports.registerUser = function(req, res) {
                     $options: "ix"
                 }
             }]
-        }, function(err, user) {
+        }, function (err, user) {
             //if there is an error, send an error message
             if (err) {
                 return res.status(500).json({
@@ -81,9 +84,11 @@ module.exports.registerUser = function(req, res) {
                 var regexp = new RegExp('^' + req.body.username + '$', 'i')
                 if (regexp.test(user.username))
                     msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
-
+                var newError = {
+                    "msg": msg
+                };
                 res.status(500).json({
-                    error: null,
+                    error: newError,
                     msg: msg,
                     data: null
                 });
@@ -121,8 +126,11 @@ module.exports.registerUser = function(req, res) {
                             if (regexp.test(tempUser.username))
                                 msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
 
+                            var newError = {
+                                "msg": msg
+                            };
                             res.status(500).json({
-                                error: null,
+                                error: newError,
                                 msg: msg,
                                 data: null
                             });
@@ -152,13 +160,16 @@ module.exports.registerUser = function(req, res) {
                                 });
                                 else {
                                     if (user) {
-                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/api/user/verifyAccount/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/api/user/verifyAccount/" + token + "</p>";
+                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/verify/" + token + "</p>";
                                         var subject = 'Account Verification';
                                         emailSender.sendEmail(subject, req.body.email, "", html, function(err, info) {
                                             if (err)
-                                                newUser.remove(function(err) {
+                                                newUser.remove(function (err) {
+                                                    var newError = {
+                                                        "msg": 'Email address is not valid, registration failed.'
+                                                    };
                                                     res.status(500).json({
-                                                        error: err,
+                                                        error: null,
                                                         msg: 'Email address is not valid, registration failed.',
                                                         data: null
                                                     });
@@ -223,10 +234,10 @@ module.exports.deleteAccount = function(req, res) {
     Redirects to: Nothing.
     Calling route: '/api/user/addFavorite/:businessId'
 */
-module.exports.addFavorite = function(req, res) {
+module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    Business.findById(businessId, function(err, doc) {
+    Business.findById(businessId, function (err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
             res.status(500).json({
@@ -251,7 +262,7 @@ module.exports.addFavorite = function(req, res) {
                         favorites: businessId
                     }
                 }, //add the business id to the favorites array
-                function(err, result) {
+                function (err, result) {
                     //couldn't add to array, return the error
                     if (err) {
                         res.status(500).json({
@@ -288,7 +299,7 @@ module.exports.deleteFavorite = function(req, res) {
         $pull: {
             "favorites": businessId
         }
-    }, function(err, data) {
+    }, function (err, data) {
         if (err) {
             res.status(500).json({
                 error: err,
@@ -324,30 +335,26 @@ module.exports.deleteFavorite = function(req, res) {
     and tags.
     Takes:
         query{
-            result: "used for name or tag search value",
-            offset: "get businesses starting from number",
-            count: "how many businesses to get"
+            result: "used for name or tag search value"
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: Nothing.
     Calling route: '/api/search'
 */
-module.exports.searchByNameOrTag = function(req, res, next) {
-    var offset = 0;
-    var count = 10;
 
+module.exports.searchByNameOrTag = function (req, res, next) {
+
+    var sort = {
+        interactivity: "desc"
+    };
+    if (req.query && req.query.sort === "totalRatings") {
+        sort = {
+            totalRatings: "desc"
+        };
+    }
     //Check for query string Ex: "/api/search?result=omar"
     if (req.query && req.query.result) {
         var nameOrTag = req.query.result;
-
-
-        if (req.query.offset) {
-            offset = parseInt(req.query.offset, 10);
-        }
-
-        if (req.query.count) {
-            count = parseInt(req.query.count, 10);
-        }
 
         //Find businesses from the database excluding password in returned document
         Business.find({
@@ -368,7 +375,8 @@ module.exports.searchByNameOrTag = function(req, res, next) {
 
                 }
             ]
-        }).select('-password').skip(offset).limit(count).exec(function(err, businesses) {
+
+        }).sort(sort).select('-password').exec(function (err, businesses) {
             //If an error occured return it to the frontend
             if (err) {
                 res.status(500).json({
@@ -397,28 +405,26 @@ module.exports.searchByNameOrTag = function(req, res, next) {
     Takes:
         query{
             location: "used for location search value",
-            category: "used for category search value",
-            offset: "get businesses starting from number",
-            count: "how many businesses to get"
+            category: "used for category search value"
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: nothing.
     Calling route: '/api/search'
 */
-module.exports.searchByLocationAndCategory = function(req, res) {
-    var offset = 0;
-    var count = 10;
+
+module.exports.searchByLocationAndCategory = function (req, res) {
     var location = "All";
     var category = "All";
-
-    //Check for query string Ex: "/api/search?location=Cairo&category=Escape&offset=2&count=10"
-    if (req.query && req.query.offset) {
-        offset = parseInt(req.query.offset, 10);
+    var sort = {
+        interactivity: "desc"
+    };
+    if (req.query && req.query.sort === "totalRatings") {
+        sort = {
+            totalRatings: "desc"
+        };
     }
 
-    if (req.query && req.query.count) {
-        count = parseInt(req.query.count, 10);
-    }
+    //Check for query string Ex: "/api/search?location=Cairo&category=Escape"
 
     if (req.query && req.query.category) {
         category = req.query.category;
@@ -542,17 +548,14 @@ module.exports.searchByLocationAndCategory = function(req, res) {
             };
         }
 
-        //if nothing was chosen return empty array
+        //if nothing was chosen return all
         else
-            return res.status(200).json({
-                error: null,
-                msg: 'No search parameters were entered.',
-                data: []
-            });
+            findQuery = {};
     }
 
     //execute the query
-    Business.find(findQuery).select('-password').skip(offset).limit(count).exec(function(err, businesses) {
+
+    Business.find(findQuery).sort(sort).select('-password').exec(function (err, businesses) {
 
         //if an error occurred, return the error
         if (err)
@@ -574,16 +577,16 @@ module.exports.searchByLocationAndCategory = function(req, res) {
 };
 
 
-/*  
+/*
     Put Function, to change the password of the user.
     Takes:
-        body{  
+        body{
             oldPassword,
             password,
-            confirmPassword 
+            confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/changePassword'
 */
 module.exports.changePassword = function(req, res) {
@@ -675,15 +678,15 @@ module.exports.changePassword = function(req, res) {
 };
 
 
-/*  
+/*
     Get Function, to check the validity of the token in the verification request.
     Takes:
-        params{  
-            token: verification token sent to the user 
+        params{
+            token: verification token sent to the user
         }
-    Returns: in case of Success, the token and the userId to verify, 
+    Returns: in case of Success, the token and the userId to verify,
             in case of failure, failure messages along with errors.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/verifyAccount/:token'
 */
 module.exports.checkVerificationToken = function(req, res) {
@@ -720,14 +723,14 @@ module.exports.checkVerificationToken = function(req, res) {
 };
 
 
-/*  
+/*
     Post Function, to verify a temp user and add it to users model.
     Takes:
-        params{  
+        params{
             userId: the temp user id to verify
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/verifyAccount/:userId'
 */
 module.exports.confirmVerification = function(req, res) {
@@ -773,14 +776,14 @@ module.exports.confirmVerification = function(req, res) {
 };
 
 
-/*  
+/*
     Post Function, to resend a verification email to the user.
     Takes:
-        body{  
-            email 
+        body{
+            email
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/resendVerification'
 */
 module.exports.resendVerification = function(req, res) {
@@ -852,4 +855,53 @@ module.exports.resendVerification = function(req, res) {
             }
         });
     }
+};
+
+
+/*
+Get function that returns the logged in user or business if they exist
+Returns: {
+  success: indicated whether there's a log in session or no,
+  user: User object of logged in user,
+  business: Business object of logged in business
+}
+Redirects to: Nothing.
+Calling Route: '/api/currentUser'
+*/
+module.exports.currentUser = function (req, res) {
+    if (req.isAuthenticated()) {
+        if (req.user.constructor.modelName === "User") {
+            res.json({
+                success: true,
+                user: req.user,
+                business: null
+            });
+        } else {
+            res.json({
+                success: true,
+                user: null,
+                business: req.user
+            });
+        }
+    } else {
+        res.json({
+            success: false,
+            user: null,
+            business: null
+        });
+    }
+}
+
+
+module.exports.successLogin = function (req, res) {
+    return res.json({
+        success: true
+    });
+};
+
+
+module.exports.failedLogin = function (req, res) {
+    return res.json({
+        success: false
+    });
 };

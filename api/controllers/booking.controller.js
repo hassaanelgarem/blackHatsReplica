@@ -37,7 +37,7 @@ module.exports.bookActivity = function (req, res) {
         const newBooking = new Booking({
             slot: req.body.slot,
             activity: req.body.activity,
-            user: req.user._id,
+            user: "58dff292c0dc7f2224966e47",
             date: req.body.date
         });
         Activity.findById(req.body.activity, function (err, doc) {
