@@ -87,7 +87,7 @@ module.exports = function(passportConfig) {
     router.route('/activity/:activityId/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deletePhoto);
     router.route('/activity/:activityId/delete').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deleteActivity);
     router.route('/activity/:activityId/edit').post(passportConfig.isBusinessLoggedIn, activityCtrl.editActivity);
-    router.route('/activity/getActivity/:businessId').get(passportConfig.isBusinessLoggedIn, activityCtrl.getActivityBookings);
+    router.route('/activity/getActivity/:businessId').get(activityCtrl.getActivityBookings);//passportConfig.isBusinessLoggedIn,
 
     //Admin routes
     router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
@@ -119,8 +119,8 @@ module.exports = function(passportConfig) {
 
 
     //Advertisement routes
-    router.route('/advertisement/bookAdvSlot/:advSlotId').post(passportConfig.isBusinessLoggedIn, advCtrl.bookAdvSlot);
-    router.route('/advertisement/addAdvPhoto').post(passportConfig.isBusinessLoggedIn, advCtrl.uploadAdv);
+    router.route('/advertisement/bookAdvSlot/:advSlotId').post(advCtrl.bookAdvSlot); //passportConfig.isBusinessLoggedIn,
+    router.route('/advertisement/addAdvPhoto').post(advCtrl.uploadAdv); //passportConfig.isBusinessLoggedIn,
 
     return router;
 };

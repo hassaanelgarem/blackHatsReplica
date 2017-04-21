@@ -1,0 +1,7 @@
+select {
+  margin: auto;
+  width: 50%;
+  border-radius: 10px;
+  border-width: medium;
+  border-color: black;
+}
