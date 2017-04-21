@@ -9,6 +9,8 @@ import { ResetPasswordComponent } from "./user/resetPassword/resetPassword.compo
 import { VerifyComponent } from "./user/verify/verify.component";
 import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { EditActivityComponent} from "./businessEdit/activities/editActivity.component"
+import { BusinessPageComponent } from "./businessPage/businessPage.component";
+import { ReviewsComponent } from "./reviews/reviews.component";
 
 
 const APP_ROUTES: Routes = [
@@ -22,6 +24,8 @@ const APP_ROUTES: Routes = [
     { path: 'verify/:token', component: VerifyComponent},
     { path: 'businessEdit', component: BusinessEditComponent },
     { path: 'businessEdit/activity/:activityId', component: EditActivityComponent },
+    { path: 'business/:businessId', component: BusinessPageComponent },
+    { path: 'business/:businessId/reviews', component: ReviewsComponent },
     { path: '**',redirectTo:'/homepage'}
 
 ];

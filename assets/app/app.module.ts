@@ -13,6 +13,8 @@ import { RatingModule } from "ngx-rating";
 
 
 import { AppComponent } from "./app.component";
+import { BusinessPageComponent } from "./businessPage/businessPage.component";
+import { ReviewsComponent } from "./reviews/reviews.component";
 import { HomepageComponent} from "./homepage/homepage.component";
 import { NavComponent} from "./navigationBar/nav.component";
 import { RegisterComponent} from "./user/register/register.component";
@@ -37,6 +39,8 @@ import { BookAdvComponent } from "./businessEdit/bookAdv/bookAdv.component";
 import { ActivityBookingsComponent } from "./businessEdit/activityBookings/activityBookings.component";
 
 
+import { BusinessPageService } from "./businessPage/businessPage.service";
+import { ReviewsService } from "./reviews/reviews.service";
 import { HomepageService } from "./homepage/homepage.service";
 import { UserRegisterService} from "./user/register/register.service";
 import { BusinessRegisterService} from "./business/register/businessRegister.service"
@@ -64,6 +68,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ActivityBookingsComponent,
       AddPhotoComponent,
       AppComponent,
+      BusinessPageComponent,
+      ReviewsComponent,
       HomepageComponent,
       NavComponent,
       LoginComponent,
@@ -113,9 +119,10 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       BookAdvService,
       ActivityBookingsService,
       ResetPasswordService,
-      VerifyService
+      VerifyService,
+      BusinessPageService,
+      ReviewsService
     ],
-
     bootstrap : [AppComponent]
 })
 
