@@ -170,7 +170,7 @@
 
                     <div class="form-group" style="padding-left: 15px;">
                       <label>Your Review: </label>
-                      <textarea [(ngModel)]="addComment" name="addComment" class="form-control form-control-sm" placeholder="Maximum 100 characters" maxlength="100" rows="4" style="width: 400pt;"></textarea>
+                      <textarea style="resize: none;" [(ngModel)]="addComment" name="addComment" class="form-control form-control-sm" placeholder="Maximum 100 characters" maxlength="100" rows="4" style="width: 400pt;"></textarea>
                       <div *ngIf="addCommentWarning" class="alert alert-danger alert-dismissable" style="width: 400pt; margin-top: 15pt;">
                           <a class="close" (click)="hideCommentWarning()" aria-label="close">&times;</a> Please write a review!
                       </div>

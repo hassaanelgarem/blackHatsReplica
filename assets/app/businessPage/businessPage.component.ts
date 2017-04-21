@@ -117,6 +117,8 @@ export class BusinessPageComponent implements OnInit {
                     console.error(info.msg);
                 }
                 else {
+                    console.log("here yasta");
+                    console.log(info);
                     this.rating = info.data.toFixed(1);
                     this.ratingNumber += this.rating;
                 }
