@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { LoginService } from '../user/login/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -18,12 +19,12 @@ export class NavComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.appService.getCurrentUser().subscribe(data => {
-      console.log(data);
       if(data.success){
         if(data.user){
           this.user = data.user;
@@ -71,5 +72,4 @@ export class NavComponent implements OnInit {
       console.log('log out failed');
     });
     }
-
 }

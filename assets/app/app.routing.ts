@@ -11,10 +11,13 @@ import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
 import { EditActivityComponent} from "./businessEdit/activities/editActivity.component"
 import { BusinessPageComponent } from "./businessPage/businessPage.component";
 import { ReviewsComponent } from "./reviews/reviews.component";
+import { UserComponent } from "./user/user.component";
+import { FourofourComponent } from "./errors/404.component";
+import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
+import { SomethingWrongComponent } from "./errors/500.component";
 
 
 const APP_ROUTES: Routes = [
-
     { path: '',redirectTo:'/homepage', pathMatch: 'full'},
     { path: 'homepage', component: HomepageComponent},
     { path: 'search', component: SearchResultComponent},
@@ -26,8 +29,12 @@ const APP_ROUTES: Routes = [
     { path: 'businessEdit/activity/:activityId', component: EditActivityComponent },
     { path: 'business/:businessId', component: BusinessPageComponent },
     { path: 'business/:businessId/reviews', component: ReviewsComponent },
+    { path: 'user', component: UserComponent},
+    { path: '404-error', component: FourofourComponent},
+    { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent},
+    { path: '500-error', component: SomethingWrongComponent},
     { path: '**',redirectTo:'/homepage'}
-
 ];
+
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

@@ -37,6 +37,15 @@ import { EditProfileComponent } from "./businessEdit/editProfile/editProfile.com
 import { AddPhotoComponent } from "./businessEdit/addPhoto/addPhoto.component";
 import { BookAdvComponent } from "./businessEdit/bookAdv/bookAdv.component";
 import { ActivityBookingsComponent } from "./businessEdit/activityBookings/activityBookings.component";
+import { UserComponent } from "./user/user.component";
+import { HeaderComponent }from "./user/header.component";
+import { ReviewComponent } from "./user/reviews/review.component";
+import { UserFavoritesComponent } from "./user/favorites/favorites.component";
+import { UserBookingsComponent } from "./user/bookings/userBookings.component";
+import { EditUserProfileComponent } from "./user/editProfile/editProfile.component";
+import { FourofourComponent } from "./errors/404.component";
+import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
+import { SomethingWrongComponent } from "./errors/500.component";
 
 
 import { BusinessPageService } from "./businessPage/businessPage.service";
@@ -56,7 +65,8 @@ import { EditProfileService } from "./businessEdit/editProfile/editProfile.servi
 import { AddPhotoService } from "./businessEdit/addPhoto/addPhoto.service";
 import { BookAdvService } from "./businessEdit/bookAdv/bookAdv.service";
 import { ActivityBookingsService } from "./businessEdit/activityBookings/activityBookings.service";
-
+import { UserService } from "./user/user.service";
+import { EditUserProfileService } from "./user/editProfile/editProfile.service";
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   acceptedFiles: 'image/*'
@@ -68,6 +78,16 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ActivityBookingsComponent,
       AddPhotoComponent,
       AppComponent,
+      FourofourComponent,
+      UserComponent,
+      HeaderComponent,
+      ReviewComponent,
+      UserFavoritesComponent,
+      UserBookingsComponent,
+      EditUserProfileComponent,
+      FileSelectDirective,
+      NotAuthorizedErrorComponent,
+      SomethingWrongComponent,
       BusinessPageComponent,
       ReviewsComponent,
       HomepageComponent,
@@ -121,7 +141,9 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ResetPasswordService,
       VerifyService,
       BusinessPageService,
-      ReviewsService
+      ReviewsService,
+      UserService,
+      EditUserProfileService
     ],
     bootstrap : [AppComponent]
 })

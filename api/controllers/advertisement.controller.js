@@ -79,7 +79,6 @@ module.exports.bookAdvSlot = function(req, res) {
     req.checkBody('startTime', 'Start Time is required.').notEmpty();
     req.checkBody('endTime', 'End Time is required.').notEmpty();
     req.checkBody('image', 'Image path is required.').notEmpty();
-
     const errors = req.validationErrors();
 
     if (errors) {
@@ -104,7 +103,7 @@ module.exports.bookAdvSlot = function(req, res) {
             });
             // Create new AdvBooking object using parameters from post request
             const newAdvBooking = new AdvBooking({
-                business: "58e8eb94b0283d09afa30176",
+                business: req.user._id,
                 advSlot: req.params.advSlotId,
                 image: req.body.image,
                 startTime: req.body.startTime,

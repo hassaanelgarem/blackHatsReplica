@@ -19,7 +19,7 @@ passportConfig.configurePassport(passport);
 
 //Enable IP Address Getting
 app.enable('trust proxy')
-//view engine setup
+    //view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -30,37 +30,37 @@ app.set('view engine', 'hbs');
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: false
+    extended: false
 }));
 app.use(cookieParser());
 // Express Session
 app.use(session({
-  secret: 'secret',
-  saveUninitialized: true,
-  resave: true,
-  cookie: {
-    maxAge: 3600000 * 2
-  }
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true,
+    cookie: {
+        maxAge: 3600000 * 2
+    }
 }));
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
 // Express Validator
 app.use(expressValidator({
-  errorFormatter: function (param, msg, value) {
-    var namespace = param.split('.'),
-      root = namespace.shift(),
-      formParam = root;
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.'),
+            root = namespace.shift(),
+            formParam = root;
 
-    while (namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
+        while (namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
     }
-    return {
-      param: formParam,
-      msg: msg,
-      value: value
-    };
-  }
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -70,9 +70,9 @@ const routes = require("./api/routes")(passportConfig);
 app.use("/api", routes);
 
 //any request reaches this point means it failed to match any of the above routes
-app.use(function (req, res, next) {
-  //to always give back the angular application
-  res.render('index');
+app.use(function(req, res, next) {
+    //to always give back the angular application
+    res.render('index');
 });
 
 module.exports = app;
