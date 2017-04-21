@@ -1,6 +1,6 @@
-<div class="bg-white pt-70 pb-60 clearfix">
+<div *ngIf="exists" class="bg-white pt-70 pb-60 clearfix">
 
-	<div class="container" *ngIf="exists">
+	<div class="container">
 		<div class="row">
 
 			<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
@@ -22,7 +22,7 @@
 					<div class="GridLex-col-4_mdd-4_sm-6_xs-6_xss-12" *ngFor="let bookingSlot of bookingSlots">
 
 						<div class="trip-guide-item">
-							<a href="#">
+							<a href="http://localhost:8080/business/{{bookingSlot.businessId}}">
 								<div class="trip-guide-image">
 									<img src="/uploads/businessAds/{{bookingSlot.image}}" alt="images" />
 								</div>
@@ -40,3 +40,4 @@
 		</div>
 
 	</div>
+</div>

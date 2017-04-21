@@ -84,7 +84,9 @@ module.exports.registerUser = function (req, res) {
                 var regexp = new RegExp('^' + req.body.username + '$', 'i')
                 if (regexp.test(user.username))
                     msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
-                var newError = {"msg": msg};
+                var newError = {
+                    "msg": msg
+                };
                 res.status(500).json({
                     error: newError,
                     msg: msg,
@@ -124,7 +126,9 @@ module.exports.registerUser = function (req, res) {
                             if (regexp.test(tempUser.username))
                                 msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
 
-                            var newError = {"msg": msg};
+                            var newError = {
+                                "msg": msg
+                            };
                             res.status(500).json({
                                 error: newError,
                                 msg: msg,
@@ -161,7 +165,9 @@ module.exports.registerUser = function (req, res) {
                                         emailSender.sendEmail(subject, req.body.email, "", html, function (err, info) {
                                             if (err)
                                                 newUser.remove(function (err) {
-                                                    var newError = {"msg": 'Email address is not valid, registration failed.'};
+                                                    var newError = {
+                                                        "msg": 'Email address is not valid, registration failed.'
+                                                    };
                                                     res.status(500).json({
                                                         error: null,
                                                         msg: 'Email address is not valid, registration failed.',
@@ -329,30 +335,25 @@ module.exports.deleteFavorite = function (req, res) {
     and tags.
     Takes:
         query{
-            result: "used for name or tag search value",
-            offset: "get businesses starting from number",
-            count: "how many businesses to get"
+            result: "used for name or tag search value"
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: Nothing.
     Calling route: '/api/search'
 */
 module.exports.searchByNameOrTag = function (req, res, next) {
-    var offset = 0;
-    var count = 10;
 
+    var sort = {
+        interactivity: "desc"
+    };
+    if (req.query && req.query.sort === "totalRatings") {
+        sort = {
+            totalRatings: "desc"
+        };
+    }
     //Check for query string Ex: "/api/search?result=omar"
     if (req.query && req.query.result) {
         var nameOrTag = req.query.result;
-
-
-        if (req.query.offset) {
-            offset = parseInt(req.query.offset, 10);
-        }
-
-        if (req.query.count) {
-            count = parseInt(req.query.count, 10);
-        }
 
         //Find businesses from the database excluding password in returned document
         Business.find({
@@ -373,7 +374,7 @@ module.exports.searchByNameOrTag = function (req, res, next) {
 
                 }
             ]
-        }).select('-password').skip(offset).limit(count).exec(function (err, businesses) {
+        }).sort(sort).select('-password').exec(function (err, businesses) {
             //If an error occured return it to the frontend
             if (err) {
                 res.status(500).json({
@@ -402,28 +403,25 @@ module.exports.searchByNameOrTag = function (req, res, next) {
     Takes:
         query{
             location: "used for location search value",
-            category: "used for category search value",
-            offset: "get businesses starting from number",
-            count: "how many businesses to get"
+            category: "used for category search value"
         }
     Returns: Array of matching businesses to the search query.
     Redirects to: nothing.
     Calling route: '/api/search'
 */
 module.exports.searchByLocationAndCategory = function (req, res) {
-    var offset = 0;
-    var count = 10;
     var location = "All";
     var category = "All";
-
-    //Check for query string Ex: "/api/search?location=Cairo&category=Escape&offset=2&count=10"
-    if (req.query && req.query.offset) {
-        offset = parseInt(req.query.offset, 10);
+    var sort = {
+        interactivity: "desc"
+    };
+    if (req.query && req.query.sort === "totalRatings") {
+        sort = {
+            totalRatings: "desc"
+        };
     }
 
-    if (req.query && req.query.count) {
-        count = parseInt(req.query.count, 10);
-    }
+    //Check for query string Ex: "/api/search?location=Cairo&category=Escape"
 
     if (req.query && req.query.category) {
         category = req.query.category;
@@ -547,17 +545,13 @@ module.exports.searchByLocationAndCategory = function (req, res) {
             };
         }
 
-        //if nothing was chosen return empty array
+        //if nothing was chosen return all
         else
-            return res.status(200).json({
-                error: null,
-                msg: 'No search parameters were entered.',
-                data: []
-            });
+            findQuery = {};
     }
 
     //execute the query
-    Business.find(findQuery).select('-password').skip(offset).limit(count).exec(function (err, businesses) {
+    Business.find(findQuery).sort(sort).select('-password').exec(function (err, businesses) {
 
         //if an error occurred, return the error
         if (err)
@@ -871,25 +865,39 @@ Redirects to: Nothing.
 Calling Route: '/api/currentUser'
 */
 module.exports.currentUser = function (req, res) {
-  if(req.isAuthenticated()){
-    if(req.user.constructor.modelName === "User"){
-      res.json({success: true, user: req.user, business: null});
+    if (req.isAuthenticated()) {
+        if (req.user.constructor.modelName === "User") {
+            res.json({
+                success: true,
+                user: req.user,
+                business: null
+            });
+        } else {
+            res.json({
+                success: true,
+                user: null,
+                business: req.user
+            });
+        }
+    } else {
+        res.json({
+            success: false,
+            user: null,
+            business: null
+        });
     }
-    else{
-      res.json({success: true, user: null, business: req.user});
-    }
-  }
-  else{
-    res.json({success: false, user: null, business: null});
-  }
 }
 
 
 module.exports.successLogin = function (req, res) {
-    return res.json({ success: true });
+    return res.json({
+        success: true
+    });
 };
 
 
 module.exports.failedLogin = function (req, res) {
-    return res.json({ success: false });
+    return res.json({
+        success: false
+    });
 };
