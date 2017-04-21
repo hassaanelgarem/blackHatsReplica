@@ -103,7 +103,7 @@ module.exports.bookAdvSlot = function(req, res) {
             });
             // Create new AdvBooking object using parameters from post request
             const newAdvBooking = new AdvBooking({
-                business: "58e8eb94b0283d09afa30176",
+                business: req.user._id,
                 advSlot: req.params.advSlotId,
                 image: req.body.image,
                 startTime: req.body.startTime,

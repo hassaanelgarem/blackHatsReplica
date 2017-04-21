@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { BookAdvService} from "./bookAdv.service"
+import { AppService } from "../../app.service"
 import { Router } from '@angular/router';
 import {Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -30,7 +31,9 @@ export class BookAdvComponent implements OnInit {
   constructor(
     private bookAdvService: BookAdvService,
     private router: Router,
-    private http: Http) { }
+    private http: Http,
+    private appService: AppService
+  ) { }
 
   ngOnInit() {
     this.showAdvSlots();
@@ -74,6 +77,8 @@ export class BookAdvComponent implements OnInit {
   }
 
 
+
+
   bookAdv(advId, index){
     if(!this.noOfDays || this.noOfDays.length == 0){
       this.advNoOfDaysWarning = true;
@@ -90,11 +95,24 @@ export class BookAdvComponent implements OnInit {
     if(!this.advImgWarning && !this.advImgWarning){
       this.startTimeValue = new Date(this.availableSlots[index]);
       this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
-      console.log("I am here");
-      console.log(this.startTimeValue);
-      console.log(this.endTimeValue);
-      console.log(this.noOfDays[index]);
-      console.log(this.advPicture);
+
+      var handler = (<any>window).StripeCheckout.configure({
+        key: 'pk_test_9AEHvD0gXViwtKYQDpQcLXlY',
+        locale: 'auto',
+        token: token => this.gotToken(token, advId)
+      });
+
+      handler.open({
+        name: 'Book Advertisement',
+        description: this.advertisements[index].name,
+        amount: this.advertisements[index].price * 100
+      });
+    }
+  }
+
+  gotToken(token, advId){
+
+    this.appService.charge(token).subscribe(res => {
       this.bookAdvService.bookAdvSlot(this.startTimeValue, this.endTimeValue, this.advPicture, advId).subscribe(
         (data) => {
           bootbox.alert(data.msg);
@@ -113,7 +131,7 @@ export class BookAdvComponent implements OnInit {
           }
         }
       );
-    }
+    });
   }
 
   hideAdvImgWarning(){
