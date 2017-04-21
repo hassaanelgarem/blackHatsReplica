@@ -20,7 +20,6 @@ export class ReviewsComponent implements OnInit {
     addressAvailable = false;
     businessPhoneNumbers: String[] = [];
     phoneNumbersAvailable = false
-    totalRatings: Number = 0;
     reviews: Object[] = new Array<Review>();
     firstPhoto: String;
     businessPhotos: String[] = [];
@@ -63,7 +62,6 @@ export class ReviewsComponent implements OnInit {
                         this.businessPhoneNumbers = info.data.phoneNumbers;
                         this.phoneNumbersAvailable = true;
                     }
-                    this.totalRatings = info.data.totalRatings;
                     this.businessPhotos.length = info.data.photos.length - 1;
                     this.businessPhotos[0] = info.data.photos[1];
                     for (var _i = 1; _i < this.businessPhotos.length; _i++) {

@@ -23,7 +23,6 @@ export class BusinessPageComponent implements OnInit {
     workingFrom: String = "";
     workingTo: String = "";
     workingHoursAvailable = false;
-    totalRatings: Number = 0;
     description: String = "";
     rating: any = "";
     ratingNumber: Number = 0;
@@ -75,7 +74,6 @@ export class BusinessPageComponent implements OnInit {
                         this.phoneNumbers = info.data.phoneNumbers;
                         this.phoneNumbersAvailable = true;
                     }
-                    this.totalRatings = info.data.totalRatings;
                     this.description = info.data.description;
                     if (info.data.workingDays.length != 0) {
                         this.workingDays = info.data.workingDays;

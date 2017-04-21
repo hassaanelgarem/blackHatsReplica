@@ -48,14 +48,14 @@
 
                             <!-- First slide -->
                             <div class="item active">
-                                <div class="image">
+                                <div class="image image-responsive">
                                     <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" />
                                 </div>
                             </div>
                             <!-- /.item -->
 
                             <div class="item" *ngFor="let photo of photos; let i = index">
-                                <div class="image">
+                                <div class="image image-responsive">
                                     <img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" />
                                 </div>
                             </div>
@@ -104,7 +104,7 @@
                                                 <div class="GridLex-inner">
                                                     <div class="heading clearfix">
                                                         <h3>{{name}}</h3>
-                                                        <a *ngIf="ownerLoggedIn" href="#" class="btn btn-primary btn-xs btn-border">Admin view</a>
+                                                        <a *ngIf="ownerLoggedIn" href="businessEdit" class="btn btn-primary btn-xs btn-border">Admin view</a>
                                                     </div>
                                                     <ul class="user-meta">
                                                         <li><i *ngIf="addressAvailable" class="fa fa-map-marker"></i> {{address}} <span class="mh-5 text-muted">|</span> <i *ngIf="phoneNumbersAvailable" class="fa fa-phone"></i> {{phoneNumbers}}</li>
@@ -132,7 +132,7 @@
                                                                   <div class="rating-item rating-item-lg">
                                                                     <rating [(ngModel)]="rating" [readonly]="true" [float]="true" [titles]="false"></rating>
                                                                   </div>
-                                                                  <a href="business/{{businessId}}/reviews">{{totalRatings}} reviews</a>
+                                                                  <a href="business/{{businessId}}/reviews">{{reviews.length}} reviews</a>
                                                               </div>
                                                           </div>
                                                         </div>
@@ -371,6 +371,7 @@
 
                                         </div>
                                         <a href="business/{{businessId}}/reviews" class="btn-blog">View all reviews <i class="fa fa-long-arrow-right"></i></a>
+                                        <a href="#">view profile <i class="ion-android-arrow-forward"></i></a>
 
                                     </div>
 
