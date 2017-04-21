@@ -134,7 +134,7 @@ module.exports.addReview = function (req, res) {
                                 res.status(200).json({
                                     error: null,
                                     msg: "Review saved Successfully",
-                                    data: null
+                                    data: review
                                 });
                             });
                         });

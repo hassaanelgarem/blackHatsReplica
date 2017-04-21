@@ -3,6 +3,8 @@ import {ReviewsService} from './reviews.service';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import { Review } from './reviews.model';
+import { AppService } from '../app.service';
+
 
 @Component({
     selector: 'app-reviews',
@@ -13,7 +15,7 @@ export class ReviewsComponent implements OnInit {
     rating: any = "";
     ratingNumber: Number = 0;
     businessId: String = "";
-    userId: String = "58f2930eb12e4f01d02fd302";
+    userId: String = "";
     businessName: String = "";
     logo: String = "";
     businessAddress: String = "";
@@ -26,25 +28,49 @@ export class ReviewsComponent implements OnInit {
     path: String = "http://localhost:8080/api/";
     loadDone = false;
 
-    availableRatings = [0, 1, 2, 3, 4, 5];
     addComment: String;
     addRating: Number;
     addCommentWarning = false;
     addRatingWarning = false;
+    userLoggedIn = false;
+    favorited = false;
 
     constructor(
         private reviewsService: ReviewsService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private http: Http) { }
+        private http: Http,
+        private appService: AppService) { }
 
     ngOnInit() {
         this.initialize();
     }
 
     initialize() {
+
         this.activatedRoute.params.subscribe((params: Params) => {
             this.businessId = params['businessId'];
+
+            this.appService.getCurrentUser().subscribe(info => {
+              if(info.success){
+                if(info.user){
+                  this.userLoggedIn = true;
+                  this.userId = info.user._id;
+                  if(info.user.favorites.includes(this.businessId)){
+                    this.favorited = true;
+                    console.log("it's a favorite");
+                  } else{
+                    this.favorited = false;
+                    console.log("it's not a favorite");
+                  }
+                } else{
+                    this.userLoggedIn = false;
+                }
+              } else{
+                  this.userLoggedIn = false;
+              }
+            });
+
 
             this.reviewsService.getBusinessInfo(this.businessId).subscribe(info => {
                 if (info.err) {
@@ -70,6 +96,18 @@ export class ReviewsComponent implements OnInit {
                     this.firstPhoto = info.data.photos[0];
                     this.loadDone = true;
                 }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong in getting info");
+                        break;
+                }
             });
 
             this.reviewsService.getAverageRating(this.businessId).subscribe(info => {
@@ -80,6 +118,18 @@ export class ReviewsComponent implements OnInit {
                     this.rating = info.data.toFixed(1);
                     this.ratingNumber += this.rating;
                 }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
+                }
             });
 
             this.reviewsService.getReviews(this.businessId).subscribe(info => {
@@ -89,15 +139,51 @@ export class ReviewsComponent implements OnInit {
                 else {
                     this.reviews = info.data;
                 }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
+                }
             });
 
+        },(err) => {
+            switch (err.status) {
+                case 404:
+                    console.log("404 not found");
+                    break;
+                case 401:
+                    console.log("Unauthorized");
+                    break;
+                default:
+                    console.log("Oops somethings went wrong");
+                    break;
+            }
         });
     }
 
     addFavorite() {
-        this.reviewsService.addFavorite(this.businessId).subscribe(info => {
-            if (info.err) {
-                console.error(info.msg);
+        this.reviewsService.addFavorite(this.businessId).subscribe(
+          (info) => {
+          this.favorited = true;
+          this.initialize();
+        },(err) => {
+            switch (err.status) {
+                case 404:
+                    console.log("404 not found");
+                    break;
+                case 401:
+                    console.log("Unauthorized");
+                    break;
+                default:
+                    console.log("Oops somethings went wrong in favoriting");
+                    break;
             }
         });
     }
@@ -118,17 +204,26 @@ export class ReviewsComponent implements OnInit {
 
 
         if (!this.addCommentWarning && !this.addRatingWarning) {
-          console.log("warnings tamam");
             const newReview = new Review(this.addComment, this.addRating, this.businessId, this.userId);
             this.reviewsService.addReview(newReview).subscribe((info) => {
-              console.log("da5al el callback");
                 if (info.err) {
                     console.error(info.msg);
                 } else {
-                  console.log("el mafrood tamam");
-                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, info.data.user, info.data.time), callback => {
-                        this.initialize();
-                    });
+                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, info.data.user, info.data.time));
+                    this.addComment = null;
+                    this.addRating = null;
+                }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
                 }
             });
 
