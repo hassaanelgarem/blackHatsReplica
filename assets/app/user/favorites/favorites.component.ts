@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class UserFavoritesComponent implements OnInit {
   favorites: [String];
   businesses: [Object];
-  userId: String = "58f923c4fae7424824625eec";
+  userId: String = "58f252bd9037f62725ddf62c";
   logoPath :String = "http://localhost:8080/api/image/businessLogos/";
   loggedIn = true;
   user: Object;
@@ -47,7 +47,7 @@ export class UserFavoritesComponent implements OnInit {
     });
 
   }
-  
+
    deleteFavorite(i){
 
     this.userService.deleteFavorite(this.favorites[i]).subscribe(
@@ -70,11 +70,11 @@ export class UserFavoritesComponent implements OnInit {
                 this.router.navigateByUrl('500-error');
                 break;
             }
-        
+
       }
     );
-    
+
   }
- 
+
 
 }

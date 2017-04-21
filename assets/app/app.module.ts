@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from "./app.routing";
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+import { RatingModule } from 'ngx-rating'
 //import {MomentModule} from 'angular2-moment';
 
 import { AppComponent } from "./app.component";
@@ -39,13 +40,14 @@ import { EditProfileService } from "./user/editProfile/editProfile.service";
       FileSelectDirective,
       NotAuthorizedErrorComponent,
       SomethingWrongComponent
-      
+
     ],
     imports: [
       BrowserModule,
       FormsModule,
       HttpModule,
-      routing
+      routing,
+      RatingModule
     ],
     providers: [DummyService,UserService,EditProfileService],
     bootstrap : [AppComponent]

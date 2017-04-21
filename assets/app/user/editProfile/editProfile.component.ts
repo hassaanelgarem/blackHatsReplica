@@ -21,7 +21,7 @@ export class EditProfileComponent implements OnInit {
     birthDate: Date;
 
     path: String = "";
-    userId: String = "58f923c4fae7424824625eec";
+    userId: String = "58f252bd9037f62725ddf62c";
 
     constructor(
         private editProfileService: EditProfileService,
@@ -61,7 +61,7 @@ export class EditProfileComponent implements OnInit {
 
         this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
             if (data.err) {
-                
+
                 console.error(data.msg);
             }
         });
@@ -70,7 +70,7 @@ export class EditProfileComponent implements OnInit {
         //this.router.navigateByUrl('user');
     }
 
-    
+
     onUpload() {
         this.uploader.uploadAll();
     }
@@ -78,14 +78,14 @@ export class EditProfileComponent implements OnInit {
     deleteAccount(){
         this.editProfileService.deleteAccount().subscribe(
         (data) => {
-           this.router.navigateByUrl('/'); 
+           this.router.navigateByUrl('/');
         },
         (err) => {
             //TODO:
             //handle and redirect
         }
         );
-        
+
 
     }
 

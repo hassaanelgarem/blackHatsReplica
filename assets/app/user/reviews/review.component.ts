@@ -13,11 +13,11 @@ import 'rxjs/add/operator/map';
 })
 
 export class ReviewComponent implements OnInit {
-   
+
     count: Number = 0;
     reviews: Object[];
     //reviews: Review[];
-    userId: String = "58f923c4fae7424824625eec";
+    userId: String = "58f252bd9037f62725ddf62c";
     averageString: String;
     loggedIn = true;
     editing: Boolean[] = [];
@@ -33,7 +33,7 @@ export class ReviewComponent implements OnInit {
 
     //hassaan:
     ngOnInit() {
-      
+
         this.userService.getReviews(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
@@ -80,11 +80,14 @@ export class ReviewComponent implements OnInit {
     }
 
     onEdit(i){
+      for(var j = 0; j < this.editing.length; j++ ){
+        this.editing[j] = false;
+      }
       this.editing[i] = true;
       this.editComment = this.reviews[i].comment;
       this.editRating = this.reviews[i].rating;
     }
 
 
-    
+
 }

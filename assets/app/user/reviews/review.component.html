@@ -81,7 +81,9 @@
                         <div class="col-xs-12 col-sm-12 col-md-3">
                             <div class="review-header">
                                 <h6>{{review.business.name}}</h6>
-                                <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span>
+                                <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span><br>
+                                <rating *ngIf="!editing[i]" [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
+                                <rating *ngIf="editing[i]" [(ngModel)]="editRating" name="editRating" [titles]="false"></rating>
 
                                 <div class="rating-item">
                                     <input type="hidden" class="rating" data-filled="fa fa-star" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="3.5" />
@@ -94,13 +96,15 @@
                                 <div class="review-content" *ngIf="!editing[i]">
 
                                     <h4>{{review.comment}}</h4>
-                                    <h4>Rating: {{review.rating}}</h4>
+                                    <!-- <h4>Rating: {{review.rating}}</h4> -->
+                                    <!-- <rating [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating> -->
 
                                 </div>
                                 <div class="review-content" *ngIf="editing[i]">
 
                                     <input type="text" class="form-control" [(ngModel)]="editComment" name="editComment">
-                                    <input type="text" class="form-control" [(ngModel)]="editRating" name="editRating">
+                                    <!-- <input type="text" class="form-control" [(ngModel)]="editRating" name="editRating"> -->
+                                    <!-- <rating [(ngModel)]="editRating" name="editRating" [titles]="false"></rating> -->
 
                                 </div>
 
