@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   private profilePicture: String;
 
   user: Object;
-  userId: String = "58e8d26b86e48c253b2c3c1e"; //get the id of the logged in user
+  userId: String = "58f252bd9037f62725ddf62c"; //get the id of the logged in user
   favorites:Object[];
   firstName:String;
   lastName:String;

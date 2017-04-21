@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class UserFavoritesComponent implements OnInit {
   favorites: [String];
   businesses: [Object];
-  userId: String = "58e8d26b86e48c253b2c3c1e";
+  userId: String = "58f252bd9037f62725ddf62c";
   logoPath :String = "http://localhost:8080/api/image/businessLogos/";
   loggedIn = true;
   user: Object;

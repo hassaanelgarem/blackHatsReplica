@@ -15,8 +15,9 @@
 
                         <div class="trip-list-item" *ngFor="let booking of bookings; let i = index">
                             <div class="image-absolute">
-                                <div class="image image-object-fit image-object-fit-cover">
-                                    <!-- <img src="{{path}}{{booking}}" alt="image" /> -->
+                                <div *ngIf="loaded" class="image image-object-fit image-object-fit-cover">
+                                  <img *ngIf="loaded && businesses[i].logo == null" src="http://localhost:8080/api/image/businessLogos/Moon.jpg" alt="image" />
+                                    <img *ngIf="loaded && businesses[i].logo != null" src="{{logoPath}}{{businesses[i].logo}}" alt="image" />
                                 </div>
                             </div>
                             <div class="content">

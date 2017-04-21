@@ -12,8 +12,10 @@ import 'rxjs/add/operator/map';
 export class UserBookingsComponent implements OnInit {
     count: Number = 0;
     bookings: [Object];
-    userId: String = "58e8d26b86e48c253b2c3c1e";
-    logoPath :String = "http://localhost:8080/api/image/businessLogos/";
+    userId: String = "58f252bd9037f62725ddf62c";
+    logoPath: String = "http://localhost:8080/api/image/businessLogos/";
+    businesses: [Object];
+    loaded = false;
 
     constructor(
         private userService: UserService,
@@ -29,7 +31,22 @@ export class UserBookingsComponent implements OnInit {
             else {
               this.bookings = data.data;
               this.count = this.bookings.length;
+              var businesses = [];
+              for(var i = 0; i < this.bookings.length; i++) {
+                this.userService.getCurrentInfo(this.bookings[i].activity.business).subscribe(data => {
+                  if (data.err) {
+                    console.error(data.msg);
+                  }
+                  else {
+                    businesses.push(data.data);
+                  }
+                });
+              }
+
+              this.businesses = businesses as [Object];
+              this.loaded = true;
+
             }
         });
-    }
+}
 }
