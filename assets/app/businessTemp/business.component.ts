@@ -30,6 +30,7 @@ export class BusinessComponent implements OnInit {
   gotToken(token){
 
     this.businessService.charge(token).subscribe(res => {
+      console.log("Done");
       console.log(res);
     });
   }
