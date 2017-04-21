@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {BusinessPageService} from './businessPage.service';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import { Http, Headers } from '@angular/http';
+import { AppService } from '../app.service';
+
 
 
 @Component({
@@ -41,22 +43,50 @@ export class BusinessPageComponent implements OnInit {
     loadDone = false;
     ownerLoggedIn = false;
     userLoggedIn = false;
-    otherBusinessLoggedIn = false;
-    noLogIn = false;
+    favorited = false;
 
     constructor(
         private businessPageService: BusinessPageService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private http: Http) { }
+        private http: Http,
+        private appService: AppService) { }
 
     ngOnInit() {
+      this.initialize();
 
+}
+  initialize(){
         this.activatedRoute.params.subscribe((params: Params) => {
             this.businessId = params['businessId'];
 
-
-
+            this.appService.getCurrentUser().subscribe(info => {
+              if(info.success){
+                if(info.user){
+                  this.userLoggedIn = true;
+                  this.ownerLoggedIn = false;
+                  if(info.user.favorites.includes(this.businessId)){
+                    this.favorited = true;
+                    console.log("it's a favorite");
+                  } else{
+                    this.favorited = false;
+                    console.log("it's not a favorite");
+                  }
+                } else if(info.business._id == this.businessId){
+                    this.ownerLoggedIn = true;
+                    this.userLoggedIn = false;
+                    console.log("owner logged in");
+                } else{
+                    this.ownerLoggedIn = false;
+                    this.userLoggedIn = false;
+                    console.log("another business logged in");
+                }
+              } else{
+                  this.ownerLoggedIn = false;
+                  this.userLoggedIn = false;
+                  console.log("no log in");
+              }
+            });
 
             this.businessPageService.getBusinessInfo(this.businessId).subscribe(info => {
                 if (info.err) {
@@ -110,6 +140,19 @@ export class BusinessPageComponent implements OnInit {
                     }
                     this.loadDone = true;
                 }
+            },
+            (err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
+                }
             });
 
             this.businessPageService.getAverageRating(this.businessId).subscribe(info => {
@@ -122,6 +165,18 @@ export class BusinessPageComponent implements OnInit {
                     this.rating = info.data.toFixed(1);
                     this.ratingNumber += this.rating;
                 }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
+                }
             });
 
             this.businessPageService.getActivities(this.businessId).subscribe(info => {
@@ -130,6 +185,18 @@ export class BusinessPageComponent implements OnInit {
                 }
                 else {
                     this.activities = info.data;
+                }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
                 }
             });
 
@@ -140,22 +207,69 @@ export class BusinessPageComponent implements OnInit {
                 else {
                     this.reviews = info.data;
                 }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
+                }
             });
 
             this.businessPageService.updateInteractivity(this.businessId).subscribe(info => {
                 if (info.err) {
                     console.error(info.msg);
                 }
+            },(err) => {
+                switch (err.status) {
+                    case 404:
+                        console.log("404 not found");
+                        break;
+                    case 401:
+                        console.log("Unauthorized");
+                        break;
+                    default:
+                        console.log("Oops somethings went wrong");
+                        break;
+                }
             });
+        },(err) => {
+            switch (err.status) {
+                case 404:
+                    console.log("404 not found");
+                    break;
+                case 401:
+                    console.log("Unauthorized");
+                    break;
+                default:
+                    console.log("Oops somethings went wrong");
+                    break;
+            }
         });
     }
 
-    addFavorite(){
-      this.businessPageService.addFavorite(this.businessId).subscribe(info => {
-            if (info.err) {
-                console.error(info.msg);
+    addFavorite() {
+        this.businessPageService.addFavorite(this.businessId).subscribe(
+          (info) => {
+          this.favorited = true;
+          this.initialize();
+        },(err) => {
+            switch (err.status) {
+                case 404:
+                    console.log("404 not found");
+                    break;
+                case 401:
+                    console.log("Unauthorized");
+                    break;
+                default:
+                    console.log("Oops somethings went wrong in favoriting");
+                    break;
             }
         });
-
-      }
+    }
 }
