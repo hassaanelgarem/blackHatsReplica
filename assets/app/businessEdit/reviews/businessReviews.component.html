@@ -1,0 +1,72 @@
+<body>
+    <div class="review-wrapper">
+
+        <div class="review-header">
+
+            <div class="GridLex-gap-30">
+
+                <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+                    <div class="GridLex-col-9_sm-8_xs-12_xss-12">
+
+                        <div class="review-rating">
+
+                            <div class="number">{{averageString}}</div>
+                            <div class="rating-wrapper">
+                                <div class="rating-item rating-item-lg">
+                                    <rating [(ngModel)]="averageRating" [readonly]="true" [float]="true" [titles]="false"></rating>
+                                </div>
+                                {{count}} reviews
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="review-content">
+
+            <ul class="review-list">
+
+                <li class="clearfix" *ngFor="let review of reviews; let i = index">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="review-header">
+                                <h6>{{review.user.firstName + " " + review.user.lastName}}</h6>
+                                <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span>
+
+                                <div class="rating-item">
+                                    <rating  [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-9">
+                            <div class="review-replied">
+                                <div class="review-content">
+
+                                    <h4>{{review.comment}}</h4>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+
+            </ul>
+
+            <!-- <a href="#" class="review-load-more mb-40">load more...</a> -->
+
+        </div>
+
+    </div>
+
+</body>
