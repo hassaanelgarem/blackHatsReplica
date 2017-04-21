@@ -506,12 +506,18 @@ module.exports.getCurrentInfo = function (req, res) {
 
             });
         } else {
-            if (business)
+            if (business){
+            /*    let filteredBusiness = {
+                  name: business.name,
+                  email: business.email,
+                  category
+                }  */
                 res.status(200).json({
                     error: null,
                     msg: null,
                     data: business
                 });
+              }
 
             else
                 res.status(404).json({

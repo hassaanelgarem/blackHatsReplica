@@ -1,5 +1,6 @@
 import { Component, OnInit, Output ,EventEmitter } from '@angular/core';
 import { LoginService } from './login.service';
+import { AppService } from '../../app.service';
 import {Router} from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -25,6 +26,10 @@ export class LoginComponent implements OnInit {
     private failedReset: String;
     private successBusinessReset: String;
     private failedBusinessReset: String;
+    
+    private successResend: String;
+    private failedResend: String;
+    
 
 
 
@@ -42,15 +47,21 @@ export class LoginComponent implements OnInit {
     private resetFailureWarning: boolean = false;
     private resetBusinessSuccessWarning: boolean = false;
     private resetBusinessFailureWarning: boolean = false;
+    private loggedin: boolean = false;
+
+    private resendEmailWarning: boolean = false;
+    private resendSuccessWarning: boolean = false;
+    private resendFailureWarning: boolean = false;
 
     constructor(
         private loginService: LoginService,
         private router: Router,
-        private http: Http
+        private http: Http,
+        private appService: AppService
         ){ }
     
 
-    ngOnInit() { }
+    ngOnInit() {}
 
 
     onUserLogin(){
@@ -70,10 +81,10 @@ export class LoginComponent implements OnInit {
         if(!this.userUsernameWarning && !this.userPasswordWarning){
             this.loginService.userLogin(this.username, this.userPassword).subscribe(data => {
             if(data.success){
-            console.log("login");
-            this.router.navigate(['/']);
-            location.reload();
+           // console.log("login");
+           this.loggedin = true;
             this.loginClicked.emit(true);
+            this.appService.login();
             }
             else{
             this.incorrectUserWarning = true;
@@ -106,9 +117,9 @@ export class LoginComponent implements OnInit {
 
             this.loginService.businessLogin(this.businessEmail, this.businessPassword).subscribe(data => {
             if(data.success){
-            this.router.navigate(['/']);
-            location.reload();
+            this.loggedin = true;
             this.loginClicked.emit(true);
+            this.appService.login();
             }
             else{
                this.incorrectBusinessWarning = true;
@@ -182,8 +193,34 @@ export class LoginComponent implements OnInit {
     }
 
 
-    onLogout() {
-        console.log("Logged out!!");
+    onResendEmail() {
+
+        if(!this.userEmail || this.userEmail.length == 0){
+            this.resendEmailWarning = true;
+           }
+        else {
+            this.resendEmailWarning = false;        
+        }
+
+        if(!this.resendEmailWarning) {
+            this.loginService.resendEmail(this.userEmail).subscribe(data => {
+            this.resendFailureWarning = false; 
+            this.resendSuccessWarning = true; 
+            this.successResend = data.msg;        
+            //console.log(data.msg);   
+        }, err => {
+            this.resendSuccessWarning = false;
+            this.resendFailureWarning = true;
+            if(err.status == 500) {
+                this.failedResend = err.json().error[0].msg;
+            }
+            else {
+                this.failedResend = err.json().msg;
+            }
+            //console.log(err.json());
+             });
+        }
+        
     }
 
 
@@ -223,8 +260,16 @@ export class LoginComponent implements OnInit {
         this.resetSuccessWarning = false;
     }
     
-    hideResetFailureWarning() {
-        this.resetFailureWarning = false;
+    hideResendFailureWarning() {
+        this.resendFailureWarning = false;
+    }
+
+    hideResendSuccessWarning() {
+        this.resendSuccessWarning = false;
+    }
+
+    hideResendEmailWarning() {
+        this.resendEmailWarning = false;
     }
 
     onUserLoginCancel() {
@@ -237,6 +282,7 @@ export class LoginComponent implements OnInit {
         this.resetUserEmailWarning = false;
         this.resetFailureWarning = false;
         this.resetSuccessWarning = false;
+        this.loggedin = false;
     }
 
 
@@ -249,6 +295,7 @@ export class LoginComponent implements OnInit {
         this.incorrectBusinessWarning = false;
         this.resetFailureWarning = false;
         this.resetSuccessWarning = false;
+        this.loggedin = false;
     }
 
     onUserForgetPassCancel() {
@@ -272,6 +319,23 @@ export class LoginComponent implements OnInit {
         this.resetBusinessEmailWarning = false;
         this.resetSuccessWarning = false;
         this.resetFailureWarning = false;
+    }
+
+    onResendCancel() {
+        this.userEmail = null;
+        this.username = null;
+        this.userPassword = null;
+        this.businessEmail = null;
+        this.businessPassword = null;
+        this.userUsernameWarning = false;
+        this.userPasswordWarning = false;
+        this.incorrectUserWarning = false;
+        this.businessEmailWarning = false;
+        this.businessPasswordWarning = false;
+        this.incorrectBusinessWarning = false;
+        this.resendEmailWarning = false;
+        this.resendSuccessWarning = false;
+        this.resendFailureWarning = false;
     }
 
 }

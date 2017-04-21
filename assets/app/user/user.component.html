@@ -1,0 +1,115 @@
+<body>
+    <div class="user-profile-wrapper">
+
+        <div class="user-header">
+
+            <div class="content">
+
+                <div class="content-top">
+
+                    <div class="container">
+
+                        <div class="inner-top">
+
+                            <div class="image">
+                                <br>
+                                <img class='img-circle' src="{{path}}{{profilePicture}}" alt="profile picture" style="width:200px;height:100px">
+                                <br>
+
+
+                            </div>
+
+                            <div class="GridLex-gap-20">
+
+                                <div class="GridLex-grid-noGutter-equalHeight GirdLex-grid-bottom">
+
+                                    <div class="GridLex-col-7_sm-12_xs-12_xss-12">
+
+                                        <div class="GridLex-inner">
+                                            <div class="heading clearfix">
+
+                                                <h3>{{firstName +" " + lastName}}</h3>
+
+                                            </div>
+                                            <ul class="user-meta">
+                                                <li> Email: {{email}}<span class="mh-5 text-muted"></span></li>
+                                                <li> Born: {{birthDate | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
+                                                <li> Joined: {{createdAt | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
+
+
+                                            </ul>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="GridLex-col-5_sm-12_xs-12_xss-12">
+
+                                        <div class="GridLex-inner">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="content-bottom">
+
+                    <div class="container">
+                        <header class="row spacing">
+                            <nav class="col-md-8 col-md-offset-2">
+                                <ul class="nav nav-tabs">
+
+                                    <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
+                                    <li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
+                                    <li *ngIf="loggedIn" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+                                    <li *ngIf="loggedIn" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
+
+                                </ul>
+                            </nav>
+                        </header>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pt-30 pb-50">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <h2> Reviews </h2>
+                    <user-review></user-review>
+                </div>
+
+                <div *ngIf="showFavorites" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-user-favorites></app-user-favorites>
+
+                </div>
+
+                <div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-user-bookings></app-user-bookings>
+                </div>
+
+                <div *ngIf="editProfile" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-editUserProfile></app-editUserProfile>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>

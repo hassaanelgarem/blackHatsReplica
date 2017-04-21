@@ -13,9 +13,10 @@ const adminCtrl = require('../controllers/admin.controller');
 const passwordCtrl = require('../controllers/resetPassword.controller');
 const supportCtrl = require('../controllers/support.controller');
 const imagesCtrl = require("../controllers/images.controller");
+const paymentCtrl = require("../controllers/payment.controller");
 
 
-module.exports = function (passportConfig) {
+module.exports = function(passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/api/successLogin',
         failureRedirect: '/api/failedLogin',
@@ -29,6 +30,9 @@ module.exports = function (passportConfig) {
         failureFlash: false
     });
 
+    //For testing
+
+    router.route('/charge').post(paymentCtrl.charge);
 
     //Not logged in only routes
     router.route('/user/login').post(passportConfig.isNotLoggedIn, authenticateUser);
@@ -66,7 +70,7 @@ module.exports = function (passportConfig) {
 
 
     //Available to logged in only routes
-
+    router.route('/logout').get(passportConfig.isLoggedIn, passportConfig.logout);
 
     //Business routes
     router.route('/business/editInfo').put(passportConfig.isBusinessLoggedIn, businessCtrl.saveNewInfo);
@@ -74,7 +78,7 @@ module.exports = function (passportConfig) {
     router.route('/business/addPhoto').post(passportConfig.isBusinessLoggedIn, businessCtrl.addPhoto);
     router.route('/business/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, businessCtrl.deletePhoto);
     router.route('/business/addLogo').post(passportConfig.isBusinessLoggedIn, businessCtrl.uploadLogo);
-    router.route('/business/logout').get(passportConfig.isBusinessLoggedIn, passportConfig.logout);
+    //router.route('/business/logout').get(passportConfig.isBusinessLoggedIn, passportConfig.logout);
     //Business activity routes
     router.route('/activity/add').post(passportConfig.isBusinessLoggedIn, activityCtrl.addActivity);
     router.route('/activity/:activityId/addSlot').post(passportConfig.isBusinessLoggedIn, activityCtrl.addSlot);
@@ -99,7 +103,7 @@ module.exports = function (passportConfig) {
     router.route('/admin/advertisement/addAdvSlots').post(passportConfig.isAdminLoggedIn, adminCtrl.addAdvSlots);
 
     //User routes
-    router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);
+    //router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);
     router.route('/user/profile/editInfo').put(passportConfig.isUserLoggedIn, profileCtrl.updateOneUser);
     router.route('/user/changePassword').put(passportConfig.isUserLoggedIn, userCtrl.changePassword);
     router.route('/user/profile/uploadProfilePicture').post(passportConfig.isUserLoggedIn, profileCtrl.uploadProfilePicture);
