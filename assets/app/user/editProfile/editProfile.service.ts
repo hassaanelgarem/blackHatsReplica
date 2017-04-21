@@ -4,10 +4,10 @@ import {Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class EditProfileService {
-    
+export class EditUserProfileService {
+
     userId: String = "58f923c4fae7424824625eec";
-    
+
     constructor(private http: Http) { }
 
     getOneUser(userId){
@@ -23,7 +23,7 @@ export class EditProfileService {
           firstName: firstName,
           lastName: lastName,
           birthDate: birthDate,
-          
+
         }
         return this.http.put('http://localhost:8080/api/user/profile/editInfo', body, { headers: headers }).map(res => res.json());
     }

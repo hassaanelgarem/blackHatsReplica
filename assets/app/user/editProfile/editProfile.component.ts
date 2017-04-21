@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { EditProfileService} from "./editProfile.service"
+import { EditUserProfileService} from "./editProfile.service"
 import { Router } from '@angular/router';
 import {Http, Headers } from '@angular/http';
 //import { Business } from "../../../api/data/business.model";
@@ -8,12 +8,12 @@ import 'rxjs/add/operator/map';
 
 
 @Component({
-    selector: 'app-editProfile',
+    selector: 'app-editUserProfile',
     templateUrl: './editProfile.component.html',
     styleUrls: ['./editProfile.component.css']
 })
 
-export class EditProfileComponent implements OnInit {
+export class EditUserProfileComponent implements OnInit {
     public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
     private profilePicture: String;
     firstName: String;
@@ -24,7 +24,7 @@ export class EditProfileComponent implements OnInit {
     userId: String = "58f252bd9037f62725ddf62c";
 
     constructor(
-        private editProfileService: EditProfileService,
+        private editProfileService: EditUserProfileService,
         private router: Router,
         private http: Http) { }
 
