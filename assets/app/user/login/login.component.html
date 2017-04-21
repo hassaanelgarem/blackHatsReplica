@@ -1,0 +1,291 @@
+
+<!-- start User Sign-in Modal -->
+<div id="userLoginModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" data-replace="true">
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserLoginCancel()">&times;</button>
+		<h4 class="modal-title text-center">Login To Your User Account</h4>
+	</div>
+
+	<div *ngIf="loggedin" class="alert alert-success alert-dismissable">
+					Login Successfull
+	</div>
+
+	<div *ngIf="!loggedin">
+
+	<div class="modal-body">
+		<div class="row gap-20">
+
+			<div class="col-sm-12 col-md-12">
+
+				<div *ngIf="incorrectUserWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideIncorrectUserWarning()" aria-label="close">&times;</a> Incorrect username or password
+				</div>
+
+				<div *ngIf="userUsernameWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideuserUsernameWarning()" aria-label="close">&times;</a> Please enter a username
+				</div>
+
+				<div class="form-group">
+					<label>Username</label>
+					<input class="form-control" placeholder="Enter username" type="text" [(ngModel)]="username" name="username">
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+			<br>
+
+				<div *ngIf="userPasswordWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideuserPasswordWarning()" aria-label="close">&times;</a> Please enter a password
+				</div>
+
+				<div class="form-group">
+					<label>Password</label>
+					<input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="userPassword" name="userPassword">
+				</div>
+
+			</div>
+
+			<div class="col-sm-6 col-md-6">
+				<div class="checkbox-block">
+					<input id="user_remember_me_checkbox" name="user_remember_me_checkbox" class="checkbox" value="First Choice" type="checkbox">
+					<label class="" for="user_remember_me_checkbox">Remember me</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-6">
+				<div class="user-login-box-link-action">
+					<a data-toggle="modal" href="#userForgotPasswordModal" class="block line18 mt-1" (click)="onUserLoginCancel()">Forgot password?</a>
+				</div>
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="user-login-box-box-action">
+					No account? <a data-toggle="modal" href="#userRegisterModal" (click)="onUserLoginCancel()">Signup</a>
+				</div>
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="user-login-box-box-action">
+					Not a user? <a data-toggle="modal" href="#businessLoginModal" (click)="onUserLoginCancel()">Login as Business</a>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+	<div class="modal-footer text-center">
+		<button type="button" class="btn btn-primary" (click)="onUserLogin()">Login</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onUserLoginCancel()">Close</button>
+	</div>
+
+	</div>
+
+</div>
+
+<!-- end User Sign-in Modal -->
+
+
+
+
+<!-- start User Forget Password Modal -->
+<div id="userForgotPasswordModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserForgetPassCancel()">&times;</button>
+		<h4 class="modal-title text-center">Restore your forgotten password</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="row gap-20">
+
+			<div class="col-sm-12 col-md-12">
+				<p class="mb-20">Just provide us with your valid email address and we will send you an email with further instructions.</p>
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div *ngIf="resetSuccessWarning" class="alert alert-success alert-dismissable">
+					<a class="close" (click)="hideResetSuccessWarning()" aria-label="close">&times;</a>
+					<p>{{successReset}}</p>
+				</div>
+
+				<div *ngIf="resetFailureWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideResetFailureWarning()" aria-label="close">&times;</a>
+					<p>{{failedReset}}</p>
+				</div>
+
+				<div *ngIf="resetUserEmailWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideResetUserEmailWarning()" aria-label="close">&times;</a> Please enter an email
+				</div>
+
+				<div class="form-group">
+					<label>Email Address</label>
+					<input class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="userEmail" name="userEmail">
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="login-box-box-action">
+					Return to <a data-toggle="modal" href="#userLoginModal" (click)="onUserLoginCancel()">Login</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	<div class="modal-footer text-center">
+		<button type="button" class="btn btn-primary" (click)="onUserForgetPass()">Restore</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onUserForgetPassCancel()">Close</button>
+	</div>
+
+</div>
+<!-- end User Forget Password Modal -->
+
+
+
+
+
+
+
+<!-- start Business Sign-in Modal -->
+<div id="businessLoginModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" data-replace="true">
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onBusinessLoginCancel()">&times;</button>
+		<h4 class="modal-title text-center">Login To Your Business Account</h4>
+	</div>
+	<div *ngIf="loggedin" class="alert alert-success alert-dismissable">
+					Login Successfull
+	</div>
+	<div *ngIf="!loggedin">
+	<div class="modal-body">
+		<div class="row gap-20">
+
+			<div class="col-sm-12 col-md-12">
+
+				<div *ngIf="incorrectBusinessWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideIncorrectBusinessWarning()" aria-label="close">&times;</a> Incorrect email or password
+				</div>
+
+				<div *ngIf="businessEmailWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideBusinessEmailWarning()" aria-label="close">&times;</a> Please enter an email
+				</div>
+
+				<div class="form-group">
+					<label>Email Address</label>
+					<input autocomplete="off" class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="businessEmail" name="businessEmail">
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<br>
+				<div *ngIf="businessPasswordWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideBusinessPasswordWarning()" aria-label="close">&times;</a> Please enter a password
+				</div>
+
+				<div class="form-group">
+					<label>Password</label>
+					<input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="businessPassword" name="businessPassword">
+				</div>
+
+			</div>
+
+			<div class="col-sm-6 col-md-6">
+				<div class="checkbox-block">
+					<input id="business-remember_me_checkbox" name="business-remember_me_checkbox" class="checkbox" value="First Choice" type="checkbox">
+					<label class="" for="remember_me_checkbox">Remember me</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-6">
+				<div class="business-login-box-link-action">
+					<a data-toggle="modal" href="#businessForgotPasswordModal" class="block line18 mt-1" (click)="onBusinessLoginCancel()">Forgot password?</a>
+				</div>
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="business-login-box-box-action">
+					No account? <a data-toggle="modal" href="#businessRegisterModal" (click)="onBusinessLoginCancel()">Signup</a>
+				</div>
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+	<div class="modal-footer text-center">
+		<button type="button" class="btn btn-primary" (click)="onBusinessLogin()">Login</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onBusinessLoginCancel()">Close</button>
+	</div>
+</div>
+</div>
+<!-- end Business Sign-in Modal -->
+
+
+
+
+<!-- start Business Forget Password Modal -->
+<div id="businessForgotPasswordModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onBusinessForgetPassCancel()">&times;</button>
+		<h4 class="modal-title text-center">Restore your forgotten password</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="row gap-20">
+
+			<div class="col-sm-12 col-md-12">
+				<p class="mb-20">Just provide us with your valid email address and we will verify your account then reset your password.</p>
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+
+				<div *ngIf="resetSuccessWarning" class="alert alert-success alert-dismissable">
+					<a class="close" (click)="hideResetSuccessWarning()" aria-label="close">&times;</a>
+					<p>{{successReset}}</p>
+				</div>
+
+				<div *ngIf="resetFailureWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideResetFailureWarning()" aria-label="close">&times;</a>
+					<p>{{failedReset}}</p>
+				</div>
+
+				<div *ngIf="resetBusinessEmailWarning" class="alert alert-danger alert-dismissable">
+					<a class="close" (click)="hideResetBusinessEmailWarning()" aria-label="close">&times;</a> Please enter an email
+				</div>
+
+				<div class="form-group">
+					<label>Email Address</label>
+					<input class="form-control" placeholder="Enter your email address" type="text">
+				</div>
+
+			</div>
+
+			<div class="col-sm-12 col-md-12">
+				<div class="login-box-box-action">
+					Return to <a data-toggle="modal" href="#businessLoginModal" (click)="onBusinessLoginCancel()">Login</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<div class="modal-footer text-center">
+		<button type="button" class="btn btn-primary" (click)="onBusinessForgetPass()">Restore</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onBusinessForgetPassCancel()">Close</button>
+	</div>
+
+</div>

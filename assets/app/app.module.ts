@@ -3,36 +3,126 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from "./app.routing";
+import { MomentModule } from 'angular2-moment';
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+import { DateTimePickerModule } from 'ng2-date-time-picker';
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { FocusDirective } from './directives/focus.directive';
+import { RatingModule } from "ngx-rating";
 
-import { RatingModule } from 'ngx-rating';
 
 import { AppComponent } from "./app.component";
-import { DummyComponent } from "./dummy/dummy.component";
-import { BusinessComponent } from "./business/business.component";
 import { BusinessPageComponent } from "./businessPage/businessPage.component";
 import { ReviewsComponent } from "./reviews/reviews.component";
+import { HomepageComponent} from "./homepage/homepage.component";
+import { NavComponent} from "./navigationBar/nav.component";
+import { RegisterComponent} from "./user/register/register.component";
+import { BusinessRegisterComponent} from "./business/register/businessRegister.component";
+import { SearchComponent} from "./homepage/search/search.component";
+import { SearchResultComponent} from "./homepage/search/SearchResult/result.component";
+import { TopBusinessesComponent } from "./homepage/topBusinesses/topBusinesses.component";
+import { AdSlotsComponent } from "./homepage/adSlots/adSlots.component";
+import { FooterComponent } from "./footer/footer.component";
+import { LoginComponent} from "./user/login/login.component";
+import { ResetPasswordComponent } from "./user/resetPassword/resetPassword.component";
+import { TermsComponent } from "./terms/terms.component";
+import { PolicyComponent } from "./policy/policy.component";
+import { VerifyComponent } from "./user/verify/verify.component";
+import { BusinessEditComponent } from "./businessEdit/businessEdit.component";
+import { BusinessReviewsComponent} from "./businessEdit/reviews/businessReviews.component"
+import { BusinessActivitiesComponent} from "./businessEdit/activities/businessActivities.component"
+import { EditActivityComponent} from "./businessEdit/activities/editActivity.component"
+import { EditProfileComponent } from "./businessEdit/editProfile/editProfile.component";
+import { AddPhotoComponent } from "./businessEdit/addPhoto/addPhoto.component";
+import { BookAdvComponent } from "./businessEdit/bookAdv/bookAdv.component";
+import { ActivityBookingsComponent } from "./businessEdit/activityBookings/activityBookings.component";
 
-import { DummyService } from "./dummy/dummy.service";
-import { BusinessService } from "./business/business.service";
+
 import { BusinessPageService } from "./businessPage/businessPage.service";
 import { ReviewsService } from "./reviews/reviews.service";
+import { HomepageService } from "./homepage/homepage.service";
+import { UserRegisterService} from "./user/register/register.service";
+import { BusinessRegisterService} from "./business/register/businessRegister.service"
+import { AppService } from "./app.service";
+import { SearchService } from "./homepage/search/search.service";
+import { AdSlotsService } from "./homepage/adSlots/adSlots.service";
+import { TopBusinessesService } from "./homepage/topBusinesses/topBusinesses.service";
+import { LoginService } from "./user/login/login.service";
+import { ResetPasswordService } from "./user/resetPassword/resetPassword.service";
+import { VerifyService } from "./user/verify/verify.service";
+import { BusinessService } from "./businessEdit/business.service";
+import { EditProfileService } from "./businessEdit/editProfile/editProfile.service";
+import { AddPhotoService } from "./businessEdit/addPhoto/addPhoto.service";
+import { BookAdvService } from "./businessEdit/bookAdv/bookAdv.service";
+import { ActivityBookingsService } from "./businessEdit/activityBookings/activityBookings.service";
+
+
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+  acceptedFiles: 'image/*'
+};
+
 
 @NgModule({
     declarations : [
+      ActivityBookingsComponent,
+      AddPhotoComponent,
       AppComponent,
-      DummyComponent,
-      BusinessComponent,
       BusinessPageComponent,
-      ReviewsComponent
+      ReviewsComponent,
+      HomepageComponent,
+      NavComponent,
+      LoginComponent,
+      ResetPasswordComponent,
+      TermsComponent,
+      PolicyComponent,
+      RegisterComponent,
+      BusinessRegisterComponent,
+      SearchComponent,
+      SearchResultComponent,
+      TopBusinessesComponent,
+      AdSlotsComponent,
+      FooterComponent,
+      VerifyComponent,
+      BookAdvComponent,
+      BusinessActivitiesComponent,
+      BusinessEditComponent,
+      BusinessReviewsComponent,
+      EditActivityComponent,
+      EditProfileComponent,
+      FileSelectDirective,
+      FocusDirective
     ],
     imports: [
       BrowserModule,
+      MomentModule,
       FormsModule,
       HttpModule,
       routing,
+      MomentModule,
+      DateTimePickerModule,
+      DropzoneModule.forRoot(DROPZONE_CONFIG),
       RatingModule
     ],
-    providers: [DummyService, BusinessService, BusinessPageService, ReviewsService],
+    providers: [
+      HomepageService,
+      AppService,
+      SearchService,
+      AdSlotsService,
+      TopBusinessesService,
+      UserRegisterService,
+      BusinessRegisterService,
+      LoginService,
+      BusinessService,
+      EditProfileService,
+      AddPhotoService,
+      BookAdvService,
+      ActivityBookingsService,
+      ResetPasswordService,
+      VerifyService,
+      BusinessPageService,
+      ReviewsService
+    ],
     bootstrap : [AppComponent]
 })
 

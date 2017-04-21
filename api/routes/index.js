@@ -17,15 +17,15 @@ const imagesCtrl = require("../controllers/images.controller");
 
 module.exports = function (passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
-        successRedirect: '/',
-        failureRedirect: '/api/login',
+        successRedirect: '/api/successLogin',
+        failureRedirect: '/api/failedLogin',
         failureFlash: false
     });
 
 
     var authenticateBusiness = passportConfig.passport.authenticate('local-business', {
-        successRedirect: '/',
-        failureRedirect: '/api/login',
+        successRedirect: '/api/successLogin',
+        failureRedirect: '/api/failedLogin',
         failureFlash: false
     });
 
@@ -41,7 +41,8 @@ module.exports = function (passportConfig) {
     router.route('/resetPassword/:id').put(passportConfig.isNotLoggedIn, passwordCtrl.resetPassword);
     router.route('/forgotPassword').post(passportConfig.isNotLoggedIn, passwordCtrl.forgotPassword);
     router.route('/contactSupport').post(passportConfig.isNotLoggedIn, supportCtrl.addRequest);
-
+    router.route('/successLogin').get(userCtrl.successLogin);
+    router.route('/failedLogin').get(userCtrl.failedLogin);
 
     //Available to all routes
     router.route('/search').get(userCtrl.searchByNameOrTag, userCtrl.searchByLocationAndCategory);
@@ -56,14 +57,16 @@ module.exports = function (passportConfig) {
     router.route('/activity/:businessId').get(activityCtrl.getActivities);
     router.route('/booking/history/:userId').get(bookingCtrl.getBookingHistory);
     router.route('/activity/freeSlots').post(activityCtrl.getAvailableSlots);
+    router.route('/activity/:activityId/getActivity').get(activityCtrl.getActivity);
     router.route('/advertisement/getAdvSlots').get(advCtrl.getAdvSlots);
     router.route('/advertisement/getCurrentBookings/:advSlotId').get(advCtrl.getCurrentBookings);
     router.route('/advertisement/getFreeSlot/:advSlotId').get(advCtrl.getFreeSlot);
     router.route('/image/:imageType/:imageName').get(imagesCtrl.getImage);
+    router.route('/currentUser').get(userCtrl.currentUser);
 
 
     //Available to logged in only routes
-
+    router.route('/logout').get(passportConfig.isLoggedIn, passportConfig.logout);
 
     //Business routes
     router.route('/business/editInfo').put(passportConfig.isBusinessLoggedIn, businessCtrl.saveNewInfo);
@@ -71,7 +74,7 @@ module.exports = function (passportConfig) {
     router.route('/business/addPhoto').post(passportConfig.isBusinessLoggedIn, businessCtrl.addPhoto);
     router.route('/business/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, businessCtrl.deletePhoto);
     router.route('/business/addLogo').post(passportConfig.isBusinessLoggedIn, businessCtrl.uploadLogo);
-    router.route('/business/logout').get(passportConfig.isBusinessLoggedIn, passportConfig.logout);
+    //router.route('/business/logout').get(passportConfig.isBusinessLoggedIn, passportConfig.logout);
     //Business activity routes
     router.route('/activity/add').post(passportConfig.isBusinessLoggedIn, activityCtrl.addActivity);
     router.route('/activity/:activityId/addSlot').post(passportConfig.isBusinessLoggedIn, activityCtrl.addSlot);
@@ -79,7 +82,8 @@ module.exports = function (passportConfig) {
     router.route('/activity/:activityId/addPhoto').post(passportConfig.isBusinessLoggedIn, activityCtrl.addPhoto);
     router.route('/activity/:activityId/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deletePhoto);
     router.route('/activity/:activityId/delete').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deleteActivity);
-
+    router.route('/activity/:activityId/edit').post(passportConfig.isBusinessLoggedIn, activityCtrl.editActivity);
+    router.route('/activity/getActivity/:businessId').get(passportConfig.isBusinessLoggedIn, activityCtrl.getActivityBookings);
 
     //Admin routes
     router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
@@ -95,7 +99,7 @@ module.exports = function (passportConfig) {
     router.route('/admin/advertisement/addAdvSlots').post(passportConfig.isAdminLoggedIn, adminCtrl.addAdvSlots);
 
     //User routes
-    router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);
+    //router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);
     router.route('/user/profile/editInfo').put(passportConfig.isUserLoggedIn, profileCtrl.updateOneUser);
     router.route('/user/changePassword').put(passportConfig.isUserLoggedIn, userCtrl.changePassword);
     router.route('/user/profile/uploadProfilePicture').post(passportConfig.isUserLoggedIn, profileCtrl.uploadProfilePicture);
@@ -112,7 +116,7 @@ module.exports = function (passportConfig) {
 
     //Advertisement routes
     router.route('/advertisement/bookAdvSlot/:advSlotId').post(passportConfig.isBusinessLoggedIn, advCtrl.bookAdvSlot);
-
+    router.route('/advertisement/addAdvPhoto').post(passportConfig.isBusinessLoggedIn, advCtrl.uploadAdv);
 
     return router;
 };

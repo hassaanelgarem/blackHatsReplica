@@ -72,7 +72,7 @@ module.exports.addReview = function (req, res) {
 
     if (errors) {
         res.status(500).json({
-            error: err,
+            error: errors,
             msg: null,
             data: null
         });

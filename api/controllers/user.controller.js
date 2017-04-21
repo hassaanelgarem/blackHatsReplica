@@ -8,7 +8,7 @@ const Business = mongoose.model('Business');
 const TempUser = mongoose.model('TempUser');
 
 
-/*  
+/*
     Post Function, to register a new user into the temp users database and send the
     verification email.
     Takes:
@@ -21,8 +21,8 @@ const TempUser = mongoose.model('TempUser');
             confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
-    Calling Route: '/api/user/register'  
+    Redirects to: Nothing.
+    Calling Route: '/api/user/register'
 */
 module.exports.registerUser = function (req, res) {
 
@@ -33,15 +33,18 @@ module.exports.registerUser = function (req, res) {
     req.checkBody('email', 'Email format is not correct.').isEmail();
     req.checkBody('username', 'Username is required.').notEmpty();
     req.checkBody('password', 'Password is required.').notEmpty();
-    req.checkBody('password', 'Password must be at least 8 characters.').isAlphanumeric();
+    req.checkBody('password', 'Password must contain letters and numbers.').isAlphanumeric();
     req.checkBody('password', 'Password must be at least 8 characters.').len(8);
     req.checkBody('confirmPassword', 'Passwords do not match.').equals(req.body.password);
 
     var errors = req.validationErrors();
 
     if (errors) {
+        for (i = 1; i < errors.length; i++) {
+            errors[0].msg += "\n" + errors[i].msg;
+        }
         res.status(500).json({
-            error: errors,
+            error: errors[0],
             msg: null,
             data: null
         });
@@ -64,7 +67,7 @@ module.exports.registerUser = function (req, res) {
                     $options: "ix"
                 }
             }]
-        }, function(err, user) {
+        }, function (err, user) {
             //if there is an error, send an error message
             if (err) {
                 return res.status(500).json({
@@ -81,9 +84,9 @@ module.exports.registerUser = function (req, res) {
                 var regexp = new RegExp('^' + req.body.username + '$', 'i')
                 if (regexp.test(user.username))
                     msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
-
+                var newError = {"msg": msg};
                 res.status(500).json({
-                    error: null,
+                    error: newError,
                     msg: msg,
                     data: null
                 });
@@ -121,8 +124,9 @@ module.exports.registerUser = function (req, res) {
                             if (regexp.test(tempUser.username))
                                 msg = 'Username already exists, Username: ' + req.body.username + '. Please enter another username.';
 
+                            var newError = {"msg": msg};
                             res.status(500).json({
-                                error: null,
+                                error: newError,
                                 msg: msg,
                                 data: null
                             });
@@ -152,13 +156,14 @@ module.exports.registerUser = function (req, res) {
                                 });
                                 else {
                                     if (user) {
-                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/api/user/verifyAccount/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/api/user/verifyAccount/" + token + "</p>";
+                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/verify/" + token + "</p>";
                                         var subject = 'Account Verification';
                                         emailSender.sendEmail(subject, req.body.email, "", html, function (err, info) {
                                             if (err)
                                                 newUser.remove(function (err) {
+                                                    var newError = {"msg": 'Email address is not valid, registration failed.'};
                                                     res.status(500).json({
-                                                        error: err,
+                                                        error: null,
                                                         msg: 'Email address is not valid, registration failed.',
                                                         data: null
                                                     });
@@ -223,10 +228,10 @@ module.exports.deleteAccount = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/user/addFavorite/:businessId'
 */
-module.exports.addFavorite = function(req, res) {
+module.exports.addFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
-    Business.findById(businessId, function(err, doc) {
+    Business.findById(businessId, function (err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
             res.status(500).json({
@@ -251,7 +256,7 @@ module.exports.addFavorite = function(req, res) {
                         favorites: businessId
                     }
                 }, //add the business id to the favorites array
-                function(err, result) {
+                function (err, result) {
                     //couldn't add to array, return the error
                     if (err) {
                         res.status(500).json({
@@ -278,7 +283,7 @@ else returns error message.
 Redirects to: Nothing
 Calling route: '/api/user/deleteFavorite/:businessId'
 */
-module.exports.deleteFavorite = function(req, res) {
+module.exports.deleteFavorite = function (req, res) {
     var businessId = req.params.businessId; //to get the id of the busniness i want to add to favorites
     var userId = req.user._id; //using passport, get the id of the signed in user
 
@@ -288,7 +293,7 @@ module.exports.deleteFavorite = function(req, res) {
         $pull: {
             "favorites": businessId
         }
-    }, function(err, data) {
+    }, function (err, data) {
         if (err) {
             res.status(500).json({
                 error: err,
@@ -574,16 +579,16 @@ module.exports.searchByLocationAndCategory = function (req, res) {
 };
 
 
-/*  
+/*
     Put Function, to change the password of the user.
     Takes:
-        body{  
+        body{
             oldPassword,
             password,
-            confirmPassword 
+            confirmPassword
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/changePassword'
 */
 module.exports.changePassword = function (req, res) {
@@ -675,15 +680,15 @@ module.exports.changePassword = function (req, res) {
 };
 
 
-/*  
+/*
     Get Function, to check the validity of the token in the verification request.
     Takes:
-        params{  
-            token: verification token sent to the user 
+        params{
+            token: verification token sent to the user
         }
-    Returns: in case of Success, the token and the userId to verify, 
+    Returns: in case of Success, the token and the userId to verify,
             in case of failure, failure messages along with errors.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/verifyAccount/:token'
 */
 module.exports.checkVerificationToken = function (req, res) {
@@ -720,14 +725,14 @@ module.exports.checkVerificationToken = function (req, res) {
 };
 
 
-/*  
+/*
     Post Function, to verify a temp user and add it to users model.
     Takes:
-        params{  
+        params{
             userId: the temp user id to verify
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/verifyAccount/:userId'
 */
 module.exports.confirmVerification = function (req, res) {
@@ -773,14 +778,14 @@ module.exports.confirmVerification = function (req, res) {
 };
 
 
-/*  
+/*
     Post Function, to resend a verification email to the user.
     Takes:
-        body{  
-            email 
+        body{
+            email
         }
     Returns: Success or failure messages along with errors in case of failure.
-    Redirects to: Nothing.    
+    Redirects to: Nothing.
     Calling Route: '/api/user/resendVerification'
 */
 module.exports.resendVerification = function (req, res) {
@@ -852,4 +857,39 @@ module.exports.resendVerification = function (req, res) {
             }
         });
     }
+};
+
+
+/*
+Get function that returns the logged in user or business if they exist
+Returns: {
+  success: indicated whether there's a log in session or no,
+  user: User object of logged in user,
+  business: Business object of logged in business
+}
+Redirects to: Nothing.
+Calling Route: '/api/currentUser'
+*/
+module.exports.currentUser = function (req, res) {
+  if(req.isAuthenticated()){
+    if(req.user.constructor.modelName === "User"){
+      res.json({success: true, user: req.user, business: null});
+    }
+    else{
+      res.json({success: true, user: null, business: req.user});
+    }
+  }
+  else{
+    res.json({success: false, user: null, business: null});
+  }
+}
+
+
+module.exports.successLogin = function (req, res) {
+    return res.json({ success: true });
+};
+
+
+module.exports.failedLogin = function (req, res) {
+    return res.json({ success: false });
 };

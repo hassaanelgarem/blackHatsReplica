@@ -808,6 +808,12 @@ ul.bottom-footer-menu.for-social li:after {
     font-weight: 700
 }
 
+.login-box-wrapper .modal-title2 {
+    line-height: 1;
+    margin: 0;
+    font-weight: 700
+}
+
 .login-modal-or {
     margin: 45px 0 25px;
     text-align: center;
@@ -5916,4 +5922,3 @@ ul.social-share-sm.for-useful li a:after {
 }
 
 @media (max-width: 479px) {}
-  
