@@ -873,14 +873,14 @@ Calling Route: '/api/currentUser'
 module.exports.currentUser = function (req, res) {
   if(req.isAuthenticated()){
     if(req.user.constructor.modelName === "User"){
-      res.json({succes: true, user: req.user, business: null});
+      res.json({success: true, user: req.user, business: null});
     }
     else{
-      res.json({succes: true, user: null, business: req.user});
+      res.json({success: true, user: null, business: req.user});
     }
   }
   else{
-    res.json({succes: false, user: null, business: null});
+    res.json({success: false, user: null, business: null});
   }
 }
 

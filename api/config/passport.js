@@ -83,6 +83,19 @@ var configurePassport = function (passport) {
 };
 
 
+var isLoggedIn = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    res.status(401).json({
+        error: null,
+        msg: 'Login is required.',
+        data: null
+    });
+};
+
+
 var isUserLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
       if (req.user.constructor.modelName === "User")
@@ -148,6 +161,7 @@ var logout = function (req, res) {
 module.exports = {
     configurePassport: configurePassport,
     passport: passport,
+    isLoggedIn: isLoggedIn,
     isUserLoggedIn: isUserLoggedIn,
     isBusinessLoggedIn: isBusinessLoggedIn,
     isAdminLoggedIn: isAdminLoggedIn,

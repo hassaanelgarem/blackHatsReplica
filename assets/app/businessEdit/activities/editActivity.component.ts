@@ -206,8 +206,6 @@ export class EditActivityComponent implements OnInit {
         this.myFocusTriggeringEventEmitterOne.emit(true);
         this.myFocusTriggeringEventEmitterTwo.emit(true);
 
-
-
     }
 
     deletePhoto(index) {

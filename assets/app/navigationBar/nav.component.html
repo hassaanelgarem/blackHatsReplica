@@ -23,6 +23,13 @@
 							<li>
 								<a href="#">Explore</a>
 							</li>
+							<li *ngIf="loggedin && isUser">
+								<a href="{{path}}user/{{user._id}}">Profile</a>
+							</li>
+							<li *ngIf="loggedin && !isUser">
+								<a href="{{path}}business/{{business._id}}">My Account</a>
+							</li>
+
 						</ul>
 
 					</div>
@@ -32,7 +39,7 @@
 						<ul class="nav-mini">
 							<li *ngIf="!loggedin"><a data-toggle="modal" href="#userRegisterModal"><i class="icon-user-follow" data-toggle="tooltip" data-placement="bottom" title="Sign Up"></i></a></li>
 							<li *ngIf="!loggedin"><a data-toggle="modal" href="#userLoginModal"><i class="icon-login" data-toggle="tooltip" data-placement="bottom" title="Login"></i> </a></li>
-							<li *ngIf="loggedin"><a href="#" (click)="logout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
+							<li *ngIf="loggedin"><a (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
 						</ul>
 					</div>
 
@@ -46,7 +53,7 @@
 	<!-- end Header -->
 
 	<!--loading the login component-->
-	<app-signin (loginClicked)="loggedin=$event"></app-signin>
+	<app-signin (loginClicked)="loggedIn($event)"></app-signin>
 
 
 	<!--loading the register component-->
