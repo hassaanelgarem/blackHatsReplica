@@ -170,7 +170,7 @@ module.exports.getReviews = function (req, res) {
         "business": req.params.businessId
     }).populate({
       path: 'user',
-      select: 'firstName lastName'
+      select: 'firstName lastName profilePicture'
     }).exec(function (err, reviews) {
         //If an error occurred, return an error
         if (err) {
@@ -219,8 +219,10 @@ module.exports.getAverageRating = function (req, res) {
         if (doc) {
             // Calculate average rating using totalRating and count of reviews
             const reviewsCount = doc.reviews.length;
-            let averageRating = doc.totalRatings / reviewsCount;
-
+            var averageRating = 0;
+            if(reviewsCount != 0){
+              averageRating = doc.totalRatings / reviewsCount;
+            }
             // Return average rating in response
             res.status(200).json({
                 error: null,
