@@ -1,0 +1,67 @@
+<body>
+
+    <div class="pt-30 pb-50">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-8 col-md-9 mt-20">
+
+                    <h4 class="section-title">Booking history:</h4>
+                    <p class="mmt-15 mb-20">{{count}} Bookings</p>
+
+                    <div class="trip-list-wrapper no-bb-last">
+
+                        <div class="trip-list-item" *ngFor="let booking of bookings; let i = index">
+                            <div class="image-absolute">
+                                <div class="image image-object-fit image-object-fit-cover">
+                                    <!-- <img src="{{path}}{{booking}}" alt="image" /> -->
+                                </div>
+                            </div>
+                            <div class="content">
+
+                                <div class="GridLex-gap-20 mb-5">
+
+                                    <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+                                        <div class="GridLex-col-6_sm-12_xs-12_xss-12">
+
+                                            <div class="GridLex-inner">
+                                                <h6>{{booking.activity.name}}</h6>
+                                                <span class="font-italic font14"><b>Price:</b> ${{booking.activity.price}}</span>
+                                                <span class="font-italic font14"><br/><b>Start Time:</b> {{booking.slot.startTime | date:'hh:mm'}} &ensp;&ensp;<b>End Time:</b> {{booking.slot.endTime | date:'hh:mm'}}</span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="GridLex-col-3_sm-6_xs-7_xss-12">
+                                            <div class="GridLex-inner line-1 font14 text-muted spacing-1">
+                                                Booking date
+                                                <span class="block text-primary font16 font700 mt-1">{{booking.date | date:'MMM d, y'}}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="GridLex-col-3_sm-6_xs-5_xss-12">
+                                            <div class="GridLex-inner text-center text-left-xss dropdown">
+                                                <strong>Description:</strong> <br/>{{booking.activity.description}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>

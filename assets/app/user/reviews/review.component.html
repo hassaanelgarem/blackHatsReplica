@@ -1,0 +1,99 @@
+<body>
+    <div class="review-wrapper">
+
+        <div class="review-header">
+
+            <div class="GridLex-gap-30">
+
+                <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+
+                    <div class="GridLex-col-9_sm-8_xs-12_xss-12">
+
+                        <div class="review-rating">
+                            <div class="number">{{averageString}}</div>
+                            <div class="rating-wrapper">
+                                {{count}} Reviews
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="review-content">
+
+            <ul class="review-list">
+
+                <li class="clearfix" *ngFor="let review of reviews; let i = index">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="review-header">
+                                <h6>{{review.business.name}}</h6>
+                                <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span><br>
+                                <rating *ngIf="!editing[i]" [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
+                                <rating *ngIf="editing[i]" [(ngModel)]="editRating" name="editRating" [titles]="false"></rating>
+
+                                <div class="rating-item">
+                                    <input type="hidden" class="rating" data-filled="fa fa-star" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="3.5" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-9">
+                            <div class="review-replied">
+                                <div class="review-content" *ngIf="!editing[i]">
+
+                                    <h4>{{review.comment}}</h4>
+                                    <!-- <h4>Rating: {{review.rating}}</h4> -->
+                                    <!-- <rating [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating> -->
+
+                                </div>
+                                <div class="review-content" *ngIf="editing[i]">
+
+                                    <textarea style="resize: none;" type="text" class="form-control" [(ngModel)]="editComment" name="editComment" rows="4"></textarea>
+                                    <!-- <input type="text" class="form-control" [(ngModel)]="editRating" name="editRating"> -->
+                                    <!-- <rating [(ngModel)]="editRating" name="editRating" [titles]="false"></rating> -->
+
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="loggedIn && !editing[i]">
+                                <footer class="panel-footer">
+                                    <div class="config">
+                                        <a (click)="onEdit(i)">Edit</a>
+                                    </div>
+                                </footer>
+                            </div>
+
+                            <div *ngIf="loggedIn && editing[i]">
+                                <footer class="panel-footer">
+                                    <div class="config">
+                                        <a (click)="onSave(i)">Save</a>
+                                        <a (click)="onDelete(i)">Delete</a>
+                                        <a (click)="onCancel(i)">Cancel</a>
+                                    </div>
+                                </footer>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </li>
+
+            </ul>
+
+            <!-- <a href="#" class="review-load-more mb-40">load more...</a> -->
+
+        </div>
+
+    </div>
+
+</body>
