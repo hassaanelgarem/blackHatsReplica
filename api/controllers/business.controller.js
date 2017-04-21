@@ -422,7 +422,7 @@ module.exports.uploadLogo = function (req, res) {
             });
 
             //save the image file path to the Business model
-            Business.findById(req.user._id, function (err, business) {
+            Business.findById(req.user._id , function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.status(500).json({
@@ -506,12 +506,18 @@ module.exports.getCurrentInfo = function (req, res) {
 
             });
         } else {
-            if (business)
+            if (business){
+            /*    let filteredBusiness = {
+                  name: business.name,
+                  email: business.email,
+                  category
+                }  */
                 res.status(200).json({
                     error: null,
                     msg: null,
                     data: business
                 });
+              }
 
             else
                 res.status(404).json({

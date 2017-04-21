@@ -21,11 +21,14 @@
 
 						<ul class="nav navbar-nav" id="responsive-menu">
 							<li>
-								<a href="#">Explore</a>
+								<a href="/search?location=All&category=All&page=1">Explore</a>
 							</li>
-							<li *ngIf="loggedin">
-								<a href="#">Profile</a>
-							</li> 
+							<li *ngIf="loggedin && isUser">
+								<a href="{{path}}user/{{user._id}}">Profile</a>
+							</li>
+							<li *ngIf="loggedin && !isUser">
+								<a href="{{path}}business/{{business._id}}">My Account</a>
+							</li>
 
 						</ul>
 
@@ -50,7 +53,7 @@
 	<!-- end Header -->
 
 	<!--loading the login component-->
-	<app-signin (loginClicked)="loggedin=$event"></app-signin>
+	<app-signin (loginClicked)="loggedIn($event)"></app-signin>
 
 
 	<!--loading the register component-->
