@@ -30,7 +30,7 @@ export class UserComponent implements OnInit {
   birthDate:Date;
   createdAt:Date;
   path: String = "";
-  
+
 
   constructor(
         private activatedRoute: ActivatedRoute,
@@ -96,7 +96,7 @@ export class UserComponent implements OnInit {
     });
 
     });
- 
+
   }
 
   onReviewsClick(){
@@ -129,6 +129,10 @@ export class UserComponent implements OnInit {
   }
   isLoggedIn (){
     return this.loggedin;
+  }
+
+  pictureChanged(path: string){
+    this.profilePicture = path;
   }
 
 }

@@ -1,4 +1,4 @@
-<body>
+  <div class="container">
     <div class="user-profile-wrapper">
 
         <div class="user-header">
@@ -103,7 +103,7 @@
                 </div>
 
                 <div *ngIf="editProfile" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                    <app-editUserProfile></app-editUserProfile>
+                    <app-editUserProfile (pictureChanged)="pictureChanged($event)"></app-editUserProfile>
                 </div>
 
             </div>
@@ -111,5 +111,4 @@
         </div>
 
     </div>
-
-</body>
+  </div>

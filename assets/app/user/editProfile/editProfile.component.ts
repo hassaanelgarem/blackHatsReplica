@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import { UserService } from "../user.service";
 import { FileUploader } from 'ng2-file-upload';
@@ -25,8 +25,9 @@ export class EditUserProfileComponent implements OnInit {
     firstName: String;
     lastName: String;
     birthDate: Date;
-    
-    
+    @Output() pictureChanged = new EventEmitter<string>();
+
+
 
     path: String = "";
     userId: String = ""; //58f252bd9037f62725ddf62c";
@@ -40,8 +41,8 @@ export class EditUserProfileComponent implements OnInit {
 
     ngOnInit() {
         this.activatedRoute.params.subscribe((params: Params) => {
-      this.userId = params['userId'];
-      });
+            this.userId = params['userId'];
+        });
         /*this.appService.getCurrentUser().subscribe(data => {
             if(data.success){
                 if(data.user){
@@ -62,10 +63,10 @@ export class EditUserProfileComponent implements OnInit {
         */
         this.initialise();
     }
-    
+
 
     initialise() {
-        
+
         this.editProfileService.getOneUser(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
@@ -84,8 +85,14 @@ export class EditUserProfileComponent implements OnInit {
                     this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
-                this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
+                this.uploader.onCompleteItem = (item: any, response, headers: any) => {
                     this.initialise();
+                    let res = JSON.parse(response);
+                    console.log(this.profilePicture);
+                    this.pictureChanged.emit(res.data.imagePath);
+                    this.profilePicture = res.data.imagePath;
+                    console.log(this.profilePicture);
+
                 };
             }
         });
@@ -93,15 +100,14 @@ export class EditUserProfileComponent implements OnInit {
 
     updateProfile() {
 
-        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
-            if (data.err) {
-
-                console.error(data.msg);
+        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(
+            (data) => {
+              location.reload();
             }
-        });
+        );
 
         //refresh
-        
+
     }
 
 
@@ -109,15 +115,15 @@ export class EditUserProfileComponent implements OnInit {
         this.uploader.uploadAll();
     }
 
-    deleteAccount(){
+    deleteAccount() {
         this.editProfileService.deleteAccount().subscribe(
-        (data) => {
-           this.router.navigateByUrl('/');
-        },
-        (err) => {
-            //TODO:
-            //handle and redirect
-        }
+            (data) => {
+                this.router.navigateByUrl('/');
+            },
+            (err) => {
+                //TODO:
+                //handle and redirect
+            }
         );
 
 
