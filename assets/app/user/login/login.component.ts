@@ -66,12 +66,14 @@ export class LoginComponent implements OnInit {
 
     onUserLogin(){
         if(!this.username || this.username.length == 0){
+            this.incorrectUserWarning = false;
             this.userUsernameWarning = true;
            }
         else {
             this.userUsernameWarning = false;        
         }
         if(!this.userPassword || this.userPassword.length == 0){
+            this.incorrectUserWarning = false;
             this.userPasswordWarning = true;
         }
         else{
@@ -81,8 +83,7 @@ export class LoginComponent implements OnInit {
         if(!this.userUsernameWarning && !this.userPasswordWarning){
             this.loginService.userLogin(this.username, this.userPassword).subscribe(data => {
             if(data.success){
-           // console.log("login");
-           this.loggedin = true;
+            this.loggedin = true;
             this.loginClicked.emit(true);
             this.appService.login();
             }
@@ -101,12 +102,14 @@ export class LoginComponent implements OnInit {
 
     onBusinessLogin(){
         if(!this.businessEmail || this.businessEmail.length == 0){
+            this.incorrectBusinessWarning = false;
             this.businessEmailWarning = true;
            }
         else {
             this.businessEmailWarning = false;        
         }
         if(!this.businessPassword || this.businessPassword.length == 0){
+            this.incorrectBusinessWarning = false;
             this.businessPasswordWarning = true;
         }
         else{
@@ -146,8 +149,7 @@ export class LoginComponent implements OnInit {
             this.loginService.forgetPassword(this.userEmail).subscribe(data => {
             this.resetFailureWarning = false; 
             this.resetSuccessWarning = true; 
-            this.successReset = data.msg;        
-            //console.log(data.msg);   
+            this.successReset = data.msg; 
         }, err => {
             this.resetSuccessWarning = false;
             this.resetFailureWarning = true;
@@ -157,7 +159,6 @@ export class LoginComponent implements OnInit {
             else {
                 this.failedReset = err.json().msg;
             }
-            //console.log(err.json());
              });
         }
         
@@ -177,7 +178,6 @@ export class LoginComponent implements OnInit {
             this.resetFailureWarning = false; 
             this.resetSuccessWarning = true; 
             this.successReset = data.msg;
-            //console.log(data);
         }, err => {
             this.resetSuccessWarning = false;
             this.resetFailureWarning = true;
@@ -206,8 +206,7 @@ export class LoginComponent implements OnInit {
             this.loginService.resendEmail(this.userEmail).subscribe(data => {
             this.resendFailureWarning = false; 
             this.resendSuccessWarning = true; 
-            this.successResend = data.msg;        
-            //console.log(data.msg);   
+            this.successResend = data.msg;          
         }, err => {
             this.resendSuccessWarning = false;
             this.resendFailureWarning = true;
@@ -217,7 +216,6 @@ export class LoginComponent implements OnInit {
             else {
                 this.failedResend = err.json().msg;
             }
-            //console.log(err.json());
              });
         }
         

@@ -16,6 +16,15 @@ export class ResetPasswordComponent implements OnInit {
     private password: String;
     private confirmPassword: String;
 
+    private resetFailure: String;
+
+
+    //warning Flags
+
+    private passwordWarning: boolean = false;
+    private confirmPasswordWarning: boolean = false;
+    private resetFailureWarning: boolean = false;
+
   constructor(
     private resetPasswordService: ResetPasswordService,
     private router: Router,
@@ -27,13 +36,10 @@ export class ResetPasswordComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.token = params['token'];
-      //console.log(this.token);
       this.resetPasswordService.passwordToken(this.token).subscribe(data => {
           this.id = data.data.id;
       }, err => {
-          this.router.navigate(['/']);
-          location.reload();
-          //page 404
+          //aya errors
       });
     })
 
@@ -41,9 +47,50 @@ export class ResetPasswordComponent implements OnInit {
 
   onResetPassword() {
 
-    this.resetPasswordService.passwordId(this.id, this.password, this.confirmPassword).subscribe(data => {
-      console.log(data);
-    });
+        if(!this.password || this.password.length == 0){
+            this.resetFailureWarning = false;
+            this.passwordWarning = true;
+           }
+        else {
+            this.passwordWarning = false;        
+        }
+        if(!this.confirmPassword || this.confirmPassword.length == 0){
+            this.resetFailureWarning = false;
+            this.confirmPasswordWarning = true;
+           }
+        else {
+            this.confirmPasswordWarning = false;        
+        }
+
+        if(!this.passwordWarning && !this.confirmPasswordWarning) {
+            this.resetPasswordService.passwordId(this.id, this.password, this.confirmPassword).subscribe(data => {
+               this.router.navigate(["/"]);
+        }, err => {
+            this.password = null;
+            this.confirmPassword = null;
+            this.resetFailureWarning = true;
+
+            if(err.status == 500) {
+                this.resetFailure = err.json().error[0].msg;
+            }
+            else {
+                this.resetFailure = err.json().msg;
+            }
+
+          });
+        }
   }
 
+
+    hidePasswordWarning() {
+        this.passwordWarning = false;
+    }
+
+    hideConfirmPasswordWarning() {
+        this.confirmPasswordWarning = false;
+    }
+
+    hideResetFailureWarning() {
+      this.resetFailureWarning = false;
+    }
 }

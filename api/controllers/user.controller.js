@@ -715,7 +715,7 @@ module.exports.checkVerificationToken = function(req, res) {
                     }
                 });
             else
-                res.status(200).json({
+                res.status(404).json({
                     error: null,
                     msg: "Token is invalid or has expired.",
                     data: null
