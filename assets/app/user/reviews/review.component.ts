@@ -1,9 +1,10 @@
-
 import { Component, OnInit } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import { UserService } from "../user.service";
-import {Router} from '@angular/router';
+import { AppService } from '../../app.service';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import{UserComponent} from "../user.component";
 
 
 @Component({
@@ -17,9 +18,9 @@ export class ReviewComponent implements OnInit {
     count: Number = 0;
     reviews: Object[];
     //reviews: Review[];
-    userId: String = "58e8d26b86e48c253b2c3c1e";
+    userId: String = "";//"58e8d26b86e48c253b2c3c1e";
     averageString: String;
-    loggedIn = true;
+    loggedIn:Boolean;
     editing: Boolean[] = [];
     editIndex = 0;
     editComment: String;
@@ -27,12 +28,19 @@ export class ReviewComponent implements OnInit {
 
 
     constructor(
+        private activatedRoute: ActivatedRoute,
+        private userComponent: UserComponent,
+        private appService: AppService,
         private userService: UserService,
         private router: Router,
         private http: Http) { }
 
     //hassaan:
     ngOnInit() {
+      this.loggedIn = this.userComponent.isLoggedIn();
+      this.activatedRoute.params.subscribe((params: Params) => {
+      this.userId = params['userId'];
+      });
 
         this.userService.getReviews(this.userId).subscribe(data => {
             if (data.err) {

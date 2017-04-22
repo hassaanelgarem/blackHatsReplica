@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import {UserService} from '../user.service';
-import {Router} from '@angular/router';
+import { AppService } from '../../app.service';
 import { Http, Headers } from '@angular/http';
+import{UserComponent} from "../user.component";
 import 'rxjs/add/operator/map';
 
 
@@ -10,19 +12,46 @@ import 'rxjs/add/operator/map';
   templateUrl: './favorites.component.html'
 })
 export class UserFavoritesComponent implements OnInit {
+  private loggedin: Boolean;
+  private isUser: Boolean;
+  private user: Object;
   favorites: [String];
   businesses: [Object];
-  userId: String = "58e8d26b86e48c253b2c3c1e";
+  userId: String = "";//"58e8d26b86e48c253b2c3c1e";
   logoPath :String = "http://localhost:8080/api/image/businessLogos/";
-  loggedIn = true;
-  user: Object;
-
+  loggedIn : Boolean;
+  
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private userComponent: UserComponent,
+    private appService: AppService,
     private userService: UserService,
     private router: Router,
     private http: Http) { }
 
   ngOnInit() {
+    this.loggedIn = this.userComponent.isLoggedIn();
+    this.activatedRoute.params.subscribe((params: Params) => {
+      this.userId = params['userId'];
+    });
+    
+    this.appService.getCurrentUser().subscribe(data => {
+        if(data.success){
+            if(data.user){
+              this.user = data.user;
+              this.isUser = true;
+              this.userId = data.user._id;
+
+            }
+            else{
+                //business
+            }
+            this.loggedin = true;
+        }
+       else{
+          this.loggedin = false;
+        }
+      });
 
     this.userService.getOneUser(this.userId).subscribe(data => {
       if (data.err) {

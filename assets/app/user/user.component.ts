@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import { UserService } from "./user.service";
-import {Router} from '@angular/router';
+import { AppService } from '../app.service';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-
 
 
 @Component({
@@ -18,47 +18,85 @@ export class UserComponent implements OnInit {
   public editProfile = false;
 
   private profilePicture: String;
+  public loggedin: Boolean;
+  private isUser: Boolean;
+  private user: Object;
 
-  user: Object;
-  userId: String = "58e8d26b86e48c253b2c3c1e"; //get the id of the logged in user
-  favorites:Object[];
+  userId: String = ""; //58e8d26b86e48c253b2c3c1e"; //get the id of the logged in user
+  //favorites:Object[];
   firstName:String;
   lastName:String;
   email:String;
   birthDate:Date;
   createdAt:Date;
   path: String = "";
-  loggedIn = true;
+  
 
-  constructor(private userService: UserService,
+  constructor(
+        private activatedRoute: ActivatedRoute,
+        private appService: AppService,
+        private userService: UserService,
         private router: Router,
         private http: Http) { }
 
   ngOnInit() {
-    this.userService.getOneUser(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
+    //getting the userId in the route:
+    this.activatedRoute.params.subscribe((params: Params) => {
+      this.userId = params['userId'];
+
+      this.appService.getCurrentUser().subscribe(data => {
+        //if the logged in user has the same ud as the id in the route
+        if(data.success && data.user && data.user._id == this.userId){
+          //case 1: a user is logged in:
+          this.loggedin = true;
+          this.user = data.user;
+          this.firstName = data.user.firstName;
+          this.lastName = data.user.lastName;
+          this.email = data.user.email;
+          this.birthDate = data.user.birthDate;
+          this.createdAt = data.user.createdAt;
+          if (data.user.profilePicture != null) {
+              this.path = "http://localhost:8080/api/image/profilePictures/";
+              this.profilePicture = data.user.profilePicture;
+          }
+          else {
+              this.path = "";
+              this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
+          }
+        }
+
+        //if no one is logged in or logged in user not the one in the route:
+        else{
+          this.loggedin = false;
+
+          this.userService.getOneUser(this.userId).subscribe(info => {
+            if (info.err) {
+                console.error(info.msg);
             }
             else {
-              this.user = data.data;
-              this.firstName = data.data.firstName;
-              this.lastName = data.data.lastName;
-              this.email = data.data.email;
-              this.birthDate = data.data.birthDate;
-              this.createdAt = data.data.createdAt;
-              if (data.data.profilePicture != null) {
-                    this.path = "http://localhost:8080/api/image/profilePictures/";
-                    this.profilePicture = data.data.profilePicture;
-                }
-                else {
-                    this.path = "";
-                    this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
-                }
+              this.user = info.data;
+              this.firstName = info.data.firstName;
+              this.lastName = info.data.lastName;
+              this.email = info.data.email;
+              this.birthDate = info.data.birthDate;
+              this.createdAt = info.data.createdAt;
+              if (info.data.profilePicture != null) {
+                  this.path = "http://localhost:8080/api/image/profilePictures/";
+                  this.profilePicture = info.data.profilePicture;
+              }
+              else {
+                  this.path = "";
+                  this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
+              }
 
-
-              //this.favorites = this.user.favorites;
             }
         });
+
+      }
+    });
+
+    });
+ 
   }
 
   onReviewsClick(){
@@ -88,6 +126,9 @@ export class UserComponent implements OnInit {
     this.showBookings = false;
     this.editProfile = true;
 
+  }
+  isLoggedIn (){
+    return this.loggedin;
   }
 
 }

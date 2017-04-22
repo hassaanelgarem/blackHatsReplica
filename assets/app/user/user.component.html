@@ -69,8 +69,8 @@
 
                                     <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
                                     <li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
-                                    <li *ngIf="loggedIn" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
-                                    <li *ngIf="loggedIn" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
+                                    <li *ngIf="loggedin" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+                                    <li *ngIf="loggedin" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
 
                                 </ul>
                             </nav>

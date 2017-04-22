@@ -71,5 +71,6 @@ export class NavComponent implements OnInit {
     }, err => {
       console.log('log out failed');
     });
+    
     }
 }

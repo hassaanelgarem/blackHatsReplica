@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
+import { UserService } from "../user.service";
 import { FileUploader } from 'ng2-file-upload';
-import { EditUserProfileService} from "./editProfile.service"
-import { Router } from '@angular/router';
+import { EditUserProfileService} from "./editProfile.service";
+import { AppService } from '../../app.service';
 import {Http, Headers } from '@angular/http';
-//import { Business } from "../../../api/data/business.model";
+
+
 import 'rxjs/add/operator/map';
 
 
@@ -16,22 +19,53 @@ import 'rxjs/add/operator/map';
 export class EditUserProfileComponent implements OnInit {
     public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
     private profilePicture: String;
+    private loggedin: Boolean;
+    private isUser: Boolean;
+    private user: Object;
     firstName: String;
     lastName: String;
     birthDate: Date;
+    
+    
 
     path: String = "";
-    userId: String = "58f252bd9037f62725ddf62c";
+    userId: String = ""; //58f252bd9037f62725ddf62c";
 
     constructor(
+        private activatedRoute: ActivatedRoute,
+        private appService: AppService,
         private editProfileService: EditUserProfileService,
         private router: Router,
         private http: Http) { }
 
     ngOnInit() {
+        this.activatedRoute.params.subscribe((params: Params) => {
+      this.userId = params['userId'];
+      });
+        /*this.appService.getCurrentUser().subscribe(data => {
+            if(data.success){
+                if(data.user){
+                this.user = data.user;
+                this.isUser = true;
+                this.userId = data.user._id;
+
+                }
+                else{
+                //business
+                }
+                this.loggedin = true;
+            }
+            else{
+                this.loggedin = false;
+            }
+        });
+        */
         this.initialise();
     }
+    
+
     initialise() {
+        
         this.editProfileService.getOneUser(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
@@ -66,8 +100,8 @@ export class EditUserProfileComponent implements OnInit {
             }
         });
 
-        //this.router.navigateByUrl('dummy');
-        //this.router.navigateByUrl('user');
+        //refresh
+        
     }
 
 
