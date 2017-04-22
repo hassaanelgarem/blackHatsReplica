@@ -31,21 +31,7 @@ export class UserBookingsComponent implements OnInit {
             else {
               this.bookings = data.data;
               this.count = this.bookings.length;
-              var businesses = [];
-              for(var i = 0; i < this.bookings.length; i++) {
-                this.userService.getCurrentInfo(this.bookings[i].activity.business).subscribe(data => {
-                  if (data.err) {
-                    console.error(data.msg);
-                  }
-                  else {
-                    businesses.push(data.data);
-                  }
-                });
-              }
-
-              this.businesses = businesses as [Object];
               this.loaded = true;
-
             }
         });
 }
