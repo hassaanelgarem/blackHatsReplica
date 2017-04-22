@@ -18,7 +18,8 @@ export class UserBookingsComponent implements OnInit {
     //private user: Object;
     //private loggedin: Boolean;
     //private isUser: Boolean;
-  
+    businesses: [Object];
+    loaded = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -57,7 +58,8 @@ export class UserBookingsComponent implements OnInit {
             else {
               this.bookings = data.data;
               this.count = this.bookings.length;
+              this.loaded = true;
             }
         });
-    }
+}
 }

@@ -20,7 +20,7 @@ export class UserFavoritesComponent implements OnInit {
   userId: String = "";//"58e8d26b86e48c253b2c3c1e";
   logoPath :String = "http://localhost:8080/api/image/businessLogos/";
   loggedIn : Boolean;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private userComponent: UserComponent,
@@ -34,7 +34,7 @@ export class UserFavoritesComponent implements OnInit {
     this.activatedRoute.params.subscribe((params: Params) => {
       this.userId = params['userId'];
     });
-    
+
     this.appService.getCurrentUser().subscribe(data => {
         if(data.success){
             if(data.user){

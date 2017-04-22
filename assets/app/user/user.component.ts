@@ -23,7 +23,7 @@ export class UserComponent implements OnInit {
   private user: Object;
 
   userId: String = ""; //58e8d26b86e48c253b2c3c1e"; //get the id of the logged in user
-  //favorites:Object[];
+  favorites:Object[];
   firstName:String;
   lastName:String;
   email:String;
