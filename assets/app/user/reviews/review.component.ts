@@ -37,20 +37,40 @@ export class ReviewComponent implements OnInit {
 
     //hassaan:
     ngOnInit() {
-      this.loggedIn = this.userComponent.isLoggedIn();
       this.activatedRoute.params.subscribe((params: Params) => {
-      this.userId = params['userId'];
-      });
-
-        this.userService.getReviews(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
+        this.userId = params['userId'];
+        this.appService.getCurrentUser().subscribe(data => {
+            if (data.success) {
+                if (data.user) {
+                    this.isUser = true;
+                    if(this.userId == data.user._id){
+                      this.loggedIn = true;
+                    }
+                    else{
+                      this.loggedIn = false;
+                    }
+                }
+                else {
+                    this.loggedIn = false;
+                }
             }
             else {
-              this.reviews = data.data;
-              this.count = this.reviews.length;
+                this.loggedin = false;
             }
+            this.userService.getReviews(this.userId).subscribe(data => {
+                if (data.err) {
+                    console.error(data.msg);
+                }
+                else {
+                  this.reviews = data.data;
+                  this.count = this.reviews.length;
+                }
+            });
         });
+
+      });
+
+
     }
 
     onDelete(i){

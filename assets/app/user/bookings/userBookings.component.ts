@@ -31,35 +31,18 @@ export class UserBookingsComponent implements OnInit {
     ngOnInit() {
         this.activatedRoute.params.subscribe((params: Params) => {
             this.userId = params['userId'];
-        });
-        /*this.appService.getCurrentUser().subscribe(data => {
-            if(data.success){
-                if(data.user){
-                this.user = data.user;
-                this.isUser = true;
-                this.userId = data.user._id;
-
+            this.userService.getBookingHistory(this.userId).subscribe(data => {
+                if (data.err) {
+                    console.error(data.msg);
                 }
-                else{
-                //business
+                else {
+                  this.bookings = data.data;
+                  this.count = this.bookings.length;
+                  this.loaded = true;
                 }
-             this.loggedin = true;
-            }
-            else{
-             this.loggedin = false;
-            }
+            });
         });
-        */
 
-        this.userService.getBookingHistory(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
-              this.bookings = data.data;
-              this.count = this.bookings.length;
-              this.loaded = true;
-            }
-        });
+
 }
 }
