@@ -45,4 +45,13 @@ export class LoginService {
     return this.http.get('http://localhost:8080/api/logout', { headers: headers }).map(res => res.json());
   }
 
+  resendEmail(email) {
+    let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let body = {
+          email: email
+    }
+    return this.http.post('http://localhost:8080/api/user/resendVerification', body, {headers: headers}).map(res => res.json());
+  }
+
 }

@@ -19,14 +19,19 @@ export class BookAdvService {
     return this.http.get('http://localhost:8080/api/advertisement/getFreeSlot/' + advId, { headers: headers }).map(res => res.json());
   }
 
-  bookAdvSlot(startTime, endTime, advImg, advId){
+  bookAdvSlot(startTime: Date, endTime: Date, advImg, advId){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    console.log("Service");
+    console.log(startTime);
+    console.log(endTime);
+    console.log("why does adv image change here");
+    console.log(advImg);
     let body = {
-      startTime: startTime,
-      endTime: endTime,
-      image: advImg
-    }
+      "startTime": startTime.toString(),
+      "endTime": endTime.toString(),
+      "image": advImg
+    };
     return this.http.post('http://localhost:8080/api/advertisement/bookAdvSlot/' + advId, body, {headers: headers}).map(res => res.json());
   }
 

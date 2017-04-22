@@ -4,7 +4,8 @@ import { Http, Headers, Response} from '@angular/http';
 @Injectable()
 export class AppService {
   private isLoggedin = false;
-
+  apiPath: String = "http://localhost:8080/api/";
+  
   constructor(private http: Http) { }
 
   // to do from the database
@@ -32,6 +33,15 @@ export class AppService {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
       return this.http.get('http://localhost:8080/api/currentUser', { headers: headers }).map(res => res.json());
+  }
+
+  charge(token){
+    let headers = new Headers();
+	    headers.append('Content-Type', 'application/json');
+	    let body = {
+	      stripeToken: token
+	    };
+	    return this.http.post(this.apiPath + "charge", body, {headers: headers}).map(res => res.json());
   }
 
 }

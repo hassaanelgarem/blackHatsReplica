@@ -240,6 +240,7 @@ module.exports.addFavorite = function (req, res) {
     Business.findById(businessId, function (err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
+          console.log("1");
             res.status(500).json({
                 error: err,
                 msg: "Error retrieving desired business",
@@ -265,6 +266,7 @@ module.exports.addFavorite = function (req, res) {
                 function (err, result) {
                     //couldn't add to array, return the error
                     if (err) {
+                      console.log("2");
                         res.status(500).json({
                             error: null,
                             msg: "adding business to favorites failed",
@@ -828,7 +830,7 @@ module.exports.resendVerification = function(req, res) {
                             });
                         } else {
                             //TO-DO replace the link with the angular route not server route.
-                            var html = "<p>Hello " + tempUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/api/user/verifyAccount/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/api/user/verifyAccount/" + token + "</p>";
+                            var html = "<p>Hello " + tempUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/verify/" + token + "</p>";
                             var subject = 'Account Verification';
                             emailSender.sendEmail(subject, email, "", html, function(err, info) {
                                 if (err) res.status(500).json({
