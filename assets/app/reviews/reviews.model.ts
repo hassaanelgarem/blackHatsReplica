@@ -4,14 +4,14 @@ export class Review {
   comment: String;
   rating: Number;
   business: String;
-  user: String;
+  user: {"firstName": String, "lastName": String, "_id": String};
   time: Date;
 
     constructor(comment: String,
         rating: Number,
         business: String,
-        user: String,
-        time?: Date
+        user: {"firstName": String, "lastName": String, "_id": String},
+        time?: Date,
           ) {
           this.comment = comment;
           this.rating = rating;

@@ -15,7 +15,7 @@ import 'rxjs/add/operator/map';
 export class BusinessActivitiesComponent implements OnInit {
 
     activities: Activity[] = [];
-    business: Object;
+    business: any;
     path: String = "http://localhost:8080/api/";
     currentIndex = 0;
     showEdit = false;

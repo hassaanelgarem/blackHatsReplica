@@ -16,7 +16,7 @@ import{UserComponent} from "../user.component";
 export class ReviewComponent implements OnInit {
 
     count: Number = 0;
-    reviews: Object[];
+    reviews: any[];
     //reviews: Review[];
     userId: String = "";//"58e8d26b86e48c253b2c3c1e";
     averageString: String;
@@ -25,6 +25,7 @@ export class ReviewComponent implements OnInit {
     editIndex = 0;
     editComment: String;
     editRating: Number;
+    isUser = false;
 
 
     constructor(
@@ -55,7 +56,7 @@ export class ReviewComponent implements OnInit {
                 }
             }
             else {
-                this.loggedin = false;
+                this.loggedIn = false;
             }
             this.userService.getReviews(this.userId).subscribe(data => {
                 if (data.err) {

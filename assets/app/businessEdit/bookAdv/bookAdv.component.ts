@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./bookAdv.component.css']
 })
 export class BookAdvComponent implements OnInit {
-  advertisements: Object[];
+  advertisements: any[];
   availableSlots: Date[] = [];
   date: Date;
   noOfDays: number[] = [];
