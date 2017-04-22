@@ -1,7 +1,9 @@
 export class Business {
+  public averageRating: string;
     constructor(public businessId:string,
                 public name: string,
                 public logo:string,
+                public reviews:string[],
                 public email?: string,
                 public phoneNumbers?: string[],
                 public workingDays?: string[],
@@ -14,6 +16,14 @@ export class Business {
                 public totalRatings?:number,
                 public photos?:string[],
                 public paymentRequired?:number,
-                public deposit?:number,
-                ) {}
+                public deposit?:number
+
+                ) {
+                    if(reviews.length == 0){
+                      this.averageRating = "0";
+                    }
+                    else{
+                      this.averageRating = (totalRatings / reviews.length).toFixed(1);
+                    }
+                }
 }

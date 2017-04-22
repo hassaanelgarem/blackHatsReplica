@@ -20,7 +20,7 @@ export class SearchService {
                 let transformedBusiness: Business[] = [];
                 for (let business of businesses) {
                     transformedBusiness.push(new Business(business._id,business.name,business.logo, business.email, business.phoneNumbers, business.workingDays, business.workingHours, business.location, business.tags, business.category, business.description, business.interactivity,
-                        business.totalRatings, business.photos, business.paymentRequired, business.deposit ));
+                        business.totalRatings, business.photos, business.paymentRequired, business.deposit, business.reviews ));
                 }
                 this.businesses = transformedBusiness;
                 return transformedBusiness;

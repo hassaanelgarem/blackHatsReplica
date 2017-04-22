@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from '../user.service';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute, Params} from '@angular/router';
+import { UserService } from "../user.service";
+import { AppService } from '../../app.service';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -14,22 +15,34 @@ export class UserBookingsComponent implements OnInit {
     bookings: [Object];
     userId: String = "58e8d26b86e48c253b2c3c1e";
     logoPath :String = "http://localhost:8080/api/image/businessLogos/";
+    //private user: Object;
+    //private loggedin: Boolean;
+    //private isUser: Boolean;
+    businesses: [Object];
+    loaded = false;
 
     constructor(
+        private activatedRoute: ActivatedRoute,
+        private appService: AppService,
         private userService: UserService,
         private router: Router,
         private http: Http) { }
 
     ngOnInit() {
-
-        this.userService.getBookingHistory(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
-              this.bookings = data.data;
-              this.count = this.bookings.length;
-            }
+        this.activatedRoute.params.subscribe((params: Params) => {
+            this.userId = params['userId'];
+            this.userService.getBookingHistory(this.userId).subscribe(data => {
+                if (data.err) {
+                    console.error(data.msg);
+                }
+                else {
+                  this.bookings = data.data;
+                  this.count = this.bookings.length;
+                  this.loaded = true;
+                }
+            });
         });
-    }
+
+
+}
 }

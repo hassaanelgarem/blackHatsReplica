@@ -6,7 +6,6 @@ import {BusinessService} from '../business.service';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import {EventEmitter} from "@angular/common/src/facade/async";
 
-
 @Component({
     selector: 'activity-edit',
     templateUrl: './editActivity.component.html',
