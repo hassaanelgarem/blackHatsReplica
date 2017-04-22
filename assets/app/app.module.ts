@@ -51,7 +51,6 @@ import { ActivityPageComponent } from "./businessPage/activityPage.component";
 
 import { BusinessPageService } from "./businessPage/businessPage.service";
 import { ReviewsService } from "./reviews/reviews.service";
-import { HomepageService } from "./homepage/homepage.service";
 import { UserRegisterService} from "./user/register/register.service";
 import { BusinessRegisterService} from "./business/register/businessRegister.service"
 import { AppService } from "./app.service";
@@ -128,7 +127,6 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       RatingModule
     ],
     providers: [
-      HomepageService,
       AppService,
       SearchService,
       AdSlotsService,

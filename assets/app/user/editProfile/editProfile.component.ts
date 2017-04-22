@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
+import { UserService } from "../user.service";
 import { FileUploader } from 'ng2-file-upload';
-import { EditUserProfileService} from "./editProfile.service"
-import { Router } from '@angular/router';
+import { EditUserProfileService} from "./editProfile.service";
+import { AppService } from '../../app.service';
 import {Http, Headers } from '@angular/http';
-//import { Business } from "../../../api/data/business.model";
+
+
 import 'rxjs/add/operator/map';
 
 
@@ -16,22 +19,54 @@ import 'rxjs/add/operator/map';
 export class EditUserProfileComponent implements OnInit {
     public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
     private profilePicture: String;
+    private loggedin: Boolean;
+    private isUser: Boolean;
+    private user: Object;
     firstName: String;
     lastName: String;
     birthDate: Date;
+    @Output() pictureChanged = new EventEmitter<string>();
+
+
 
     path: String = "";
-    userId: String = "58f252bd9037f62725ddf62c";
+    userId: String = ""; //58f252bd9037f62725ddf62c";
 
     constructor(
+        private activatedRoute: ActivatedRoute,
+        private appService: AppService,
         private editProfileService: EditUserProfileService,
         private router: Router,
         private http: Http) { }
 
     ngOnInit() {
+        this.activatedRoute.params.subscribe((params: Params) => {
+            this.userId = params['userId'];
+        });
+        /*this.appService.getCurrentUser().subscribe(data => {
+            if(data.success){
+                if(data.user){
+                this.user = data.user;
+                this.isUser = true;
+                this.userId = data.user._id;
+
+                }
+                else{
+                //business
+                }
+                this.loggedin = true;
+            }
+            else{
+                this.loggedin = false;
+            }
+        });
+        */
         this.initialise();
     }
+
+
     initialise() {
+
         this.editProfileService.getOneUser(this.userId).subscribe(data => {
             if (data.err) {
                 console.error(data.msg);
@@ -50,8 +85,12 @@ export class EditUserProfileComponent implements OnInit {
                     this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
-                this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
+                this.uploader.onCompleteItem = (item: any, response, headers: any) => {
                     this.initialise();
+                    let res = JSON.parse(response);
+                    this.pictureChanged.emit(res.data.imagePath);
+                    this.profilePicture = res.data.imagePath;
+
                 };
             }
         });
@@ -59,15 +98,14 @@ export class EditUserProfileComponent implements OnInit {
 
     updateProfile() {
 
-        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
-            if (data.err) {
-
-                console.error(data.msg);
+        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(
+            (data) => {
+              location.reload();
             }
-        });
+        );
 
-        //this.router.navigateByUrl('dummy');
-        //this.router.navigateByUrl('user');
+        //refresh
+
     }
 
 
@@ -75,15 +113,15 @@ export class EditUserProfileComponent implements OnInit {
         this.uploader.uploadAll();
     }
 
-    deleteAccount(){
+    deleteAccount() {
         this.editProfileService.deleteAccount().subscribe(
-        (data) => {
-           this.router.navigateByUrl('/');
-        },
-        (err) => {
-            //TODO:
-            //handle and redirect
-        }
+            (data) => {
+                this.router.navigateByUrl('/');
+            },
+            (err) => {
+                //TODO:
+                //handle and redirect
+            }
         );
 
 

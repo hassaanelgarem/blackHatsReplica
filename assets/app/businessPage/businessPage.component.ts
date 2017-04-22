@@ -259,6 +259,7 @@ export class BusinessPageComponent implements OnInit {
           this.favorited = true;
           this.initialize();
         },(err) => {
+            console.log(err);
             switch (err.status) {
                 case 404:
                     console.log("404 not found");

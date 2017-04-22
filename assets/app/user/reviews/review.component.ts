@@ -1,9 +1,10 @@
-
 import { Component, OnInit } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import { UserService } from "../user.service";
-import {Router} from '@angular/router';
+import { AppService } from '../../app.service';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import{UserComponent} from "../user.component";
 
 
 @Component({
@@ -17,32 +18,60 @@ export class ReviewComponent implements OnInit {
     count: Number = 0;
     reviews: any[];
     //reviews: Review[];
-    userId: String = "58e8d26b86e48c253b2c3c1e";
+    userId: String = "";//"58e8d26b86e48c253b2c3c1e";
     averageString: String;
-    loggedIn = true;
+    loggedIn:Boolean;
     editing: Boolean[] = [];
     editIndex = 0;
     editComment: String;
     editRating: Number;
+    isUser = false;
 
 
     constructor(
+        private activatedRoute: ActivatedRoute,
+        private userComponent: UserComponent,
+        private appService: AppService,
         private userService: UserService,
         private router: Router,
         private http: Http) { }
 
     //hassaan:
     ngOnInit() {
-
-        this.userService.getReviews(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
+      this.activatedRoute.params.subscribe((params: Params) => {
+        this.userId = params['userId'];
+        this.appService.getCurrentUser().subscribe(data => {
+            if (data.success) {
+                if (data.user) {
+                    this.isUser = true;
+                    if(this.userId == data.user._id){
+                      this.loggedIn = true;
+                    }
+                    else{
+                      this.loggedIn = false;
+                    }
+                }
+                else {
+                    this.loggedIn = false;
+                }
             }
             else {
-              this.reviews = data.data;
-              this.count = this.reviews.length;
+                this.loggedIn = false;
             }
+            this.userService.getReviews(this.userId).subscribe(data => {
+                if (data.err) {
+                    console.error(data.msg);
+                }
+                else {
+                  this.reviews = data.data;
+                  this.count = this.reviews.length;
+                }
+            });
         });
+
+      });
+
+
     }
 
     onDelete(i){

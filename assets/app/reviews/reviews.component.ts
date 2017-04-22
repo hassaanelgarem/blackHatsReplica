@@ -27,6 +27,9 @@ export class ReviewsComponent implements OnInit {
     businessPhotos: String[] = [];
     path: String = "http://localhost:8080/api/";
     loadDone = false;
+    firstName: String;
+    lastName: String;
+    user: any;
 
     addComment: String;
     addRating: Number;
@@ -56,6 +59,7 @@ export class ReviewsComponent implements OnInit {
                 if(info.user){
                   this.userLoggedIn = true;
                   this.userId = info.user._id;
+                  this.user = info.user;
                   if(info.user.favorites.includes(this.businessId)){
                     this.favorited = true;
                     console.log("it's a favorite");
@@ -204,12 +208,12 @@ export class ReviewsComponent implements OnInit {
 
 
         if (!this.addCommentWarning && !this.addRatingWarning) {
-            const newReview = new Review(this.addComment, this.addRating, this.businessId, this.userId);
+            const newReview = new Review(this.addComment, this.addRating, this.businessId, {"firstName": this.user.firstName, "lastName": this.user.lastName, "_id": this.userId});
             this.reviewsService.addReview(newReview).subscribe((info) => {
                 if (info.err) {
                     console.error(info.msg);
                 } else {
-                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, info.data.user, info.data.time));
+                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, {"firstName": this.user.firstName, "lastName": this.user.lastName, "_id": info.data.user}, info.data.time));
                     this.addComment = null;
                     this.addRating = null;
                 }

@@ -33,7 +33,7 @@ const APP_ROUTES: Routes = [
     { path: 'business/:businessId', component: BusinessPageComponent },
     { path: 'business/:businessId/reviews', component: ReviewsComponent },
     { path: 'business/activity/:activityId', component: ActivityPageComponent },
-    { path: 'user', component: UserComponent},
+    { path: 'user/:userId', component: UserComponent},
     { path: '404-error', component: FourofourComponent},
     { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent},
     { path: '500-error', component: SomethingWrongComponent},
