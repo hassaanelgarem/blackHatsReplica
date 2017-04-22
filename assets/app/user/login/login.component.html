@@ -1,6 +1,6 @@
-
 <!-- start User Sign-in Modal -->
-<div id="userLoginModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" data-replace="true">
+<div id="userLoginModal" class="modal fade login-box-wrapper" style="background-color: #fff;" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false"
+    data-replace="true">
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserLoginCancel()">&times;</button>
@@ -8,83 +8,80 @@
 	</div>
 
 	<div *ngIf="loggedin" class="alert alert-success alert-dismissable">
-					Login Successfull
+		Login Successfull
 	</div>
 
 	<div *ngIf="!loggedin">
 
-	<div class="modal-body">
-		<div class="row gap-20">
+		<div class="modal-body">
+			<div class="row gap-20">
 
-			<div class="col-sm-12 col-md-12">
+				<div class="col-sm-12 col-md-12">
 
-				<div *ngIf="incorrectUserWarning" class="alert alert-danger alert-dismissable">
-					<a class="close" (click)="hideIncorrectUserWarning()" aria-label="close">&times;</a> Incorrect username or password
+					<div *ngIf="incorrectUserWarning" class="alert alert-danger alert-dismissable">
+						<a class="close" (click)="hideIncorrectUserWarning()" aria-label="close">&times;</a> Incorrect username or password
+					</div>
+
+					<div *ngIf="userUsernameWarning" class="alert alert-danger alert-dismissable">
+						<a class="close" (click)="hideuserUsernameWarning()" aria-label="close">&times;</a> Please enter a username
+					</div>
+
+					<div class="form-group">
+						<label>Username</label>
+						<input class="form-control" placeholder="Enter username" type="text" [(ngModel)]="username" name="username">
+					</div>
+
 				</div>
 
-				<div *ngIf="userUsernameWarning" class="alert alert-danger alert-dismissable">
-					<a class="close" (click)="hideuserUsernameWarning()" aria-label="close">&times;</a> Please enter a username
+				<div class="col-sm-12 col-md-12">
+					<br>
+
+					<div *ngIf="userPasswordWarning" class="alert alert-danger alert-dismissable">
+						<a class="close" (click)="hideuserPasswordWarning()" aria-label="close">&times;</a> Please enter a password
+					</div>
+
+					<div class="form-group">
+						<label>Password</label>
+						<input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="userPassword" name="userPassword">
+					</div>
+
+				</div>
+        <div class="col-sm-offset-8 col-md-offset-8 col-md-4 col-sm-4">
+          <div class="user-login-box-link-action">
+            <a data-toggle="modal" href="#userForgotPasswordModal" class="block line18 mt-1" (click)="onUserLoginCancel()">Forgot password?</a>
+          </div>
+        </div>
+				<div class="col-sm-8 col-md-8">
+					<div class="user-login-box-box-action">
+						No account? <a data-toggle="modal" href="#userRegisterModal" (click)="onUserLoginCancel()">Signup</a>
+					</div>
 				</div>
 
-				<div class="form-group">
-					<label>Username</label>
-					<input class="form-control" placeholder="Enter username" type="text" [(ngModel)]="username" name="username">
+				<div class="col-sm-8 col-md-8">
+					<div class="user-login-box-box-action">
+						Not a user? <a data-toggle="modal" href="#businessLoginModal" (click)="onUserLoginCancel()">Login as Business</a>
+					</div>
 				</div>
 
-			</div>
-
-			<div class="col-sm-12 col-md-12">
-			<br>
-
-				<div *ngIf="userPasswordWarning" class="alert alert-danger alert-dismissable">
-					<a class="close" (click)="hideuserPasswordWarning()" aria-label="close">&times;</a> Please enter a password
-				</div>
-
-				<div class="form-group">
-					<label>Password</label>
-					<input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="userPassword" name="userPassword">
-				</div>
-
-			</div>
-
-			<div class="col-sm-offset-8 col-md-offset-8">
-				<div class="user-login-box-link-action">
-					<a data-toggle="modal" href="#userForgotPasswordModal" class="block line18 mt-1" (click)="onUserLoginCancel()">Forgot password?</a>
-				</div>
-			</div>
-
-			<div class="col-sm-12 col-md-12">
-				<div class="user-login-box-box-action">
-					No account? <a data-toggle="modal" href="#userRegisterModal" (click)="onUserLoginCancel()">Signup</a>
-				</div>
-			</div>
-
-			<div class="col-sm-12 col-md-12">
-				<div class="user-login-box-box-action">
-					Not a user? <a data-toggle="modal" href="#businessLoginModal" (click)="onUserLoginCancel()">Login as Business</a>
-				</div>
-			</div>
-
-			<div class="col-sm-12 col-md-12">
+			<div class="col-sm-8 col-md-8">
 				<div class="user-login-box-box-action">
 					Not verified yet? <a data-toggle="modal" href="#resendEmailModal" (click)="onResendCancel()">Resend email</a>
 				</div>
 			</div>
 
-
+    </div>
 		</div>
-	</div>
 
 
 
-	<div class="modal-footer text-center">
-		<button type="button" class="btn btn-primary" (click)="onUserLogin()">Login</button>
-		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onUserLoginCancel()">Close</button>
-	</div>
 
-	</div>
-
+		<div class="modal-footer text-center">
+			<button type="button" class="btn btn-primary" (click)="onUserLogin()">Login</button>
+			<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onUserLoginCancel()">Close</button>
+		</div>
 </div>
+	</div>
+
 
 <!-- end User Sign-in Modal -->
 
@@ -92,7 +89,8 @@
 
 
 <!-- start User Forget Password Modal -->
-<div id="userForgotPasswordModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
+<div id="userForgotPasswordModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" style="background-color: #fff;"
+    data-replace="true">
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserForgetPassCancel()">&times;</button>
@@ -152,61 +150,64 @@
 
 
 <!-- start Business Sign-in Modal -->
-<div id="businessLoginModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" data-replace="true">
+<div id="businessLoginModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" style="background-color: #fff;"
+    data-replace="true">
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onBusinessLoginCancel()">&times;</button>
 		<h4 class="modal-title text-center">Login To Your Business Account</h4>
 	</div>
 	<div *ngIf="loggedin" class="alert alert-success alert-dismissable">
-					Login Successfull
+		Login Successfull
 	</div>
 	<div *ngIf="!loggedin">
-	<div class="modal-body">
-		<div class="row gap-20">
+		<div class="modal-body">
+			<div class="row gap-20">
 
-			<div class="col-sm-12 col-md-12">
+				<div class="col-sm-12 col-md-12">
 
-				<div *ngIf="incorrectBusinessWarning" class="alert alert-danger alert-dismissable">
-					<a class="close" (click)="hideIncorrectBusinessWarning()" aria-label="close">&times;</a> Incorrect email or password
+					<div *ngIf="incorrectBusinessWarning" class="alert alert-danger alert-dismissable">
+						<a class="close" (click)="hideIncorrectBusinessWarning()" aria-label="close">&times;</a> Incorrect email or password
+					</div>
+
+					<div *ngIf="businessEmailWarning" class="alert alert-danger alert-dismissable">
+						<a class="close" (click)="hideBusinessEmailWarning()" aria-label="close">&times;</a> Please enter an email
+					</div>
+
+					<div class="form-group">
+						<label>Email Address</label>
+						<input autocomplete="off" class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="businessEmail"
+						    name="businessEmail">
+					</div>
+
 				</div>
 
-				<div *ngIf="businessEmailWarning" class="alert alert-danger alert-dismissable">
-					<a class="close" (click)="hideBusinessEmailWarning()" aria-label="close">&times;</a> Please enter an email
+				<div class="col-sm-12 col-md-12">
+					<br>
+					<div *ngIf="businessPasswordWarning" class="alert alert-danger alert-dismissable">
+						<a class="close" (click)="hideBusinessPasswordWarning()" aria-label="close">&times;</a> Please enter a password
+					</div>
+
+					<div class="form-group">
+						<label>Password</label>
+						<input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="businessPassword" name="businessPassword">
+					</div>
+
 				</div>
 
-				<div class="form-group">
-					<label>Email Address</label>
-					<input autocomplete="off" class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="businessEmail" name="businessEmail">
-				</div>
-
-			</div>
-
-			<div class="col-sm-12 col-md-12">
-				<br>
-				<div *ngIf="businessPasswordWarning" class="alert alert-danger alert-dismissable">
-					<a class="close" (click)="hideBusinessPasswordWarning()" aria-label="close">&times;</a> Please enter a password
-				</div>
-
-				<div class="form-group">
-					<label>Password</label>
-					<input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="businessPassword" name="businessPassword">
-				</div>
-
-			</div>
 
 			<div class="col-sm-offset-8 col-md-offset-8">
 
 				<div class="business-login-box-link-action">
 					<a data-toggle="modal" href="#businessForgotPasswordModal" class="block line18 mt-1" (click)="onBusinessLoginCancel()">Forgot password?</a>
 				</div>
-			</div>
+      </div>
 
-			<div class="col-sm-12 col-md-12">
-				<div class="business-login-box-box-action">
-					No account? <a data-toggle="modal" href="#businessRegisterModal" (click)="onBusinessLoginCancel()">Signup</a>
+				<div class="col-sm-12 col-md-12">
+					<div class="business-login-box-box-action">
+						No account? <a data-toggle="modal" href="#businessRegisterModal" (click)="onBusinessLoginCancel()">Signup</a>
+					</div>
 				</div>
-			</div>
 
 			<div class="col-sm-12 col-md-12">
 				<div class="user-login-box-box-action">
@@ -214,16 +215,16 @@
 				</div>
 			</div>
 
+			</div>
+
 		</div>
 
-	</div>
 
-
-	<div class="modal-footer text-center">
-		<button type="button" class="btn btn-primary" (click)="onBusinessLogin()">Login</button>
-		<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onBusinessLoginCancel()">Close</button>
+		<div class="modal-footer text-center">
+			<button type="button" class="btn btn-primary" (click)="onBusinessLogin()">Login</button>
+			<button type="button" data-dismiss="modal" class="btn btn-primary btn-border" (click)="onBusinessLoginCancel()">Close</button>
+		</div>
 	</div>
-</div>
 </div>
 <!-- end Business Sign-in Modal -->
 
@@ -231,7 +232,8 @@
 
 
 <!-- start Business Forget Password Modal -->
-<div id="businessForgotPasswordModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
+<div id="businessForgotPasswordModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" style="background-color: #fff;"
+    data-replace="true">
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onBusinessForgetPassCancel()">&times;</button>
@@ -292,7 +294,7 @@
 
 
 <!-- start Resend Email Modal -->
-<div id="resendEmailModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
+<div id="resendEmailModal" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" style="background-color: #fff;" data-replace="true">
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onResendCancel()">&times;</button>
