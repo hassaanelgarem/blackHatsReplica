@@ -88,10 +88,8 @@ export class EditUserProfileComponent implements OnInit {
                 this.uploader.onCompleteItem = (item: any, response, headers: any) => {
                     this.initialise();
                     let res = JSON.parse(response);
-                    console.log(this.profilePicture);
                     this.pictureChanged.emit(res.data.imagePath);
                     this.profilePicture = res.data.imagePath;
-                    console.log(this.profilePicture);
 
                 };
             }
