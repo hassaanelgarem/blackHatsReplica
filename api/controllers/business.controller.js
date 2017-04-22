@@ -76,7 +76,7 @@ module.exports.addPhoto = function (req, res) {
             });
 
             //add the image file name to the photos array of the Business model
-            Business.findByIdAndUpdate(req.user._id, {
+            Business.findByIdAndUpdate("58e8d68ce4a2cf7c06cff89a", {
                     $push: {
                         "photos": req.file.filename + "." + string
                     }

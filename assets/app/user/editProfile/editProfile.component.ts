@@ -32,11 +32,8 @@ export class EditUserProfileComponent implements OnInit {
         this.initialise();
     }
     initialise() {
-        this.editProfileService.getOneUser(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
+        this.editProfileService.getOneUser(this.userId).subscribe(
+            (data) => {
                 this.firstName = data.data.firstName;
                 this.lastName = data.data.lastName;
                 this.birthDate = data.data.birthDate;
@@ -50,21 +47,51 @@ export class EditUserProfileComponent implements OnInit {
                     this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
-                this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
+                this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+                    switch (status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
                     this.initialise();
                 };
-            }
-        });
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
     updateProfile() {
-
-        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(data => {
-            if (data.err) {
-
-                console.error(data.msg);
-            }
-        });
+        this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(
+            (data) => {
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
 
         //this.router.navigateByUrl('dummy');
         //this.router.navigateByUrl('user');
@@ -75,15 +102,24 @@ export class EditUserProfileComponent implements OnInit {
         this.uploader.uploadAll();
     }
 
-    deleteAccount(){
+    deleteAccount() {
         this.editProfileService.deleteAccount().subscribe(
-        (data) => {
-           this.router.navigateByUrl('/');
-        },
-        (err) => {
-            //TODO:
-            //handle and redirect
-        }
+            (data) => {
+                this.router.navigateByUrl('/');
+            },
+            (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            }
         );
 
 

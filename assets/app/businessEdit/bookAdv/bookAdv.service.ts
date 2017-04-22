@@ -22,11 +22,6 @@ export class BookAdvService {
   bookAdvSlot(startTime: Date, endTime: Date, advImg, advId){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    console.log("Service");
-    console.log(startTime);
-    console.log(endTime);
-    console.log("why does adv image change here");
-    console.log(advImg);
     let body = {
       "startTime": startTime.toString(),
       "endTime": endTime.toString(),

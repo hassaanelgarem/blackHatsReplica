@@ -33,9 +33,9 @@ export class EditActivityComponent implements OnInit {
     showFakeInput = false;
 
     constructor(
-      private activatedRoute: ActivatedRoute,
-      private businessService: BusinessService,
-      private router: Router
+        private activatedRoute: ActivatedRoute,
+        private businessService: BusinessService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -69,13 +69,13 @@ export class EditActivityComponent implements OnInit {
                 (err) => {
                     switch (err.status) {
                         case 404:
-                            console.log("404 not found");
+                            this.router.navigateByUrl('/404-error');
                             break;
                         case 401:
-                            console.log("Unauthorized");
+                            this.router.navigateByUrl('/notAuthorized-error');
                             break;
                         default:
-                            console.log("Oops somethings went wrong");
+                            this.router.navigateByUrl('/500-error')
                             break;
                     }
                 }
@@ -84,48 +84,48 @@ export class EditActivityComponent implements OnInit {
     }
 
     onSave() {
-      this.activity.name = this.name;
-      this.activity.description = this.description;
-      this.activity.price = this.price;
-      this.activity.bookingsPerSlot = this.perSlot;
-      this.businessService.editActivity(this.activity).subscribe(
-        (data) => {
-          this.router.navigate(["/businessEdit"]);
-        },
-        (err) => {
-          switch (err.status) {
-              case 404:
-                  console.log("404 not found");
-                  break;
-              case 401:
-                  console.log("Unauthorized");
-                  break;
-              default:
-                  console.log("Oops somethings went wrong");
-                  break;
-          }
-        }
-      );
+        this.activity.name = this.name;
+        this.activity.description = this.description;
+        this.activity.price = this.price;
+        this.activity.bookingsPerSlot = this.perSlot;
+        this.businessService.editActivity(this.activity).subscribe(
+            (data) => {
+                this.router.navigate(["/businessEdit"]);
+            },
+            (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error')
+                        break;
+                }
+            }
+        );
     }
 
     onDelete() {
         this.businessService.deleteActivity(this.activity).subscribe(
-          (data) => {
-            this.router.navigate(["/businessEdit"]);
-          },
-          (err) => {
-            switch (err.status) {
-                case 404:
-                    console.log("404 not found");
-                    break;
-                case 401:
-                    console.log("Unauthorized");
-                    break;
-                default:
-                    console.log("Oops somethings went wrong");
-                    break;
+            (data) => {
+                this.router.navigate(["/businessEdit"]);
+            },
+            (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error')
+                        break;
+                }
             }
-          }
         );
     }
 
@@ -141,13 +141,13 @@ export class EditActivityComponent implements OnInit {
             (err) => {
                 switch (err.status) {
                     case 404:
-                        console.log("404 not found");
+                        this.router.navigateByUrl('/404-error');
                         break;
                     case 401:
-                        console.log("Unauthorized");
+                        this.router.navigateByUrl('/notAuthorized-error');
                         break;
                     default:
-                        console.log("Oops somethings went wrong");
+                        this.router.navigateByUrl('/500-error')
                         break;
                 }
             }
@@ -180,13 +180,13 @@ export class EditActivityComponent implements OnInit {
                 (err) => {
                     switch (err.status) {
                         case 404:
-                            console.log("404 not found");
+                            this.router.navigateByUrl('/404-error');
                             break;
                         case 401:
-                            console.log("Unauthorized");
+                            this.router.navigateByUrl('/notAuthorized-error');
                             break;
                         default:
-                            console.log("Oops somethings went wrong");
+                            this.router.navigateByUrl('/500-error')
                             break;
                     }
                 }
@@ -216,13 +216,13 @@ export class EditActivityComponent implements OnInit {
             (err) => {
                 switch (err.status) {
                     case 404:
-                        console.log("404 not found");
+                        this.router.navigateByUrl('/404-error');
                         break;
                     case 401:
-                        console.log("Unauthorized");
+                        this.router.navigateByUrl('/notAuthorized-error');
                         break;
                     default:
-                        console.log("Oops somethings went wrong");
+                        this.router.navigateByUrl('/500-error')
                         break;
                 }
             }

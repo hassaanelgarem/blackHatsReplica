@@ -7,140 +7,164 @@ import {Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Component({
-  selector: 'app-bookAdv',
-  templateUrl: './bookAdv.component.html',
-  styleUrls: ['./bookAdv.component.css']
+    selector: 'app-bookAdv',
+    templateUrl: './bookAdv.component.html',
+    styleUrls: ['./bookAdv.component.css']
 })
 export class BookAdvComponent implements OnInit {
-  advertisements: Object[];
-  availableSlots: Date[] = [];
-  date: Date;
-  noOfDays: number[] = [];
-  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/advertisement/addAdvPhoto', itemAlias: "myfile" });;
-  startTime : Date = new Date();
-  endTime: Date = new Date();
-  startTimeValue: Date  = new Date();
-  endTimeValue: Date = new Date();
-  path: String;
-  advPicture: String;
+    advertisements: Object[];
+    availableSlots: Date[] = [];
+    date: Date;
+    noOfDays: number[] = [];
+    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/advertisement/addAdvPhoto', itemAlias: "myfile" });;
+    startTime: Date = new Date();
+    endTime: Date = new Date();
+    startTimeValue: Date = new Date();
+    endTimeValue: Date = new Date();
+    path: String;
+    advPicture: String;
 
-  private advNoOfDaysWarning: boolean = false;
-  private advImgWarning: boolean = false;
-  private successfulBooking: boolean = false;
+    private advNoOfDaysWarning: boolean = false;
+    private advImgWarning: boolean = false;
+    private successfulBooking: boolean = false;
 
-  constructor(
-    private bookAdvService: BookAdvService,
-    private router: Router,
-    private http: Http,
-    private appService: AppService
-  ) { }
+    constructor(
+        private bookAdvService: BookAdvService,
+        private router: Router,
+        private http: Http,
+        private appService: AppService
+    ) { }
 
-  ngOnInit() {
-    this.showAdvSlots();
-  }
-
-  showAdvSlots(){
-    this.bookAdvService.getAdvSlots().subscribe(data => {
-        if (data.err) {
-            console.error(data.msg);
-        }
-        else {
-          this.advertisements = data.data;
-          let i = 0;
-          for(let advertisement of this.advertisements){
-              this.getFreeSlot(data.data[i]._id);
-              i++;
-          }
-        }
-    });
-
-  }
-
-   getFreeSlot(index){
-    this.bookAdvService.getFreeSlot(index).subscribe(data => {
-      if (data.err) {
-          console.error(data.msg);
-      }
-      else {
-        this.availableSlots.push(data.data);
-      }
-    });
-  }
-
-  uploadAdvPicture(){
-    this.uploader.uploadAll();
-    this.uploader.onCompleteItem = (item: any, response: any, status:any, headers:any) => {
-    this.advPicture = JSON.parse(response).data;
-    console.log(this.advPicture);
-    this.path = "http://localhost:8080/api/image/businessAds/";
+    ngOnInit() {
+        this.showAdvSlots();
     }
-  }
 
+    showAdvSlots() {
+        this.bookAdvService.getAdvSlots().subscribe(
+            (data) => {
+                this.advertisements = data.data;
+                let i = 0;
+                for (let advertisement of this.advertisements) {
+                    this.getFreeSlot(data.data[i]._id);
+                    i++;
+                }
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            }
+        );
 
-
-
-  bookAdv(advId, index){
-    if(!this.noOfDays || this.noOfDays.length == 0){
-      this.advNoOfDaysWarning = true;
     }
-    else {
-      this.advNoOfDaysWarning = false;
-    }
-    if(!this.advPicture || this.advPicture.length == 0){
-      this.advImgWarning = true;
-    }
-    else {
-      this.advImgWarning = false;
-    }
-    if(!this.advImgWarning && !this.advImgWarning){
-      this.startTimeValue = new Date(this.availableSlots[index]);
-      this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
 
-      var handler = (<any>window).StripeCheckout.configure({
-        key: 'pk_test_9AEHvD0gXViwtKYQDpQcLXlY',
-        locale: 'auto',
-        token: token => this.gotToken(token, advId)
-      });
-
-      handler.open({
-        name: 'Book Advertisement',
-        description: this.advertisements[index].name,
-        amount: this.advertisements[index].price * 100
-      });
+    getFreeSlot(index) {
+        this.bookAdvService.getFreeSlot(index).subscribe(
+            (data) => {
+                this.availableSlots.push(data.data);
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
-  }
 
-  gotToken(token, advId){
-
-    this.appService.charge(token).subscribe(res => {
-      this.bookAdvService.bookAdvSlot(this.startTimeValue, this.endTimeValue, this.advPicture, advId).subscribe(
-        (data) => {
-          bootbox.alert(data.msg);
-        },
-        (err) => {
-          switch (err.status) {
+    uploadAdvPicture() {
+        this.uploader.uploadAll();
+        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+          switch (status) {
               case 404:
-                  console.log("404 not found");
+                  this.router.navigateByUrl('/404-error');
                   break;
               case 401:
-                  console.log("Unauthorized");
+                  this.router.navigateByUrl('/notAuthorized-error');
                   break;
               default:
-                  console.log("Oops something went wrong");
+                  this.router.navigateByUrl('/500-error');
                   break;
           }
+            this.advPicture = JSON.parse(response).data;
+            this.path = "http://localhost:8080/api/image/businessAds/";
         }
-      );
-    });
-  }
+    }
 
-  hideAdvImgWarning(){
-    this.advImgWarning = false;
-  }
+    bookAdv(advId, index) {
+        if (!this.noOfDays || this.noOfDays.length == 0) {
+            this.advNoOfDaysWarning = true;
+        }
+        else {
+            this.advNoOfDaysWarning = false;
+        }
+        if (!this.advPicture || this.advPicture.length == 0) {
+            this.advImgWarning = true;
+        }
+        else {
+            this.advImgWarning = false;
+        }
+        if (!this.advImgWarning && !this.advImgWarning) {
+            this.startTimeValue = new Date(this.availableSlots[index]);
+            this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
 
-  hideNoOfDaysWarning(){
-    this.advNoOfDaysWarning = false;
-  }
+            var handler = (<any>window).StripeCheckout.configure({
+                key: 'pk_test_9AEHvD0gXViwtKYQDpQcLXlY',
+                locale: 'auto',
+                token: token => this.gotToken(token, advId)
+            });
+
+            handler.open({
+                name: 'Book Advertisement',
+                description: this.advertisements[index].name,
+                amount: this.advertisements[index].price * 100
+            });
+        }
+    }
+
+    gotToken(token, advId) {
+
+        this.appService.charge(token).subscribe(res => {
+            this.bookAdvService.bookAdvSlot(this.startTimeValue, this.endTimeValue, this.advPicture, advId).subscribe(
+                (data) => {
+                    bootbox.alert(data.msg);
+                },
+                (err) => {
+                    switch (err.status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
+                }
+            );
+        });
+    }
+
+    hideAdvImgWarning() {
+        this.advImgWarning = false;
+    }
+
+    hideNoOfDaysWarning() {
+        this.advNoOfDaysWarning = false;
+    }
 
 
 

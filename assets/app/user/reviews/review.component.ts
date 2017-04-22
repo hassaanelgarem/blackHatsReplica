@@ -34,26 +34,43 @@ export class ReviewComponent implements OnInit {
     //hassaan:
     ngOnInit() {
 
-        this.userService.getReviews(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
-              this.reviews = data.data;
-              this.count = this.reviews.length;
-            }
-        });
+        this.userService.getReviews(this.userId).subscribe(
+          (data) => {
+            this.reviews = data.data;
+            this.count = this.reviews.length;
+          }, (err) => {
+              switch (err.status) {
+                  case 404:
+                      this.router.navigateByUrl('/404-error');
+                      break;
+                  case 401:
+                      this.router.navigateByUrl('/notAuthorized-error');
+                      break;
+                  default:
+                      this.router.navigateByUrl('/500-error');
+                      break;
+              }
+            });
     }
 
     onDelete(i){
       this.editIndex = i;
       this.userService.deleteReview(this.reviews[i]._id).subscribe(
         (data) => {
-        console.log("no error");
         this.reviews.splice(i,1);
       },
       (err) => {
-      console.log("error");
+        switch (err.status) {
+            case 404:
+                this.router.navigateByUrl('/404-error');
+                break;
+            case 401:
+                this.router.navigateByUrl('/notAuthorized-error');
+                break;
+            default:
+                this.router.navigateByUrl('/500-error');
+                break;
+        }
       });
       this.editing[i] = false;
     }
@@ -62,7 +79,6 @@ export class ReviewComponent implements OnInit {
       this.editIndex = i;
       this.userService.editReview(this.reviews[i]._id, this.editComment, this.editRating).subscribe(
         (data) => {
-          console.log("no error");
           this.reviews[i].comment = this.editComment;
           this.reviews[i].rating = this.editRating;
           this.editing[i] = false;
@@ -70,7 +86,17 @@ export class ReviewComponent implements OnInit {
           this.editRating = null;
         },
         (err) => {
-          console.log("error");
+          switch (err.status) {
+              case 404:
+                  this.router.navigateByUrl('/404-error');
+                  break;
+              case 401:
+                  this.router.navigateByUrl('/notAuthorized-error');
+                  break;
+              default:
+                  this.router.navigateByUrl('/500-error');
+                  break;
+          }
         });
     }
 

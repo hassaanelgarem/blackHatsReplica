@@ -41,11 +41,8 @@ export class EditProfileComponent implements OnInit {
         this.initialise();
     }
     initialise() {
-        this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
+        this.editProfileService.getBusinessProfile(this.businessId).subscribe(
+            (data) => {
                 this.name = data.data.name;
                 if (data.data.workingHours != null) {
                     this.workingFrom = data.data.workingHours.from;
@@ -54,11 +51,11 @@ export class EditProfileComponent implements OnInit {
                 this.category = data.data.category;
                 this.description = data.data.description;
                 this.paymentRequired = data.data.paymentRequired;
-                if(data.data.paymentRequired == 2){
-                  this.depositFlag = true;
+                if (data.data.paymentRequired == 2) {
+                    this.depositFlag = true;
                 }
-                else{
-                  this.depositFlag = false;
+                else {
+                    this.depositFlag = false;
                 }
                 this.deposit = data.data.deposit;
                 this.phoneNumbers = data.data.phoneNumbers;
@@ -73,11 +70,33 @@ export class EditProfileComponent implements OnInit {
                     this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
-                this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
+                this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+                    switch (status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
                     this.initialise();
                 };
-            }
-        });
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
     updateProfile() {
@@ -85,15 +104,26 @@ export class EditProfileComponent implements OnInit {
             from: this.workingFrom,
             to: this.workingTo
         }
-        this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-        });
+        this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(
+            (data) => {
+
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
-    cancel(){
-      this.initialise();
+    cancel() {
+        this.initialise();
     }
 
     showDeposit(value) {

@@ -22,14 +22,22 @@ export class UserBookingsComponent implements OnInit {
 
     ngOnInit() {
 
-        this.userService.getBookingHistory(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
-              this.bookings = data.data;
-              this.count = this.bookings.length;
-            }
-        });
+        this.userService.getBookingHistory(this.userId).subscribe(
+          (data) => {
+            this.bookings = data.data;
+            this.count = this.bookings.length;
+            }, (err) => {
+              switch (err.status) {
+                  case 404:
+                      this.router.navigateByUrl('/404-error');
+                      break;
+                  case 401:
+                      this.router.navigateByUrl('/notAuthorized-error');
+                      break;
+                  default:
+                      this.router.navigateByUrl('/500-error');
+                      break;
+              }
+            });
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { TopBusinessesService } from "./topBusinesses.service";
 import { Business } from '../business.model';
 
@@ -11,7 +11,8 @@ import { Business } from '../business.model';
 })
 export class TopBusinessesComponent implements OnInit {
   private businesses: Business[] = [];
-  constructor(private topBusinessesService: TopBusinessesService) { }
+  constructor( private router: Router,
+               private topBusinessesService: TopBusinessesService) { }
 
   ngOnInit() {
     this.topBusinessesService.getBusinesses()
@@ -19,6 +20,19 @@ export class TopBusinessesComponent implements OnInit {
       (business: Business[]) => {
         this.businesses = business;
         // console.log(this.businesses)
+      },
+      (err) => {
+        switch (err.status) {
+            case 404:
+                this.router.navigateByUrl('/404-error');
+                break;
+            case 401:
+                this.router.navigateByUrl('/notAuthorized-error');
+                break;
+            default:
+                this.router.navigateByUrl('/500-error');
+                break;
+        }
       });
   }
 

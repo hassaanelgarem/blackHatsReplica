@@ -24,11 +24,8 @@ export class UserFavoritesComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.getOneUser(this.userId).subscribe(data => {
-      if (data.err) {
-        console.error(data.msg);
-      }
-      else {
+    this.userService.getOneUser(this.userId).subscribe(
+      (data) => {
         this.user = data.data;
         this.favorites = data.data.favorites;
         var businesses = [];
@@ -43,16 +40,25 @@ export class UserFavoritesComponent implements OnInit {
           });
         }
         this.businesses = businesses as [Object];
-      }
-    });
+      }, (err) => {
+        switch (err.status) {
+            case 404:
+                this.router.navigateByUrl('/404-error');
+                break;
+            case 401:
+                this.router.navigateByUrl('/notAuthorized-error');
+                break;
+            default:
+                this.router.navigateByUrl('/500-error');
+                break;
+        }
+      });
 
   }
 
    deleteFavorite(i){
-
     this.userService.deleteFavorite(this.favorites[i]).subscribe(
       (data) => {
-        console.log("no error");
         this.businesses.splice(i, 1);
       },
       (err) => {
