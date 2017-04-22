@@ -171,7 +171,7 @@ export class EditActivityComponent implements OnInit {
                         two.setDate(12);
                         two.setMonth(12);
                         two.setFullYear(2012);
-                        return two - one;
+                        return this.two - this.one;
                     });
                     this.newStart = null;
                     this.newEnd = null;

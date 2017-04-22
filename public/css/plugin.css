@@ -1552,11 +1552,11 @@ body.modal-open,
     left: 50%;
     bottom: auto;
     right: auto;
-    z-index: 1050;
+    z-index: 999999;
     padding: 0;
-    width: 500px;
+    /*width: 500px;*/
     margin-left: -250px;
-    background-color: #fff;
+    /*background-color: #fff;*/
     border: 1px solid #999;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 6px;

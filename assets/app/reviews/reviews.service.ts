@@ -28,7 +28,7 @@ export class ReviewsService {
   }
 
   addFavorite(businessId){
-    return this.http.post('http://localhost:8080/api/user/addFavorite/' + businessId, null, null).map(res => res.json());
+    return this.http.put('http://localhost:8080/api/user/addFavorite/' + businessId, null, null).map(res => res.json());
   }
 
   addReview(review: Review){

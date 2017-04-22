@@ -1,61 +1,60 @@
-	<!-- start Container Wrapper -->
+<!-- start Header -->
 
-	<div class="container-wrapper">
+<header id="header">
 
-		<!-- start Header -->
+	<!-- start Navbar (Header) -->
+	<nav class="navbar navbar-default navbar-fixed-top navbar-sticky-function navbar-arrow">
 
-		<header id="header">
+		<div class="container">
 
-			<!-- start Navbar (Header) -->
-			<nav class="navbar navbar-default navbar-fixed-top navbar-sticky-function navbar-arrow">
-
-				<div class="container">
-
-					<div class="logo-wrapper">
-						<div class="logo">
-							<a href="/"><h1>BlackHats</h1></a>
-						</div>
-					</div>
-
-					<div id="navbar" class="navbar-nav-wrapper">
-
-						<ul class="nav navbar-nav" id="responsive-menu">
-							<li>
-								<a href="/search?location=All&category=All&page=1">Explore</a>
-							</li>
-							<li *ngIf="loggedin && isUser">
-								<a href="{{path}}user/{{user._id}}">Profile</a>
-							</li>
-							<li *ngIf="loggedin && !isUser">
-								<a href="{{path}}business/{{business._id}}">My Account</a>
-							</li>
-
-						</ul>
-
-					</div>
-					<!--/.nav-collapse -->
-
-					<div class="nav-mini-wrapper">
-						<ul class="nav-mini">
-							<li *ngIf="!loggedin"><a data-toggle="modal" href="#userRegisterModal"><i class="icon-user-follow" data-toggle="tooltip" data-placement="bottom" title="Sign Up"></i></a></li>
-							<li *ngIf="!loggedin"><a data-toggle="modal" href="#userLoginModal"><i class="icon-login" data-toggle="tooltip" data-placement="bottom" title="Login"></i> </a></li>
-							<li *ngIf="loggedin"><a (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
-						</ul>
-					</div>
-
+			<div class="logo-wrapper">
+				<div class="logo">
+					<a href="/">
+						<h1>Black Hats</h1>
+					</a>
 				</div>
-			</nav>
-			<!-- end Navbar (Header) -->
+			</div>
 
-		</header>
-	</div>
+			<div id="navbar" class="navbar-nav-wrapper">
 
-	<!-- end Header -->
+				<ul class="nav navbar-nav" id="responsive-menu">
+					<li>
+						<a href="/homepage">Home</a>
+					</li>
+					<li>
+						<a href="/search?location=All&category=All&page=1">Explore</a>
+					</li>
+					<li *ngIf="loggedin && isUser">
+						<a href="{{path}}user/{{user._id}}">Profile</a>
+					</li>
+					<li *ngIf="loggedin && !isUser">
+						<a href="{{path}}business/{{business._id}}">My Account</a>
+					</li>
 
+				</ul>
+
+			</div>
+			<!--/.nav-collapse -->
+
+			<div class="nav-mini-wrapper">
+				<ul class="nav-mini">
+					<li *ngIf="!loggedin"><a data-toggle="modal" href="#userRegisterModal"><i class="icon-user-follow" data-toggle="tooltip" data-placement="bottom" title="Sign Up"></i></a></li>
+					<li *ngIf="!loggedin"><a data-toggle="modal" href="#userLoginModal"><i class="icon-login" data-toggle="tooltip" data-placement="bottom" title="Login"></i> </a></li>
+					<li *ngIf="loggedin"><a (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="slicknav-mobile"></div>
+
+	</nav>
+	<!-- end Navbar (Header) -->
 	<!--loading the login component-->
 	<app-signin (loginClicked)="loggedIn($event)"></app-signin>
-
 
 	<!--loading the register component-->
 	<user-register></user-register>
 	<business-register></business-register>
+
+</header>
+
+<!-- end Header -->

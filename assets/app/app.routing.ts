@@ -18,7 +18,6 @@ import { SomethingWrongComponent } from "./errors/500.component";
 
 
 const APP_ROUTES: Routes = [
-
     { path: '',redirectTo:'/homepage', pathMatch: 'full'},
     { path: 'homepage', component: HomepageComponent},
     { path: 'search', component: SearchResultComponent},
@@ -35,7 +34,6 @@ const APP_ROUTES: Routes = [
     { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent},
     { path: '500-error', component: SomethingWrongComponent},
     { path: '**',redirectTo:'/homepage'}
-
 ];
 
 
