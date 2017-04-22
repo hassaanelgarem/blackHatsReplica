@@ -15,7 +15,7 @@ import 'rxjs/add/operator/map';
 export class ReviewComponent implements OnInit {
 
     count: Number = 0;
-    reviews: Object[];
+    reviews: any[];
     //reviews: Review[];
     userId: String = "58e8d26b86e48c253b2c3c1e";
     averageString: String;

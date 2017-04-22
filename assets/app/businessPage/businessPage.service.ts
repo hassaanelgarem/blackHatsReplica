@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import { Slot } from '../businessEdit/activities/slot.model';
 import 'rxjs/add/operator/map';
 
 
@@ -38,6 +39,27 @@ export class BusinessPageService {
 
   addFavorite(businessId){
     return this.http.post('http://localhost:8080/api/user/addFavorite/' + businessId, null, null).map(res => res.json());
+  }
+
+  getAvailableSlots(activityId, date){
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    let body = {
+      "date": date,
+      "activityID": activityId
+    }
+    return this.http.post('http://localhost:8080/api/activity/freeSlots', body, {headers: headers}).map(res => res.json());
+  }
+
+  bookActivity(slot: Slot, activityId, date){
+    let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+    let body = {
+      "date": date,
+      "activity": activityId,
+      "slot": slot
+    }
+    return this.http.post('http://localhost:8080/api/activity/book', body, {headers: headers}).map(res => res.json());
   }
 
 }

@@ -15,7 +15,7 @@ import 'rxjs/add/operator/map';
 export class BusinessActivitiesComponent implements OnInit {
 
     activities: Activity[] = [];
-    business: Object;
+    business: any;
     path: String = "http://localhost:8080/api/";
     currentIndex = 0;
     showEdit = false;
@@ -40,14 +40,14 @@ export class BusinessActivitiesComponent implements OnInit {
 
     addName: String;
     addDescription: String;
-    addPrice: Number;
-    addPerSlot: Number;
+    addPrice: number;
+    addPerSlot: number;
     //Edit attributes
 
     editName: String;
     editDescription: String;
-    editPrice: Number;
-    editPerSlot: Number;
+    editPrice: number;
+    editPerSlot: number;
 
     constructor(
         private activatedRoute: ActivatedRoute,

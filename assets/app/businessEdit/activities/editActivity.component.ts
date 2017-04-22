@@ -26,8 +26,8 @@ export class EditActivityComponent implements OnInit {
     //Input fields
     name: String;
     description: String;
-    price: Number;
-    perSlot: Number;
+    price: number;
+    perSlot: number;
     fakeVaribaleOne: String;
     fakeVaribaleTwo: String;
     showFakeInput = false;

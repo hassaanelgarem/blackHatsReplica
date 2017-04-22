@@ -15,6 +15,7 @@ import { UserComponent } from "./user/user.component";
 import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
+import { ActivityPageComponent } from "./businessPage/activityPage.component";
 
 
 const APP_ROUTES: Routes = [
@@ -29,6 +30,7 @@ const APP_ROUTES: Routes = [
     { path: 'businessEdit/activity/:activityId', component: EditActivityComponent },
     { path: 'business/:businessId', component: BusinessPageComponent },
     { path: 'business/:businessId/reviews', component: ReviewsComponent },
+    { path: 'business/activity/:activityId', component: ActivityPageComponent },
     { path: 'user', component: UserComponent},
     { path: '404-error', component: FourofourComponent},
     { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent},

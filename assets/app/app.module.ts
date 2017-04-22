@@ -46,6 +46,7 @@ import { EditUserProfileComponent } from "./user/editProfile/editProfile.compone
 import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
+import { ActivityPageComponent } from "./businessPage/activityPage.component";
 
 
 import { BusinessPageService } from "./businessPage/businessPage.service";
@@ -110,6 +111,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       BusinessReviewsComponent,
       EditActivityComponent,
       EditProfileComponent,
+      ActivityPageComponent,
       FileSelectDirective,
       FocusDirective
     ],
