@@ -17,6 +17,8 @@ import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
 import { ActivityPageComponent } from "./businessPage/activityPage.component";
 
+import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
+
 
 const APP_ROUTES: Routes = [
     { path: '',redirectTo:'/homepage', pathMatch: 'full'},
@@ -26,8 +28,8 @@ const APP_ROUTES: Routes = [
     { path: 'policy', component: PolicyComponent },
     { path: 'resetPassword/:token', component: ResetPasswordComponent},
     { path: 'verify/:token', component: VerifyComponent},
-    { path: 'businessEdit', component: BusinessEditComponent },
-    { path: 'businessEdit/activity/:activityId', component: EditActivityComponent },
+    { path: 'businessEdit', component: BusinessEditComponent, canActivate: [BusinessEditGuard] },
+    { path: 'businessEdit/activity/:activityId', component: EditActivityComponent, canActivate: [BusinessEditGuard]},
     { path: 'business/:businessId', component: BusinessPageComponent },
     { path: 'business/:businessId/reviews', component: ReviewsComponent },
     { path: 'business/activity/:activityId', component: ActivityPageComponent },

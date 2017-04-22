@@ -68,6 +68,7 @@ import { BookAdvService } from "./businessEdit/bookAdv/bookAdv.service";
 import { ActivityBookingsService } from "./businessEdit/activityBookings/activityBookings.service";
 import { UserService } from "./user/user.service";
 import { EditUserProfileService } from "./user/editProfile/editProfile.service";
+import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   acceptedFiles: 'image/*'
@@ -145,7 +146,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       BusinessPageService,
       ReviewsService,
       UserService,
-      EditUserProfileService
+      EditUserProfileService,
+      BusinessEditGuard
     ],
     bootstrap : [AppComponent]
 })
