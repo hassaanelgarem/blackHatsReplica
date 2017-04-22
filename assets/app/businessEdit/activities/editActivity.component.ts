@@ -63,8 +63,6 @@ export class EditActivityComponent implements OnInit {
                     this.description = this.activity.description;
                     this.price = this.activity.price;
                     this.perSlot = this.activity.bookingsPerSlot;
-
-
                 },
                 (err) => {
                     switch (err.status) {

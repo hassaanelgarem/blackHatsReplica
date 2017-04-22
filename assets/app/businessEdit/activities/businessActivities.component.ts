@@ -75,18 +75,6 @@ export class BusinessActivitiesComponent implements OnInit {
                                 break;
                         }
                     });
-            }, (err) => {
-                switch (err.status) {
-                    case 404:
-                        this.router.navigateByUrl('/404-error');
-                        break;
-                    case 401:
-                        this.router.navigateByUrl('/notAuthorized-error');
-                        break;
-                    default:
-                        this.router.navigateByUrl('/500-error');
-                        break;
-                }
             });
 
     }
