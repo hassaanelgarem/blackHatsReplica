@@ -64,14 +64,17 @@ export class LoginComponent implements OnInit {
     ngOnInit() { }
 
 
-    onUserLogin() {
-        if (!this.username || this.username.length == 0) {
+    onUserLogin(){
+        if(!this.username || this.username.length == 0){
+            this.incorrectUserWarning = false;
             this.userUsernameWarning = true;
         }
         else {
             this.userUsernameWarning = false;
         }
-        if (!this.userPassword || this.userPassword.length == 0) {
+        if(!this.userPassword || this.userPassword.length == 0){
+            this.incorrectUserWarning = false;
+
             this.userPasswordWarning = true;
         }
         else {
@@ -101,14 +104,16 @@ export class LoginComponent implements OnInit {
     }
 
 
-    onBusinessLogin() {
-        if (!this.businessEmail || this.businessEmail.length == 0) {
+    onBusinessLogin(){
+        if(!this.businessEmail || this.businessEmail.length == 0){
+            this.incorrectBusinessWarning = false;
             this.businessEmailWarning = true;
         }
         else {
             this.businessEmailWarning = false;
         }
-        if (!this.businessPassword || this.businessPassword.length == 0) {
+        if(!this.businessPassword || this.businessPassword.length == 0){
+            this.incorrectBusinessWarning = false;
             this.businessPasswordWarning = true;
         }
         else {
@@ -147,21 +152,19 @@ export class LoginComponent implements OnInit {
 
         if (!this.resetUserEmailWarning) {
             this.loginService.forgetPassword(this.userEmail).subscribe(data => {
-                this.resetFailureWarning = false;
-                this.resetSuccessWarning = true;
-                this.successReset = data.msg;
-                //console.log(data.msg);
-            }, err => {
-                this.resetSuccessWarning = false;
-                this.resetFailureWarning = true;
-                if (err.status == 500) {
-                    this.failedReset = err.json().error[0].msg;
-                }
-                else {
-                    this.failedReset = err.json().msg;
-                }
-                //console.log(err.json());
-            });
+            this.resetFailureWarning = false;
+            this.resetSuccessWarning = true;
+            this.successReset = data.msg;
+        }, err => {
+            this.resetSuccessWarning = false;
+            this.resetFailureWarning = true;
+            if(err.status == 500) {
+                this.failedReset = err.json().error[0].msg;
+            }
+            else {
+                this.failedReset = err.json().msg;
+            }
+             });
         }
 
     }
@@ -177,20 +180,19 @@ export class LoginComponent implements OnInit {
 
         if (!this.resetBusinessEmailWarning) {
             this.loginService.forgetPassword(this.businessEmail).subscribe(data => {
-                this.resetFailureWarning = false;
-                this.resetSuccessWarning = true;
-                this.successReset = data.msg;
-                //console.log(data);
-            }, err => {
-                this.resetSuccessWarning = false;
-                this.resetFailureWarning = true;
-                if (err.status == 500) {
-                    this.failedReset = err.json().error[0].msg;
-                }
-                else {
-                    this.failedReset = err.json().msg;
-                }
-            });
+            this.resetFailureWarning = false;
+            this.resetSuccessWarning = true;
+            this.successReset = data.msg;
+        }, err => {
+            this.resetSuccessWarning = false;
+            this.resetFailureWarning = true;
+            if(err.status == 500) {
+                this.failedReset = err.json().error[0].msg;
+            }
+            else {
+                this.failedReset = err.json().msg;
+            }
+        });
         }
 
     }
@@ -207,21 +209,19 @@ export class LoginComponent implements OnInit {
 
         if (!this.resendEmailWarning) {
             this.loginService.resendEmail(this.userEmail).subscribe(data => {
-                this.resendFailureWarning = false;
-                this.resendSuccessWarning = true;
-                this.successResend = data.msg;
-                //console.log(data.msg);
-            }, err => {
-                this.resendSuccessWarning = false;
-                this.resendFailureWarning = true;
-                if (err.status == 500) {
-                    this.failedResend = err.json().error[0].msg;
-                }
-                else {
-                    this.failedResend = err.json().msg;
-                }
-                //console.log(err.json());
-            });
+            this.resendFailureWarning = false; 
+            this.resendSuccessWarning = true;
+            this.successResend = data.msg;
+        }, err => {
+            this.resendSuccessWarning = false;
+            this.resendFailureWarning = true;
+            if(err.status == 500) {
+                this.failedResend = err.json().error[0].msg;
+            }
+            else {
+                this.failedResend = err.json().msg;
+            }
+             });
         }
 
     }

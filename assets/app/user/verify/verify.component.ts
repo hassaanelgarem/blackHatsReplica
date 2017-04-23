@@ -25,15 +25,15 @@ export class VerifyComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.token = params['token'];
-      //console.log(this.token);
       this.verifyService.verifyToken(this.token).subscribe(data => {
-          console.log(data.data.id);
-          this.userId = data.data.id;
+          if(data.msg === "Token is valid.") {
+            this.userId = data.data.id;
+          } 
+          else {
+            //aya error 500 only!!
+          }
       }, err => {
-        console.log(err);
-          //this.router.navigate(['/']);
-          //location.reload();
-          //page 404
+          //aya errors
       });
     })
 
@@ -41,8 +41,8 @@ export class VerifyComponent implements OnInit {
 
   onVerifyUser() {
 
-    this.verifyService.confirmId(this.userId).subscribe(data => {
-      console.log(data);
+    this.verifyService.confirmId(this.userId).subscribe(data => {}, err => {
+      //aya errors
     });
   }
 
