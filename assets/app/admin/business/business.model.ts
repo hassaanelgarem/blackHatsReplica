@@ -4,6 +4,6 @@ export class Business {
         public name: string,
         public email: string,
         public location: { "address": string, "city": string, "coordinates": number[] },
-        public totalRatings: number,
+        public averageRating: number,
         public createdAt: Date) { }
 }

@@ -3,7 +3,6 @@
         <div class="main_container">
             <app-admin-navbar></app-admin-navbar>
             <app-admin-sidebar></app-admin-sidebar>
-            <link href="/admin/iCheck/skins/flat/green.css" rel="stylesheet">
             <!-- page content -->
             <div class="right_col" role="main">
                 <div class="">
@@ -16,42 +15,40 @@
                     <div class="clearfix"></div>
 
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="x_panel">
-                                <div class="x_content">
+                        <div class="x_panel">
+                            <div class="x_content">
 
-                                    <table id="datatable" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 20%">Username</th>
-                                                <th>Email</th>
-                                                <th>Member Since</th>
-                                                <th style="width: 20%">Admin Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let user of users">
-                                                <td>
-                                                    <p>{{user.username}}</p>
-                                                    <br />
-                                                </td>
-                                                <td>
-                                                    <p>{{user.email}}</p>
-                                                </td>
-                                                <td>
-                                                    {{user.createdAt}}
-                                                </td>
-                                            
-                                                <td>
-                                                    <button class="btn btn-primary btn-xs" [disabled]="isLoading()" (click)="unAssignAdmin(user._id)"><i class="fa fa-user"></i> Unassign </button>
-                                                </td>
-                                            </tr>
+                                <table id="datatable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20%">Username</th>
+                                            <th>Email</th>
+                                            <th>Member Since</th>
+                                            <th style="width: 20%">Admin Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let user of users">
+                                            <td>
+                                                <p>{{user.username}}</p>
+                                                <br />
+                                            </td>
+                                            <td>
+                                                <p>{{user.email}}</p>
+                                            </td>
+                                            <td>
+                                                {{user.createdAt | date:'medium'}}
+                                            </td>
 
-                                        </tbody>
-                                    </table>
-                                    <!-- end project list -->
+                                            <td>
+                                                <button class="btn btn-primary btn-xs" [disabled]="isLoading()" (click)="unAssignAdmin(user._id)"><i class="fa fa-user"></i> Unassign </button>
+                                            </td>
+                                        </tr>
 
-                                </div>
+                                    </tbody>
+                                </table>
+                                <!-- end project list -->
+
                             </div>
                         </div>
                     </div>

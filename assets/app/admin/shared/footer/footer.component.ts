@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 
 @Component({
   selector: 'app-admin-footer',
@@ -6,8 +6,8 @@ import { Component, OnInit } from '@angular/core';
 })
 
 
-export class FooterComponent {
-  ngAfterViewInit() {
+export class FooterComponent implements AfterViewInit {
+  ngAfterViewInit (){
     var s1 = document.createElement("script");
     s1.src = "/admin/js/custom.min.js";
     document.getElementsByTagName('body')[0].appendChild(s1);

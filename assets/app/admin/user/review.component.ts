@@ -19,7 +19,10 @@ export class ReviewComponent implements OnInit {
     this.userService.getUsers().subscribe(users => {
       this.userService.getUnverifiedUsers().subscribe(tempUsers => {
         this.users = users.concat(tempUsers);
-      })
+      },
+        err => {
+          bootbox.alert(err.msg);
+        })
     });
   }
 
@@ -46,13 +49,18 @@ export class ReviewComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
+            });
         }
       }
     });
   }
 
   viewUser(userId: string) {
-    this.router.navigate(['user', userId]);
+    this.router.navigate(['/user', userId]);
   }
 };

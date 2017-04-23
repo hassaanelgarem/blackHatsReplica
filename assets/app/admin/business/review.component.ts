@@ -19,7 +19,10 @@ export class ReviewComponent implements OnInit {
   ngOnInit() {
     this.businessService.getBusinesses().subscribe(businesses => {
       this.businesses = businesses
-    });
+    },
+      err => {
+        bootbox.alert(err.msg);
+      });
   }
 
   isLoading() {
@@ -45,13 +48,17 @@ export class ReviewComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg);
+              location.reload();
+            });
         }
       }
     });
   }
 
   viewBusiness(businessId: string) {
-    this.router.navigate(['business', businessId]);
+    this.router.navigate(['/business', businessId]);
   }
 };

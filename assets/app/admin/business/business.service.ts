@@ -9,10 +9,11 @@ import { Observable } from "rxjs";
 @Injectable()
 export class BusinessService {
     private alertMsg: string;
+    private apiPath: string = "http://localhost:8080/api/";
     constructor(private http: Http) { }
 
     getBusinesses() {
-        return this.http.get('http://localhost:8080/api/admin/business/getAll')
+        return this.http.get(this.apiPath + 'admin/business/getAll')
             //map method to transform the response
             .map((response: Response) => {
                 const businesses = response.json().data;
@@ -20,7 +21,7 @@ export class BusinessService {
                 for (let business of businesses) {
                     transformedBusinesses.push(new Business(
                         business._id,
-                        business.name, business.email, business.location, business.totalRatings, business.createdAt
+                        business.name, business.email, business.location, business.averageRating, business.createdAt
                     ));
                 }
                 return transformedBusinesses;
@@ -28,7 +29,7 @@ export class BusinessService {
     }
 
     getUnverifiedBusinesses() {
-        return this.http.get('http://localhost:8080/api/admin/business/unVerifiedBusinesses')
+        return this.http.get(this.apiPath + 'admin/business/unVerifiedBusinesses')
             //map method to transform the response
             .map((response: Response) => {
                 const businesses = response.json().data;
@@ -36,7 +37,7 @@ export class BusinessService {
                 for (let business of businesses) {
                     transformedBusinesses.push(new Business(
                         business._id,
-                        business.name, business.email, business.location, business.totalRatings, business.createdAt
+                        business.name, business.email, business.location, business.averageRating, business.createdAt
                     ));
                 }
                 return transformedBusinesses;
@@ -45,7 +46,7 @@ export class BusinessService {
 
 
     deleteBusiness(businessId: string) {
-        return this.http.delete('http://localhost:8080/api/admin/business/delete/' + businessId)
+        return this.http.delete(this.apiPath + 'admin/business/delete/' + businessId)
             //map method to transform the response
             .map((response: Response) => {
                 this.alertMsg = response.json().msg;
@@ -55,7 +56,7 @@ export class BusinessService {
     }
 
     verifyBusiness(businessId: string) {
-        return this.http.put('http://localhost:8080/api/admin/business/verify/' + businessId, {verified: true})
+        return this.http.put(this.apiPath + 'admin/business/verify/' + businessId, { verified: true })
             //map method to transform the response
             .map((response: Response) => {
                 this.alertMsg = response.json().msg;

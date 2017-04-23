@@ -8,11 +8,10 @@ import { Observable } from "rxjs";
 export class AdminService {
     constructor(private http: Http) { }
 
-    logout(){
+    logout() {
         return this.http.get('http://localhost:8080/api/logout')
             //map method to transform the response
-            .map((response: Response) => {
-                return response.json();
-            });
-    }
+            .map(res => res.json())
+    };
 }
+

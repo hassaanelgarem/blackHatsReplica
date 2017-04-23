@@ -3,37 +3,61 @@
 
 <head>
     <base href="/">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
+    <title>Black Hats</title>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Black Hats</title>
+    <meta name="keywords" content="Activities, Adventure, Entertainment, Egypt, Escape, Breakout" />
+    <meta name="author" content="Black Hats">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <!-- Bootstrap -->
-    <link href="/admin/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="/admin/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!--NProgress -->
-    <link href="/admin/css/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="/admin/iCheck/skins/flat/green.css" rel="stylesheet">
-    <!-- Datatables -->
-    <link href="/admin/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="/admin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-    <link href="/admin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-    <link href="/admin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-    <link href="/admin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-    <!-- Custom Theme Style -->
-    <link href="/admin/css/custom.min.css" rel="stylesheet">
+    <!-- Fav and Touch Icons -->
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon" href="/images/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="/images/ico/favicon.png">
+
+    <!-- CSS Plugins -->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" media="screen">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/plugin.css" rel="stylesheet">
+
+    <!-- CSS Custom -->
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- Add your style -->
+    <link href="/css/your-style.css" rel="stylesheet">
 
 </head>
 
-<body>
-    <!-- jQuery -->
-    <script src="/js/jquery.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="/admin/bootstrap/dist/js/bootstrap.min.js"></script>
+<body class="home transparent-header">
+
+    <my-app></my-app>
+
+    <!-- Core JS -->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/core-plugins.js"></script>
+    <script type="text/javascript" src="/js/customs.js"></script>
+
+    <!-- Detail Page JS -->
+    <script type="text/javascript" src="/js/jquery.stickit.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-tokenfield.js"></script>
+    <script type="text/javascript" src="/js/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.sumogallery.js"></script>
+    <script type="text/javascript" src="/js/images-grid.js"></script>
+    <script type="text/javascript" src="/js/jquery.bootstrap-touchspin.js"></script>
+    <script type="text/javascript" src="/js/customs-detail.js"></script>
+    <script type="text/javascript" src="/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flexdatalist.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+    <script type="text/javascript" src="/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="/js/dropzone.min.js"></script>
+    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
     <!-- FastClick -->
     <script src="/admin/js/fastclick.js"></script>
     <!-- NProgress -->
@@ -53,10 +77,10 @@
     <script src="/admin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
     <script src="/admin/jszip/dist/jszip.min.js"></script>
     <script src="/admin/pdfmake/build/pdfmake.min.js"></script>
-    <script src="/js/bootbox.min.js"></script>
-    <my-app>loading...</my-app>
+
     <!-- this is how our angular app gets served -->
     <script src="/js/app/bundle.js"></script>
+
 </body>
 
 </html>

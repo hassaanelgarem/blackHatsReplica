@@ -18,7 +18,10 @@ export class SupportComponent implements OnInit {
   ngOnInit() {
     this.supportService.getRequests().subscribe(requests => {
       this.requests = requests;
-    });
+    },
+      err => {
+        bootbox.alert(err.msg);
+      });
   }
 
   isLoading() {
@@ -44,7 +47,12 @@ export class SupportComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
+            });
         }
       }
     });
@@ -69,7 +77,12 @@ export class SupportComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
+            });
         }
       }
     });

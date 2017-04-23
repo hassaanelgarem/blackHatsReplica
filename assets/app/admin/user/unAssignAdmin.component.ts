@@ -17,7 +17,10 @@ export class UnAssignAdminComponent implements OnInit {
     ngOnInit() {
         this.userService.getAdmins().subscribe(users => {
             this.users = users;
-        });
+        },
+            err => {
+                bootbox.alert(err.msg);
+            });
     }
 
     isLoading() {
@@ -43,7 +46,12 @@ export class UnAssignAdminComponent implements OnInit {
                         bootbox.alert(msg, () => {
                             location.reload();
                         });
-                    });
+                    },
+                        err => {
+                            bootbox.alert(err.msg, () => {
+                                location.reload();
+                            });
+                        });
                 }
             }
         });

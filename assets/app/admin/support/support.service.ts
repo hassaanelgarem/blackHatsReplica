@@ -8,10 +8,12 @@ import { SupportRequest } from './support.model';
 @Injectable()
 export class SupportService {
     private alertMsg: string;
+    private apiPath: string = "http://localhost:8080/api/";
+
     constructor(private http: Http) { }
 
     getRequests() {
-        return this.http.get('http://localhost:8080/api/admin/support/getRequests')
+        return this.http.get(this.apiPath + 'admin/support/getRequests')
             //map method to transform the response
             .map((response: Response) => {
                 const requests = response.json().data;
@@ -28,7 +30,7 @@ export class SupportService {
 
     recoverAccount(requestId: string, accountType: string) {
         if (accountType === "Business") {
-            return this.http.put('http://localhost:8080/api/admin/support/business/recoverAccount/' + requestId, {})
+            return this.http.put(this.apiPath + 'admin/support/business/recoverAccount/' + requestId, {})
                 //map method to transform the response
                 .map((response: Response) => {
                     this.alertMsg = response.json().msg;
@@ -37,7 +39,7 @@ export class SupportService {
                 .catch((error: Response) => Observable.throw(error.json()));
         }
         else {
-            return this.http.put('http://localhost:8080/api/admin/support/user/recoverAccount/' + requestId, {})
+            return this.http.put(this.apiPath + 'admin/support/user/recoverAccount/' + requestId, {})
                 //map method to transform the response
                 .map((response: Response) => {
                     this.alertMsg = response.json().msg;
@@ -48,7 +50,7 @@ export class SupportService {
     }
 
     rejectRequest(requestId: string) {
-        return this.http.delete('http://localhost:8080/api/admin/support/deleteRequest/' + requestId)
+        return this.http.delete(this.apiPath + 'admin/support/deleteRequest/' + requestId)
             //map method to transform the response
             .map((response: Response) => {
                 this.alertMsg = response.json().msg;

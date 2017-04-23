@@ -18,6 +18,9 @@ export class VerifyComponent implements OnInit {
   ngOnInit() {
     this.businessService.getUnverifiedBusinesses().subscribe(businesses => {
       this.businesses = businesses
+    },
+    err => {
+      bootbox.alert(err.msg);
     });
   }
 
@@ -44,7 +47,12 @@ export class VerifyComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
+            });
         }
       }
     });
@@ -69,7 +77,12 @@ export class VerifyComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
+            });
         }
       }
     });

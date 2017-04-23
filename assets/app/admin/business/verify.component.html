@@ -16,45 +16,43 @@
                     <div class="clearfix"></div>
 
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="x_panel">
-                                <div class="x_content">
+                        <div class="x_panel">
+                            <div class="x_content">
 
-                                    <table id="datatable" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 20%">Name</th>
-                                                <th>Email</th>
-                                                <th>Applied At</th>
+                                <table id="datatable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20%">Name</th>
+                                            <th>Email</th>
+                                            <th>Applied At</th>
 
-                                                <th style="width: 20%">Admin Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let business of businesses">
-                                                <td>
-                                                    <p>{{business.name}}</p>
-                                                    <br />
-                                                </td>
-                                                <td>
-                                                    <p>{{business.email}}</p>
-                                                </td>
-                
-                                                <td>
-                                                    {{business.createdAt}}
-                                                </td>
+                                            <th style="width: 20%">Admin Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let business of businesses">
+                                            <td>
+                                                <p>{{business.name}}</p>
+                                                <br />
+                                            </td>
+                                            <td>
+                                                <p>{{business.email}}</p>
+                                            </td>
 
-                                                <td>
-                                                    <button class="btn btn-primary btn-xs" [disabled]="isLoading()" (click)="verifyBusiness(business._id)"><i class="fa fa-building"></i> Verify </button>
-                                                    <button class="btn btn-danger btn-xs" [disabled]="isLoading()" (click)="rejectBusiness(business._id)"><i class="fa fa-trash-o"></i> Reject </button>
-                                                </td>
-                                            </tr>
+                                            <td>
+                                                {{business.createdAt | date:'medium'}}
+                                            </td>
 
-                                        </tbody>
-                                    </table>
-                                    <!-- end project list -->
+                                            <td>
+                                                <button class="btn btn-primary btn-xs" [disabled]="isLoading()" (click)="verifyBusiness(business._id)"><i class="fa fa-building"></i> Verify </button>
+                                                <button class="btn btn-danger btn-xs" [disabled]="isLoading()" (click)="rejectBusiness(business._id)"><i class="fa fa-trash-o"></i> Reject </button>
+                                            </td>
+                                        </tr>
 
-                                </div>
+                                    </tbody>
+                                </table>
+                                <!-- end project list -->
+
                             </div>
                         </div>
                     </div>

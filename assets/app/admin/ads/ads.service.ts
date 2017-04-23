@@ -8,10 +8,11 @@ import { Observable } from "rxjs";
 @Injectable()
 export class AdsService {
     private alertMsg: string;
+    private apiPath: string = "http://localhost:8080/api/";
     constructor(private http: Http) { }
 
     getSlots() {
-        return this.http.get('http://localhost:8080/api/advertisement/getAdvSlots')
+        return this.http.get(this.apiPath + 'advertisement/getAdvSlots')
             //map method to transform the response
             .map((response: Response) => {
                 const slots = response.json().data;
@@ -27,7 +28,7 @@ export class AdsService {
     }
 
     addSlot(name: string, price: number, length: number, width: number) {
-        return this.http.post('http://localhost:8080/api/admin/advertisement/addAdvSlots', {
+        return this.http.post(this.apiPath + 'admin/advertisement/addAdvSlots', {
             name,
             price,
             length,
@@ -42,7 +43,7 @@ export class AdsService {
     }
 
     deleteSlot(slotId: string){
-        return this.http.delete('http://localhost:8080/api/admin/advertisement/deleteAdvSlot/'+slotId)
+        return this.http.delete(this.apiPath + 'admin/advertisement/deleteAdvSlot/'+slotId)
             //map method to transform the response
             .map((response: Response) => {
                 this.alertMsg = response.json().msg;

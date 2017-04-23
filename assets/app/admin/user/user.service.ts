@@ -9,10 +9,11 @@ import { User } from './user.model';
 @Injectable()
 export class UserService {
     private alertMsg: string;
+    private apiPath: string = "http://localhost:8080/api/";
     constructor(private http: Http) { }
 
     getUsers() {
-        return this.http.get('http://localhost:8080/api/admin/user/getVerified')
+        return this.http.get(this.apiPath + 'admin/user/getVerified')
             //map method to transform the response
             .map((response: Response) => {
                 const users = response.json().data;
@@ -29,7 +30,7 @@ export class UserService {
     }
 
     getUnverifiedUsers() {
-        return this.http.get('http://localhost:8080/api/admin/user/getUnVerified')
+        return this.http.get(this.apiPath + 'admin/user/getUnVerified')
             //map method to transform the response
             .map((response: Response) => {
                 const users = response.json().data;
@@ -48,7 +49,7 @@ export class UserService {
 
 
     getAdmins() {
-        return this.http.get('http://localhost:8080/api/admin/user/getAdmins')
+        return this.http.get(this.apiPath + 'admin/user/getAdmins')
             //map method to transform the response
             .map((response: Response) => {
                 const admins = response.json().data;
@@ -67,7 +68,7 @@ export class UserService {
     }
 
     getNonAdmins() {
-        return this.http.get('http://localhost:8080/api/admin/user/getNonAdmins')
+        return this.http.get(this.apiPath + 'admin/user/getNonAdmins')
             //map method to transform the response
             .map((response: Response) => {
                 const nonAdmins = response.json().data;
@@ -87,7 +88,7 @@ export class UserService {
 
     deleteUser(userId: string, verified: boolean) {
         if (verified) {
-            return this.http.delete('http://localhost:8080/api/admin/user/delete/' + userId)
+            return this.http.delete(this.apiPath + 'admin/user/delete/' + userId)
                 //map method to transform the response
                 .map((response: Response) => {
                     this.alertMsg = response.json().msg;
@@ -96,7 +97,7 @@ export class UserService {
                 .catch((error: Response) => Observable.throw(error.json()));
         }
         else {
-            return this.http.delete('http://localhost:8080/api/admin/user/deleteTemp/' + userId)
+            return this.http.delete(this.apiPath + 'admin/user/deleteTemp/' + userId)
                 //map method to transform the response
                 .map((response: Response) => {
                     this.alertMsg = response.json().msg;
@@ -111,7 +112,7 @@ export class UserService {
         var body = {
             admin: true
         }
-        return this.http.put('http://localhost:8080/api/admin/makeAdmin/' + userId, body)
+        return this.http.put(this.apiPath + 'admin/makeAdmin/' + userId, body)
             //map method to transform the response
             .map((response: Response) => {
                 this.alertMsg = response.json().msg;
@@ -124,7 +125,7 @@ export class UserService {
         var body = {
             admin: false
         }
-        return this.http.put('http://localhost:8080/api/admin/removeAdmin/' + userId, body)
+        return this.http.put(this.apiPath + 'admin/removeAdmin/' + userId, body)
             //map method to transform the response
             .map((response: Response) => {
                 this.alertMsg = response.json().msg;

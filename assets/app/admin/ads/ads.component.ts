@@ -22,7 +22,12 @@ export class AdsComponent implements OnInit {
   ngOnInit() {
     this.adsService.getSlots().subscribe(slots => {
       this.slots = slots;
-    });
+    },
+      err => {
+        bootbox.alert(err.msg, () => {
+          location.reload();
+        });
+      });
   }
 
   isLoading() {
@@ -47,8 +52,13 @@ export class AdsComponent implements OnInit {
           this.adsService.deleteSlot(slotId).subscribe(msg => {
             bootbox.alert(msg, () => {
               location.reload();
+            })
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
             });
-          });
         }
       }
     });
@@ -77,7 +87,12 @@ export class AdsComponent implements OnInit {
             bootbox.alert(msg, () => {
               location.reload();
             });
-          });
+          },
+            err => {
+              bootbox.alert(err.msg, () => {
+                location.reload();
+              });
+            });
         }
       }
     });
