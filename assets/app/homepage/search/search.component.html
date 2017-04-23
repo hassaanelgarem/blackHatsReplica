@@ -1,0 +1,60 @@
+<!-- start hero-header -->
+<div class="hero img-bg-01">
+	<div class="container">
+
+		<h1>What would you like to do?</h1>
+		<p>Discover and book your unique entertainment experiences offered by local businesses</p>
+		<form>
+			<div class="form-group">
+				<input type="text" placeholder="Search by name or tag" class="form-control" data-min-length="1" name="results" #result>
+				<button class="btn" (click)="searchClicked(result.value)"><i class="icon-magnifier"></i></button>
+			</div>
+		</form>
+		<br>
+		<br>
+		<br>
+		<p>Have nothing in mind? we can help you choose!</p>
+
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="form-group">
+					<p>Where are you?</p>
+
+					<select class="selectpicker show-tick form-control" title="Choose Location" #location>
+									<option value="All"></option>
+									<option value="nearby">Nearby</option>
+									<option value="Cairo">Cairo</option>
+									<option value="Giza">Giza</option>
+									<option value="Alexandria">Alexandria</option>
+									<option value="Suez">Suez</option>
+				</select>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="form-group">
+					<p>What do you feel like doing?</p>
+
+					<select class="selectpicker show-tick form-control" title="Choose Category" #category>
+									<option value="All"></option>
+									<option value="Room Escape">Room Escape</option>
+									<option value="Trampoline">Trampoline</option>
+									<option value="Go Karts">Go Karts</option>
+									<option value="Battle Games">Battle Games</option>
+									<option value="Water Games">Water Games</option>
+									<option value="Hiking">Hiking</option>
+									<option value="Extreme Sports">Extreme Sports</option>
+									<option value="Sports">Sports</option>
+								</select>
+				</div>
+
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-12">
+				<br>
+				<div class="fearured-join-item mb-0">
+					<a (click)="exploreClicked(location.value,category.value)" class="btn btn-primary btn-lg">Explore</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end hero-header -->

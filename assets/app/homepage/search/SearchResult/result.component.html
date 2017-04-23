@@ -1,0 +1,201 @@
+<div class="transparent-header">
+
+    <!-- start Container Wrapper -->
+
+    <div class="container-wrapper">
+
+
+        <!-- start Main Wrapper -->
+
+        <div class="main-wrapper scrollspy-container">
+
+            <!-- start breadcrumb -->
+
+            <div class="breadcrumb-image-bg" style="background-image:url('/images/breadcrumb-bg.jpg');">
+                <div class="container">
+
+                    <div class="page-title">
+
+                        <div class="row">
+
+                            <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+
+                                <h2>Business Search results</h2>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- end breadcrumb -->
+
+            <div class="filter-full-width-wrapper">
+
+                <form class="">
+
+                    <div class="filter-full-primary">
+
+                        <div class="container">
+
+                            <div class="filter-full-primary-inner">
+
+                                <div class="form-holder">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-12 col-md-6">
+
+                                            <div class="filter-item bb-sm no-bb-xss">
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-12 col-md-6">
+
+                                            <div class="filter-item-wrapper">
+
+                                                <div class="row">
+
+                                                    <div class="col-xss-12 col-xs-6 col-sm-5">
+
+                                                        <div class="filter-item mmr">
+
+                                                            <div class="input-group input-group-addon-icon no-border no-br-xs">
+                                                                <span class="input-group-addon input-group-addon-icon bg-white">
+																<label class="block-xs"><i class="fa fa-sort-amount-asc"></i> Sort by:</label></span>
+                                                                <select class="selectpicker form-control block-xs" #sort (change)="updateSortQuery(sort.value)">
+																	<option value="interactivity"> Popularity</option>
+																	<option value="averageRating"> Ratings</option>
+
+																</select>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+
+
+            <div class="pt-30 pb-50">
+
+                <div class="container">
+
+                    <div class="user-item-wrapper-02">
+
+                        <div class="GridLex-gap-20 GridLex-gap-15-mdd GridLex-gap-10-xs">
+
+                            <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-center">
+                                <div class="GridLex-col-3_sm-4_xs-6_xss-12" *ngFor="let business of sliced">
+
+                                    <div class="user-item-02" style="background-color:white">
+
+                                        <div class="image">
+                                            <img *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="Images" />
+                                            <img name="businessLogo" *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="Images" />
+                                        </div>
+
+                                        <div class="content">
+
+                                            <h4>{{business.name}}</h4>
+                                            <div class="rating-wrapper">
+                                                <div class="rating-item">
+                                                    <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly
+                                                        value="{{business.averageRating}}" />
+                                                </div>
+                                            </div>
+                                            <div *ngIf="business.location">
+                                                <span class="labeling"><i class="fa fa-map-marker"></i> {{business.location.city}}</span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="user-meta">
+                                            <ul class="clearfix">
+                                                <li>
+                                                    <div class="meta">
+                                                        <span class="number">{{business.interactivity}}</span> Popularity
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="meta">
+                                                        <span class="number">{{business.averageRating}}/5</span> Rating
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="ph-20">
+                                            <a href="/business/{{business.businessId}}" class="btn btn-primary btn-block">View Profile</a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="pager-wrappper clearfix">
+
+                        <div class="pager-innner">
+
+                            <div class="clearfix">
+                                Showing businesses from {{businesses.length}} results
+                            </div>
+
+                            <div class="clearfix">
+                                <nav class="pager-center">
+                                    <ul class="pagination">
+                                        <li *ngIf="pageNumber > 1">
+                                            <a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li routerLinkActive="active" *ngFor="let number of pagingIndex; let i = index" ><a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+1}">{{i+1}}</a></li>
+                                        <li *ngIf="pageNumber < pagingIndex.length">
+                                            <a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+2}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- end Main Wrapper -->
+    </div>
+</div>

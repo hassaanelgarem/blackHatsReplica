@@ -25,10 +25,10 @@ const businessSchema = new mongoose.Schema({
     }],
     workingHours: {
         from: {
-            type: String
+            type: Date
         },
         to: {
-            type: String
+            type: Date
         }
     },
     address: {
@@ -67,6 +67,10 @@ const businessSchema = new mongoose.Schema({
     }],
     totalRatings: {
         type: Number,
+        default: 0
+    },
+    averageRating: {
+        Number,
         default: 0
     },
     photos: [{

@@ -9,7 +9,9 @@ const session = require('express-session');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const moment = require('moment');
 const app = express();
+
 
 //require passport.js for configuration
 const passportConfig = require('./api/config/passport');
@@ -40,6 +42,7 @@ app.use(session({
     maxAge: 3600000 * 2
   }
 }));
+
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
@@ -60,6 +63,7 @@ app.use(expressValidator({
     };
   }
 }));
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());

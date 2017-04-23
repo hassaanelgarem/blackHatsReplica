@@ -1,0 +1,9 @@
+.img-wrap {
+  position: relative;
+}
+
+.img-wrap .close{
+  position: absolute;
+  top: 0px;
+  right: 7px;
+}

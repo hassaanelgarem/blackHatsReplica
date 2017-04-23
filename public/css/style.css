@@ -76,7 +76,7 @@
 }
 
 .transparent-header .navbar-default {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 .bg-color-header .navbar-default {
@@ -374,7 +374,7 @@ ul.nav-mini li i {
  */
 
 .navbar-sticky {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     padding: 10px 0;
     z-index: 999999;
 }
@@ -805,6 +805,12 @@ ul.bottom-footer-menu.for-social li:after {
     line-height: 1;
     margin: 0;
     text-transform: lowercase;
+    font-weight: 700
+}
+
+.login-box-wrapper .modal-title2 {
+    line-height: 1;
+    margin: 0;
     font-weight: 700
 }
 

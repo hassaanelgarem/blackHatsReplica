@@ -1,0 +1,45 @@
+<div class="row">
+
+
+  <h4 class="section-title">Bookings</h4>
+
+    <div class="col-md-12">
+        <div class="form-group">
+          <select select class="selectpicker show-tick form-control" data-live-search="false" #t (change)="getBookings(t.value)">
+            <option value="0" selected disabled>Choose an activity</option>
+            <option *ngFor="let activityName of activityNames; let i=index" value={{i}}>{{activityName}}</option>
+          </select>
+        </div>
+  </div>
+
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_content">
+
+                <table id="datatable" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let currentBooking of currentBookings">
+                        <th>{{currentBooking.user.firstName}}</th>
+                        <th>{{currentBooking.slot.startTime | date:'hh:mm'}}</th>
+                        <th>{{currentBooking.slot.endTime | date:'hh:mm'}}</th>
+                        <th>{{currentBooking.date | date:'MMM d, y'}}</th>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -19,11 +19,15 @@ const Review = mongoose.model('Review');
     Redirects to: Nothing
     Calling route: '/api/review/user/:userId'
 */
-module.exports.getUserReviews = function (req, res) {
+
+module.exports.getUserReviews = function(req, res) {
     //Finds all reviews made by a user according to the User ID
     Review.find({
         "user": req.params.userId
-    }, function (err, reviews) {
+    }).populate({
+        path: 'business',
+        select: 'name'
+    }).exec(function(err, reviews) {
         //If an error occurred, return an error
         if (err) {
             res.status(500).json({
@@ -37,9 +41,10 @@ module.exports.getUserReviews = function (req, res) {
                 error: null,
                 msg: "Reviews retrieved Successfully",
                 data: reviews
+
             });
         }
-    })
+    });
 };
 
 
@@ -58,7 +63,7 @@ module.exports.getUserReviews = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/review/businessId/add'
 */
-module.exports.addReview = function (req, res) {
+module.exports.addReview = function(req, res) {
     //get values from post request
     var comment = req.body.comment;
     var rating = req.body.rating;
@@ -72,7 +77,7 @@ module.exports.addReview = function (req, res) {
 
     if (errors) {
         res.status(500).json({
-            error: err,
+            error: errors,
             msg: null,
             data: null
         });
@@ -85,7 +90,7 @@ module.exports.addReview = function (req, res) {
             business: business
         });
         //saves the new review in the database
-        newReview.save(function (err, review) {
+        newReview.save(function(err, review) {
             //if an error occurred, return an error
             if (err) return res.status(500).json({
                 error: err,
@@ -103,7 +108,7 @@ module.exports.addReview = function (req, res) {
                     upsert: true,
                     new: true
                 },
-                function (err, model) {
+                function(err, model) {
                     if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
@@ -111,7 +116,7 @@ module.exports.addReview = function (req, res) {
                     });
                     if (model) {
                         // Gets the business being reviewed
-                        Business.findById(review.business, function (err, doc) {
+                        Business.findById(review.business, function(err, doc) {
                             if (err) return res.status(500).json({
                                 error: err,
                                 msg: "Error occured while updating Business concerned",
@@ -120,12 +125,12 @@ module.exports.addReview = function (req, res) {
 
                             // Updates totalRating of the business
                             doc.totalRatings = doc.totalRatings + review.rating;
-
+                            doc.averageRating = doc.totalRatings / doc.reviews.length;
                             //Adds review to reviews array of corresponding business
                             doc.reviews.push(review._id);
 
                             // Saves the updated business document in database
-                            doc.save(function (err) {
+                            doc.save(function(err) {
                                 if (err) return res.status(400).json({
                                     error: err,
                                     msg: "Error occured while saving review",
@@ -134,7 +139,7 @@ module.exports.addReview = function (req, res) {
                                 res.status(200).json({
                                     error: null,
                                     msg: "Review saved Successfully",
-                                    data: null
+                                    data: review
                                 });
                             });
                         });
@@ -164,13 +169,13 @@ module.exports.addReview = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/review/:businessId'
 */
-module.exports.getReviews = function (req, res) {
+module.exports.getReviews = function(req, res) {
     //Finds all reviews made on a specific business according to its business ID
     Review.find({
         "business": req.params.businessId
     }).populate({
       path: 'user',
-      select: 'firstName lastName'
+      select: 'firstName lastName profilePicture'
     }).exec(function (err, reviews) {
         //If an error occurred, return an error
         if (err) {
@@ -206,10 +211,10 @@ module.exports.getReviews = function (req, res) {
     Redirects to: Nothing.
     Calling route: '/api/review/averageRating/:businessId'
 */
-module.exports.getAverageRating = function (req, res) {
+module.exports.getAverageRating = function(req, res) {
 
     // Get the business concered from the database by it's Id
-    Business.findById(req.params.businessId, function (err, doc) {
+    Business.findById(req.params.businessId, function(err, doc) {
         // If there is an error return it in response
         if (err) return res.status(500).json({
             error: err,
@@ -219,8 +224,10 @@ module.exports.getAverageRating = function (req, res) {
         if (doc) {
             // Calculate average rating using totalRating and count of reviews
             const reviewsCount = doc.reviews.length;
-            let averageRating = doc.totalRatings / reviewsCount;
-
+            var averageRating = 0;
+            if(reviewsCount != 0){
+              averageRating = doc.totalRatings / reviewsCount;
+            }
             // Return average rating in response
             res.status(200).json({
                 error: null,
@@ -253,7 +260,7 @@ module.exports.getAverageRating = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/review/:reviewId/edit'
 */
-module.exports.editReview = function (req, res) {
+module.exports.editReview = function(req, res) {
     //gets values of variables that user wants to edit
     const newComment = req.body.comment;
     const newRating = req.body.rating;
@@ -271,7 +278,7 @@ module.exports.editReview = function (req, res) {
         });
     } else {
         //Finds the review by the ID specified in the URI and updates the comment and the rating
-        Review.findById(req.params.reviewId, function (err, oldReview) {
+        Review.findById(req.params.reviewId, function(err, oldReview) {
             //If error occurred return it in response
             if (err) {
                 res.status(500).json({
@@ -287,7 +294,7 @@ module.exports.editReview = function (req, res) {
                         data: null
                     });
                 } else {
-                    Business.findById(oldReview.business, function (err, business) {
+                    Business.findById(oldReview.business, function(err, business) {
                         if (err) {
                             res.status(500).json({
                                 error: err,
@@ -303,7 +310,8 @@ module.exports.editReview = function (req, res) {
                                 });
                             } else {
                                 business.totalRatings = business.totalRatings - oldReview.rating + newRating;
-                                business.save(function (err, updatedBusiness) {
+                                business.averageRating = business.totalRatings / business.reviews.length;
+                                business.save(function(err, updatedBusiness) {
                                     if (err) {
                                         res.status(500).json({
                                             error: err,
@@ -313,7 +321,7 @@ module.exports.editReview = function (req, res) {
                                     } else {
                                         oldReview.rating = newRating;
                                         oldReview.comment = newComment;
-                                        oldReview.save(function (err, newReview) {
+                                        oldReview.save(function(err, newReview) {
                                             if (err) {
                                                 res.status(500).json({
                                                     error: err,
@@ -355,9 +363,9 @@ module.exports.editReview = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/review/:reviewId/delete'
 */
-module.exports.deleteReview = function (req, res) {
+module.exports.deleteReview = function(req, res) {
     //Finding and deleting review from database
-    Review.findByIdAndRemove(req.params.reviewId, function (err, reviewToDelete) {
+    Review.findByIdAndRemove(req.params.reviewId, function(err, reviewToDelete) {
         if (err) return res.status(500).json({
             error: err,
             msg: 'There was a problem with deleting the review',
@@ -375,7 +383,7 @@ module.exports.deleteReview = function (req, res) {
                     upsert: true,
                     new: true
                 },
-                function (err, model) {
+                function(err, model) {
                     if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
@@ -383,7 +391,7 @@ module.exports.deleteReview = function (req, res) {
                     });
                     if (model) {
                         //Delete review from reviews array in corresponding business
-                        Business.findById(reviewToDelete.business, function (err, business) {
+                        Business.findById(reviewToDelete.business, function(err, business) {
                             if (err)
                                 return res.status(500).json({
                                     error: null,
@@ -394,8 +402,8 @@ module.exports.deleteReview = function (req, res) {
 
                                 business.reviews.pull(reviewToDelete._id);
                                 business.totalRatings = business.totalRatings - reviewToDelete.rating;
-
-                                business.save(function (err, updatedBusiness) {
+                                business.averageRating = business.totalRatings / business.reviews.length;
+                                business.save(function(err, updatedBusiness) {
                                     if (err) {
                                         res.status(500).json({
                                             error: err,
