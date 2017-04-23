@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { UserRegisterService } from './register.service';
 import { User } from '../user.model';
+
 @Component({
     selector: 'user-register',
     templateUrl: './register.component.html'
@@ -42,15 +43,15 @@ export class RegisterComponent {
         this.registerService.signUp(user)
             .subscribe(
             data => {
-                    this.failure= false;
-                    this.success = true;
-                    this.message = data.msg;
-              },
-              error => {
-                        this.success= false;
-                        this.failure = true;
-                        this.message = error.error.msg;
-                    }
+                this.failure = false;
+                this.success = true;
+                this.message = data.msg;
+            },
+            error => {
+                this.success = false;
+                this.failure = true;
+                this.message = error.error.msg;
+            }
             );
     };
 }

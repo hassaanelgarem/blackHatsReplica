@@ -1,4 +1,4 @@
-<body>
+  <div class="container">
     <div class="user-profile-wrapper">
 
         <div class="user-header">
@@ -33,8 +33,8 @@
                                             </div>
                                             <ul class="user-meta">
                                                 <li> Email: {{email}}<span class="mh-5 text-muted"></span></li>
-                                                <li> Born: {{birthDate | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
-                                                <li> Joined: {{createdAt | date:'hh:mm - MMM d, y' }}<span class="mh-5 text-muted"></span></li>
+                                                <li> Born: {{birthDate | date:'shortDate' }}<span class="mh-5 text-muted"></span></li>
+                                                <li> Joined: {{createdAt | date:'shortDate' }}<span class="mh-5 text-muted"></span></li>
 
 
                                             </ul>
@@ -69,8 +69,8 @@
 
                                     <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
                                     <li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
-                                    <li *ngIf="loggedIn" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
-                                    <li *ngIf="loggedIn" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
+                                    <li *ngIf="loggedin" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+                                    <li *ngIf="loggedin" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
 
                                 </ul>
                             </nav>
@@ -103,7 +103,7 @@
                 </div>
 
                 <div *ngIf="editProfile" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                    <app-editUserProfile></app-editUserProfile>
+                    <app-editUserProfile (pictureChanged)="pictureChanged($event)"></app-editUserProfile>
                 </div>
 
             </div>
@@ -111,5 +111,4 @@
         </div>
 
     </div>
-
-</body>
+  </div>

@@ -178,11 +178,20 @@ module.exports.getActivityBookings = function(req, res) {
                     model: 'User'
                 }
                 Activity.populate(activities, options, function(err, populatedActvities) {
-                    return res.status(200).json({
-                        error: null,
-                        msg: "Successful Retrieval",
-                        data: activities
-                    });
+                    if (err) {
+                        //If an error occurred, display a msg along with the error
+                        if (err) return res.status(500).json({
+                            error: err,
+                            msg: "Cannot Retrieve activities",
+                            data: null
+                        });
+                    } else {
+                        return res.status(200).json({
+                            error: null,
+                            msg: "Successful Retrieval",
+                            data: populatedActvities
+                        });
+                    }
                 });
             }
         });
@@ -534,7 +543,7 @@ module.exports.addSlot = function(req, res) {
 
                         //If an error occurred, display a msg along with the error
                         else {
-                            res.status(500).json({
+                            res.status(405).json({
                                 error: null,
                                 msg: "Slots Overlap",
                                 data: null
@@ -887,18 +896,18 @@ module.exports.getActivity = function(req, res) {
             });
         } else {
             if (activity) {
-              var act = activity.toObject();
-              act.slots.sort(function(a, b){
-                var one = new Date(b.startTime);
-                var two = new Date(a.startTime);
-                one.setDate(12);
-                one.setMonth(12);
-                one.setFullYear(2012);
-                two.setDate(12);
-                two.setMonth(12);
-                two.setFullYear(2012);
-                return two - one;
-              });
+                var act = activity.toObject();
+                act.slots.sort(function(a, b) {
+                    var one = new Date(b.startTime);
+                    var two = new Date(a.startTime);
+                    one.setDate(12);
+                    one.setMonth(12);
+                    one.setFullYear(2012);
+                    two.setDate(12);
+                    two.setMonth(12);
+                    two.setFullYear(2012);
+                    return two - one;
+                });
                 res.status(200).json({
                     error: null,
                     msg: null,
@@ -931,65 +940,60 @@ module.exports.getActivity = function(req, res) {
     Redirects to: Nothing.
     Calling Route: '/api/activity/:activityId/edit'
 */
-module.exports.editActivity = function(req, res){
+module.exports.editActivity = function(req, res) {
 
-  req.checkBody('name', 'Name is required.').notEmpty();
-  req.checkBody('price', 'Price is required.').notEmpty();
-  req.checkBody('description', 'Description is required.').notEmpty();
-  req.checkBody('bookingsPerSlot', 'Bookings Per Slot is required.').notEmpty();
+    req.checkBody('name', 'Name is required.').notEmpty();
+    req.checkBody('price', 'Price is required.').notEmpty();
+    req.checkBody('description', 'Description is required.').notEmpty();
+    req.checkBody('bookingsPerSlot', 'Bookings Per Slot is required.').notEmpty();
 
-  const errors = req.validationErrors();
+    const errors = req.validationErrors();
 
-  if(errors) {
-    res.status(500).json({
-        error: errors,
-        msg: "Incomplete Input",
-        data: null
-    });
-  }
-  else {
-    activityBelongs(req.params.activityId, req.user._id, function(flag) {
-      if(flag) {
-        Activity.findByIdAndUpdate(req.params.activityId,
-          {
-            name: req.body.name,
-            price: req.body.price,
-            description: req.body.description,
-            bookingsPerSlot: req.body.bookingsPerSlot
-          }, {}, function(err, activity) {
-            if(err) {
-              res.status(500).json({
-                  error: err,
-                  msg: "Error updating databse",
-                  data: null
-              });
-            }
-            else{
-              if(!activity){
-                res.status(500).json({
-                    error: null,
-                    msg: "Activity not found",
-                    data: null
-                });
-              }
-              else{
-                res.status(200).json({
-                    error: null,
-                    msg: "Activity updated Successfully",
-                    data: null
-                });
-              }
-            }
-          });
-      }
-      else{
-        res.status(401).json({
-            error: null,
-            msg: "Business Login Required or Unauthorized Access",
+    if (errors) {
+        res.status(500).json({
+            error: errors,
+            msg: "Incomplete Input",
             data: null
         });
-      }
-    });
-  }
+    } else {
+        activityBelongs(req.params.activityId, req.user._id, function(flag) {
+            if (flag) {
+                Activity.findByIdAndUpdate(req.params.activityId, {
+                    name: req.body.name,
+                    price: req.body.price,
+                    description: req.body.description,
+                    bookingsPerSlot: req.body.bookingsPerSlot
+                }, {}, function(err, activity) {
+                    if (err) {
+                        res.status(500).json({
+                            error: err,
+                            msg: "Error updating databse",
+                            data: null
+                        });
+                    } else {
+                        if (!activity) {
+                            res.status(500).json({
+                                error: null,
+                                msg: "Activity not found",
+                                data: null
+                            });
+                        } else {
+                            res.status(200).json({
+                                error: null,
+                                msg: "Activity updated Successfully",
+                                data: null
+                            });
+                        }
+                    }
+                });
+            } else {
+                res.status(401).json({
+                    error: null,
+                    msg: "Business Login Required or Unauthorized Access",
+                    data: null
+                });
+            }
+        });
+    }
 
 }

@@ -19,14 +19,14 @@
                           <!-- First slide -->
                           <div class="item active">
                               <div class="image">
-                                  <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" />
+                                  <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt;"/>
                               </div>
                           </div>
                           <!-- /.item -->
 
                           <div class="item" *ngFor="let businessPhoto of businessPhotos; let i = index">
                               <div class="image">
-                                  <img src="{{path}}image/businessPhotos/{{businessPhoto}}" alt="Image" />
+                                  <img src="{{path}}image/businessPhotos/{{businessPhoto}}" alt="Image" style="height: 300pt;"/>
                               </div>
                           </div>
 
@@ -63,7 +63,7 @@
                                     <div class="image" *ngIf="loadDone">
                                         <!-- changethis -->
                                         <!-- "{{path}}image/businessLogos/{{logo}}" -->
-                                        <img src="{{path}}image/businessLogos/{{logo}}" alt="image"/>
+                                        <img src="{{path}}image/businessLogos/{{logo}}" alt="image" style="height: 105px; width: auto;"/>
                                     </div>
 
                                     <div class="GridLex-gap-20">
@@ -74,16 +74,13 @@
 
                                                 <div class="GridLex-inner">
                                                     <div class="heading clearfix">
-                                                        <h3>{{businessName}}</h3>
-                                                        <a *ngIf="ownerLoggedIn" href="#" class="btn btn-primary btn-xs btn-border">Admin view</a>
+                                                        <h3><a href="business/{{businessId}}">{{businessName}}</a></h3>
                                                     </div>
                                                     <ul class="user-meta">
                                                         <li><i *ngIf="addressAvailable" class="fa fa-map-marker"></i> {{businessAddress}} <span class="mh-5 text-muted">|</span> <i *ngIf="phoneNumbersAvailable" class="fa fa-phone"></i> {{businessPhoneNumbers}}</li>
                                                         <li>
-                                                            <a *ngIf="userLoggedIn" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
-                                                            <a *ngIf="noLogIn" href="#" class="btn btn-primary btn-xs btn-border">Favorite</a>
-                                                        </li>
-                                                        <li>
+                                                            <a *ngIf="userLoggedIn && !favorited" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
+                                                            <p *ngIf="userLoggedIn && favorited" style="color: coral;"> This is one of your favorites!</p>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -107,7 +104,7 @@
 
             </div>
 
-            <div id="review-form" class="review-form" style="padding-top: 150px; padding-left: 100px; padding-right: 250px; padding-bottom: 50px;">
+            <div *ngIf="userLoggedIn" id="review-form" class="review-form" style="padding-top: 150px; padding-left: 100px; padding-right: 250px; padding-bottom: 50px;">
 
               <h3 class="review-form-title">Leave Your Review</h3>
 
@@ -158,7 +155,7 @@
             </div>
 
             <body>
-                <div class="review-wrapper" style="padding-top: 50px; padding-left: 100px; padding-right: 250px;">
+                <div class="review-wrapper" style="padding-top: 50px; padding-left: 100px; padding-right: 250px; margin-bottom: 200pt;">
 
                     <div class="review-header">
 
@@ -196,7 +193,7 @@
 
                                     <div class="col-xs-12 col-sm-12 col-md-3">
                                         <div class="review-header">
-                                            <h6><a href="user/review.user._id">{{review.user.firstName + " " + review.user.lastName}}</a></h6>
+                                            <h6><a href="user/{{review.user._id}}">{{review.user.firstName + " " + review.user.lastName}}</a></h6>
                                             <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span>
 
                                             <div class="rating-item">
@@ -220,8 +217,6 @@
                             </li>
 
                         </ul>
-
-                        <!-- <a href="#" class="review-load-more mb-40">load more...</a> -->
 
                     </div>
 

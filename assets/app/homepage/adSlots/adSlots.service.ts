@@ -14,7 +14,9 @@ export class AdSlotsService {
     constructor(private http: Http) { }
 
     getAdSlots() {
-        return this.http.get('http://localhost:8080/api/advertisement/getAdvSlots')
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+        return this.http.get('http://localhost:8080/api/advertisement/getAdvSlots', {headers: headers})
             //map method to transform the response
             .map((response: Response) => {
                 const adSlots = response.json().data;
@@ -25,12 +27,13 @@ export class AdSlotsService {
                 this.adSlots = transformedAdSlots;
                 // console.log(this.adSlots);
                 return transformedAdSlots;
-            })
-            .catch((error: Response) => Observable.throw(error.json()));
+            }).catch((error: Response) => Observable.throw(error.json()));
     }
 
     getBookedSlots(advertismentId : string) {
-        return this.http.get('http://localhost:8080/api/advertisement/getCurrentBookings/'+advertismentId)
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+        return this.http.get('http://localhost:8080/api/advertisement/getCurrentBookings/' + advertismentId, {headers: headers})
             //map method to transform the response
             .map((response: Response) => {
                 const bookingSlots = response.json().data;
@@ -41,8 +44,7 @@ export class AdSlotsService {
                 this.bookingSlots = transformedBookingSlots;
                 // console.log(this.adSlots);
                 return transformedBookingSlots;
-            })
-            .catch((error: Response) => Observable.throw(error.json()));
+            }).catch((error: Response) => Observable.throw(error.json()));
     }
-   
+
 }

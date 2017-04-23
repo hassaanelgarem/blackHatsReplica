@@ -71,7 +71,7 @@
                                                                 <select class="selectpicker form-control block-xs" #sort (change)="updateSortQuery(sort.value)">
 																	<option value="interactivity"> Popularity</option>
 																	<option value="totalRatings"> Ratings</option>
-																
+
 																</select>
                                                             </div>
 
@@ -141,7 +141,7 @@
                                                 </li>
                                                 <li>
                                                     <div class="meta">
-                                                        <span class="number">{{business.totalRatings}}/5</span> Ratings
+                                                        <span class="number">{{business.averageRating}}/5</span> Rating
                                                     </div>
                                                 </li>
                                             </ul>

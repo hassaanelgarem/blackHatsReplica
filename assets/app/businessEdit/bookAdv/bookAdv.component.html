@@ -10,6 +10,14 @@
 
             <div class="row">
 
+              <div *ngIf="advImgWarning" class="alert alert-danger alert-dismissable">
+                <a class="close" (click)="hideAdvImgWarning()" aria-label="close">&times;</a> You must upload a picture to book an advertisement
+              </div>
+
+              <div *ngIf="advNoOfDaysWarning" class="alert alert-danger alert-dismissable">
+                <a class="close" (click)="hideNoOfDaysWarning()" aria-label="close">&times;</a> You must specify the number of days to book an advertisement
+              </div>
+
                 <div class="col-xs-12 col-sm-8 col-md-9 mt-20">
 
                     <div class="dashboard-wrapper">
@@ -52,7 +60,7 @@
 
                                             <div class="GridLex-inner">
                                                 <h4>{{advertisement.name}}</h4>
-                                                <span class="font-italic font14">Available Date: {{availableSlots[i]}}</span>
+                                                <span class="font-italic font14">Available Date: {{availableSlots[i] | date:'hh:mm - MMM d, y'}}</span>
                                                 <div>
                                                     <span class="font-italic font14">Length: {{advertisement.length}}</span>
                                                     <div class="divider"></div>

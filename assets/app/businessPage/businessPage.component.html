@@ -17,14 +17,14 @@
                         <!-- First slide -->
                         <div class="item active">
                             <div class="image image-responsive">
-                                <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" />
+                                <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt;"/>
                             </div>
                         </div>
                         <!-- /.item -->
 
                         <div class="item" *ngFor="let photo of photos; let i = index">
                             <div class="image image-responsive">
-                                <img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" />
+                                <img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" style="height: 300pt;"/>
                             </div>
                         </div>
 
@@ -60,7 +60,7 @@
                                 <div class="image" *ngIf="loadDone">
                                     <!-- changethis -->
                                     <!-- "{{path}}image/businessLogos/{{logo}}" -->
-                                    <img src="{{path}}image/businessLogos/{{logo}}" alt="image" />
+                                    <img src="{{path}}image/businessLogos/{{logo}}" alt="image" style="height: 105px; width: auto;"/>
                                 </div>
 
                                 <div class="GridLex-gap-20">
@@ -77,10 +77,9 @@
                                                 <ul class="user-meta">
                                                     <li><i *ngIf="addressAvailable" class="fa fa-map-marker"></i> {{address}} <span class="mh-5 text-muted">|</span> <i *ngIf="phoneNumbersAvailable" class="fa fa-phone"></i> {{phoneNumbers}}</li>
                                                     <li>
-                                                        <a *ngIf="userLoggedIn" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
-                                                        <a *ngIf="noLogIn" href="#" class="btn btn-primary btn-xs btn-border">Favorite</a>
+                                                        <a *ngIf="userLoggedIn && !favorited" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
+                                                        <label *ngIf="userLoggedIn && favorited" style="color: coral; font-weight: 400;"> This is one of your favorites!</label>
                                                         <a *ngIf="userLoggedIn" href="business/{{businessId}}/reviews" class="btn btn-primary btn-xs btn-border">Rate and Review</a>
-                                                        <a *ngIf="noLogIn" href="#" class="btn btn-primary btn-xs btn-border">Rate and Review</a>
                                                     </li>
                                                     <li>
                                                     </li>
@@ -89,7 +88,7 @@
 
                                         </div>
 
-                                        <div class="GridLex-col-5_sm-12_xs-12_xss-12">
+                                        <div class="GridLex-col-5_sm-12_xs-12_xss-12 content">
 
                                             <div class="GridLex-inner">
 
@@ -235,7 +234,7 @@
                                 <div class="trip-guide-item">
 
                                     <div class="trip-guide-image">
-                                        <img src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" />
+                                        <img src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="max-height: 183pt;"/>
                                     </div>
 
                                     <div class="trip-guide-content">
@@ -245,14 +244,6 @@
 
                                     <div class="trip-guide-bottom">
 
-                                        <div class="trip-guide-meta row gap-10">
-                                            <div class="col-xs-6 col-sm-6">
-                                                <div class="rating-item">
-                                                    <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="4.5" />
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="row gap-10">
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="trip-guide-price">
@@ -260,7 +251,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-sm-6 text-right text-left-xs">
-                                                <a data-toggle="modal" href="#activityModal" class="btn btn-primary">Details</a>
+                                                <a data-toggle="modal" href="business/activity/{{activity._id}}" class="btn btn-primary">Details</a>
                                             </div>
                                         </div>
 
@@ -330,7 +321,7 @@
                                                         <div class="image">
                                                             <img src="{{path}}image/profilePictures/{{review.user.profilePicture}}" class="img-circle" alt="images" style="height: 30pt;" />
                                                         </div>
-                                                        <p class="name">By: <a href="user/review.user._id">{{review.user.firstName + " " + review.user.lastName}}</a></p>
+                                                        <p class="name">By: <a href="user/{{review.user._id}}">{{review.user.firstName + " " + review.user.lastName}}</a></p>
                                                         <p> on {{review.time | date:'hh:mm - MMM d, y'}}</p>
                                                     </div>
 
@@ -339,9 +330,7 @@
                                         </div>
 
                                     </div>
-                                    <a href="business/{{businessId}}/reviews" class="btn-blog">View all reviews <i class="fa fa-long-arrow-right"></i></a>
-                                    <a href="#">view profile <i class="ion-android-arrow-forward"></i></a>
-
+                                    <a href="business/{{businessId}}/reviews" style="padding-left: 900px;" class="btn-blog">View all reviews <i class="fa fa-long-arrow-right"></i></a>
                                 </div>
 
                             </div>
