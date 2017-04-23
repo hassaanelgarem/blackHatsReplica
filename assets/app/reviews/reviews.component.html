@@ -19,7 +19,7 @@
                           <!-- First slide -->
                           <div class="item active">
                               <div class="image">
-                                <img *ngIf="noPhotos" src="/images/no-image.svg" alt="Image" style="height: 300pt; margin: auto;"/>
+                                <img *ngIf="noPhotos" src="{{path}}image/businessPhotos/x" alt="Image" style="height: 300pt; margin: auto;"/>
                                 <img *ngIf="!noPhotos" src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt; margin: auto;"/>
                               </div>
                           </div>
@@ -64,7 +64,8 @@
                                     <div class="image" *ngIf="loadDone">
                                         <!-- changethis -->
                                         <!-- "{{path}}image/businessLogos/{{logo}}" -->
-                                        <img src="{{path}}image/businessLogos/{{logo}}" alt="image" style="height: 105px; width: auto;"/>
+                                        <img *ngIf="!logo" src="{{path}}image/businessLogos/x" alt="image" style="height: 105px; width: auto;"/>
+                                        <img *ngIf="logo" src="{{path}}image/businessLogos/{{logo}}" alt="image" style="height: 105px; width: auto;"/>
                                     </div>
 
                                     <div class="GridLex-gap-20">

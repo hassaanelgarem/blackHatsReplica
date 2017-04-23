@@ -14,7 +14,8 @@
 
                             <div class="image">
                                 <br>
-                                <img src="{{path}}{{profilePicture}}" alt="profile picture" style="width:inherit;height:inherit">
+                                <img *ngIf="!profilePicture" src="{{path}}x" alt="profile picture" style="width:inherit;height:inherit">
+                                <img *ngIf="profilePicture" src="{{path}}{{profilePicture}}" alt="profile picture" style="width:inherit;height:inherit">
                                 <br>
                             </div>
 
@@ -63,13 +64,13 @@
 
                     <div class="container">
                         <header class="row spacing">
-                            <nav class="col-md-8 col-md-offset-2">
+                            <nav class="col-md-10 col-md-offset-2">
                                 <ul class="nav nav-tabs">
 
-                                    <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
-                                    <li [class.active]="showFavorites"><a (click)="onFavoritesClick()">Favorites</a></li>
-                                    <li *ngIf="loggedin" [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
-                                    <li *ngIf="loggedin" [class.active]="editProfile"><a (click)="onEditProfileClick()">Edit Profile</a></li>
+                                    <li [class.active]="showReviews"><a (click)="onReviewsClick()" style="cursor: pointer;">Reviews</a></li>
+                                    <li [class.active]="showFavorites"><a (click)="onFavoritesClick()" style="cursor: pointer;">Favorites</a></li>
+                                    <li *ngIf="loggedin" [class.active]="showBookings"><a (click)="onBookingsClick()" style="cursor: pointer;">Bookings</a></li>
+                                    <li *ngIf="loggedin" [class.active]="editProfile"><a (click)="onEditProfileClick()" style="cursor: pointer;">Edit Profile</a></li>
 
                                 </ul>
                             </nav>

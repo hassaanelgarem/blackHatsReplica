@@ -5,8 +5,7 @@
 * Created:        08/03/2017
 -------------------------------------------------------------------*/
 
-
-.truncate{
+.truncate {
   width: 260px;
   height: 63px;
 }
@@ -14,12 +13,13 @@
 $font-size: 14px;
 $line-height: 1.4;
 $lines-to-show: 3;
-
-.truncate2{
-  display: block; /* Fallback for non-webkit */
+.truncate2 {
+  display: block;
+  /* Fallback for non-webkit */
   display: -webkit-box;
   max-width: 400px;
-  height: $font-size*$line-height*$lines-to-show; /* Fallback for non-webkit */
+  height: $font-size*$line-height*$lines-to-show;
+  /* Fallback for non-webkit */
   margin: 0 auto;
   font-size: $font-size;
   line-height: $line-height;
@@ -29,12 +29,3 @@ $lines-to-show: 3;
   text-overflow: ellipsis;
 }
 
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    /* Margin bottom by footer height */
-    margin-bottom: 74px;
-}

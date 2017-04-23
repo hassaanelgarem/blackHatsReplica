@@ -25,7 +25,8 @@
 						<!--to add the link later-->
 						<a href="http://localhost:8080/business/{{business.businessId}}">
 							<div class="image">
-								<img src="/uploads/businessLogos/{{business.logo}}" alt="images" />
+								<img *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="images" />
+								<img *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="images" />
 							</div>
 							<h4 class="uppercase"><span>{{business.name}}</span></h4>
 						</a>

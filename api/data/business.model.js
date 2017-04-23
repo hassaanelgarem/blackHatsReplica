@@ -69,6 +69,10 @@ const businessSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    averageRating: {
+        Number,
+        default: 0
+    },
     photos: [{
         type: String
     }],

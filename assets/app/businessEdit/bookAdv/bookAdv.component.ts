@@ -120,7 +120,7 @@ export class BookAdvComponent implements OnInit {
             this.advImgWarning = false;
         }
         if (!this.advImgWarning && !this.advImgWarning) {
-            this.startTimeValue = new Date(this.availableSlots[index]);
+            this.startTimeValue = this.availableSlots[index];
             this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
 
             var handler = (<any>window).StripeCheckout.configure({

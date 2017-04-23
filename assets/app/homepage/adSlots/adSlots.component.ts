@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { AdSlotsService } from './adSlots.service';
 import { AdSlot } from '../adSlots.model';
 import { BookingSlot } from "../bookingSlot.model";
@@ -66,5 +66,4 @@ export class AdSlotsComponent implements OnInit {
                 }
             });
     }
-
 }

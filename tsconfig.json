@@ -7,9 +7,8 @@
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "compileOnSave": false,
-    "lib": ["es6", "dom"]
+    "lib": ["es6", "dom"] 
   },
-  "compileOnSave": false,
   "exclude": [
     "node_modules",
     "public/js"

@@ -125,7 +125,7 @@ module.exports.addReview = function(req, res) {
 
                             // Updates totalRating of the business
                             doc.totalRatings = doc.totalRatings + review.rating;
-
+                            doc.averageRating = doc.totalRatings / doc.reviews.length;
                             //Adds review to reviews array of corresponding business
                             doc.reviews.push(review._id);
 
@@ -310,6 +310,7 @@ module.exports.editReview = function(req, res) {
                                 });
                             } else {
                                 business.totalRatings = business.totalRatings - oldReview.rating + newRating;
+                                business.averageRating = business.totalRatings / business.reviews.length;
                                 business.save(function(err, updatedBusiness) {
                                     if (err) {
                                         res.status(500).json({
@@ -401,7 +402,7 @@ module.exports.deleteReview = function(req, res) {
 
                                 business.reviews.pull(reviewToDelete._id);
                                 business.totalRatings = business.totalRatings - reviewToDelete.rating;
-
+                                business.averageRating = business.totalRatings / business.reviews.length;
                                 business.save(function(err, updatedBusiness) {
                                     if (err) {
                                         res.status(500).json({

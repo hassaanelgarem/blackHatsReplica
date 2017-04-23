@@ -225,8 +225,8 @@ export class EditActivityComponent implements OnInit {
                     console.log("Data status: " + data.status);
                     this.activity.slots.push(newSlot);
                     this.activity.slots.sort(function(a, b) {
-                        var one = new Date(b.startTime);
-                        var two = new Date(a.startTime);
+                        var one = b.startTime;
+                        var two = a.startTime;
                         one.setDate(12);
                         one.setMonth(12);
                         one.setFullYear(2012);
