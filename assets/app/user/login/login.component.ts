@@ -68,6 +68,9 @@ export class LoginComponent implements OnInit {
         if(!this.username || this.username.length == 0){
             this.incorrectUserWarning = false;
             this.userUsernameWarning = true;
+            setTimeout(() => {
+                this.userUsernameWarning = false;
+            }, 5000);
         }
         else {
             this.userUsernameWarning = false;
@@ -76,6 +79,9 @@ export class LoginComponent implements OnInit {
             this.incorrectUserWarning = false;
 
             this.userPasswordWarning = true;
+            setTimeout(() => {
+                this.userPasswordWarning = false;
+            }, 5000);
         }
         else {
             this.userPasswordWarning = false;
@@ -84,7 +90,7 @@ export class LoginComponent implements OnInit {
         if (!this.userUsernameWarning && !this.userPasswordWarning) {
             this.loginService.userLogin(this.username, this.userPassword).subscribe(data => {
                 if (data.success) {
-                    // console.log("login");
+
                     this.loggedin = true;
                     setTimeout(() => {
                         location.reload();
@@ -93,6 +99,9 @@ export class LoginComponent implements OnInit {
                 }
                 else {
                     this.incorrectUserWarning = true;
+                    setTimeout(() => {
+                        this.incorrectUserWarning = false;
+                    }, 5000);
                     this.username = null;
                     this.userPassword = null;
                 }
@@ -108,6 +117,9 @@ export class LoginComponent implements OnInit {
         if(!this.businessEmail || this.businessEmail.length == 0){
             this.incorrectBusinessWarning = false;
             this.businessEmailWarning = true;
+            setTimeout(() => {
+                this.businessEmailWarning = false;
+            }, 5000);
         }
         else {
             this.businessEmailWarning = false;
@@ -115,6 +127,9 @@ export class LoginComponent implements OnInit {
         if(!this.businessPassword || this.businessPassword.length == 0){
             this.incorrectBusinessWarning = false;
             this.businessPasswordWarning = true;
+            setTimeout(() => {
+                this.businessPasswordWarning = false;
+            }, 5000);
         }
         else {
             this.businessPasswordWarning = false;
@@ -131,6 +146,9 @@ export class LoginComponent implements OnInit {
                 }
                 else {
                     this.incorrectBusinessWarning = true;
+                    setTimeout(() => {
+                        this.incorrectBusinessWarning = false;
+                    }, 5000);
                     this.businessEmail = null;
                     this.businessPassword = null;
                 }
@@ -145,6 +163,9 @@ export class LoginComponent implements OnInit {
     onUserForgetPass() {
         if (!this.userEmail || this.userEmail.length == 0) {
             this.resetUserEmailWarning = true;
+            setTimeout(() => {
+                this.resetUserEmailWarning = false;
+            }, 5000);
         }
         else {
             this.resetUserEmailWarning = false;
@@ -154,10 +175,16 @@ export class LoginComponent implements OnInit {
             this.loginService.forgetPassword(this.userEmail).subscribe(data => {
             this.resetFailureWarning = false;
             this.resetSuccessWarning = true;
+            setTimeout(() => {
+                this.resetSuccessWarning = false;
+            }, 5000);
             this.successReset = data.msg;
         }, err => {
             this.resetSuccessWarning = false;
             this.resetFailureWarning = true;
+            setTimeout(() => {
+                this.resetFailureWarning = false;
+            }, 5000);
             if(err.status == 500) {
                 this.failedReset = err.json().error[0].msg;
             }
@@ -173,6 +200,9 @@ export class LoginComponent implements OnInit {
     onBusinessForgetPass() {
         if (!this.businessEmail || this.businessEmail.length == 0) {
             this.resetBusinessEmailWarning = true;
+            setTimeout(() => {
+                this.resetBusinessEmailWarning = false;
+            }, 5000);
         }
         else {
             this.resetBusinessEmailWarning = false;
@@ -182,10 +212,16 @@ export class LoginComponent implements OnInit {
             this.loginService.forgetPassword(this.businessEmail).subscribe(data => {
             this.resetFailureWarning = false;
             this.resetSuccessWarning = true;
+            setTimeout(() => {
+                this.resetSuccessWarning = false;
+            }, 5000);
             this.successReset = data.msg;
         }, err => {
             this.resetSuccessWarning = false;
             this.resetFailureWarning = true;
+            setTimeout(() => {
+                this.resetFailureWarning = false;
+            }, 5000);
             if(err.status == 500) {
                 this.failedReset = err.json().error[0].msg;
             }
@@ -202,6 +238,9 @@ export class LoginComponent implements OnInit {
 
         if (!this.userEmail || this.userEmail.length == 0) {
             this.resendEmailWarning = true;
+            setTimeout(() => {
+                this.resendEmailWarning = false;
+            }, 5000);
         }
         else {
             this.resendEmailWarning = false;
@@ -209,12 +248,18 @@ export class LoginComponent implements OnInit {
 
         if (!this.resendEmailWarning) {
             this.loginService.resendEmail(this.userEmail).subscribe(data => {
-            this.resendFailureWarning = false; 
+            this.resendFailureWarning = false;
             this.resendSuccessWarning = true;
+            setTimeout(() => {
+                this.resendSuccessWarning = false;
+            }, 5000);
             this.successResend = data.msg;
         }, err => {
             this.resendSuccessWarning = false;
             this.resendFailureWarning = true;
+            setTimeout(() => {
+                this.resendFailureWarning = false;
+            }, 5000);
             if(err.status == 500) {
                 this.failedResend = err.json().error[0].msg;
             }

@@ -61,6 +61,9 @@ export class ResetPasswordComponent implements OnInit {
         if (!this.password || this.password.length == 0) {
             this.resetFailureWarning = false;
             this.passwordWarning = true;
+            setTimeout(() => {
+                this.passwordWarning = false;
+            }, 5000);
         }
         else {
             this.passwordWarning = false;
@@ -68,6 +71,9 @@ export class ResetPasswordComponent implements OnInit {
         if (!this.confirmPassword || this.confirmPassword.length == 0) {
             this.resetFailureWarning = false;
             this.confirmPasswordWarning = true;
+            setTimeout(() => {
+                this.confirmPasswordWarning = false;
+            }, 5000);
         }
         else {
             this.confirmPasswordWarning = false;
@@ -80,6 +86,9 @@ export class ResetPasswordComponent implements OnInit {
                 this.password = null;
                 this.confirmPassword = null;
                 this.resetFailureWarning = true;
+                setTimeout(() => {
+                    this.resetFailureWarning = false;
+                }, 5000);
 
                 if (err.status == 500) {
                     this.resetFailure = err.json().error[0].msg;
