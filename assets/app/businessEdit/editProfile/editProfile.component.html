@@ -16,7 +16,8 @@
 					<div class="form-group bootstrap-fileinput-style-01">
 						<label>Logo</label>
 						<br>
-						<img class='img-circle' src="{{path}}{{logo}}" alt="Business Logo" style="width:200px;height:200px">
+						<img *ngIf="!logo" class='img-circle' src="{{path}}x" alt="Business Logo" style="width:200px;height:200px">
+						<img *ngIf="logo" class='img-circle' src="{{path}}{{logo}}" alt="Business Logo" style="width:200px;height:200px">
 						<br>
 						<div class="form-horizontal">
 							<div class="form-group">

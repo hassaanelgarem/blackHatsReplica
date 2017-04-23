@@ -70,7 +70,7 @@
 																<label class="block-xs"><i class="fa fa-sort-amount-asc"></i> Sort by:</label></span>
                                                                 <select class="selectpicker form-control block-xs" #sort (change)="updateSortQuery(sort.value)">
 																	<option value="interactivity"> Popularity</option>
-																	<option value="totalRatings"> Ratings</option>
+																	<option value="averageRating"> Ratings</option>
 
 																</select>
                                                             </div>
@@ -113,8 +113,8 @@
                                     <div class="user-item-02" style="background-color:white">
 
                                         <div class="image">
-                                            <img *ngIf="!business.logo" src="/images/no-image.svg" alt="Images" />
-                                            <img name="businessLogo" *ngIf="business.logo" src="/uploads/businessLogos/{{business.logo}}" alt="Images" />
+                                            <img *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="Images" />
+                                            <img name="businessLogo" *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="Images" />
                                         </div>
 
                                         <div class="content">
@@ -123,7 +123,7 @@
                                             <div class="rating-wrapper">
                                                 <div class="rating-item">
                                                     <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly
-                                                        value="{{business.totalRatings}}" />
+                                                        value="{{business.averageRating}}" />
                                                 </div>
                                             </div>
                                             <div *ngIf="business.location">
@@ -171,14 +171,14 @@
                             <div class="clearfix">
                                 <nav class="pager-center">
                                     <ul class="pagination">
-                                        <li>
-                                            <a aria-label="Previous">
+                                        <li *ngIf="pageNumber > 1">
+                                            <a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i}" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li *ngFor="let number of pagingIndex; let i = index" class="active"><a routerLinkActive="active" [routerLink]="search" [queryParams]="{result: searchQuery, page : i+1}">{{i+1}}</a></li>
-                                        <li>
-                                            <a href="#" aria-label="Next">
+                                        <li routerLinkActive="active" *ngFor="let number of pagingIndex; let i = index" ><a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+1}">{{i+1}}</a></li>
+                                        <li *ngIf="pageNumber < pagingIndex.length">
+                                            <a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+2}" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
                                         </li>

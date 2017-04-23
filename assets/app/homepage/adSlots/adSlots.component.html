@@ -24,7 +24,8 @@
 						<div class="trip-guide-item">
 							<a href="http://localhost:8080/business/{{bookingSlot.businessId}}">
 								<div class="trip-guide-image">
-									<img src="/uploads/businessAds/{{bookingSlot.image}}" alt="images" />
+									<img *ngIf="!bookingSlot.image" src="http://localhost:8080/api/image/businessLogos/x" alt="images" />
+									<img *ngIf="bookingSlot.image"src="http://localhost:8080/api/image/businessAds/{{bookingSlot.image}}" alt="images" />
 								</div>
 							</a>
 

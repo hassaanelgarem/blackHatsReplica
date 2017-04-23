@@ -48,6 +48,7 @@ import { EditUserProfileComponent } from "./user/editProfile/editProfile.compone
 import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
+import { ContactSupportComponent } from './contactSupport/contactSupport.component';
 import { ActivityPageComponent } from "./businessPage/activityPage.component";
 
 
@@ -69,6 +70,7 @@ import { BookAdvService } from "./businessEdit/bookAdv/bookAdv.service";
 import { ActivityBookingsService } from "./businessEdit/activityBookings/activityBookings.service";
 import { UserService } from "./user/user.service";
 import { EditUserProfileService } from "./user/editProfile/editProfile.service";
+import { ContactSupportService } from './contactSupport/contactSupport.service';
 import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -115,7 +117,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       EditProfileComponent,
       ActivityPageComponent,
       FileSelectDirective,
-      FocusDirective
+      FocusDirective,
+      ContactSupportComponent
     ],
     imports: [
       BrowserModule,
@@ -151,6 +154,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ReviewsService,
       UserService,
       EditUserProfileService,
+      ContactSupportService,
       BusinessEditGuard
     ],
     bootstrap : [AppComponent]
