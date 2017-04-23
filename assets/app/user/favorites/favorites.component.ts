@@ -31,50 +31,79 @@ export class UserFavoritesComponent implements OnInit {
 
     ngOnInit() {
         this.loggedIn = this.userComponent.isLoggedIn();
-        this.activatedRoute.params.subscribe((params: Params) => {
-            this.userId = params['userId'];
-            this.appService.getCurrentUser().subscribe(data => {
-                if (data.success) {
-                    if (data.user) {
-                        this.isUser = true;
-                        if(this.userId == data.user._id){
-                          this.loggedIn = true;
-                        }
-                        else{
-                          this.loggedIn = false;
-                        }
-                    }
-                    else {
-                        this.loggedIn = false;
-                    }
-                }
-                else {
-                    this.loggedin = false;
-                }
-                this.userService.getOneUser(this.userId).subscribe(data => {
-                    if (data.err) {
-                        console.error(data.msg);
-                    }
-                    else {
-                        this.user = data.data;
-                        this.favorites = data.data.favorites;
-                        var businesses = [];
-                        for (var i = 0; i < this.favorites.length; i++) {
-                            this.userService.getCurrentInfo(this.favorites[i]).subscribe(data => {
-                                if (data.err) {
-                                    console.error(data.msg);
+        this.activatedRoute.params.subscribe(
+            (params: Params) => {
+                this.userId = params['userId'];
+                this.appService.getCurrentUser().subscribe(
+                    (data) => {
+                        if (data.success) {
+                            if (data.user) {
+                                this.isUser = true;
+                                if (this.userId == data.user._id) {
+                                    this.loggedIn = true;
                                 }
                                 else {
-                                    businesses.push(data.data);
+                                    this.loggedIn = false;
+                                }
+                            }
+                            else {
+                                this.loggedIn = false;
+                            }
+                        }
+                        else {
+                            this.loggedin = false;
+                        }
+                        this.userService.getOneUser(this.userId).subscribe(
+                            (data) => {
+                                this.user = data.data;
+                                this.favorites = data.data.favorites;
+                                var businesses = [];
+                                for (var i = 0; i < this.favorites.length; i++) {
+                                    this.userService.getCurrentInfo(this.favorites[i]).subscribe(
+                                        (data) => {
+                                            businesses.push(data.data);
+                                        }, (err) => {
+                                            switch (err.status) {
+                                                case 404:
+                                                    this.router.navigateByUrl('/404-error');
+                                                    break;
+                                                case 401:
+                                                    this.router.navigateByUrl('/notAuthorized-error');
+                                                    break;
+                                                default:
+                                                    this.router.navigateByUrl('/500-error');
+                                                    break;
+                                            }
+                                        });
+                                }
+                                this.businesses = businesses as [Object];
+                            }, (err) => {
+                                switch (err.status) {
+                                    case 404:
+                                        this.router.navigateByUrl('/404-error');
+                                        break;
+                                    case 401:
+                                        this.router.navigateByUrl('/notAuthorized-error');
+                                        break;
+                                    default:
+                                        this.router.navigateByUrl('/500-error');
+                                        break;
                                 }
                             });
-                        }
-                        this.businesses = businesses as [Object];
-                    }
-                });
-
+                    });
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
             });
-        });
 
 
 
@@ -82,47 +111,47 @@ export class UserFavoritesComponent implements OnInit {
     }
 
     deleteFavorite(i) {
-      var _this = this;
-      bootbox.confirm({
-          title: "Delete Favorite",
-          message: "Are you sure you want to remove this business from your favorites?",
-          buttons: {
-              cancel: {
-                  label: '<i class="fa fa-times"></i> Cancel'
-              },
-              confirm: {
-                  label: '<i class="fa fa-check"></i> Confirm'
-              }
-          },
-          callback: function(result) {
-            if(result){
-              _this.userService.deleteFavorite(_this.favorites[i]).subscribe(
-                  (data) => {
-                      console.log("no error");
-                      _this.businesses.splice(i, 1);
-                  },
-                  (err) => {
-                      switch (err.status) {
-                          case 404:
-                              //console.log("404 not found");
-                              _this.router.navigateByUrl('404-error');
-                              break;
-                          case 401:
-                              //console.log("Unauthorized");
-                              _this.router.navigateByUrl('notAuthorized-error');
-                              break;
-                          default:
-                              //console.log("Oops somethings went wrong");
-                              _this.router.navigateByUrl('500-error');
-                              break;
-                      }
+        var _this = this;
+        bootbox.confirm({
+            title: "Delete Favorite",
+            message: "Are you sure you want to remove this business from your favorites?",
+            buttons: {
+                cancel: {
+                    label: '<i class="fa fa-times"></i> Cancel'
+                },
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Confirm'
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    _this.userService.deleteFavorite(_this.favorites[i]).subscribe(
+                        (data) => {
+                            console.log("no error");
+                            _this.businesses.splice(i, 1);
+                        },
+                        (err) => {
+                            switch (err.status) {
+                                case 404:
+                                    //console.log("404 not found");
+                                    _this.router.navigateByUrl('/404-error');
+                                    break;
+                                case 401:
+                                    //console.log("Unauthorized");
+                                    _this.router.navigateByUrl('/notAuthorized-error');
+                                    break;
+                                default:
+                                    //console.log("Oops somethings went wrong");
+                                    _this.router.navigateByUrl('/500-error');
+                                    break;
+                            }
 
-                  }
-              );
+                        }
+                    );
+                }
+
             }
-
-          }
-      });
+        });
 
 
     }

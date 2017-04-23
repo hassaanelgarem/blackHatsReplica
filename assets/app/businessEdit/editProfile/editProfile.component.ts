@@ -48,54 +48,62 @@ export class EditProfileComponent implements OnInit {
         this.initialise();
     }
     initialise() {
-      this.appService.getCurrentUser().subscribe(
-        (data) => {
-          if(data.success && data.business){
-            this.businessId = data.business._id;
+        this.appService.getCurrentUser().subscribe(
+            (data) => {
+                if (data.success && data.business) {
+                    this.businessId = data.business._id;
 
-            this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {
-                if (data.err) {
-                    console.error(data.msg);
+                    this.editProfileService.getBusinessProfile(this.businessId).subscribe(
+                        (data) => {
+                            this.name = data.data.name;
+                            if (data.data.workingHours != null) {
+                                this.workingFrom = data.data.workingHours.from;
+                                this.workingTo = data.data.workingHours.to;
+                            }
+                            this.category = data.data.category;
+                            this.description = data.data.description;
+                            this.paymentRequired = data.data.paymentRequired;
+                            if (data.data.paymentRequired == 2) {
+                                this.depositFlag = true;
+                            }
+                            else {
+                                this.depositFlag = false;
+                            }
+                            this.deposit = data.data.deposit;
+                            this.phoneNumbers = data.data.phoneNumbers;
+                            this.tags = data.data.tags;
+                            this.workingDays = data.data.workingDays;
+                            if (data.data.location != null) {
+                                this.lng = data.data.location.coordinates[0];
+                                this.lat = data.data.location.coordinates[1];
+                            }
+                            if (data.data.logo != null) {
+                                this.path = "http://localhost:8080/api/image/businessLogos/";
+                                this.logo = data.data.logo;
+                            }
+                            else {
+                                this.path = "";
+                                this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
+                            }
+                            this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
+                            this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
+                                this.initialise();
+                            };
+                        }, (err) => {
+                            switch (err.status) {
+                                case 404:
+                                    this.router.navigateByUrl('/404-error');
+                                    break;
+                                case 401:
+                                    this.router.navigateByUrl('/notAuthorized-error');
+                                    break;
+                                default:
+                                    this.router.navigateByUrl('/500-error');
+                                    break;
+                            }
+                        });
                 }
-                else {
-                    this.name = data.data.name;
-                    if (data.data.workingHours != null) {
-                        this.workingFrom = data.data.workingHours.from;
-                        this.workingTo = data.data.workingHours.to;
-                    }
-                    this.category = data.data.category;
-                    this.description = data.data.description;
-                    this.paymentRequired = data.data.paymentRequired;
-                    if(data.data.paymentRequired == 2){
-                      this.depositFlag = true;
-                    }
-                    else{
-                      this.depositFlag = false;
-                    }
-                    this.deposit = data.data.deposit;
-                    this.phoneNumbers = data.data.phoneNumbers;
-                    this.tags = data.data.tags;
-                    this.workingDays = data.data.workingDays;
-                    if(data.data.location != null){
-                      this.lng = data.data.location.coordinates[0];
-                      this.lat = data.data.location.coordinates[1];
-                    }
-                    if (data.data.logo != null) {
-                        this.path = "http://localhost:8080/api/image/businessLogos/";
-                        this.logo = data.data.logo;
-                    }
-                    else {
-                        this.path = "";
-                        this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
-                    }
-                    this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
-                    this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
-                        this.initialise();
-                    };
-                }
-            });
-          }
-        })
+            })
 
     }
 
@@ -105,17 +113,28 @@ export class EditProfileComponent implements OnInit {
             to: this.workingTo
         };
         let location = {
-          coordinates: [this.lng, this.lat]
+            coordinates: [this.lng, this.lat]
         }
-        this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, location, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-        });
+        this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, location, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(
+            (data) => {
+
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
-    cancel(){
-      this.initialise();
+    cancel() {
+        this.initialise();
     }
 
     showDeposit(value) {
@@ -164,14 +183,14 @@ export class EditProfileComponent implements OnInit {
         this.uploader.uploadAll();
     }
 
-    markerDragEnd($event){
-      this.lat = $event.coords.lat;
-      this.lng = $event.coords.lng;
+    markerDragEnd($event) {
+        this.lat = $event.coords.lat;
+        this.lng = $event.coords.lng;
     }
 
-    mapClicked($event){
-      this.lat = $event.coords.lat;
-      this.lng = $event.coords.lng;
+    mapClicked($event) {
+        this.lat = $event.coords.lat;
+        this.lng = $event.coords.lng;
     }
 
 }

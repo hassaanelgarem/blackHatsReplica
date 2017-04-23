@@ -9,12 +9,12 @@ import 'rxjs/add/operator/map';
 @Component({
     selector: 'app-user-bookings',
     templateUrl: './userBookings.component.html'
-  })
+})
 export class UserBookingsComponent implements OnInit {
     count: Number = 0;
     bookings: [Object];
-    userId: String = "58e8d26b86e48c253b2c3c1e";
-    logoPath :String = "http://localhost:8080/api/image/businessLogos/";
+    userId: String;
+    logoPath: String = "http://localhost:8080/api/image/businessLogos/";
     //private user: Object;
     //private loggedin: Boolean;
     //private isUser: Boolean;
@@ -29,20 +29,41 @@ export class UserBookingsComponent implements OnInit {
         private http: Http) { }
 
     ngOnInit() {
-        this.activatedRoute.params.subscribe((params: Params) => {
-            this.userId = params['userId'];
-            this.userService.getBookingHistory(this.userId).subscribe(data => {
-                if (data.err) {
-                    console.error(data.msg);
-                }
-                else {
-                  this.bookings = data.data;
-                  this.count = this.bookings.length;
-                  this.loaded = true;
+        this.activatedRoute.params.subscribe(
+            (params: Params) => {
+                this.userId = params['userId'];
+                this.userService.getBookingHistory(this.userId).subscribe(
+                    (data) => {
+                        this.bookings = data.data;
+                        this.count = this.bookings.length;
+                        this.loaded = true;
+                    }, (err) => {
+                        switch (err.status) {
+                            case 404:
+                                this.router.navigateByUrl('/404-error');
+                                break;
+                            case 401:
+                                this.router.navigateByUrl('/notAuthorized-error');
+                                break;
+                            default:
+                                this.router.navigateByUrl('/500-error');
+                                break;
+                        }
+                    });
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
                 }
             });
-        });
 
 
-}
+    }
 }
