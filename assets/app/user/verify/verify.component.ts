@@ -31,9 +31,6 @@ export class VerifyComponent implements OnInit {
                         if (data.msg === "Token is valid.") {
                             this.userId = data.data.id;
                         }
-                        // else {
-                        //     //aya error 500 only!!
-                        // }
                     }, (err) => {
                         switch (err.status) {
                             case 404:

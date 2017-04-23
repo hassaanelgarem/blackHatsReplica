@@ -116,9 +116,8 @@ export class EditProfileComponent implements OnInit {
             coordinates: [this.lng, this.lat]
         }
         this.editProfileService.editBusinessProfile(this.name, workingHours, this.workingDays, this.category, location, this.description, this.phoneNumbers, this.tags, this.paymentRequired, this.deposit).subscribe(
-            (data) => {
-
-            }, (err) => {
+            (data) => {}, 
+            (err) => {
                 switch (err.status) {
                     case 404:
                         this.router.navigateByUrl('/404-error');
