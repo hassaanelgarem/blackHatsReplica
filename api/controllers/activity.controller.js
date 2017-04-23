@@ -543,7 +543,7 @@ module.exports.addSlot = function(req, res) {
 
                         //If an error occurred, display a msg along with the error
                         else {
-                            res.status(500).json({
+                            res.status(405).json({
                                 error: null,
                                 msg: "Slots Overlap",
                                 data: null

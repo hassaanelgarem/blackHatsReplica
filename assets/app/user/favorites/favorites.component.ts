@@ -82,30 +82,48 @@ export class UserFavoritesComponent implements OnInit {
     }
 
     deleteFavorite(i) {
+      var _this = this;
+      bootbox.confirm({
+          title: "Delete Favorite",
+          message: "Are you sure you want to remove this business from your favorites?",
+          buttons: {
+              cancel: {
+                  label: '<i class="fa fa-times"></i> Cancel'
+              },
+              confirm: {
+                  label: '<i class="fa fa-check"></i> Confirm'
+              }
+          },
+          callback: function(result) {
+            if(result){
+              _this.userService.deleteFavorite(_this.favorites[i]).subscribe(
+                  (data) => {
+                      console.log("no error");
+                      _this.businesses.splice(i, 1);
+                  },
+                  (err) => {
+                      switch (err.status) {
+                          case 404:
+                              //console.log("404 not found");
+                              _this.router.navigateByUrl('404-error');
+                              break;
+                          case 401:
+                              //console.log("Unauthorized");
+                              _this.router.navigateByUrl('notAuthorized-error');
+                              break;
+                          default:
+                              //console.log("Oops somethings went wrong");
+                              _this.router.navigateByUrl('500-error');
+                              break;
+                      }
 
-        this.userService.deleteFavorite(this.favorites[i]).subscribe(
-            (data) => {
-                console.log("no error");
-                this.businesses.splice(i, 1);
-            },
-            (err) => {
-                switch (err.status) {
-                    case 404:
-                        //console.log("404 not found");
-                        this.router.navigateByUrl('404-error');
-                        break;
-                    case 401:
-                        //console.log("Unauthorized");
-                        this.router.navigateByUrl('notAuthorized-error');
-                        break;
-                    default:
-                        //console.log("Oops somethings went wrong");
-                        this.router.navigateByUrl('500-error');
-                        break;
-                }
-
+                  }
+              );
             }
-        );
+
+          }
+      });
+
 
     }
 
