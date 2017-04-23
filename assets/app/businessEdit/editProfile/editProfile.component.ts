@@ -34,8 +34,8 @@ export class EditProfileComponent implements OnInit {
     extraDay: String = "";
     path: String = "";
     businessId: String;
-    lat: number = 51.678418;
-    lng: number = 7.809007;
+    lat: number = 30.044281;
+    lng: number = 31.340002;
 
 
     constructor(
@@ -50,7 +50,7 @@ export class EditProfileComponent implements OnInit {
     initialise() {
       this.appService.getCurrentUser().subscribe(
         (data) => {
-          if(data.success){
+          if(data.success && data.business){
             this.businessId = data.business._id;
 
             this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {

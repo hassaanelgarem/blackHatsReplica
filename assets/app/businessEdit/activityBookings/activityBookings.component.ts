@@ -43,7 +43,7 @@ export class ActivityBookingsComponent implements OnInit {
   getActivityBookings(){
     this.appService.getCurrentUser().subscribe(
     (data) => {
-      if(data.success){
+      if(data.success && data.business){
         this.businessId = data.business._id;
 
         this.activityBookingsService.getBookings(this.businessId).subscribe(data => {

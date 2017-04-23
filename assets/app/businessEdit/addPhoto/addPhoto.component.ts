@@ -31,7 +31,7 @@ export class AddPhotoComponent implements OnInit {
   showPhotos(){
     this.appService.getCurrentUser().subscribe(
       (data) => {
-        if(data.success){
+        if(data.success && data.business){
             this.businessId = data.business._id;
 
             this.editProfileService.getBusinessProfile(this.businessId).subscribe(data => {
