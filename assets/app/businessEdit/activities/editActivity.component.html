@@ -1,8 +1,4 @@
-<!doctype html>
-<html lang="en">
-
-<body class="transparent-header">
-
+<body class="home transparent-header">
 	<!-- start Container Wrapper -->
 	<div class="container-wrapper">
 
@@ -126,7 +122,9 @@
 										</div>
 
 										<div class="row gap-20">
-
+											<div *ngIf="addSlotWarning" class="alert alert-danger alert-dismissable">
+													<a class="close" (click)="hideSlotWarning()" aria-label="close">&times;</a> {{warningMessage}}
+											</div>
 											<div class="col-xs-12 col-sm-5 col-md-5">
 
 												<div class="form-group">
@@ -233,18 +231,5 @@
 
 		<!-- end Main Wrapper -->
 	</div>
-
-	<!-- end Container Wrapper -->
-
-
-	<!-- start Back To Top -->
-
-	<div id="back-to-top">
-		<a href="#"><i class="ion-ios-arrow-up"></i></a>
-	</div>
-
-	<!-- end Back To Top -->
-
 </body>
-
-</html>
+	<!-- end Container Wrapper -->

@@ -5,7 +5,6 @@ export class User {
         public username: string,
         public password: string,
         public confirmPassword: string,
-        public email: string,
-        public birthDate?: Date
+        public email: string
     ) { }
 }

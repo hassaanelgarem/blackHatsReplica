@@ -75,16 +75,36 @@ export class ReviewComponent implements OnInit {
     }
 
     onDelete(i){
-      this.editIndex = i;
-      this.userService.deleteReview(this.reviews[i]._id).subscribe(
-        (data) => {
-        console.log("no error");
-        this.reviews.splice(i,1);
-      },
-      (err) => {
-      console.log("error");
+      var _this = this;
+      bootbox.confirm({
+          title: "Delete Review",
+          message: "Are you sure you want to delete this review?",
+          buttons: {
+              cancel: {
+                  label: '<i class="fa fa-times"></i> Cancel'
+              },
+              confirm: {
+                  label: '<i class="fa fa-check"></i> Confirm'
+              }
+          },
+          callback: function(result) {
+            if(result){
+              _this.editIndex = i;
+              _this.userService.deleteReview(_this.reviews[i]._id).subscribe(
+                (data) => {
+                _this.reviews.splice(i,1);
+                _this.editing[i] = false;
+              },
+              (err) => {
+              console.log("error");
+              });
+            }
+
+          }
       });
-      this.editing[i] = false;
+
+
+
     }
 
     onSave(i){

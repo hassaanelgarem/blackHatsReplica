@@ -15,6 +15,9 @@ import { UserComponent } from "./user/user.component";
 import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
+import { ActivityPageComponent } from "./businessPage/activityPage.component";
+
+import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
 
 
 const APP_ROUTES: Routes = [
@@ -25,11 +28,12 @@ const APP_ROUTES: Routes = [
     { path: 'policy', component: PolicyComponent },
     { path: 'resetPassword/:token', component: ResetPasswordComponent},
     { path: 'verify/:token', component: VerifyComponent},
-    { path: 'businessEdit', component: BusinessEditComponent },
-    { path: 'businessEdit/activity/:activityId', component: EditActivityComponent },
+    { path: 'businessEdit', component: BusinessEditComponent, canActivate: [BusinessEditGuard] },
+    { path: 'businessEdit/activity/:activityId', component: EditActivityComponent, canActivate: [BusinessEditGuard]},
     { path: 'business/:businessId', component: BusinessPageComponent },
     { path: 'business/:businessId/reviews', component: ReviewsComponent },
-    { path: 'user/:userId', component: UserComponent}, //mirna fixed
+    { path: 'business/activity/:activityId', component: ActivityPageComponent },
+    { path: 'user/:userId', component: UserComponent},
     { path: '404-error', component: FourofourComponent},
     { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent},
     { path: '500-error', component: SomethingWrongComponent},

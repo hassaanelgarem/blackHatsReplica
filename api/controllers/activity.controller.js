@@ -56,7 +56,7 @@ module.exports.addActivity = function(req, res) {
             price: req.body.price,
             description: req.body.description,
             bookingsPerSlot: req.body.bookingsPerSlot,
-            business: "58e8d68ce4a2cf7c06cff89a"
+            business: req.user._id
         });
         // Save new Activity in database
         newActivity.save(function(err, activity) {
@@ -543,7 +543,7 @@ module.exports.addSlot = function(req, res) {
 
                         //If an error occurred, display a msg along with the error
                         else {
-                            res.status(500).json({
+                            res.status(405).json({
                                 error: null,
                                 msg: "Slots Overlap",
                                 data: null
