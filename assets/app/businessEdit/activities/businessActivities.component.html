@@ -23,7 +23,7 @@
                                             <div class="trip-guide-item no-person">
 
                                                 <div class="trip-guide-image" style="width: 290px; height: 290px">
-                                                    <img *ngIf="!activity.photos[0]" src="/images/placeholderImage.jpg" alt="images" style="width: inherit; height: inherit" />
+                                                    <img *ngIf="!activity.photos[0]" src="{{path}}image/activityPhotos/x" alt="images" style="width: inherit; height: inherit" />
                                                     <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="width: inherit; height: inherit" />
                                                 </div>
 

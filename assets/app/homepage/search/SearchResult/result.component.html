@@ -113,8 +113,8 @@
                                     <div class="user-item-02" style="background-color:white">
 
                                         <div class="image">
-                                            <img *ngIf="!business.logo" src="/images/no-image.svg" alt="Images" />
-                                            <img name="businessLogo" *ngIf="business.logo" src="/uploads/businessLogos/{{business.logo}}" alt="Images" />
+                                            <img *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="Images" />
+                                            <img name="businessLogo" *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="Images" />
                                         </div>
 
                                         <div class="content">

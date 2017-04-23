@@ -11,7 +11,7 @@ const imageTypes = ["activityPhotos", "businessAds", "businessLogos", "businessP
         - businessLogos
         - businessPhotos
         - profilePictures
-    Takes: 
+    Takes:
         params{
             imageType,
             imageName
@@ -28,7 +28,8 @@ module.exports.getImage = function(req, res) {
         if (fs.existsSync(filePath)) {
             res.sendFile(path.resolve(filePath));
         } else {
-            res.status(404).send("Image not found");
+          let noImage = './public/images/no-image.svg';
+          res.sendFile(path.resolve(noImage));
         }
     }
 }
