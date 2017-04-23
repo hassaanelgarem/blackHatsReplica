@@ -19,7 +19,7 @@ const Business = mongoose.model("Business");
     Redirect to: Nothing.
     Calling route: '/api/activity/book'
 */
-module.exports.bookActivity = function (req, res) {
+module.exports.bookActivity = function(req, res) {
     req.checkBody('slot', 'Slot is required').notEmpty();
     req.checkBody('activity', 'Activity ID is required').notEmpty();
     req.checkBody('date', 'Date is required').notEmpty();
@@ -37,10 +37,10 @@ module.exports.bookActivity = function (req, res) {
         const newBooking = new Booking({
             slot: req.body.slot,
             activity: req.body.activity,
-            user: "58dff292c0dc7f2224966e47",
+            user: req.user._id,
             date: req.body.date
         });
-        Activity.findById(req.body.activity, function (err, doc) {
+        Activity.findById(req.body.activity, function(err, doc) {
             if (err) return res.status(500).json({
                 error: err,
                 msg: "Error searching for activity",
@@ -52,7 +52,7 @@ module.exports.bookActivity = function (req, res) {
                 data: null
             });
             // Save new booking in database
-            newBooking.save(function (err, booking) {
+            newBooking.save(function(err, booking) {
                 // If there is an error return it in response
                 if (err) return res.status(500).json({
                     error: err,
@@ -71,7 +71,7 @@ module.exports.bookActivity = function (req, res) {
                         upsert: true,
                         new: true
                     },
-                    function (err, user) {
+                    function(err, user) {
                         // If there is an error return it in response
                         if (err) return res.status(500).json({
                             error: err,
@@ -90,7 +90,7 @@ module.exports.bookActivity = function (req, res) {
                                     upsert: true,
                                     new: true
                                 },
-                                function (err, activity) {
+                                function(err, activity) {
                                     // If there is an error return it in response
                                     if (err) return res.status(500).json({
                                         error: err,
@@ -136,26 +136,49 @@ module.exports.bookActivity = function (req, res) {
     Redirects to: Nothing.
     Calling routes: '/api/booking/history/:userId'
 */
-module.exports.getBookingHistory = function (req, res) {
+module.exports.getBookingHistory = function(req, res) {
 
     //Finds history of bookings for a specific user given his id
     Booking.find({
         "user": req.params.userId
-    }).populate('activity').exec(function (err, bookings) {
+    }).populate('activity').exec(function(err, bookings) {
 
         //If an error occurred, display a message along with the error
-        if (err) return res.status(500).json({
-            "error": err,
-            "msg": "Cannot retrieve history.",
-            "data": null
-        })
+        if (err) {
+            return res.status(500).json({
+                "error": err,
+                "msg": "Cannot retrieve history.",
+                "data": null
+            });
+        } else {
+            var options = {
+                path: 'activity.business',
+                model: 'Business'
+            };
 
-        //If no error display list of bookings made by this user or empty array
-        res.status(200).json({
-            "error": null,
-            "msg": "Successful retrieval",
-            "data": bookings
-        });
+            Booking.populate(bookings, options, function(err, populated) {
+                if (err) {
+                    //If an error occurred, display a message along with the error
+                    return res.status(500).json({
+                        "error": err,
+                        "msg": "Cannot retrieve history.",
+                        "data": null
+                    });
+                } else {
+                    //If no error display list of bookings made by this user or empty array
+                    res.status(200).json({
+                        "error": null,
+                        "msg": "Successful retrieval",
+                        "data": populated
+                    });
+                }
+
+            });
+        }
+
+
+
+
     });
 }
 
@@ -173,9 +196,9 @@ module.exports.getBookingHistory = function (req, res) {
     Redirects to: Nothing
     Calling route: '/api/activity/deleteBooking/:bookingId'
 */
-module.exports.deleteBooking = function (req, res) {
+module.exports.deleteBooking = function(req, res) {
     //Finding and deleting booking from database
-    Booking.findByIdAndRemove(req.params.bookingId, function (err, bookingToDel) {
+    Booking.findByIdAndRemove(req.params.bookingId, function(err, bookingToDel) {
         //If error, return in response
         if (err) return res.status(500).json({
             error: err,
@@ -194,7 +217,7 @@ module.exports.deleteBooking = function (req, res) {
                     new: true
                 },
                 //If error occurred, return it in response
-                function (err, user) {
+                function(err, user) {
                     if (err) return res.status(500).json({
                         error: err,
                         msg: "Error occured while updating User concerned",
@@ -212,7 +235,7 @@ module.exports.deleteBooking = function (req, res) {
                                 new: true
                             },
                             //If error occurred, return it in response
-                            function (err, activity) {
+                            function(err, activity) {
                                 if (err) return res.status(500).json({
                                     error: err,
                                     msg: "Error occured while updating Activity concerned",

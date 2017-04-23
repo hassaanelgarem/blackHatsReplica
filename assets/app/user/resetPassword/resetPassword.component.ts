@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResetPasswordService } from './resetPassword.service';
-import {Router, ActivatedRoute} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -11,10 +11,10 @@ import 'rxjs/add/operator/map';
 
 export class ResetPasswordComponent implements OnInit {
 
-    private token: String;
-    private id: String;
-    private password: String;
-    private confirmPassword: String;
+  private token: String;
+  private id: String;
+  private password: String;
+  private confirmPassword: String;
 
     private resetFailure: String;
 
@@ -30,14 +30,14 @@ export class ResetPasswordComponent implements OnInit {
     private router: Router,
     private http: Http,
     private route: ActivatedRoute
-    ) { }
+  ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
 
     this.route.params.subscribe(params => {
       this.token = params['token'];
       this.resetPasswordService.passwordToken(this.token).subscribe(data => {
-          this.id = data.data.id;
+        this.id = data.data.id;
       }, err => {
           //aya errors
       });
@@ -52,14 +52,14 @@ export class ResetPasswordComponent implements OnInit {
             this.passwordWarning = true;
            }
         else {
-            this.passwordWarning = false;        
+            this.passwordWarning = false;
         }
         if(!this.confirmPassword || this.confirmPassword.length == 0){
             this.resetFailureWarning = false;
             this.confirmPasswordWarning = true;
            }
         else {
-            this.confirmPasswordWarning = false;        
+            this.confirmPasswordWarning = false;
         }
 
         if(!this.passwordWarning && !this.confirmPasswordWarning) {

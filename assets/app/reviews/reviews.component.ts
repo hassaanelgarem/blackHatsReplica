@@ -27,6 +27,9 @@ export class ReviewsComponent implements OnInit {
     businessPhotos: String[] = [];
     path: String = "http://localhost:8080/api/";
     loadDone = false;
+    firstName: String;
+    lastName: String;
+    user: any;
 
     addComment: String;
     addRating: Number;
@@ -34,6 +37,7 @@ export class ReviewsComponent implements OnInit {
     addRatingWarning = false;
     userLoggedIn = false;
     favorited = false;
+    noPhotos = false;
 
     constructor(
         private reviewsService: ReviewsService,
@@ -56,6 +60,7 @@ export class ReviewsComponent implements OnInit {
                 if(info.user){
                   this.userLoggedIn = true;
                   this.userId = info.user._id;
+                  this.user = info.user;
                   if(info.user.favorites.includes(this.businessId)){
                     this.favorited = true;
                     console.log("it's a favorite");
@@ -88,12 +93,19 @@ export class ReviewsComponent implements OnInit {
                         this.businessPhoneNumbers = info.data.phoneNumbers;
                         this.phoneNumbersAvailable = true;
                     }
-                    this.businessPhotos.length = info.data.photos.length - 1;
-                    this.businessPhotos[0] = info.data.photos[1];
-                    for (var _i = 1; _i < this.businessPhotos.length; _i++) {
+                    if(info.data.photos.length != 0){
+                      console.log("photos");
+                      this.businessPhotos.length = info.data.photos.length - 1;
+                      this.businessPhotos[0] = info.data.photos[1];
+                      for(var _i = 1; _i < this.businessPhotos.length; _i++){
                         this.businessPhotos[_i] = info.data.photos[_i + 1];
+                      }
+                      this.firstPhoto = info.data.photos[0];
+                      this.noPhotos = false;
+                    } else{
+                      console.log("no photo");
+                      this.noPhotos = true;
                     }
-                    this.firstPhoto = info.data.photos[0];
                     this.loadDone = true;
                 }
             },(err) => {
@@ -204,12 +216,12 @@ export class ReviewsComponent implements OnInit {
 
 
         if (!this.addCommentWarning && !this.addRatingWarning) {
-            const newReview = new Review(this.addComment, this.addRating, this.businessId, this.userId);
+            const newReview = new Review(this.addComment, this.addRating, this.businessId, {"firstName": this.user.firstName, "lastName": this.user.lastName, "_id": this.userId});
             this.reviewsService.addReview(newReview).subscribe((info) => {
                 if (info.err) {
                     console.error(info.msg);
                 } else {
-                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, info.data.user, info.data.time));
+                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, {"firstName": this.user.firstName, "lastName": this.user.lastName, "_id": info.data.user}, info.data.time));
                     this.addComment = null;
                     this.addRating = null;
                 }

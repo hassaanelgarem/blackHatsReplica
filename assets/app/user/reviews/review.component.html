@@ -34,14 +34,10 @@
 
                         <div class="col-xs-12 col-sm-12 col-md-3">
                             <div class="review-header">
-                                <h6>{{review.business.name}}</h6>
+                                <h6><a href="business/{{review.business._id}}">{{review.business.name}}</a></h6>
                                 <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span><br>
                                 <rating *ngIf="!editing[i]" [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
                                 <rating *ngIf="editing[i]" [(ngModel)]="editRating" name="editRating" [titles]="false"></rating>
-
-                                <div class="rating-item">
-                                    <input type="hidden" class="rating" data-filled="fa fa-star" data-empty="fa fa-star-o" data-fractions="2" data-readonly value="3.5" />
-                                </div>
                             </div>
                         </div>
 
@@ -66,18 +62,20 @@
 
                             <div *ngIf="loggedIn && !editing[i]">
                                 <footer class="panel-footer">
-                                    <div class="config">
-                                        <a (click)="onEdit(i)">Edit</a>
+                                    <div class="config text-center">
+                                        <button type="button" class="btn btn-primary" (click)="onEdit(i)"> Edit </button>
                                     </div>
                                 </footer>
                             </div>
 
                             <div *ngIf="loggedIn && editing[i]">
                                 <footer class="panel-footer">
-                                    <div class="config">
-                                        <a (click)="onSave(i)">Save</a>
-                                        <a (click)="onDelete(i)">Delete</a>
-                                        <a (click)="onCancel(i)">Cancel</a>
+                                    <div class="config text-center">
+                                      <div class="text-center">
+                                          <button type="button" class="btn btn-primary" (click)="onSave(i)"> Save </button>
+                                          <button type="button" class="btn btn-danger" (click)="onDelete(i)">Delete</button>
+                                          <button type="button" class="btn btn-primary btn-border" (click)="onCancel(i)">Cancel</button>
+                                      </div>
                                     </div>
                                 </footer>
 

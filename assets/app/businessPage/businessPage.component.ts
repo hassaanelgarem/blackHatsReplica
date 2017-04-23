@@ -27,7 +27,7 @@ export class BusinessPageComponent implements OnInit {
     workingHoursAvailable = false;
     description: String = "";
     rating: any = "";
-    ratingNumber: Number = 0;
+    ratingNumber: Number;
     activities: Object[] = new Array<Object>();
     category: String;
     categoryAvailable = false;
@@ -44,6 +44,10 @@ export class BusinessPageComponent implements OnInit {
     ownerLoggedIn = false;
     userLoggedIn = false;
     favorited = false;
+    noPhotos = false;
+    activitiesAvailable = false;
+    reviewsAvailable = false;
+    test = 3;
 
     constructor(
         private businessPageService: BusinessPageService,
@@ -121,12 +125,21 @@ export class BusinessPageComponent implements OnInit {
                         this.workingTo = info.data.workingHours.to;
                         this.workingHoursAvailable = true;
                     }
+
+
+                  if(info.data.photos.length != 0){
+                    console.log("photos");
                     this.photos.length = info.data.photos.length - 1;
                     this.photos[0] = info.data.photos[1];
                     for(var _i = 1; _i < this.photos.length; _i++){
                       this.photos[_i] = info.data.photos[_i + 1];
                     }
                     this.firstPhoto = info.data.photos[0];
+                    this.noPhotos = false;
+                  } else{
+                    console.log("no photo");
+                    this.noPhotos = true;
+                  }
                     this.paymentRequired = info.data.paymentRequired;
                     if (info.data.deposit != null) {
                         this.deposit = info.data.deposit * 100;
@@ -163,7 +176,7 @@ export class BusinessPageComponent implements OnInit {
                     console.log("here yasta");
                     console.log(info);
                     this.rating = info.data.toFixed(1);
-                    this.ratingNumber += this.rating;
+                    this.ratingNumber = info.data;
                 }
             },(err) => {
                 switch (err.status) {
@@ -185,6 +198,9 @@ export class BusinessPageComponent implements OnInit {
                 }
                 else {
                     this.activities = info.data;
+                    if(this.activities.length != 0){
+                      this.activitiesAvailable = true;
+                    }
                 }
             },(err) => {
                 switch (err.status) {
@@ -206,6 +222,9 @@ export class BusinessPageComponent implements OnInit {
                 }
                 else {
                     this.reviews = info.data;
+                    if(this.reviews.length != 0){
+                      this.reviewsAvailable = true;
+                    }
                 }
             },(err) => {
                 switch (err.status) {
@@ -259,6 +278,7 @@ export class BusinessPageComponent implements OnInit {
           this.favorited = true;
           this.initialize();
         },(err) => {
+            console.log(err);
             switch (err.status) {
                 case 404:
                     console.log("404 not found");
@@ -272,4 +292,14 @@ export class BusinessPageComponent implements OnInit {
             }
         });
     }
+
+    truncate(text) {
+        if (text.length > 100) {
+            let newText = text.slice(0, 90);
+            newText += "...";
+            return newText;
+        }
+        return text;
+    }
+
 }

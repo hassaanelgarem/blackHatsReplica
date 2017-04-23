@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { UserRegisterService } from './register.service';
 import { User } from '../user.model';
+
 @Component({
     selector: 'user-register',
     templateUrl: './register.component.html'
@@ -15,7 +16,6 @@ export class RegisterComponent {
     password: string;
     confirmPassword: string;
     email: string;
-    birthDate: Date;
     success: boolean = false;
     failure: boolean = false;
     message: string;
@@ -30,8 +30,7 @@ export class RegisterComponent {
             this.username,
             this.password,
             this.confirmPassword,
-            this.email,
-            this.birthDate
+            this.email
         )
 
         /*
@@ -42,15 +41,15 @@ export class RegisterComponent {
         this.registerService.signUp(user)
             .subscribe(
             data => {
-                    this.failure= false;
-                    this.success = true;
-                    this.message = data.msg;
-              },
-              error => {
-                        this.success= false;
-                        this.failure = true;
-                        this.message = error.error.msg;
-                    }
+                this.failure = false;
+                this.success = true;
+                this.message = data.msg;
+            },
+            error => {
+                this.success = false;
+                this.failure = true;
+                this.message = error.error.msg;
+            }
             );
     };
 }

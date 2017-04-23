@@ -46,11 +46,28 @@ export class AddPhotoComponent implements OnInit {
   }
 
   deletePhoto(index){
-    this.addPhotoService.deletePhoto(this.photos[index]).subscribe(data => {
-      if (data.err) {
-        console.error(data.msg);
-      }
+    var _this = this;
+    bootbox.confirm({
+        title: "Delete Photo",
+        message: "Are you sure you want to delete this photo?",
+        buttons: {
+            cancel: {
+                label: '<i class="fa fa-times"></i> Cancel'
+            },
+            confirm: {
+                label: '<i class="fa fa-check"></i> Confirm'
+            }
+        },
+        callback: function(result) {
+          if(result){
+            _this.addPhotoService.deletePhoto(_this.photos[index]).subscribe(data => {
+              _this.showPhotos();
+            });
+          }
+
+        }
     });
-    this.showPhotos();
+
+
   }
 }
