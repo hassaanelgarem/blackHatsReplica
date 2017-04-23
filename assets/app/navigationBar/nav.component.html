@@ -40,7 +40,7 @@
 				<ul class="nav-mini">
 					<li *ngIf="!loggedin"><a data-toggle="modal" href="#userRegisterModal"><i class="icon-user-follow" data-toggle="tooltip" data-placement="bottom" title="Sign Up"></i></a></li>
 					<li *ngIf="!loggedin"><a data-toggle="modal" href="#userLoginModal"><i class="icon-login" data-toggle="tooltip" data-placement="bottom" title="Login"></i> </a></li>
-					<li *ngIf="loggedin"><a (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
+					<li *ngIf="loggedin"><a style="cursor: pointer;" (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
 				</ul>
 			</div>
 		</div>

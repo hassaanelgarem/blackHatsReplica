@@ -66,11 +66,10 @@ export class NavComponent implements OnInit {
 
   onLogout(){
     this.loginService.logout().subscribe(data => {
-      console.log('logged out');
-      this.loggedin = false;
+      location.reload();
     }, err => {
       console.log('log out failed');
     });
-    
+
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output ,EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { LoginService } from './login.service';
 import { AppService } from '../../app.service';
 import {Router} from '@angular/router';
@@ -7,13 +7,13 @@ import 'rxjs/add/operator/map';
 
 
 @Component({
-    selector : 'app-signin',
+    selector: 'app-signin',
     templateUrl: './login.component.html'
 })
 
 export class LoginComponent implements OnInit {
 
-@Output() loginClicked = new EventEmitter<boolean>();
+    @Output() loginClicked = new EventEmitter<boolean>();
 
     private username: String;
     private userPassword: String;
@@ -26,15 +26,15 @@ export class LoginComponent implements OnInit {
     private failedReset: String;
     private successBusinessReset: String;
     private failedBusinessReset: String;
-    
+
     private successResend: String;
     private failedResend: String;
-    
+
 
 
 
     //warning Flags
-    
+
     private userUsernameWarning: boolean = false;
     private userPasswordWarning: boolean = false;
     private businessEmailWarning: boolean = false;
@@ -58,169 +58,172 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private http: Http,
         private appService: AppService
-        ){ }
-    
-
-    ngOnInit() {}
+    ) { }
 
 
-    onUserLogin(){
-        if(!this.username || this.username.length == 0){
+    ngOnInit() { }
+
+
+    onUserLogin() {
+        if (!this.username || this.username.length == 0) {
             this.userUsernameWarning = true;
-           }
-        else {
-            this.userUsernameWarning = false;        
         }
-        if(!this.userPassword || this.userPassword.length == 0){
+        else {
+            this.userUsernameWarning = false;
+        }
+        if (!this.userPassword || this.userPassword.length == 0) {
             this.userPasswordWarning = true;
         }
-        else{
+        else {
             this.userPasswordWarning = false;
         }
 
-        if(!this.userUsernameWarning && !this.userPasswordWarning){
+        if (!this.userUsernameWarning && !this.userPasswordWarning) {
             this.loginService.userLogin(this.username, this.userPassword).subscribe(data => {
-            if(data.success){
-           // console.log("login");
-           this.loggedin = true;
-            this.loginClicked.emit(true);
-            this.appService.login();
-            }
-            else{
-            this.incorrectUserWarning = true;
-            this.username = null;
-            this.userPassword = null; 
-            }
-        }, err => {
-            console.log(err);
-        });
+                if (data.success) {
+                    // console.log("login");
+                    this.loggedin = true;
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+
+                }
+                else {
+                    this.incorrectUserWarning = true;
+                    this.username = null;
+                    this.userPassword = null;
+                }
+            }, err => {
+                console.log(err);
+            });
         }
 
     }
 
 
-    onBusinessLogin(){
-        if(!this.businessEmail || this.businessEmail.length == 0){
+    onBusinessLogin() {
+        if (!this.businessEmail || this.businessEmail.length == 0) {
             this.businessEmailWarning = true;
-           }
-        else {
-            this.businessEmailWarning = false;        
         }
-        if(!this.businessPassword || this.businessPassword.length == 0){
+        else {
+            this.businessEmailWarning = false;
+        }
+        if (!this.businessPassword || this.businessPassword.length == 0) {
             this.businessPasswordWarning = true;
         }
-        else{
+        else {
             this.businessPasswordWarning = false;
         }
 
-        if(!this.businessEmailWarning && !this.businessPasswordWarning){
+        if (!this.businessEmailWarning && !this.businessPasswordWarning) {
 
             this.loginService.businessLogin(this.businessEmail, this.businessPassword).subscribe(data => {
-            if(data.success){
-            this.loggedin = true;
-            this.loginClicked.emit(true);
-            this.appService.login();
-            }
-            else{
-               this.incorrectBusinessWarning = true;
-               this.businessEmail = null;
-               this.businessPassword = null;    
-            }
-        }, err => {
-            //console.log(err);
-        });
+                if (data.success) {
+                    this.loggedin = true;
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+                else {
+                    this.incorrectBusinessWarning = true;
+                    this.businessEmail = null;
+                    this.businessPassword = null;
+                }
+            }, err => {
+                //console.log(err);
+            });
         }
-        
+
     }
 
 
     onUserForgetPass() {
-        if(!this.userEmail || this.userEmail.length == 0){
+        if (!this.userEmail || this.userEmail.length == 0) {
             this.resetUserEmailWarning = true;
-           }
+        }
         else {
-            this.resetUserEmailWarning = false;        
+            this.resetUserEmailWarning = false;
         }
 
-        if(!this.resetUserEmailWarning) {
+        if (!this.resetUserEmailWarning) {
             this.loginService.forgetPassword(this.userEmail).subscribe(data => {
-            this.resetFailureWarning = false; 
-            this.resetSuccessWarning = true; 
-            this.successReset = data.msg;        
-            //console.log(data.msg);   
-        }, err => {
-            this.resetSuccessWarning = false;
-            this.resetFailureWarning = true;
-            if(err.status == 500) {
-                this.failedReset = err.json().error[0].msg;
-            }
-            else {
-                this.failedReset = err.json().msg;
-            }
-            //console.log(err.json());
-             });
+                this.resetFailureWarning = false;
+                this.resetSuccessWarning = true;
+                this.successReset = data.msg;
+                //console.log(data.msg);
+            }, err => {
+                this.resetSuccessWarning = false;
+                this.resetFailureWarning = true;
+                if (err.status == 500) {
+                    this.failedReset = err.json().error[0].msg;
+                }
+                else {
+                    this.failedReset = err.json().msg;
+                }
+                //console.log(err.json());
+            });
         }
-        
+
     }
 
 
     onBusinessForgetPass() {
-        if(!this.businessEmail || this.businessEmail.length == 0){
+        if (!this.businessEmail || this.businessEmail.length == 0) {
             this.resetBusinessEmailWarning = true;
-           }
+        }
         else {
-            this.resetBusinessEmailWarning = false;        
+            this.resetBusinessEmailWarning = false;
         }
 
-        if(!this.resetBusinessEmailWarning) {
+        if (!this.resetBusinessEmailWarning) {
             this.loginService.forgetPassword(this.businessEmail).subscribe(data => {
-            this.resetFailureWarning = false; 
-            this.resetSuccessWarning = true; 
-            this.successReset = data.msg;
-            //console.log(data);
-        }, err => {
-            this.resetSuccessWarning = false;
-            this.resetFailureWarning = true;
-            if(err.status == 500) {
-                this.failedReset = err.json().error[0].msg;
-            }
-            else {
-                this.failedReset = err.json().msg;
-            }
-        });
+                this.resetFailureWarning = false;
+                this.resetSuccessWarning = true;
+                this.successReset = data.msg;
+                //console.log(data);
+            }, err => {
+                this.resetSuccessWarning = false;
+                this.resetFailureWarning = true;
+                if (err.status == 500) {
+                    this.failedReset = err.json().error[0].msg;
+                }
+                else {
+                    this.failedReset = err.json().msg;
+                }
+            });
         }
-    
+
     }
 
 
     onResendEmail() {
 
-        if(!this.userEmail || this.userEmail.length == 0){
+        if (!this.userEmail || this.userEmail.length == 0) {
             this.resendEmailWarning = true;
-           }
+        }
         else {
-            this.resendEmailWarning = false;        
+            this.resendEmailWarning = false;
         }
 
-        if(!this.resendEmailWarning) {
+        if (!this.resendEmailWarning) {
             this.loginService.resendEmail(this.userEmail).subscribe(data => {
-            this.resendFailureWarning = false; 
-            this.resendSuccessWarning = true; 
-            this.successResend = data.msg;        
-            //console.log(data.msg);   
-        }, err => {
-            this.resendSuccessWarning = false;
-            this.resendFailureWarning = true;
-            if(err.status == 500) {
-                this.failedResend = err.json().error[0].msg;
-            }
-            else {
-                this.failedResend = err.json().msg;
-            }
-            //console.log(err.json());
-             });
+                this.resendFailureWarning = false;
+                this.resendSuccessWarning = true;
+                this.successResend = data.msg;
+                //console.log(data.msg);
+            }, err => {
+                this.resendSuccessWarning = false;
+                this.resendFailureWarning = true;
+                if (err.status == 500) {
+                    this.failedResend = err.json().error[0].msg;
+                }
+                else {
+                    this.failedResend = err.json().msg;
+                }
+                //console.log(err.json());
+            });
         }
-        
+
     }
 
 
@@ -239,7 +242,7 @@ export class LoginComponent implements OnInit {
     hidebusinessPasswordWarning() {
         this.businessPasswordWarning = false;
     }
-    
+
     hideIncorrectUserWarning() {
         this.incorrectUserWarning = false;
     }
@@ -259,7 +262,7 @@ export class LoginComponent implements OnInit {
     hideResetSuccessWarning() {
         this.resetSuccessWarning = false;
     }
-    
+
     hideResendFailureWarning() {
         this.resendFailureWarning = false;
     }
@@ -336,6 +339,35 @@ export class LoginComponent implements OnInit {
         this.resendEmailWarning = false;
         this.resendSuccessWarning = false;
         this.resendFailureWarning = false;
+    }
+
+    keyDownUserLogin(event) {
+        if (event.keyCode == 13) {
+          this.onUserLogin();
+        }
+    }
+    keyDownForgetUser(event) {
+        if (event.keyCode == 13) {
+          this.onUserForgetPass();
+        }
+    }
+
+    keyDownBusinessLogin(event) {
+        if (event.keyCode == 13) {
+          this.onBusinessLogin();
+        }
+    }
+
+    keyDownForgetBusiness(event) {
+        if (event.keyCode == 13) {
+          this.onBusinessForgetPass();
+        }
+    }
+
+    keyDownResend(event) {
+        if (event.keyCode == 13) {
+          this.onResendEmail();
+        }
     }
 
 }
