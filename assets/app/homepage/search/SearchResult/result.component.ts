@@ -18,12 +18,17 @@ export class SearchResultComponent implements OnInit {
     private pageNumber: number;
     private searchQuery: string;
     private sort: string;
+    private result: string;
+    private location: string;
+    private category: string;
 
     constructor(private searchService: SearchService, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit() {
         this.getQueryParams();
         this.search();
+        // (jQuery.getScript('/js/core-plugins.js'));
+        // (jQuery.getScript('/js/customs.js'));
     }
 
 
@@ -40,29 +45,35 @@ export class SearchResultComponent implements OnInit {
             .queryParams
             .subscribe(params => {
                 this.pageNumber = +params['page'];
-                this.searchQuery = params['result'];
+                this.result = params['result'];
+                this.location = params['location'];
+                this.category = params['category'];
+                this.searchQuery = "result=" + this.result;
+                this.sort = params['sort'];
 
-                if (!this.searchQuery) {
-                    this.searchQuery = "location=" + params['location'] + "&&category=" + params['category'];
+                if (!this.result) {
+                    this.searchQuery = "location=" + this.location + "&category=" + this.category;
                 }
-                else
-                    this.searchQuery = "result=" + this.searchQuery;
-                this.searchQuery = this.searchQuery + "&&sort=" + this.sort;
-                console.log(this.searchQuery);
-            })
+                this.searchQuery = this.searchQuery + "&sort=" + this.sort;
+            },
+            (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
     updateSortQuery(sortValue: string) {
         this.sort = sortValue;
         this.getQueryParams();
         this.search();
-    }
-
-    nextPage() {
-        this.router.navigate(['search'], { queryParams: { result: this.searchQuery, page: this.pageNumber + 1 || 1 } });
-    }
-
-    previousPage() {
-        this.router.navigate(['search'], { queryParams: { result: this.searchQuery, page: this.pageNumber - 1 || 1 } });
     }
 }

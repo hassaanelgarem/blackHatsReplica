@@ -9,7 +9,7 @@
 
 			<div class="logo-wrapper">
 				<div class="logo">
-					<a href="/">
+					<a href="/homepage">
 						<h1>Black Hats</h1>
 					</a>
 				</div>
@@ -22,7 +22,7 @@
 						<a href="/homepage">Home</a>
 					</li>
 					<li>
-						<a href="/search?location=All&category=All&page=1">Explore</a>
+						<a href="/search?result=undefined&location=All&category=All&sort=interactivity&page=1">Explore</a>
 					</li>
 					<li *ngIf="loggedin && isUser">
 						<a href="{{path}}user/{{user._id}}">Profile</a>
@@ -30,7 +30,9 @@
 					<li *ngIf="loggedin && !isUser">
 						<a href="{{path}}business/{{business._id}}">My Account</a>
 					</li>
-
+					<li>
+						<a href="/contactSupport">Support</a>
+					</li>
 				</ul>
 
 			</div>

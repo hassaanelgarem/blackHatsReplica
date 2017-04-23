@@ -16,7 +16,7 @@ const imagesCtrl = require("../controllers/images.controller");
 const paymentCtrl = require("../controllers/payment.controller");
 
 
-module.exports = function(passportConfig) {
+module.exports = function (passportConfig) {
     var authenticateUser = passportConfig.passport.authenticate('local-user', {
         successRedirect: '/api/successLogin',
         failureRedirect: '/api/failedLogin',
@@ -44,11 +44,11 @@ module.exports = function(passportConfig) {
     router.route('/resetPassword/:token').get(passportConfig.isNotLoggedIn, passwordCtrl.checkResetPasswordToken);
     router.route('/resetPassword/:id').put(passportConfig.isNotLoggedIn, passwordCtrl.resetPassword);
     router.route('/forgotPassword').post(passportConfig.isNotLoggedIn, passwordCtrl.forgotPassword);
-    router.route('/contactSupport').post(passportConfig.isNotLoggedIn, supportCtrl.addRequest);
     router.route('/successLogin').get(userCtrl.successLogin);
     router.route('/failedLogin').get(userCtrl.failedLogin);
 
     //Available to all routes
+    router.route('/contactSupport').post(supportCtrl.addRequest);
     router.route('/search').get(userCtrl.searchByNameOrTag, userCtrl.searchByLocationAndCategory);
     router.route('/business/:businessId/interact').put(businessCtrl.updateInteractivity);
     router.route('/business/:businessId/getInfo').get(businessCtrl.getCurrentInfo);
@@ -87,7 +87,7 @@ module.exports = function(passportConfig) {
     router.route('/activity/:activityId/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deletePhoto);
     router.route('/activity/:activityId/delete').delete(passportConfig.isBusinessLoggedIn, activityCtrl.deleteActivity);
     router.route('/activity/:activityId/edit').post(passportConfig.isBusinessLoggedIn, activityCtrl.editActivity);
-    router.route('/activity/getActivity/:businessId').get(activityCtrl.getActivityBookings);//passportConfig.isBusinessLoggedIn,
+    router.route('/activity/getActivity/:businessId').get(activityCtrl.getActivityBookings); //passportConfig.isBusinessLoggedIn,
 
     //Admin routes
     router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
