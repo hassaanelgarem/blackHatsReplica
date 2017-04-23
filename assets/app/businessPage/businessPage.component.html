@@ -168,7 +168,7 @@
                                         <h5><i class="ti-flag-alt text-primary mr-5"></i> Working Hours</h5>
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-6 mt-sm">
-                                        <span class="pl-sm">{{workingFrom + " - " + workingTo}}</span>
+                                        <span class="pl-sm">{{workingFrom | date: 'shortTime'}} - {{workingTo | date: 'shortTime'}}</span>
                                     </div>
                                 </div>
                             </li>
