@@ -37,6 +37,7 @@ export class ReviewsComponent implements OnInit {
     addRatingWarning = false;
     userLoggedIn = false;
     favorited = false;
+    noPhotos = false;
 
     constructor(
         private reviewsService: ReviewsService,
@@ -92,12 +93,19 @@ export class ReviewsComponent implements OnInit {
                         this.businessPhoneNumbers = info.data.phoneNumbers;
                         this.phoneNumbersAvailable = true;
                     }
-                    this.businessPhotos.length = info.data.photos.length - 1;
-                    this.businessPhotos[0] = info.data.photos[1];
-                    for (var _i = 1; _i < this.businessPhotos.length; _i++) {
+                    if(info.data.photos.length != 0){
+                      console.log("photos");
+                      this.businessPhotos.length = info.data.photos.length - 1;
+                      this.businessPhotos[0] = info.data.photos[1];
+                      for(var _i = 1; _i < this.businessPhotos.length; _i++){
                         this.businessPhotos[_i] = info.data.photos[_i + 1];
+                      }
+                      this.firstPhoto = info.data.photos[0];
+                      this.noPhotos = false;
+                    } else{
+                      console.log("no photo");
+                      this.noPhotos = true;
                     }
-                    this.firstPhoto = info.data.photos[0];
                     this.loadDone = true;
                 }
             },(err) => {

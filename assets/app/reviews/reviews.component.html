@@ -19,14 +19,15 @@
                           <!-- First slide -->
                           <div class="item active">
                               <div class="image">
-                                  <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt;"/>
+                                <img *ngIf="noPhotos" src="/images/no-image.svg" alt="Image" style="height: 300pt; margin: auto;"/>
+                                <img *ngIf="!noPhotos" src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt; margin: auto;"/>
                               </div>
                           </div>
                           <!-- /.item -->
 
                           <div class="item" *ngFor="let businessPhoto of businessPhotos; let i = index">
                               <div class="image">
-                                  <img src="{{path}}image/businessPhotos/{{businessPhoto}}" alt="Image" style="height: 300pt;"/>
+                                  <img src="{{path}}image/businessPhotos/{{businessPhoto}}" alt="Image" style="height: 300pt; margin: auto;"/>
                               </div>
                           </div>
 
@@ -168,9 +169,7 @@
                                     <div class="review-rating">
                                         <div class="number">{{rating}}</div>
                                         <div class="rating-wrapper">
-                                            <div class="rating-item rating-item-lg">
                                               <rating [(ngModel)]="rating" [readonly]="true" [float]="true" [titles]="false"></rating>
-                                            </div>
                                             {{reviews.length}} reviews
                                         </div>
                                     </div>

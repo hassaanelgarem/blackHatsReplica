@@ -56,7 +56,7 @@ module.exports.addActivity = function(req, res) {
             price: req.body.price,
             description: req.body.description,
             bookingsPerSlot: req.body.bookingsPerSlot,
-            business: "58e8d68ce4a2cf7c06cff89a"
+            business: req.user._id
         });
         // Save new Activity in database
         newActivity.save(function(err, activity) {
