@@ -50,6 +50,7 @@ import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
 import { ContactSupportComponent } from './contactSupport/contactSupport.component';
 import { ActivityPageComponent } from "./businessPage/activityPage.component";
+import { AdminComponent } from './admin/admin.component';
 
 
 import { BusinessPageService } from "./businessPage/businessPage.service";
@@ -120,7 +121,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       FileSelectDirective,
       FocusDirective,
       ContactSupportComponent,
-      LoaderComponent
+      LoaderComponent,
+      AdminComponent
     ],
     imports: [
       BrowserModule,

@@ -1,59 +1,59 @@
 <div class="container-wrapper">
-  <div class="pt-30 pb-50">
-  				<div class="container">
+    <div class="pt-30 pb-50">
+        <div class="container">
 
-  					<div class="row">
+            <div class="row">
 
-  						<div class="col-xs-12 col-sm-4 col-md-3 mt-20">
+                <div class="col-xs-12 col-sm-4 col-md-3 mt-20">
 
-  							<aside class="sidebar-wrapper pr-15 pr-0-xs">
+                    <aside class="sidebar-wrapper pr-15 pr-0-xs">
 
-  								<div class="common-menu-wrapper">
+                        <div class="common-menu-wrapper">
 
-  									<ul class="common-menu-list">
+                            <ul class="common-menu-list">
 
-  										<li [class.active]="showActivities"><a (click)="onActivitiesClick()">Activities</a></li>
-  										<li [class.active]="showPhotos"><a (click)="onPhotosClick()">Photos</a></li>
-  										<li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
-  										<li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
-  										<li [class.active]="showEdit"><a (click)="onEditClick()">Edit</a></li>
-  										<li [class.active]="showAds"><a (click)="onAdsClick()">Advertisments</a></li>
+                                <li [class.active]="showActivities"><a (click)="onActivitiesClick()">Activities</a></li>
+                                <li [class.active]="showPhotos"><a (click)="onPhotosClick()">Photos</a></li>
+                                <li [class.active]="showReviews"><a (click)="onReviewsClick()">Reviews</a></li>
+                                <li [class.active]="showBookings"><a (click)="onBookingsClick()">Bookings</a></li>
+                                <li [class.active]="showEdit"><a (click)="onEditClick()">Edit</a></li>
+                                <li [class.active]="showAds"><a (click)="onAdsClick()">Advertisments</a></li>
 
-  									</ul>
+                            </ul>
 
-  								</div>
+                        </div>
 
-  							</aside>
+                    </aside>
 
-  						</div>
+                </div>
 
-  						<div *ngIf="showActivities" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-								<app-businessEdit-activities></app-businessEdit-activities>
-  						</div>
+                <div *ngIf="showActivities" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-businessEdit-activities></app-businessEdit-activities>
+                </div>
 
-              <div *ngIf="showPhotos" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <app-addPhoto></app-addPhoto>
-              </div>
+                <div *ngIf="showPhotos" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-addPhoto></app-addPhoto>
+                </div>
 
-							<div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <app-businessEdit-reviews></app-businessEdit-reviews>
-              </div>
+                <div *ngIf="showReviews" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-businessEdit-reviews></app-businessEdit-reviews>
+                </div>
 
-							<div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <app-activityBookings></app-activityBookings>
-              </div>
+                <div *ngIf="showBookings" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-activityBookings></app-activityBookings>
+                </div>
 
-							<div *ngIf="showEdit" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <app-editProfile></app-editProfile>
-              </div>
+                <div *ngIf="showEdit" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-editProfile></app-editProfile>
+                </div>
 
-							<div *ngIf="showAds" class="col-xs-12 col-sm-8 col-md-9 mt-20">
-                <app-bookAdv></app-bookAdv>
-              </div>
+                <div *ngIf="showAds" class="col-xs-12 col-sm-8 col-md-9 mt-20">
+                    <app-bookAdv></app-bookAdv>
+                </div>
 
-  					</div>
+            </div>
 
-  				</div>
+        </div>
 
-  			</div>
-      </div>
+    </div>
+</div>
