@@ -29,7 +29,8 @@
                                         <div class="GridLex-col-6_sm-12_xs-12_xss-12">
 
                                             <div class="GridLex-inner">
-                                                <h6>{{booking.activity.name}}</h6>
+                                                <h6>{{booking.activity.business.name}}</h6>
+                                                <h6 style="font-size: 15px;">{{booking.activity.name}}</h6>
                                                 <span class="font-italic font14"><b>Price:</b> ${{booking.activity.price}}</span>
                                                 <span class="font-italic font14"><br/><b>Start Time:</b> {{booking.slot.startTime | date:'hh:mm'}} &ensp;&ensp;<b>End Time:</b> {{booking.slot.endTime | date:'hh:mm'}}</span>
 

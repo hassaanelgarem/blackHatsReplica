@@ -1,5 +1,3 @@
-<body class="home transparent-header">
-
     <!-- start Container Wrapper -->
 
     <div class="container-wrapper">
@@ -15,16 +13,17 @@
                     <div class="carousel-inner" role="listbox">
 
                         <!-- First slide -->
-                        <div class="item active">
+                        <div class="item active" >
                             <div class="image image-responsive">
-                                <img src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt;"/>
+                                <img *ngIf="noPhotos" src="/images/no-image.svg" alt="Image" style="height: 300pt; margin: auto;"/>
+                                <img *ngIf="!noPhotos" src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt; margin: auto;"/>
                             </div>
                         </div>
                         <!-- /.item -->
 
                         <div class="item" *ngFor="let photo of photos; let i = index">
                             <div class="image image-responsive">
-                                <img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" style="height: 300pt;"/>
+                                <img src="{{path}}image/businessPhotos/{{photo}}" alt="Image" style="height: 300pt; margin: auto;"/>
                             </div>
                         </div>
 
@@ -75,7 +74,7 @@
                                                     <a *ngIf="ownerLoggedIn" href="businessEdit" class="btn btn-primary btn-xs btn-border">Admin view</a>
                                                 </div>
                                                 <ul class="user-meta">
-                                                    <li><i *ngIf="addressAvailable" class="fa fa-map-marker"></i> {{address}} <span class="mh-5 text-muted">|</span> <i *ngIf="phoneNumbersAvailable" class="fa fa-phone"></i> {{phoneNumbers}}</li>
+                                                    <li *ngIf="addressAvailable || phoneNumbersAvailable"><i *ngIf="addressAvailable" class="fa fa-map-marker"></i> {{address}} <span class="mh-5 text-muted">|</span> <i *ngIf="phoneNumbersAvailable" class="fa fa-phone"></i> {{phoneNumbers}}</li>
                                                     <li>
                                                         <a *ngIf="userLoggedIn && !favorited" class="btn btn-primary btn-xs btn-border" (click)=addFavorite()>Favorite</a>
                                                         <label *ngIf="userLoggedIn && favorited" style="color: coral; font-weight: 400;"> This is one of your favorites!</label>
@@ -206,7 +205,7 @@
 
         </div>
 
-        <div class="bg-white pt-70 pb-60 clearfix">
+        <div *ngIf="activitiesAvailable" class="bg-white pt-70 pb-60 clearfix">
 
             <div class="container">
 
@@ -216,7 +215,7 @@
 
                         <div class="section-title">
 
-                            <h2>What we offer</h2>
+                            <h2 style="text-transform: none;">What We Offer</h2>
                         </div>
 
                     </div>
@@ -233,25 +232,26 @@
 
                                 <div class="trip-guide-item">
 
-                                    <div class="trip-guide-image">
-                                        <img src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="max-height: 183pt;"/>
+                                    <div class="trip-guide-image no-person" style="width: 364px; height: 364px;">
+                                      <img *ngIf="!activity.photos[0]" src="/images/no-image.svg" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
+                                      <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
                                     </div>
 
                                     <div class="trip-guide-content">
                                         <h3>{{activity.name}}</h3>
-                                        <p>{{activity.description}}</p>
+                                        <p class="truncate"> {{truncate(activity.description)}}</p>
                                     </div>
 
-                                    <div class="trip-guide-bottom">
+                                    <div class="trip-guide-bottom bg-light-primary bt">
 
                                         <div class="row gap-10">
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="trip-guide-price">
-                                                    <span class="block inline-block-xs">{{activity.price}} EGP</span>
+                                                  <span class="number">{{activity.price.toFixed(2)}}EGP</span>
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-sm-6 text-right text-left-xs">
-                                                <a data-toggle="modal" href="business/activity/{{activity._id}}" class="btn btn-primary">Details</a>
+                                                <a href="business/activity/{{activity._id}}" class="btn btn-primary">Details</a>
                                             </div>
                                         </div>
 
@@ -271,7 +271,7 @@
 
         </div>
 
-        <div class="pt-30 pb-50">
+        <div *ngIf="reviewsAvailable" class="pt-30 pb-50">
 
             <div class="container">
 
@@ -286,7 +286,7 @@
 
                                 <div class="section-title">
 
-                                    <h2>Reviews</h2>
+                                    <h2 style="text-transform: none;">Reviews</h2>
 
                                 </div>
 
@@ -351,5 +351,3 @@
 
     </div>
     <!-- end Container Wrapper -->
-
-</body>
