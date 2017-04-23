@@ -2,11 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'my-app',
-    template: `
-    <router-outlet></router-outlet>
-    `
+    templateUrl: "./loader.component.html";
 })
 
-export class AppComponent {
+export class LoaderComponent {
 
 }

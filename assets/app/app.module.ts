@@ -15,6 +15,7 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
 
 
 import { AppComponent } from "./app.component";
+import { LoaderComponet } from "./loader.component"
 import { BusinessPageComponent } from "./businessPage/businessPage.component";
 import { ReviewsComponent } from "./reviews/reviews.component";
 import { HomepageComponent} from "./homepage/homepage.component";
@@ -118,7 +119,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ActivityPageComponent,
       FileSelectDirective,
       FocusDirective,
-      ContactSupportComponent
+      ContactSupportComponent,
+      LoaderComponet
     ],
     imports: [
       BrowserModule,
