@@ -181,7 +181,7 @@ export class EditProfileComponent implements OnInit {
 
     addPhoneNumber() {
         if (this.extraNumber != "") {
-            this.tags.push(this.extraNumber);
+            this.phoneNumbers.push(this.extraNumber);
             this.extraNumber = "";
         }
     }
