@@ -82,20 +82,6 @@ export class BusinessActivitiesComponent implements OnInit {
 
     }
 
-    onDelete() {
-        this.businessService.deleteActivity(this.activities[this.currentIndex]).subscribe(
-            (data) => {
-                console.log("tamaam");
-                this.activities.splice(this.currentIndex, 1);
-                this.currentIndex = 0;
-            },
-            (err) => {
-                console.log("msh tamaam")
-                //console.log(err);
-            }
-        );
-    }
-
     onAddSubmit() {
         if (!this.addName || this.addName.length == 0) {
             this.addNameWarning = true;

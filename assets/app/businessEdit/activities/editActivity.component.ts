@@ -31,10 +31,15 @@ export class EditActivityComponent implements OnInit {
     fakeVaribaleTwo: String;
     showFakeInput = false;
 
+    //warning
+
+    addSlotWarning = false;
+    warningMessage = "";
+
     constructor(
-      private activatedRoute: ActivatedRoute,
-      private businessService: BusinessService,
-      private router: Router
+        private activatedRoute: ActivatedRoute,
+        private businessService: BusinessService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -83,59 +88,13 @@ export class EditActivityComponent implements OnInit {
     }
 
     onSave() {
-      this.activity.name = this.name;
-      this.activity.description = this.description;
-      this.activity.price = this.price;
-      this.activity.bookingsPerSlot = this.perSlot;
-      this.businessService.editActivity(this.activity).subscribe(
-        (data) => {
-          this.router.navigate(["/businessEdit"]);
-        },
-        (err) => {
-          switch (err.status) {
-              case 404:
-                  console.log("404 not found");
-                  break;
-              case 401:
-                  console.log("Unauthorized");
-                  break;
-              default:
-                  console.log("Oops somethings went wrong");
-                  break;
-          }
-        }
-      );
-    }
-
-    onDelete() {
-        this.businessService.deleteActivity(this.activity).subscribe(
-          (data) => {
-            this.router.navigate(["/businessEdit"]);
-          },
-          (err) => {
-            switch (err.status) {
-                case 404:
-                    console.log("404 not found");
-                    break;
-                case 401:
-                    console.log("Unauthorized");
-                    break;
-                default:
-                    console.log("Oops somethings went wrong");
-                    break;
-            }
-          }
-        );
-    }
-
-    onCancel() {
-        this.router.navigate(["/businessEdit"]);
-    }
-
-    deleteSlot(index) {
-        this.businessService.deleteSlot(this.activity.slots[index], this.activity).subscribe(
+        this.activity.name = this.name;
+        this.activity.description = this.description;
+        this.activity.price = this.price;
+        this.activity.bookingsPerSlot = this.perSlot;
+        this.businessService.editActivity(this.activity).subscribe(
             (data) => {
-                this.activity.slots.splice(index, 1);
+                this.router.navigate(["/businessEdit"]);
             },
             (err) => {
                 switch (err.status) {
@@ -153,6 +112,95 @@ export class EditActivityComponent implements OnInit {
         );
     }
 
+    onDelete() {
+      var _this = this;
+      bootbox.confirm({
+          title: "Delete activity",
+          message: "Are you sure you want to delete this activity?",
+          buttons: {
+              cancel: {
+                  label: '<i class="fa fa-times"></i> Cancel'
+              },
+              confirm: {
+                  label: '<i class="fa fa-check"></i> Confirm'
+              }
+          },
+          callback: function(result) {
+            if(result){
+              _this.businessService.deleteActivity(_this.activity).subscribe(
+                  (data) => {
+                      _this.router.navigate(["/businessEdit"]);
+                  },
+                  (err) => {
+                      switch (err.status) {
+                          case 404:
+                              console.log("404 not found");
+                              break;
+                          case 401:
+                              console.log("Unauthorized");
+                              break;
+                          default:
+                              console.log("Oops somethings went wrong");
+                              break;
+                      }
+                  }
+              );
+            }
+
+          }
+      });
+
+    }
+
+    onCancel() {
+        this.router.navigate(["/businessEdit"]);
+    }
+
+    deleteSlot(index) {
+      var _this = this;
+        bootbox.confirm({
+            title: "Delete slot",
+            message: "Are you sure you want to delete this slot?",
+            buttons: {
+                cancel: {
+                    label: '<i class="fa fa-times"></i> Cancel'
+                },
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Confirm'
+                }
+            },
+            callback: function(result) {
+              if(result){
+                  console.log(_this);
+                  _this.businessService.deleteSlot(_this.activity.slots[index], _this.activity).subscribe(
+                      (data) => {
+                          _this.activity.slots.splice(index, 1);
+                      },
+                      (err) => {
+                          switch (err.status) {
+                              case 404:
+                                  console.log("404 not found");
+                                  break;
+                              case 401:
+                                  console.log("Unauthorized");
+                                  break;
+                              default:
+                                  console.log("Oops somethings went wrong");
+                                  break;
+                          }
+                      }
+                  );
+              }
+
+            }
+        });
+
+    }
+
+    hideSlotWarning(){
+      this.addSlotWarning = false;
+    }
+
     addSlot() {
         if (this.newStart && this.newEnd) {
             let newSlot = new Slot(
@@ -161,6 +209,7 @@ export class EditActivityComponent implements OnInit {
             )
             this.businessService.addSlot(newSlot, this.activity).subscribe(
                 (data) => {
+                    console.log("Data status: " + data.status);
                     this.activity.slots.push(newSlot);
                     this.activity.slots.sort(function(a, b) {
                         var one = new Date(b.startTime);
@@ -175,9 +224,14 @@ export class EditActivityComponent implements OnInit {
                     });
                     this.newStart = null;
                     this.newEnd = null;
+                    this.addSlotWarning = false;
                 },
                 (err) => {
                     switch (err.status) {
+                        case 405:
+                            this.warningMessage = "This slot overlaps another slot";
+                            this.addSlotWarning = true;
+                            break;
                         case 404:
                             console.log("404 not found");
                             break;
@@ -192,7 +246,8 @@ export class EditActivityComponent implements OnInit {
             );
         }
         else {
-            console.log("Please choose a start and end");
+            this.warningMessage = "Please choose a start and end time";
+            this.addSlotWarning = true;
         }
     }
 
@@ -208,24 +263,42 @@ export class EditActivityComponent implements OnInit {
     }
 
     deletePhoto(index) {
-        this.businessService.deleteActivityPhoto(this.activity.photos[index], this.activity).subscribe(
-            (date) => {
-                this.activity.photos.splice(index, 1);
-            },
-            (err) => {
-                switch (err.status) {
-                    case 404:
-                        console.log("404 not found");
-                        break;
-                    case 401:
-                        console.log("Unauthorized");
-                        break;
-                    default:
-                        console.log("Oops somethings went wrong");
-                        break;
-                }
+      var _this = this;
+      bootbox.confirm({
+          title: "Delete Phot",
+          message: "Are you sure you want to delete this photo?",
+          buttons: {
+              cancel: {
+                  label: '<i class="fa fa-times"></i> Cancel'
+              },
+              confirm: {
+                  label: '<i class="fa fa-check"></i> Confirm'
+              }
+          },
+          callback: function(result) {
+            if(result){
+              _this.businessService.deleteActivityPhoto(_this.activity.photos[index], _this.activity).subscribe(
+                  (date) => {
+                      _this.activity.photos.splice(index, 1);
+                  },
+                  (err) => {
+                      switch (err.status) {
+                          case 404:
+                              console.log("404 not found");
+                              break;
+                          case 401:
+                              console.log("Unauthorized");
+                              break;
+                          default:
+                              console.log("Oops somethings went wrong");
+                              break;
+                      }
+                  }
+              );
             }
-        );
+
+          }
+      });
     }
 
 }

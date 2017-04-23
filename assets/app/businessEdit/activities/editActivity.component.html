@@ -8,7 +8,7 @@
 
 			<!-- start breadcrumb -->
 
-			<div class="breadcrumb-image-bg pb-100 no-bg" style="background-color: #649ad1;">
+			<div class="breadcrumb-image-bg pb-100 no-bg" style="background-image:url('/images/breadcrumb-bg.jpg');">
 				<div class="container">
 
 					<div class="page-title">
@@ -121,7 +121,9 @@
 										</div>
 
 										<div class="row gap-20">
-
+											<div *ngIf="addSlotWarning" class="alert alert-danger alert-dismissable">
+													<a class="close" (click)="hideSlotWarning()" aria-label="close">&times;</a> {{warningMessage}}
+											</div>
 											<div class="col-xs-12 col-sm-5 col-md-5">
 
 												<div class="form-group">
