@@ -73,7 +73,7 @@ module.exports = function(passportConfig) {
     router.route('/logout').get(passportConfig.isLoggedIn, passportConfig.logout);
 
     //Business routes
-    router.route('/business/editInfo').put(passportConfig.isBusinessLoggedIn, businessCtrl.saveNewInfo); 
+    router.route('/business/editInfo').put(passportConfig.isBusinessLoggedIn, businessCtrl.saveNewInfo);
     router.route('/business/changePassword').put(passportConfig.isBusinessLoggedIn, businessCtrl.changePassword);
     router.route('/business/addPhoto').post(passportConfig.isBusinessLoggedIn, businessCtrl.addPhoto);
     router.route('/business/deletePhoto/:photoPath').delete(passportConfig.isBusinessLoggedIn, businessCtrl.deletePhoto);
@@ -119,8 +119,8 @@ module.exports = function(passportConfig) {
 
 
     //Advertisement routes
-    router.route('/advertisement/bookAdvSlot/:advSlotId').post(advCtrl.bookAdvSlot); //passportConfig.isBusinessLoggedIn,
-    router.route('/advertisement/addAdvPhoto').post(advCtrl.uploadAdv); //passportConfig.isBusinessLoggedIn,
+    router.route('/advertisement/bookAdvSlot/:advSlotId').post(passportConfig.isBusinessLoggedIn, advCtrl.bookAdvSlot);
+    router.route('/advertisement/addAdvPhoto').post(passportConfig.isBusinessLoggedIn, advCtrl.uploadAdv);
 
     return router;
 };

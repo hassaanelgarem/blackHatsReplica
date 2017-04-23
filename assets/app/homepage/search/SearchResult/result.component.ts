@@ -28,17 +28,30 @@ export class SearchResultComponent implements OnInit {
 
 
     search() {
-        this.searchService.getBusinesses(this.searchQuery).subscribe(businesses => {
-            this.businesses = businesses;
-            this.sliced = this.businesses.slice(this.pageNumber - 1, this.pageNumber * 16 + 15);
-            this.pagingIndex = new Array(Math.ceil(this.businesses.length / 16));
-        });
+        this.searchService.getBusinesses(this.searchQuery).subscribe(
+            (businesses) => {
+                this.businesses = businesses;
+                this.sliced = this.businesses.slice(this.pageNumber - 1, this.pageNumber * 16 + 15);
+                this.pagingIndex = new Array(Math.ceil(this.businesses.length / 16));
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
     getQueryParams() {
         this.route
             .queryParams
-            .subscribe(params => {
+            .subscribe((params) => {
                 this.pageNumber = +params['page'];
                 this.searchQuery = params['result'];
 
@@ -49,6 +62,18 @@ export class SearchResultComponent implements OnInit {
                     this.searchQuery = "result=" + this.searchQuery;
                 this.searchQuery = this.searchQuery + "&&sort=" + this.sort;
                 console.log(this.searchQuery);
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
             })
     }
 

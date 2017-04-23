@@ -5,16 +5,16 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Component({
-  selector: 'app-resetPass',
-  templateUrl: './resetPassword.component.html'
+    selector: 'app-resetPass',
+    templateUrl: './resetPassword.component.html'
 })
 
 export class ResetPasswordComponent implements OnInit {
 
-  private token: String;
-  private id: String;
-  private password: String;
-  private confirmPassword: String;
+    private token: String;
+    private id: String;
+    private password: String;
+    private confirmPassword: String;
 
     private resetFailure: String;
 
@@ -25,61 +25,72 @@ export class ResetPasswordComponent implements OnInit {
     private confirmPasswordWarning: boolean = false;
     private resetFailureWarning: boolean = false;
 
-  constructor(
-    private resetPasswordService: ResetPasswordService,
-    private router: Router,
-    private http: Http,
-    private route: ActivatedRoute
-  ) { }
+    constructor(
+        private resetPasswordService: ResetPasswordService,
+        private router: Router,
+        private http: Http,
+        private route: ActivatedRoute
+    ) { }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.route.params.subscribe(params => {
-      this.token = params['token'];
-      this.resetPasswordService.passwordToken(this.token).subscribe(data => {
-        this.id = data.data.id;
-      }, err => {
-          //aya errors
-      });
-    })
+        this.route.params.subscribe(
+            (params) => {
+                this.token = params['token'];
+                this.resetPasswordService.passwordToken(this.token).subscribe(data => {
+                    this.id = data.data.id;
+                }, (err) => {
+                    switch (err.status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
+                });
+            })
 
-  }
+    }
 
-  onResetPassword() {
+    onResetPassword() {
 
-        if(!this.password || this.password.length == 0){
+        if (!this.password || this.password.length == 0) {
             this.resetFailureWarning = false;
             this.passwordWarning = true;
-           }
+        }
         else {
             this.passwordWarning = false;
         }
-        if(!this.confirmPassword || this.confirmPassword.length == 0){
+        if (!this.confirmPassword || this.confirmPassword.length == 0) {
             this.resetFailureWarning = false;
             this.confirmPasswordWarning = true;
-           }
+        }
         else {
             this.confirmPasswordWarning = false;
         }
 
-        if(!this.passwordWarning && !this.confirmPasswordWarning) {
+        if (!this.passwordWarning && !this.confirmPasswordWarning) {
             this.resetPasswordService.passwordId(this.id, this.password, this.confirmPassword).subscribe(data => {
-               this.router.navigate(["/"]);
-        }, err => {
-            this.password = null;
-            this.confirmPassword = null;
-            this.resetFailureWarning = true;
+                this.router.navigate(["/"]);
+            }, err => {
+                this.password = null;
+                this.confirmPassword = null;
+                this.resetFailureWarning = true;
 
-            if(err.status == 500) {
-                this.resetFailure = err.json().error[0].msg;
-            }
-            else {
-                this.resetFailure = err.json().msg;
-            }
+                if (err.status == 500) {
+                    this.resetFailure = err.json().error[0].msg;
+                }
+                else {
+                    this.resetFailure = err.json().msg;
+                }
 
-          });
+            });
         }
-  }
+    }
 
 
     hidePasswordWarning() {
@@ -91,6 +102,6 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     hideResetFailureWarning() {
-      this.resetFailureWarning = false;
+        this.resetFailureWarning = false;
     }
 }

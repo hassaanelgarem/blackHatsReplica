@@ -40,9 +40,22 @@ export class EditUserProfileComponent implements OnInit {
         private http: Http) { }
 
     ngOnInit() {
-        this.activatedRoute.params.subscribe((params: Params) => {
-            this.userId = params['userId'];
-        });
+        this.activatedRoute.params.subscribe(
+            (params: Params) => {
+                this.userId = params['userId'];
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
         /*this.appService.getCurrentUser().subscribe(data => {
             if(data.success){
                 if(data.user){
@@ -67,11 +80,8 @@ export class EditUserProfileComponent implements OnInit {
 
     initialise() {
 
-        this.editProfileService.getOneUser(this.userId).subscribe(data => {
-            if (data.err) {
-                console.error(data.msg);
-            }
-            else {
+        this.editProfileService.getOneUser(this.userId).subscribe(
+            (data) => {
                 this.firstName = data.data.firstName;
                 this.lastName = data.data.lastName;
                 this.birthDate = data.data.birthDate;
@@ -85,22 +95,56 @@ export class EditUserProfileComponent implements OnInit {
                     this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
-                this.uploader.onCompleteItem = (item: any, response, headers: any) => {
+                this.uploader.onCompleteItem = (item: any, response, headers: any, status: any) => {
+                    switch (status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
                     this.initialise();
                     let res = JSON.parse(response);
                     this.pictureChanged.emit(res.data.imagePath);
                     this.profilePicture = res.data.imagePath;
 
                 };
-            }
-        });
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
     updateProfile() {
 
         this.editProfileService.editUserProfile(this.firstName, this.lastName, this.birthDate).subscribe(
             (data) => {
-              location.reload();
+                location.reload();
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
             }
         );
 
@@ -115,33 +159,42 @@ export class EditUserProfileComponent implements OnInit {
 
     deleteAccount() {
 
-      var _this = this;
-      bootbox.confirm({
-          title: "Delete Account",
-          message: "Are you sure you want to delete your account? This cannot be undone!",
-          buttons: {
-              cancel: {
-                  label: '<i class="fa fa-times"></i> Cancel'
-              },
-              confirm: {
-                  label: '<i class="fa fa-check"></i> Confirm'
-              }
-          },
-          callback: function(result) {
-            if(result){
-              _this.editProfileService.deleteAccount().subscribe(
-                  (data) => {
-                      _this.router.navigateByUrl('/');
-                  },
-                  (err) => {
-                      //TODO:
-                      //handle and redirect
-                  }
-              );
-            }
+        var _this = this;
+        bootbox.confirm({
+            title: "Delete Account",
+            message: "Are you sure you want to delete your account? This cannot be undone!",
+            buttons: {
+                cancel: {
+                    label: '<i class="fa fa-times"></i> Cancel'
+                },
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Confirm'
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    _this.editProfileService.deleteAccount().subscribe(
+                        (data) => {
+                            _this.router.navigateByUrl('/');
+                        },
+                        (err) => {
+                            switch (err.status) {
+                                case 404:
+                                    _this.router.navigateByUrl('/404-error');
+                                    break;
+                                case 401:
+                                    _this.router.navigateByUrl('/notAuthorized-error');
+                                    break;
+                                default:
+                                    _this.router.navigateByUrl('/500-error');
+                                    break;
+                            }
+                        }
+                    );
+                }
 
-          }
-      });
+            }
+        });
     }
 
 }

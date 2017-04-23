@@ -25,10 +25,10 @@ const businessSchema = new mongoose.Schema({
     }],
     workingHours: {
         from: {
-            type: String
+            type: Date
         },
         to: {
-            type: String
+            type: Date
         }
     },
     address: {
