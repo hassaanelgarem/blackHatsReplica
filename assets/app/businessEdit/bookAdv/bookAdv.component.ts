@@ -36,6 +36,7 @@ export class BookAdvComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.advPicture = "http://localhost:8080/api/image/businessAds/defaultAPic.jpg";
     this.showAdvSlots();
   }
 

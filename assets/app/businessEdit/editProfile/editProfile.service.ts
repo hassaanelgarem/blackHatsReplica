@@ -4,17 +4,18 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EditProfileService {
-    businessId: String = "58e8d68ce4a2cf7c06cff89a";
+    businessId: String;
 
     constructor(private http: Http) { }
 
     getBusinessProfile(businessId) {
+      console.log("ana hena:" + businessId);
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         return this.http.get('http://localhost:8080/api/business/' + businessId + '/getInfo', { headers: headers }).map(res => res.json());
     }
 
-    editBusinessProfile(name, wHours, wDays, category, description, phoneNumbers, tags, paymentRequired, deposit) {
+    editBusinessProfile(name, wHours, wDays, category, location, description, phoneNumbers, tags, paymentRequired, deposit) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let body = {
@@ -25,7 +26,8 @@ export class EditProfileService {
           paymentRequired: paymentRequired,
           phoneNumbers: phoneNumbers,
           workingDays: wDays,
-          workingHours: wHours
+          workingHours: wHours,
+          location: location
         }
         return this.http.put('http://localhost:8080/api/business/editInfo', body, { headers: headers }).map(res => res.json());
     }

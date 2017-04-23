@@ -276,6 +276,10 @@ module.exports.getFreeSlot = function(req, res) {
             freeSlot = lastSlot.advSchedule[0].endTime;
             //Increments this date to retrieve the first available slot for booking
             freeSlot.setDate(freeSlot.getDate() + 1);
+            //If first available date has already passed, set freeSlot to today's date
+            if(freeSlot < Date.now()){
+              freeSlot.setDate(Date.now());
+            }
             //return the first available date for booking
             return res.status(200).json({
                 error: null,

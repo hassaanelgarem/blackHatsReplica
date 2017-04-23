@@ -214,6 +214,13 @@
 
 										<div class="clear mb-10"></div>
 
+										<br>
+
+										<label> location </label>
+											<sebm-google-map [latitude]="lat" [longitude]="lng" (mapClick)="mapClicked($event)">
+												<sebm-google-map-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)" ></sebm-google-map-marker>
+											</sebm-google-map>
+
 										<div class="col-sm-12">
 											<a class="btn btn-primary" (click)=updateProfile()>Save</a>
 											<a class="btn btn-primary btn-border" (click)=cancel()>Cancel</a>
