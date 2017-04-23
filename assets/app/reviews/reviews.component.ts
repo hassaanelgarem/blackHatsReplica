@@ -37,6 +37,7 @@ export class ReviewsComponent implements OnInit {
     addRatingWarning = false;
     userLoggedIn = false;
     favorited = false;
+    noPhotos = false;
 
     constructor(
         private reviewsService: ReviewsService,
@@ -55,32 +56,29 @@ export class ReviewsComponent implements OnInit {
             this.businessId = params['businessId'];
 
             this.appService.getCurrentUser().subscribe(info => {
-              if(info.success){
-                if(info.user){
-                  this.userLoggedIn = true;
-                  this.userId = info.user._id;
-                  this.user = info.user;
-                  if(info.user.favorites.includes(this.businessId)){
-                    this.favorited = true;
-                    console.log("it's a favorite");
-                  } else{
-                    this.favorited = false;
-                    console.log("it's not a favorite");
-                  }
-                } else{
+                if (info.success) {
+                    if (info.user) {
+                        this.userLoggedIn = true;
+                        this.userId = info.user._id;
+                        this.user = info.user;
+                        if (info.user.favorites.includes(this.businessId)) {
+                            this.favorited = true;
+                            console.log("it's a favorite");
+                        } else {
+                            this.favorited = false;
+                            console.log("it's not a favorite");
+                        }
+                    } else {
+                        this.userLoggedIn = false;
+                    }
+                } else {
                     this.userLoggedIn = false;
                 }
-              } else{
-                  this.userLoggedIn = false;
-              }
             });
 
 
-            this.reviewsService.getBusinessInfo(this.businessId).subscribe(info => {
-                if (info.err) {
-                    console.error(info.msg);
-                }
-                else {
+            this.reviewsService.getBusinessInfo(this.businessId).subscribe(
+                (info) => {
                     console.log(info);
                     this.businessName = info.data.name;
                     this.logo = info.data.logo;
@@ -92,81 +90,81 @@ export class ReviewsComponent implements OnInit {
                         this.businessPhoneNumbers = info.data.phoneNumbers;
                         this.phoneNumbersAvailable = true;
                     }
-                    this.businessPhotos.length = info.data.photos.length - 1;
-                    this.businessPhotos[0] = info.data.photos[1];
-                    for (var _i = 1; _i < this.businessPhotos.length; _i++) {
-                        this.businessPhotos[_i] = info.data.photos[_i + 1];
+                    if (info.data.photos.length != 0) {
+                        console.log("photos");
+                        this.businessPhotos.length = info.data.photos.length - 1;
+                        this.businessPhotos[0] = info.data.photos[1];
+                        for (var _i = 1; _i < this.businessPhotos.length; _i++) {
+                            this.businessPhotos[_i] = info.data.photos[_i + 1];
+                        }
+                        this.firstPhoto = info.data.photos[0];
+                        this.noPhotos = false;
+                    } else {
+                        console.log("no photo");
+                        this.noPhotos = true;
                     }
-                    this.firstPhoto = info.data.photos[0];
                     this.loadDone = true;
-                }
-            },(err) => {
-                switch (err.status) {
-                    case 404:
-                        console.log("404 not found");
-                        break;
-                    case 401:
-                        console.log("Unauthorized");
-                        break;
-                    default:
-                        console.log("Oops somethings went wrong in getting info");
-                        break;
-                }
-            });
+                    if (info.err) {
+                        console.error(info.msg);
+                    }
+                }, (err) => {
+                    switch (err.status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
+                });
 
-            this.reviewsService.getAverageRating(this.businessId).subscribe(info => {
-                if (info.err) {
-                    console.error(info.msg);
-                }
-                else {
+            this.reviewsService.getAverageRating(this.businessId).subscribe(
+                (info) => {
                     this.rating = info.data.toFixed(1);
                     this.ratingNumber += this.rating;
-                }
-            },(err) => {
-                switch (err.status) {
-                    case 404:
-                        console.log("404 not found");
-                        break;
-                    case 401:
-                        console.log("Unauthorized");
-                        break;
-                    default:
-                        console.log("Oops somethings went wrong");
-                        break;
-                }
-            });
+                }, (err) => {
+                    switch (err.status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
+                });
 
-            this.reviewsService.getReviews(this.businessId).subscribe(info => {
-                if (info.err) {
-                    console.error(info.msg);
-                }
-                else {
+            this.reviewsService.getReviews(this.businessId).subscribe(
+                (info) => {
                     this.reviews = info.data;
-                }
-            },(err) => {
-                switch (err.status) {
-                    case 404:
-                        console.log("404 not found");
-                        break;
-                    case 401:
-                        console.log("Unauthorized");
-                        break;
-                    default:
-                        console.log("Oops somethings went wrong");
-                        break;
-                }
-            });
-
-        },(err) => {
+                }, (err) => {
+                    switch (err.status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
+                });
+        }, (err) => {
             switch (err.status) {
                 case 404:
-                    console.log("404 not found");
+                    this.router.navigateByUrl('/404-error');
                     break;
                 case 401:
-                    console.log("Unauthorized");
+                    this.router.navigateByUrl('/notAuthorized-error');
                     break;
                 default:
-                    console.log("Oops somethings went wrong");
+                    this.router.navigateByUrl('/500-error');
                     break;
             }
         });
@@ -174,22 +172,22 @@ export class ReviewsComponent implements OnInit {
 
     addFavorite() {
         this.reviewsService.addFavorite(this.businessId).subscribe(
-          (info) => {
-          this.favorited = true;
-          this.initialize();
-        },(err) => {
-            switch (err.status) {
-                case 404:
-                    console.log("404 not found");
-                    break;
-                case 401:
-                    console.log("Unauthorized");
-                    break;
-                default:
-                    console.log("Oops somethings went wrong in favoriting");
-                    break;
-            }
-        });
+            (info) => {
+                this.favorited = true;
+                this.initialize();
+            }, (err) => {
+                switch (err.status) {
+                    case 404:
+                        this.router.navigateByUrl('/404-error');
+                        break;
+                    case 401:
+                        this.router.navigateByUrl('/notAuthorized-error');
+                        break;
+                    default:
+                        this.router.navigateByUrl('/500-error');
+                        break;
+                }
+            });
     }
 
     submitReview() {
@@ -208,32 +206,29 @@ export class ReviewsComponent implements OnInit {
 
 
         if (!this.addCommentWarning && !this.addRatingWarning) {
-            const newReview = new Review(this.addComment, this.addRating, this.businessId, {"firstName": this.user.firstName, "lastName": this.user.lastName, "_id": this.userId});
+            const newReview = new Review(this.addComment, this.addRating, this.businessId, { "firstName": this.user.firstName, "lastName": this.user.lastName, "_id": this.userId });
             this.reviewsService.addReview(newReview).subscribe((info) => {
-                if (info.err) {
-                    console.error(info.msg);
-                } else {
-                    this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, {"firstName": this.user.firstName, "lastName": this.user.lastName, "_id": info.data.user}, info.data.time));
-                    this.addComment = null;
-                    this.addRating = null;
-                }
-            },(err) => {
+                this.reviews.push(new Review(info.data.comment, info.data.rating, info.data.business, { "firstName": this.user.firstName, "lastName": this.user.lastName, "_id": info.data.user }, info.data.time));
+                this.addComment = null;
+                this.addRating = null;
+            }, (err) => {
                 switch (err.status) {
                     case 404:
-                        console.log("404 not found");
+                        this.router.navigateByUrl('/404-error');
                         break;
                     case 401:
-                        console.log("Unauthorized");
+                        this.router.navigateByUrl('/notAuthorized-error');
                         break;
                     default:
-                        console.log("Oops somethings went wrong");
+                        this.router.navigateByUrl('/500-error');
                         break;
                 }
             });
 
-        } else {
-            //error message
-        }
+         }
+         // else {
+             //error message
+        // }
 
     }
 

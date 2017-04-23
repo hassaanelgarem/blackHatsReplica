@@ -192,7 +192,7 @@ module.exports.addBusiness = function (req, res) {
     //Validating inputs
     req.checkBody('name', 'Your business name is required.').notEmpty();
     req.checkBody('password', 'Password is required.').notEmpty();
-    req.checkBody('password', 'Password must be at least 8 characters.').isAlphanumeric();
+    req.checkBody('password', 'Password must contain letters and numbers.').isAlphanumeric();
     req.checkBody('password', 'Password must be at least 8 characters.').len(8);
     req.checkBody('confirmPassword', 'Passwords do not match.').equals(req.body.password);
     req.checkBody('email', 'Email is required.').notEmpty();
@@ -291,6 +291,8 @@ module.exports.addBusiness = function (req, res) {
 module.exports.updateInteractivity = function (req, res) {
     Business.findById(req.params.businessId, function (err, business) {
         if (err) {
+
+            console.log("ana hena #1");
             res.status(500).json({
                 error: err,
                 msg: "Error retrieving business from database",
@@ -306,8 +308,10 @@ module.exports.updateInteractivity = function (req, res) {
 
             } else {
                 business.interactivity = business.interactivity + 1;
+                console.log(business);
                 business.save(function (err) {
                     if (err) {
+                          console.log("ana hena #2");
                         res.status(500).json({
                             error: err,
                             msg: "Error retrieving business from database",

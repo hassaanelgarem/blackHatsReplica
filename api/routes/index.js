@@ -119,8 +119,8 @@ module.exports = function (passportConfig) {
 
 
     //Advertisement routes
-    router.route('/advertisement/bookAdvSlot/:advSlotId').post(advCtrl.bookAdvSlot); //passportConfig.isBusinessLoggedIn,
-    router.route('/advertisement/addAdvPhoto').post(advCtrl.uploadAdv); //passportConfig.isBusinessLoggedIn,
+    router.route('/advertisement/bookAdvSlot/:advSlotId').post(passportConfig.isBusinessLoggedIn, advCtrl.bookAdvSlot);
+    router.route('/advertisement/addAdvPhoto').post(passportConfig.isBusinessLoggedIn, advCtrl.uploadAdv);
 
     return router;
 };

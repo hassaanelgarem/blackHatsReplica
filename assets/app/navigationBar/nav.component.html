@@ -28,7 +28,7 @@
 						<a href="{{path}}user/{{user._id}}">Profile</a>
 					</li>
 					<li *ngIf="loggedin && !isUser">
-						<a href="{{path}}business/{{business._id}}">My Account</a>
+						<a href="{{path}}business/{{business._id}}">My Page</a>
 					</li>
 					<li>
 						<a href="/contactSupport">Support</a>
@@ -42,7 +42,7 @@
 				<ul class="nav-mini">
 					<li *ngIf="!loggedin"><a data-toggle="modal" href="#userRegisterModal"><i class="icon-user-follow" data-toggle="tooltip" data-placement="bottom" title="Sign Up"></i></a></li>
 					<li *ngIf="!loggedin"><a data-toggle="modal" href="#userLoginModal"><i class="icon-login" data-toggle="tooltip" data-placement="bottom" title="Login"></i> </a></li>
-					<li *ngIf="loggedin"><a (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
+					<li *ngIf="loggedin"><a style="cursor: pointer;" (click)="onLogout()"><i class="icon-logout"  data-placement="bottom" title="logout"></i> </a></li>
 				</ul>
 			</div>
 		</div>

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class EditUserProfileService {
 
-    userId: String = "58f923c4fae7424824625eec";
+    userId: String;
 
     constructor(private http: Http) { }
 

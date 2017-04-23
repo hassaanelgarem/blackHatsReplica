@@ -16,6 +16,8 @@ import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
 import { ContactSupportComponent } from './contactSupport/contactSupport.component';
+import { ActivityPageComponent } from "./businessPage/activityPage.component";
+import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
 
 
 const APP_ROUTES: Routes = [
@@ -24,18 +26,19 @@ const APP_ROUTES: Routes = [
     { path: 'search', component: SearchResultComponent },
     { path: 'terms', component: TermsComponent },
     { path: 'policy', component: PolicyComponent },
-    { path: 'resetPassword/:token', component: ResetPasswordComponent },
-    { path: 'verify/:token', component: VerifyComponent },
-    { path: 'businessEdit', component: BusinessEditComponent },
-    { path: 'businessEdit/activity/:activityId', component: EditActivityComponent },
+    { path: 'resetPassword/:token', component: ResetPasswordComponent},
+    { path: 'verify/:token', component: VerifyComponent},
+    { path: 'businessEdit', component: BusinessEditComponent, canActivate: [BusinessEditGuard] },
+    { path: 'businessEdit/activity/:activityId', component: EditActivityComponent, canActivate: [BusinessEditGuard]},
     { path: 'business/:businessId', component: BusinessPageComponent },
     { path: 'business/:businessId/reviews', component: ReviewsComponent },
-    { path: 'user/:userId', component: UserComponent },
+    { path: 'business/activity/:activityId', component: ActivityPageComponent },
+    { path: 'user/:userId', component: UserComponent},
     { path: 'contactSupport', component: ContactSupportComponent },
-    { path: '404-error', component: FourofourComponent },
-    { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent },
-    { path: '500-error', component: SomethingWrongComponent },
-    { path: '**', redirectTo: '/homepage' }
+    { path: '404-error', component: FourofourComponent},
+    { path: 'notAuthorized-error', component: NotAuthorizedErrorComponent},
+    { path: '500-error', component: SomethingWrongComponent},
+    { path: '**',redirectTo:'/homepage'}
 ];
 
 

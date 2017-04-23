@@ -3,19 +3,19 @@ import { Slot } from './slot.model';
 export class Activity {
   id: String;
   name: String;
-  price: Number;
+  price: number;
   description: String;
   photos: [String];
-  bookingsPerSlot: Number;
+  bookingsPerSlot: number;
   slots: Slot[];
   business: String;
   bookings: [String];
 
     constructor(
       name: String,
-      price: Number,
+      price: number,
       description: String,
-      bookingsPerSlot: Number,
+      bookingsPerSlot: number,
       business?: String,
       photos?: [String],
       slots?: Slot[],

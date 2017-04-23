@@ -32,12 +32,16 @@
 
 				</div>
 
-				<br><hr>
+				<br>
+				<hr>
 
 				<div class="clear"></div>
 
 				<div class="form-horizontal">
 					<div class="form-group">
+						<div *ngIf="nameRequired" class="alert alert-danger alert-dismissable">
+								<a class="close" (click)="hideNameWarning()" aria-label="close">&times;</a> Please fill out a name!
+						</div>
 						<label class="col-sm-3 col-md-2 control-label">Name</label>
 						<div class="col-sm-5 col-md-5">
 							<input type="text" class="form-control" [(ngModel)]="name" name="name">
@@ -49,36 +53,88 @@
 
 				<div class="form-horizontal">
 					<div class="form-group">
+						<label class="col-sm-3 col-md-2 control-label">Address</label>
+						<div class="col-sm-5 col-md-5">
+							<input type="text" class="form-control" [(ngModel)]="address" name="address">
+						</div>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-3 col-md-2 control-label">City</label>
+						<div class="col-sm-5 col-md-5">
+							<select class="selectpicker show-tick form-control" placeholder="Choose a City" data-live-search="false" [(ngModel)]="city" name="city">
+								<option value="Cairo">Cairo</option>
+								<option value="Giza">Giza</option>
+								<option value="Alexandria">Alexandria</option>
+								<option value="Suez">Suez</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+
+				<div class="form-horizontal">
+					<div class="form-group">
 						<label class="col-sm-3 col-md-2 control-label">Working Hours</label>
 						<div class="col-sm-3 col-md-3">
 							<label>From:</label>
-							<input type="text" class="form-control" [(ngModel)]="workingFrom" name="workingFrom">
+							<input name="workingFrom" [ngModel]="workingFrom | date: 'shortTime'" [(dateTimePicker)]="workingFrom" [pickerType]="'time'" [mode]="'dropdown'" [theme]="'gray'" [hourTime]=" '12' " class="form-control" />
 						</div>
 						<div class="col-xs-3 col-sm-3">
 							<label>To:</label>
-							<input type="text" class="form-control" [(ngModel)]="workingTo" name="workingTo">
+							<input name="workingTo" [ngModel]="workingTo | date: 'shortTime'" [(dateTimePicker)]="workingTo" [pickerType]="'time'" [mode]="'dropdown'" [theme]="'gray'" [hourTime]=" '12' " class="form-control" />
 						</div>
 					</div>
 				</div>
 
 				<div class="clear"></div>
 
+				<!-- <div class="form-horizontal"> -->
+					<!-- <div class="form-group"> -->
+						<!-- <label class="col-sm-3 col-md-2 control-label">Required payment</label> -->
+						<!-- <div class="col-sm-5 col-md-5">
+							<select class="selectpicker show-tick form-control" data-live-search="false" [(ngModel)]="payFmentRequired" name="paymentRequired">
+								<option value="1">Full payment</option>
+								<option value="2">Deposit</option>
+								<option value="3" selected>No payment</option>
+							</select>
+						</div> -->
+
+					<!-- </div> -->
+				<!-- </div> -->
+
 				<div class="form-horizontal">
 					<div class="form-group">
-						<label class="col-sm-3 col-md-2 control-label">category</label>
+						<label class="col-sm-3 col-md-2 control-label">Category</label>
 						<div class="col-sm-5 col-md-5">
-							<input type="text" class="form-control" [(ngModel)]="category" name="category">
+							<select class="selectpicker show-tick form-control" placeholder="Choose a category" data-live-search="false" [(ngModel)]="category" name="category">
+								<option value="Room Escape">Room Escape</option>
+								<option value="Trampoline">Trampoline</option>
+								<option value="Go Karts">Go Karts</option>
+								<option value="Battle Games">Battle Games</option>
+								<option value="Water Games">Water Games</option>
+								<option value="Hiking">Hiking</option>
+								<option value="Extreme Sports">Extreme Sports</option>
+								<option value="Sports">Sports</option>
+							</select>
 						</div>
 					</div>
 				</div>
 
 				<div class="clear"></div>
-
 				<div class="form-horizontal">
 					<div class="form-group">
+						<div *ngIf="descriptionRequired" class="alert alert-danger alert-dismissable">
+								<a class="close" (click)="hideDescriptionWarning()" aria-label="close">&times;</a> Please enter a description!
+						</div>
 						<label class="col-sm-3 col-md-2 control-label">Description</label>
 						<div class="col-sm-5 col-md-5">
-							<input type="text" class="form-control" [(ngModel)]="description" name="description">
+							<textarea style="resize: none;" class="form-control" type="text" rows="4" [(ngModel)]="description" name="description"></textarea>
 						</div>
 					</div>
 				</div>
@@ -93,60 +149,93 @@
 								<div class="form-horizontal">
 									<div class="form-group">
 										<div class="col-sm-5 col-md-5">
-										<input type="text" class="form-control" value={{workingDay}} readonly>
-									</div>
+											<input type="text" class="form-control" value={{workingDay}} readonly>
+										</div>
 										<div class="col-xs-5 col-sm-5">
 											<a class="btn btn-primary btn-border" (click)="removeWorkingDay(i)"><i class="glyphicon glyphicon-minus"></i></a>
 										</div>
-										</div>
+									</div>
 								</div>
 							</tr>
-								<div class="form-horizontal">
-									<div class="form-group">
-										<div class="col-sm-5 col-md-5">
-											<input type="text" class="form-control" [(ngModel)]="extraDay" name="extraDay">
-										</div>
-										<div class="col-xs-5 col-sm-5">
-											<a class="btn btn-primary" (click)="addWorkingDay()"><i class="glyphicon glyphicon-plus"></i></a>
-										</div>
+							<div class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-5 col-md-5">
+										<input type="text" class="form-control" [(ngModel)]="extraDay" name="extraDay">
+									</div>
+									<div class="col-xs-5 col-sm-5">
+										<a class="btn btn-primary" (click)="addWorkingDay()"><i class="glyphicon glyphicon-plus"></i></a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-							<div class="clear"></div>
-							<p>
+				<div class="clear"></div>
+				<p>
 
 
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-3 col-md-2 control-label">Phone Numbers</label>
+							<div class="col-xs-5 col-sm-5">
+								<tr *ngFor="let phoneNumber of phoneNumbers; let k=index">
+									<div class="form-horizontal">
+										<div class="form-group">
+											<div class="col-sm-5 col-md-5">
+												<input type="text" class="form-control" value={{phoneNumber}} readonly>
+											</div>
+											<div class="col-xs-5 col-sm-5">
+												<a class="btn btn-primary btn-border" (click)="removePhoneNumber(k)"><i class="glyphicon glyphicon-minus"></i></a>
+											</div>
+										</div>
+									</div>
+								</tr>
 								<div class="form-horizontal">
 									<div class="form-group">
-										<label class="col-sm-3 col-md-2 control-label">Phone Numbers</label>
+										<div class="col-sm-5 col-md-5">
+											<input type="text" class="form-control" [(ngModel)]="extraNumber" name="extraNumber">
+										</div>
 										<div class="col-xs-5 col-sm-5">
-											<tr *ngFor="let phoneNumber of phoneNumbers; let k=index">
-												<div class="form-horizontal">
-													<div class="form-group">
-														<div class="col-sm-5 col-md-5">
-															<input type="text" class="form-control" value={{phoneNumber}} readonly>
-														</div>
-														<div class="col-xs-5 col-sm-5">
-															<a class="btn btn-primary btn-border" (click)="removePhoneNumber(k)"><i class="glyphicon glyphicon-minus"></i></a>
-														</div>
-													</div>
-												</div>
-											</tr>
+											<a class="btn btn-primary" (click)="addPhoneNumber()"><i class="glyphicon glyphicon-plus"></i></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="clear"></div>
+						<p>
+
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="col-sm-3 col-md-2 control-label">Tags</label>
+									<div class="col-xs-5 col-sm-5">
+										<tr *ngFor="let tag of tags; let j=index">
 											<div class="form-horizontal">
 												<div class="form-group">
 													<div class="col-sm-5 col-md-5">
-														<input type="text" class="form-control" [(ngModel)]="extraNumber" name="extraNumber">
+														<input type="text" class="form-control" value={{tag}} readonly>
 													</div>
 													<div class="col-xs-5 col-sm-5">
-														<a class="btn btn-primary" (click)="addPhoneNumber()"><i class="glyphicon glyphicon-plus"></i></a>
+														<a class="btn btn-primary btn-border" (click)="removeTag(j)"><i class="glyphicon glyphicon-minus"></i></a>
 													</div>
+												</div>
+											</div>
+										</tr>
+										<div class="form-horizontal">
+											<div class="form-group">
+												<div class="col-sm-5 col-md-5">
+													<input type="text" class="form-control" [(ngModel)]="extraTag" name="extraTag">
+												</div>
+												<div class="col-xs-5 col-sm-5">
+													<a class="btn btn-primary" (click)="addTag()"><i class="glyphicon glyphicon-plus"></i></a>
 												</div>
 											</div>
 										</div>
 									</div>
+								</div>
 
 
 								<div class="clear"></div>
@@ -154,42 +243,9 @@
 
 									<div class="form-horizontal">
 										<div class="form-group">
-											<label class="col-sm-3 col-md-2 control-label">Tags</label>
-											<div class="col-xs-5 col-sm-5">
-												<tr *ngFor="let tag of tags; let j=index">
-													<div class="form-horizontal">
-														<div class="form-group">
-															<div class="col-sm-5 col-md-5">
-																<input type="text" class="form-control" value={{tag}} readonly>
-															</div>
-															<div class="col-xs-5 col-sm-5">
-																<a class="btn btn-primary btn-border" (click)="removeTag(j)"><i class="glyphicon glyphicon-minus"></i></a>
-															</div>
-														</div>
-													</div>
-												</tr>
-												<div class="form-horizontal">
-													<div class="form-group">
-														<div class="col-sm-5 col-md-5">
-															<input type="text" class="form-control" [(ngModel)]="extraTag" name="extraTag">
-														</div>
-														<div class="col-xs-5 col-sm-5">
-															<a class="btn btn-primary" (click)="addTag()"><i class="glyphicon glyphicon-plus"></i></a>
-														</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-
-									<div class="clear"></div>
-									<p>
-
-											<div class="form-horizontal">
-												<div class="form-group">
-												<label class="col-sm-3 col-md-2 control-label">Required payment</label>
-												<div class="col-sm-5 col-md-5">
-												<select class="selectpicker show-tick form-control" data-live-search="false" #t (change)="showDeposit(t.value)" [(ngModel)]="payFmentRequired" name="paymentRequired">
+											<label class="col-sm-3 col-md-2 control-label">Required payment</label>
+											<div class="col-sm-5 col-md-5">
+												<select class="selectpicker show-tick form-control" data-live-search="false" #t (change)="showDeposit(t.value)" [(ngModel)]="paymentRequired" name="paymentRequired">
 													<option value="1">Full payment</option>
 													<option value="2">Deposit</option>
 													<option value="3" selected>No payment</option>
@@ -199,36 +255,49 @@
 										</div>
 									</div>
 
-										<div class="clear"></div>
+									<div class="clear"></div>
 
-										<div class="form-horizontal">
-											<div class="form-group">
-												<div *ngIf="depositFlag == true" class="form-group">
-													<label class="col-sm-3 col-md-2 control-label">Deposit</label>
+									<div class="form-horizontal">
+										<div class="form-group">
+											<div *ngIf="depositFlag == true" class="form-group">
+												<label class="col-sm-3 col-md-2 control-label">Deposit</label>
 												<div class="col-sm-5 col-md-5">
 													<input type="number" class="form-control" [(ngModel)]="deposit" name="deposit">
 												</div>
 											</div>
+										</div>
+									</div>
+
+									<div class="clear mb-10"></div>
+
+									<br>
+									<div class="form-horizontal">
+										<div class="form-group">
+											<label class="col-sm-3 col-md-2 control-label">Location</label>
+											<div class="col-sm-5 col-md-5">
+												<sebm-google-map [latitude]="lat" [longitude]="lng" (mapClick)="mapClicked($event)" style="position: relative;overflow: hidden;">
+													<sebm-google-map-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></sebm-google-map-marker>
+												</sebm-google-map>
 											</div>
 										</div>
+									</div>
 
-										<div class="clear mb-10"></div>
+									<br>
+									<div class="col-sm-12">
+										<a class="btn btn-primary" (click)=updateProfile()>Save</a>
+										<a class="btn btn-primary btn-border" (click)=cancel()>Cancel</a>
+									</div>
 
-										<div class="col-sm-12">
-											<a class="btn btn-primary" (click)=updateProfile()>Save</a>
-											<a class="btn btn-primary btn-border" (click)=cancel()>Cancel</a>
-										</div>
 
-
-						</div>
+							</div>
 
 					</div>
 
-				</div>
+			</div>
 
 		</form>
 
-		</div>
+	</div>
 </body>
 
 </html>

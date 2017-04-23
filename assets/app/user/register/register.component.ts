@@ -16,7 +16,6 @@ export class RegisterComponent {
     password: string;
     confirmPassword: string;
     email: string;
-    birthDate: Date;
     success: boolean = false;
     failure: boolean = false;
     message: string;
@@ -31,8 +30,7 @@ export class RegisterComponent {
             this.username,
             this.password,
             this.confirmPassword,
-            this.email,
-            this.birthDate
+            this.email
         )
 
         /*

@@ -13,6 +13,9 @@ export class BusinessRegisterComponent {
     confirmPassword: string;
     email: string;
     description: string;
+    success: boolean = false;
+    failure: boolean = false;
+    message: string;
 
     constructor(private businessRegisterService: BusinessRegisterService) { }
 
@@ -27,14 +30,22 @@ export class BusinessRegisterComponent {
         )
 
         /*
-       Calling the signUp function from the service to handle the register operation
-       Gets back data and error and then handling them by pop up alerts
-       */
+        Calling the signUp function from the service to handle the Business Application operation
+        Gets back data and error messages then handling them by bootstrap alerts
+        Setting the success and failure booleans to check on them in the html file
+        */
         this.businessRegisterService.signUp(business)
             .subscribe(
-            data => alert(data.msg),
-            error => alert(error.error.msg)
-            );
+            data => {
+                this.failure = false;
+                this.success = true;
+                this.message = data.msg;
+            },
+            error => {
+                this.success = false;
+                this.failure = true;
+                this.message = error.error.msg;
+            });
     };
 
 }

@@ -40,14 +40,14 @@ export class BusinessActivitiesComponent implements OnInit {
 
     addName: String;
     addDescription: String;
-    addPrice: Number;
-    addPerSlot: Number;
+    addPrice: number;
+    addPerSlot: number;
     //Edit attributes
 
     editName: String;
     editDescription: String;
-    editPrice: Number;
-    editPerSlot: Number;
+    editPrice: number;
+    editPerSlot: number;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -56,12 +56,27 @@ export class BusinessActivitiesComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.businessService.getCurrentUser().subscribe(res => {
-          console.log(res);
-          this.business = res.business;
-          this.businessService.getActivities(this.business._id).subscribe((acts: Activity[]) => {
-              this.activities = acts;
-          });
+        this.businessService.getCurrentUser().subscribe(
+          (res) => {
+            console.log(res);
+            this.business = res.business;
+            this.businessService.getActivities(this.business._id).subscribe((acts: Activity[]) => {
+                this.activities = acts;
+            },
+            (err) => {
+              switch (err.status) {
+                  case 404:
+                      this.router.navigateByUrl('/404-error');
+                      break;
+                  case 401:
+                      this.router.navigateByUrl('/notAuthorized-error');
+                      break;
+                  default:
+                      this.router.navigateByUrl('/500-error');
+                      break;
+              }
+              }
+          );
         });
 
     }
@@ -80,20 +95,6 @@ export class BusinessActivitiesComponent implements OnInit {
         this.showEdit = true;
         this.router.navigate(["/businessEdit/activity/" + this.activities[index].id]);
 
-    }
-
-    onDelete() {
-        this.businessService.deleteActivity(this.activities[this.currentIndex]).subscribe(
-            (data) => {
-                console.log("tamaam");
-                this.activities.splice(this.currentIndex, 1);
-                this.currentIndex = 0;
-            },
-            (err) => {
-                console.log("msh tamaam")
-                //console.log(err);
-            }
-        );
     }
 
     onAddSubmit() {
@@ -149,11 +150,21 @@ export class BusinessActivitiesComponent implements OnInit {
                         data.data.slots,
                         data.data.bookings,
                         data.data._id
-                      )
+                    )
                     )
                 },
                 (err) => {
-                    console.log(err);
+                    switch (err.status) {
+                        case 404:
+                            this.router.navigateByUrl('/404-error');
+                            break;
+                        case 401:
+                            this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        default:
+                            this.router.navigateByUrl('/500-error');
+                            break;
+                    }
                 }
 
             );
@@ -211,17 +222,17 @@ export class BusinessActivitiesComponent implements OnInit {
         this.addPerSlotWarning = false;
     }
 
-    onSave(){
-      this.editDone = true;
+    onSave() {
+        this.editDone = true;
     }
 
-    onSaveDone(){
+    onSaveDone() {
 
     }
 
-    onEditCancel(){
-      this.editDone = false;
-      this.showEdit = false;
+    onEditCancel() {
+        this.editDone = false;
+        this.showEdit = false;
     }
 
 }

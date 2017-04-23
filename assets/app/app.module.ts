@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -10,6 +10,8 @@ import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { FocusDirective } from './directives/focus.directive';
 import { RatingModule } from "ngx-rating";
+import { CommonModule } from '@angular/common';
+import { AgmCoreModule } from 'angular2-google-maps/core';
 
 
 import { AppComponent } from "./app.component";
@@ -47,6 +49,7 @@ import { FourofourComponent } from "./errors/404.component";
 import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
 import { ContactSupportComponent } from './contactSupport/contactSupport.component';
+import { ActivityPageComponent } from "./businessPage/activityPage.component";
 
 
 import { BusinessPageService } from "./businessPage/businessPage.service";
@@ -68,7 +71,7 @@ import { ActivityBookingsService } from "./businessEdit/activityBookings/activit
 import { UserService } from "./user/user.service";
 import { EditUserProfileService } from "./user/editProfile/editProfile.service";
 import { ContactSupportService } from './contactSupport/contactSupport.service';
-
+import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   acceptedFiles: 'image/*'
@@ -112,12 +115,14 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       BusinessReviewsComponent,
       EditActivityComponent,
       EditProfileComponent,
+      ActivityPageComponent,
       FileSelectDirective,
       FocusDirective,
       ContactSupportComponent
     ],
     imports: [
       BrowserModule,
+      CommonModule,
       MomentModule,
       FormsModule,
       HttpModule,
@@ -125,7 +130,10 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       MomentModule,
       DateTimePickerModule,
       DropzoneModule.forRoot(DROPZONE_CONFIG),
-      RatingModule
+      RatingModule,
+      AgmCoreModule.forRoot({
+        apiKey: 'AIzaSyAhPwdEndt1K4nL2Q3wjR1P7LITWK794iI'
+      })
     ],
     providers: [
       AppService,
@@ -146,7 +154,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ReviewsService,
       UserService,
       EditUserProfileService,
-      ContactSupportService
+      ContactSupportService,
+      BusinessEditGuard
     ],
     bootstrap : [AppComponent]
 })
