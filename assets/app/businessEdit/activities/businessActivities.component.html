@@ -22,14 +22,14 @@
 
                                             <div class="trip-guide-item no-person">
 
-                                                <div class="trip-guide-image">
-                                                    <img *ngIf="!activity.photos[0]" src="/images/placeholderImage.jpg" alt="images" />
-                                                    <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" />
+                                                <div class="trip-guide-image" style="width: 290px; height: 290px">
+                                                    <img *ngIf="!activity.photos[0]" src="/images/placeholderImage.jpg" alt="images" style="width: inherit; height: inherit" />
+                                                    <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="width: inherit; height: inherit" />
                                                 </div>
 
                                                 <div class="trip-guide-content">
                                                     <h3>{{activity.name}}</h3>
-                                                    <p class="truncate"> {{truncate(activity.description)}}</p>
+                                                    <p style="width: inherit;" class="truncate"> {{truncate(activity.description)}}</p>
                                                 </div>
 
                                                 <div class="trip-guide-bottom bg-light-primary bt">
@@ -48,7 +48,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-xs-12 col-sm-6 text-right">
-                                                            <a (click)="onEdit(i)" class="btn btn-primary" href="#editActivity" data-toggle="modal">Edit</a>
+                                                            <a (click)="onEdit(i)" class="btn btn-primary">Edit</a>
                                                         </div>
                                                     </div>
 
@@ -78,192 +78,6 @@
     </div>
 
     <!-- end Container Wrapper -->
-
-
-
-    <!-- start Edit Modal -->
-    <div *ngIf="showEdit" id="editActivity" class="modal fade login-box-wrapper" tabindex="-1" data-backdrop="static" data-keyboard="false" data-replace="true">
-
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onEditCancel()">&times;</button>
-            <h4 class="modal-title2 text-center">Edit {{activities[currentIndex].name}}</h4>
-        </div>
-
-        <div class="modal-body">
-            <div *ngIf="!editDone">
-                <div class="row gap-20">
-
-                    <div class="col-sm-12 col-md-12">
-
-                        <div class="form-group">
-                            <div *ngIf="editNameWarning" class="alert alert-danger alert-dismissable">
-                                <a class="close" (click)="hideEditNameWarning()" aria-label="close">&times;</a> Please fill out a name!
-                            </div>
-                            <label>Name</label>
-                            <input class="form-control" type="text" [(ngModel)]="editName" name="editName">
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12 col-md-12">
-
-                        <div class="form-group">
-                            <div *ngIf="editDescriptionWarning" class="alert alert-danger alert-dismissable">
-                                <a class="close" (click)="hideEditDescriptionWarning()" aria-label="close">&times;</a> Please fill out a description!
-                            </div>
-                            <label>Description</label>
-                            <textarea style="resize: none;" class="form-control" type="text" rows="3" [(ngModel)]="editDescription" name="editDescription"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12 col-md-12">
-
-                        <div class="form-group">
-                            <div *ngIf="editPriceWarning" class="alert alert-danger alert-dismissable">
-                                <a class="close" (click)="hideEditPriceWarning()" aria-label="close">&times;</a> Please choose a price!
-                            </div>
-                            <label>Price</label>
-                            <input class="form-control" type="number" [(ngModel)]="editPrice" name="editPrice">
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12 col-md-12">
-
-                        <div class="form-group">
-                            <div *ngIf="editPerSlotWarning" class="alert alert-danger alert-dismissable">
-                                <a class="close" (click)="hideEditPerSlotWarning()" aria-label="close">&times;</a> Please choose the number of bookings per slot!
-                            </div>
-                            <label>Bookings per slot</label>
-                            <input class="form-control" placeholder="Maximum number of bookings for one slot" type="number" [(ngModel)]="editPerSlot" name="editPerSlot">
-                        </div>
-
-                    </div>
-
-                    <div class="col-xs-12 col-sm-12 col-md-12 mt-20">
-                        <div class="gallery-wrapper">
-
-                            <div class="GridLex-gap-5">
-
-                                <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle ">
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="square GridLex-col-2_sm-2_xs-2_xss-2 ">
-                                        <div class="square sumi-gallery-wrapper clearfix ">
-                                            <div class="square gallery-item image-object-fit image-object-fit-cover">
-                                                <img class="square" data-sgallery="guideGallery" title="Guide Gallery" data-full="/images/guide-lightbox/01.jpg" data-thumb="/images/guide-lightbox/01.jpg" src="/images/guide-lightbox/01.jpg" alt="images">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-            </div>
-
-            <div *ngIf="editDone">
-                <h1>Hello</h1>
-            </div>
-
-
-        </div>
-
-        <div class="modal-footer text-center">
-            <button type="button" class="btn btn-primary buttonSize" (click)="onSave()"> Save </button>
-            <button type="button" class="btn btn-danger buttonSize" data-dismiss="modal" (click)="onDelete()">Delete</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary btn-border buttonSize" (click)="onEditCancel()">Cancel</button>
-        </div>
-
-    </div>
-    <!-- end Edit Modal -->
 
     <!-- start Add Modal -->
     <div id="addActivityModal" class="modal fade login-box-wrapper" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" data-replace="true">

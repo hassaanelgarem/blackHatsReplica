@@ -114,17 +114,34 @@ export class EditUserProfileComponent implements OnInit {
     }
 
     deleteAccount() {
-        this.editProfileService.deleteAccount().subscribe(
-            (data) => {
-                this.router.navigateByUrl('/');
-            },
-            (err) => {
-                //TODO:
-                //handle and redirect
+
+      var _this = this;
+      bootbox.confirm({
+          title: "Delete Account",
+          message: "Are you sure you want to delete your account? This cannot be undone!",
+          buttons: {
+              cancel: {
+                  label: '<i class="fa fa-times"></i> Cancel'
+              },
+              confirm: {
+                  label: '<i class="fa fa-check"></i> Confirm'
+              }
+          },
+          callback: function(result) {
+            if(result){
+              _this.editProfileService.deleteAccount().subscribe(
+                  (data) => {
+                      _this.router.navigateByUrl('/');
+                  },
+                  (err) => {
+                      //TODO:
+                      //handle and redirect
+                  }
+              );
             }
-        );
 
-
+          }
+      });
     }
 
 }
