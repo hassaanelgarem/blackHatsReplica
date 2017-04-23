@@ -1,5 +1,4 @@
-<body class="home transparent-header">
-
+<body>
     <!-- start Container Wrapper -->
 
     <div class="container-wrapper">
@@ -234,9 +233,9 @@
 
                                 <div class="trip-guide-item">
 
-                                    <div class="trip-guide-image no-person">
-                                      <img *ngIf="!activity.photos[0]" src="/images/no-image.svg" alt="images" style="margin: auto;"/>
-                                      <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="margin: auto;"/>
+                                    <div class="trip-guide-image no-person" style="width: 364px; height: 364px;">
+                                      <img *ngIf="!activity.photos[0]" src="/images/no-image.svg" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
+                                      <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
                                     </div>
 
                                     <div class="trip-guide-content">

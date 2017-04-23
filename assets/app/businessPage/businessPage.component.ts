@@ -27,7 +27,7 @@ export class BusinessPageComponent implements OnInit {
     workingHoursAvailable = false;
     description: String = "";
     rating: any = "";
-    ratingNumber: Number = 0;
+    ratingNumber: Number;
     activities: Object[] = new Array<Object>();
     category: String;
     categoryAvailable = false;
@@ -47,6 +47,7 @@ export class BusinessPageComponent implements OnInit {
     noPhotos = false;
     activitiesAvailable = false;
     reviewsAvailable = false;
+    test = 3;
 
     constructor(
         private businessPageService: BusinessPageService,
@@ -175,7 +176,7 @@ export class BusinessPageComponent implements OnInit {
                     console.log("here yasta");
                     console.log(info);
                     this.rating = info.data.toFixed(1);
-                    this.ratingNumber += this.rating;
+                    this.ratingNumber = info.data;
                 }
             },(err) => {
                 switch (err.status) {
