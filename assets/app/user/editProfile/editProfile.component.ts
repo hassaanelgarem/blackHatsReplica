@@ -76,7 +76,7 @@ export class EditUserProfileComponent implements OnInit {
                     this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                 }
                 this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
-                this.uploader.onCompleteItem = (item: any, response, headers: any, status: any) => {
+                this.uploader.onCompleteItem = (item: any, response, status: any, headers: any) => {
                     switch (status) {
                         case 404:
                             this.router.navigateByUrl('/404-error');
@@ -85,7 +85,8 @@ export class EditUserProfileComponent implements OnInit {
                             this.router.navigateByUrl('/notAuthorized-error');
                             break;
                         case 200:
-                            console.log('skm');
+                            break;
+                        case 201:
                             break;
                         default:
                             this.router.navigateByUrl('/500-error');

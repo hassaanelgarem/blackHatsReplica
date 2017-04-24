@@ -45,7 +45,6 @@ export class NavComponent implements OnInit {
 
   loggedIn(args:any){
     this.appService.getCurrentUser().subscribe(data => {
-      console.log(data);
       if(data.success){
         if(data.user){
           this.user = data.user;
@@ -68,7 +67,7 @@ export class NavComponent implements OnInit {
     this.loginService.logout().subscribe(data => {
       location.reload();
     }, err => {
-      console.log('log out failed');
+      bootbox.alert(err.msg);
     });
 
     }

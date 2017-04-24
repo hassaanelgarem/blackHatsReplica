@@ -35,7 +35,6 @@ export class ReviewsService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const body = JSON.stringify(review);
-    console.log(body);
     let businessId = review.business;
     return this.http.post('http://localhost:8080/api/review/' + businessId + '/add', body, {headers: headers}).map(res => res.json());
   }

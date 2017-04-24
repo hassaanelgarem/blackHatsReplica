@@ -63,10 +63,8 @@ export class ReviewsComponent implements OnInit {
                         this.user = info.user;
                         if (info.user.favorites.includes(this.businessId)) {
                             this.favorited = true;
-                            console.log("it's a favorite");
                         } else {
                             this.favorited = false;
-                            console.log("it's not a favorite");
                         }
                     } else {
                         this.userLoggedIn = false;
@@ -79,7 +77,6 @@ export class ReviewsComponent implements OnInit {
 
             this.reviewsService.getBusinessInfo(this.businessId).subscribe(
                 (info) => {
-                    console.log(info);
                     this.businessName = info.data.name;
                     this.logo = info.data.logo;
                     if (info.data.address != null) {
@@ -91,7 +88,6 @@ export class ReviewsComponent implements OnInit {
                         this.phoneNumbersAvailable = true;
                     }
                     if (info.data.photos.length != 0) {
-                        console.log("photos");
                         this.businessPhotos.length = info.data.photos.length - 1;
                         this.businessPhotos[0] = info.data.photos[1];
                         for (var _i = 1; _i < this.businessPhotos.length; _i++) {
@@ -100,7 +96,6 @@ export class ReviewsComponent implements OnInit {
                         this.firstPhoto = info.data.photos[0];
                         this.noPhotos = false;
                     } else {
-                        console.log("no photo");
                         this.noPhotos = true;
                     }
                     this.loadDone = true;

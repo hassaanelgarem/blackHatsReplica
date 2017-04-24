@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
                     this.userPassword = null;
                 }
             }, err => {
-                console.log(err);
+                bootbox.alert(err.msg);
             });
         }
 
@@ -153,7 +153,7 @@ export class LoginComponent implements OnInit {
                     this.businessPassword = null;
                 }
             }, err => {
-                //console.log(err);
+                bootbox.alert(err.msg);
             });
         }
 

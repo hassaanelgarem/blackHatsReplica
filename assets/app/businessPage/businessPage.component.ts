@@ -71,30 +71,24 @@ export class BusinessPageComponent implements OnInit {
                         this.ownerLoggedIn = false;
                         if (info.user.favorites.includes(this.businessId)) {
                             this.favorited = true;
-                            console.log("it's a favorite");
                         } else {
                             this.favorited = false;
-                            console.log("it's not a favorite");
                         }
                     } else if (info.business._id == this.businessId) {
                         this.ownerLoggedIn = true;
                         this.userLoggedIn = false;
-                        console.log("owner logged in");
                     } else {
                         this.ownerLoggedIn = false;
                         this.userLoggedIn = false;
-                        console.log("another business logged in");
                     }
                 } else {
                     this.ownerLoggedIn = false;
                     this.userLoggedIn = false;
-                    console.log("no log in");
                 }
             });
 
             this.businessPageService.getBusinessInfo(this.businessId).subscribe(
                 (info) => {
-                    console.log(info);
                     this.name = info.data.name;
                     this.logo = info.data.logo;
                     if (info.data.address != null) {
@@ -115,9 +109,7 @@ export class BusinessPageComponent implements OnInit {
                         this.category = info.data.category;
                         this.categoryAvailable = true;
                     }
-                    console.log("abl wh");
                     if (info.data.workingHours != null) {
-                        console.log("working hours");
                         this.workingFrom = info.data.workingHours.from;
                         this.workingTo = info.data.workingHours.to;
                         this.workingHoursAvailable = true;
@@ -125,7 +117,6 @@ export class BusinessPageComponent implements OnInit {
 
 
                     if (info.data.photos.length != 0) {
-                        console.log("photos");
                         this.photos.length = info.data.photos.length - 1;
                         this.photos[0] = info.data.photos[1];
                         for (var _i = 1; _i < this.photos.length; _i++) {
@@ -134,7 +125,6 @@ export class BusinessPageComponent implements OnInit {
                         this.firstPhoto = info.data.photos[0];
                         this.noPhotos = false;
                     } else {
-                        console.log("no photo");
                         this.noPhotos = true;
                     }
                     this.paymentRequired = info.data.paymentRequired;
@@ -165,7 +155,6 @@ export class BusinessPageComponent implements OnInit {
 
             this.businessPageService.getAverageRating(this.businessId).subscribe(
                 (info) => {
-                    console.log(info);
                     this.rating = info.data.toFixed(1);
                     this.ratingNumber = info.data;
                 }, (err) => {

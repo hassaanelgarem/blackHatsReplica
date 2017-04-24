@@ -53,7 +53,6 @@ export class ActivityPageComponent implements OnInit {
                         this.noPhotos = true;
                     }
                     this.appService.getCurrentUser().subscribe(res => {
-                        console.log(res);
                         if (res.success && res.user) {
                             this.loggedIn = true;
                         }
@@ -148,7 +147,7 @@ export class ActivityPageComponent implements OnInit {
         this.appService.charge(token).subscribe(res => {
             this.businessPageService.bookActivity(this.slots[index], this.activity.id, this.chosenDate).subscribe(
                 (data) => {
-                    console.log("BOOKED")
+                    bootbox.alert(data.msg);
                 },
                 (err) => {
                     switch (err.status) {

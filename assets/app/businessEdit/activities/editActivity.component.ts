@@ -184,7 +184,6 @@ export class EditActivityComponent implements OnInit {
             },
             callback: function(result) {
                 if (result) {
-                    console.log(_this);
                     _this.businessService.deleteSlot(_this.activity.slots[index], _this.activity).subscribe(
                         (data) => {
                             _this.activity.slots.splice(index, 1);
@@ -222,7 +221,6 @@ export class EditActivityComponent implements OnInit {
             )
             this.businessService.addSlot(newSlot, this.activity).subscribe(
                 (data) => {
-                    console.log("Data status: " + data.status);
                     this.activity.slots.push(newSlot);
                     this.activity.slots.sort(function(a, b) {
                         var one = b.startTime;
@@ -264,7 +262,6 @@ export class EditActivityComponent implements OnInit {
     }
 
     onUploadError(args: any) {
-        console.log('Show error message');
     }
 
     onUploadSuccess(event) {

@@ -14,7 +14,6 @@ export class BusinessEditGuard implements CanActivate {
     ) { }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-        //console.log(this.authService.loggedIn);
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         return this.http.get('http://localhost:8080/api/currentUser', { headers: headers }).map((response) => {

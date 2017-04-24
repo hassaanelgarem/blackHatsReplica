@@ -133,7 +133,6 @@ export class BusinessService {
     }
 
     testBusinessLogin() {
-        console.log("testBusinessLogin");
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let body = {

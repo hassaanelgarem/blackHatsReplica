@@ -21,7 +21,6 @@ export class TopBusinessesComponent implements OnInit {
             .subscribe(
             (business: Business[]) => {
                 this.businesses = business;
-                // console.log(this.businesses)
             }, (err) => {
                 switch (err.status) {
                     case 404:

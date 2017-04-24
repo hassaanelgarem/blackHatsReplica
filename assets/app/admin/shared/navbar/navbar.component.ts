@@ -12,7 +12,6 @@ export class NavbarComponent {
   constructor(private adminService: AdminService, private router: Router) { }
   logout() {
     this.adminService.logout().subscribe(response => {
-      console.log('ana hena');
       this.router.navigateByUrl('/');
     });
   }

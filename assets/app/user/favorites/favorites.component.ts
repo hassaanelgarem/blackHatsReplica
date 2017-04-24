@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
-import {UserService} from '../user.service';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { UserService } from '../user.service';
 import { AppService } from '../../app.service';
 import { Http, Headers } from '@angular/http';
-import {UserComponent} from "../user.component";
+import { UserComponent } from "../user.component";
 import 'rxjs/add/operator/map';
 
 
@@ -104,10 +104,6 @@ export class UserFavoritesComponent implements OnInit {
                         break;
                 }
             });
-
-
-
-
     }
 
     deleteFavorite(i) {
@@ -123,25 +119,21 @@ export class UserFavoritesComponent implements OnInit {
                     label: '<i class="fa fa-check"></i> Confirm'
                 }
             },
-            callback: function(result) {
+            callback: function (result) {
                 if (result) {
                     _this.userService.deleteFavorite(_this.favorites[i]).subscribe(
                         (data) => {
-                            console.log("no error");
                             _this.businesses.splice(i, 1);
                         },
                         (err) => {
                             switch (err.status) {
                                 case 404:
-                                    //console.log("404 not found");
                                     _this.router.navigateByUrl('/404-error');
                                     break;
                                 case 401:
-                                    //console.log("Unauthorized");
                                     _this.router.navigateByUrl('/notAuthorized-error');
                                     break;
                                 default:
-                                    //console.log("Oops somethings went wrong");
                                     _this.router.navigateByUrl('/500-error');
                                     break;
                             }
@@ -149,12 +141,7 @@ export class UserFavoritesComponent implements OnInit {
                         }
                     );
                 }
-
             }
         });
-
-
     }
-
-
 }

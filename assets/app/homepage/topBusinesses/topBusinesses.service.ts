@@ -24,7 +24,6 @@ export class TopBusinessesService {
                     transformedBusiness.push(new Business(business._id,business.name,business.logo, []));
                 }
                 this.businesses = transformedBusiness;
-                // console.log(this.businesses);
                 return transformedBusiness;
             }).catch((error: Response) => Observable.throw(error.json()));
     }

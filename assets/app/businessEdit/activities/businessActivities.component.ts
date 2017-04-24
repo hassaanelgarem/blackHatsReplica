@@ -58,7 +58,6 @@ export class BusinessActivitiesComponent implements OnInit {
     ngOnInit() {
         this.businessService.getCurrentUser().subscribe(
           (res) => {
-            console.log(res);
             this.business = res.business;
             this.businessService.getActivities(this.business._id).subscribe((acts: Activity[]) => {
                 this.activities = acts;
@@ -138,8 +137,6 @@ export class BusinessActivitiesComponent implements OnInit {
                 (data) => {
 
                     this.addDone = true;
-                    console.log("Data:")
-                    console.log(data.data);
                     this.activities.push(new Activity(
                         data.data.name,
                         data.data.price,

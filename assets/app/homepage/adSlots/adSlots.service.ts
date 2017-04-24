@@ -25,7 +25,6 @@ export class AdSlotsService {
                     transformedAdSlots.push(new AdSlot(adSlot._id,adSlot.name));
                 }
                 this.adSlots = transformedAdSlots;
-                // console.log(this.adSlots);
                 return transformedAdSlots;
             }).catch((error: Response) => Observable.throw(error.json()));
     }
@@ -42,7 +41,6 @@ export class AdSlotsService {
                     transformedBookingSlots.push(new BookingSlot(bookingSlot.business,bookingSlot.advSlot,bookingSlot.image));
                 }
                 this.bookingSlots = transformedBookingSlots;
-                // console.log(this.adSlots);
                 return transformedBookingSlots;
             }).catch((error: Response) => Observable.throw(error.json()));
     }
