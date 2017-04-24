@@ -46,6 +46,9 @@ export class AddPhotoComponent implements OnInit {
                                     case 401:
                                         this.router.navigateByUrl('/notAuthorized-error');
                                         break;
+                                    case 201:
+                                        break;
+                                    case 200: break;
                                     default:
                                         this.router.navigateByUrl('/500-error');
                                         break;
@@ -86,24 +89,24 @@ export class AddPhotoComponent implements OnInit {
                     label: '<i class="fa fa-check"></i> Confirm'
                 }
             },
-            callback: function(result) {
+            callback: function (result) {
                 if (result) {
                     _this.addPhotoService.deletePhoto(_this.photos[index]).subscribe(
-                      (data) => {
-                        _this.showPhotos();
-                    }, (err) => {
-                      switch (err.status) {
-                          case 404:
-                              _this.router.navigateByUrl('/404-error');
-                              break;
-                          case 401:
-                              _this.router.navigateByUrl('/notAuthorized-error');
-                              break;
-                          default:
-                              _this.router.navigateByUrl('/500-error');
-                              break;
-                      }
-                    });
+                        (data) => {
+                            _this.showPhotos();
+                        }, (err) => {
+                            switch (err.status) {
+                                case 404:
+                                    _this.router.navigateByUrl('/404-error');
+                                    break;
+                                case 401:
+                                    _this.router.navigateByUrl('/notAuthorized-error');
+                                    break;
+                                default:
+                                    _this.router.navigateByUrl('/500-error');
+                                    break;
+                            }
+                        });
                 }
 
             }

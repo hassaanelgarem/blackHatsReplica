@@ -82,6 +82,7 @@ module.exports.bookAdvSlot = function(req, res) {
     const errors = req.validationErrors();
 
     if (errors) {
+        console.log(errors);
         res.status(500).json({
             error: errors,
             msg: "Incomplete Input",
@@ -90,68 +91,93 @@ module.exports.bookAdvSlot = function(req, res) {
     } else {
         // check if advSlot exists
         AdvSlot.findById(req.params.advSlotId, function(err, slot) {
-            if (err) return res.status(500).json({
-                error: err,
-                msg: "Error Searching For Advertisement Slot",
-                data: null
-            })
-
-            if (!slot) return res.status(404).json({
-                error: null,
-                msg: "Advertisement Slot Not Found",
-                data: null
-            });
-            // Create new AdvBooking object using parameters from post request
-            const newAdvBooking = new AdvBooking({
-                business: req.user._id,
-                advSlot: req.params.advSlotId,
-                image: req.body.image,
-                startTime: req.body.startTime,
-                endTime: req.body.endTime
-            });
-
-            // Save new booking in database
-            newAdvBooking.save(function(err, booking) {
-                // If there is an error return it in response
-                if (err) return res.status(500).json({
-                    error: err,
-                    msg: "Error Adding the Booking",
+            if (err) {
+              console.log(1);
+              return res.status(500).json({
+                  error: err,
+                  msg: "Error Searching For Advertisement Slot",
+                  data: null
+              });
+            }
+            else{
+              if (!slot){
+                return res.status(404).json({
+                    error: null,
+                    msg: "Advertisement Slot Not Found",
                     data: null
                 });
-            });
-
-            //Adds the new booking to the advSchedule array in advSlot
-            AdvSlot.findByIdAndUpdate(
-                newAdvBooking.advSlot, {
-                    $push: {
-                        "advSchedule": newAdvBooking._id
-                    }
-                }, {
-                    safe: true,
-                    upsert: true,
-                    new: true
-                },
-                function(err, adv) {
-                    //If there is an error, return it in response
-                    if (err) return res.status(500).json({
-                        error: err,
-                        msg: "Error While Updating Advertisement Slot",
-                        data: null
-                    });
-                    if (adv)
-                        //return a success message
-                        res.status(200).json({
-                            error: null,
-                            msg: "Booking Added To the Advertisement Slot Successfully",
-                            data: null
-                        });
-                    else
-                        res.status(500).json({
-                            error: null,
-                            msg: "Booking was saved, however, it was not added to the schedule of the slot, slot was not found.",
-                            data: null
-                        });
+              }
+              else {
+                const newAdvBooking = new AdvBooking({
+                    business: req.user._id,
+                    advSlot: req.params.advSlotId,
+                    image: req.body.image,
+                    startTime: req.body.startTime,
+                    endTime: req.body.endTime
                 });
+
+                // Save new booking in database
+                newAdvBooking.save(function(err, booking) {
+                    // If there is an error return it in response
+                    if (err) {
+                      console.log(err);
+                      return res.status(500).json({
+                          error: err,
+                          msg: "Error Adding the Booking",
+                          data: null
+                      });
+                    }
+                    else {
+                      AdvSlot.findByIdAndUpdate(
+                          newAdvBooking.advSlot, {
+                              $push: {
+                                  "advSchedule": newAdvBooking._id
+                              }
+                          }, {
+                              safe: true,
+                              upsert: true,
+                              new: true
+                          },
+                          function(err, adv) {
+                              //If there is an error, return it in response
+                              if (err) {
+                                console.log(3);
+                                return res.status(500).json({
+                                    error: err,
+                                    msg: "Error While Updating Advertisement Slot",
+                                    data: null
+                                });
+                              }
+                              else {
+                                if (adv) {
+                                  //return a success message
+                                  res.status(200).json({
+                                      error: null,
+                                      msg: "Booking Added To the Advertisement Slot Successfully",
+                                      data: null
+                                  });
+                                }
+                                else {
+                                  console.log(4);
+                                  res.status(500).json({
+                                      error: null,
+                                      msg: "Booking was saved, however, it was not added to the schedule of the slot, slot was not found.",
+                                      data: null
+                                  });
+                                }
+                              }
+                          });
+                    }
+                });
+
+                //Adds the new booking to the advSchedule array in advSlot
+
+              }
+              // Create new AdvBooking object using parameters from post request
+
+            }
+
+
         });
     }
 
@@ -259,7 +285,7 @@ module.exports.getFreeSlot = function(req, res) {
             data: null
         });
 
-
+        console.log(lastSlot.advSchedule[0]);
         var freeSlot = lastSlot.advSchedule[0];
 
         //if AdvSlot had no previous bookings, return current date
@@ -273,18 +299,19 @@ module.exports.getFreeSlot = function(req, res) {
         } else {
 
             //gets the end date of the last booked slot
-            freeSlot = lastSlot.advSchedule[0].endTime;
+            var freeSlotx = lastSlot.advSchedule[0].endTime;
             //Increments this date to retrieve the first available slot for booking
-            freeSlot.setDate(freeSlot.getDate() + 1);
+            freeSlotx.setDate(freeSlotx.getDate() + 1);
             //If first available date has already passed, set freeSlot to today's date
-            if(freeSlot < Date.now()){
-              freeSlot.setDate(Date.now());
+            if(freeSlotx < Date.now()){
+              freeSlotx = Date.now();
             }
+            console.log(freeSlotx);
             //return the first available date for booking
             return res.status(200).json({
                 error: null,
                 msg: "Free Advertisement Slot Retrieved Successfully",
-                data: freeSlot
+                data: freeSlotx
             });
         }
     })

@@ -27,8 +27,6 @@ export class SearchResultComponent implements OnInit {
     ngOnInit() {
         this.getQueryParams();
         this.search();
-        // (jQuery.getScript('/js/core-plugins.js'));
-        // (jQuery.getScript('/js/customs.js'));
     }
 
 

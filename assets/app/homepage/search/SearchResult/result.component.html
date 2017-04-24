@@ -99,7 +99,7 @@
 
 
 
-            <div class="pt-30 pb-50">
+            <div class="pt-30 pb-50" style="min-height: 460px">
 
                 <div class="container">
 
@@ -114,18 +114,13 @@
 
                                         <div class="image">
                                             <img *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="Images" />
-                                            <img name="businessLogo" *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="Images" />
+                                            <img name="businessLogo" *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="Images"
+                                            />
                                         </div>
 
                                         <div class="content">
 
                                             <h4>{{business.name}}</h4>
-                                            <div class="rating-wrapper">
-                                                <div class="rating-item">
-                                                    <input type="hidden" class="rating" data-filled="fa fa-star rating-rated" data-empty="fa fa-star-o" data-fractions="2" data-readonly
-                                                        value="{{business.averageRating}}" />
-                                                </div>
-                                            </div>
                                             <div *ngIf="business.location">
                                                 <span class="labeling"><i class="fa fa-map-marker"></i> {{business.location.city}}</span>
                                             </div>
@@ -165,20 +160,22 @@
                         <div class="pager-innner">
 
                             <div class="clearfix">
-                                Showing businesses from {{businesses.length}} results
+                                Found {{businesses.length}} results
                             </div>
 
                             <div class="clearfix">
                                 <nav class="pager-center">
                                     <ul class="pagination">
                                         <li *ngIf="pageNumber > 1">
-                                            <a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i}" aria-label="Previous">
+                                            <a routerLink="/search" [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i}"
+                                                aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li routerLinkActive="active" *ngFor="let number of pagingIndex; let i = index" ><a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+1}">{{i+1}}</a></li>
+                                        <li routerLinkActive="active" *ngFor="let number of pagingIndex; let i = index"><a routerLink="/search" [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+1}">{{i+1}}</a></li>
                                         <li *ngIf="pageNumber < pagingIndex.length">
-                                            <a routerLink="/search"  [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+2}" aria-label="Next">
+                                            <a routerLink="/search" [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+2}"
+                                                aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
                                         </li>

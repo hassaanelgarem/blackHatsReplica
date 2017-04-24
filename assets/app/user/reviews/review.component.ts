@@ -15,7 +15,7 @@ import {UserComponent} from "../user.component";
 
 export class ReviewComponent implements OnInit {
 
-    count: Number = 0;
+    count: number = 0;
     reviews: any[];
     //reviews: Review[];
     userId: String = "";//"58e8d26b86e48c253b2c3c1e";
@@ -116,6 +116,7 @@ export class ReviewComponent implements OnInit {
                         (data) => {
                             _this.reviews.splice(i, 1);
                             _this.editing[i] = false;
+                            _this.count = _this.count -1;
                         },
                         (err) => {
                             switch (err.status) {
@@ -134,9 +135,6 @@ export class ReviewComponent implements OnInit {
 
             }
         });
-
-
-
     }
 
     onSave(i) {

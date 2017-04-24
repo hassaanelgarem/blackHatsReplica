@@ -13,7 +13,6 @@ export class SearchService {
     constructor(private http: Http) { }
 
     getBusinesses(search: string) {
-        //need to modify here to take more than one word
         return this.http.get(this.path + 'search?' + search)
             //map method to transform the response
             .map((response: Response) => {
