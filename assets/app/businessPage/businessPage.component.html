@@ -15,7 +15,7 @@
                         <!-- First slide -->
                         <div class="item active" >
                             <div class="image image-responsive">
-                                <img *ngIf="noPhotos" src="http://localhost:8080/api/image/businessLogos/x" alt="Image" style="height: 300pt; margin: auto;"/>
+                                <img *ngIf="noPhotos" src="http://54.213.175.206:8080/api/image/businessLogos/x" alt="Image" style="height: 300pt; margin: auto;"/>
                                 <img *ngIf="!noPhotos" src="{{path}}image/businessPhotos/{{firstPhoto}}" alt="Image" style="height: 300pt; margin: auto;"/>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                                 <div class="trip-guide-item">
 
                                     <div class="trip-guide-image no-person" style="width: 364px; height: 364px;">
-                                      <img *ngIf="!activity.photos[0]" src="http://localhost:8080/api/image/businessLogos/x" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
+                                      <img *ngIf="!activity.photos[0]" src="http://54.213.175.206:8080/api/image/businessLogos/x" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
                                       <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="margin: auto; height: inherit; width: inherit;"/>
                                     </div>
 

@@ -16,7 +16,7 @@ export class ActivityPageComponent implements OnInit {
     activity: Activity;
     slots: Slot[];
     gotActivity = false;
-    path: String = "http://localhost:8080/api/";
+    path: String = "http://54.213.175.206:8080/api/";
     chosenDate: Date;
     dateChosen: Boolean = false;
     loggedIn = true;

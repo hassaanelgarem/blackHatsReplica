@@ -4,7 +4,7 @@ import { Http, Headers, Response} from '@angular/http';
 @Injectable()
 export class AppService {
   private isLoggedin = false;
-  apiPath: String = "http://localhost:8080/api/";
+  apiPath: String = "http://54.213.175.206:8080/api/";
   
   constructor(private http: Http) { }
 
@@ -32,7 +32,7 @@ export class AppService {
   getCurrentUser() {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
-      return this.http.get('http://localhost:8080/api/currentUser', { headers: headers }).map(res => res.json());
+      return this.http.get('http://54.213.175.206:8080/api/currentUser', { headers: headers }).map(res => res.json());
   }
 
   charge(token){

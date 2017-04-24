@@ -15,7 +15,7 @@ export class NavComponent implements OnInit {
   private isUser: Boolean;
   private user: Object;
   private business: Object;
-  private path: String = "http://localhost:8080/";
+  private path: String = "http://54.213.175.206:8080/";
 
   constructor(
     private appService: AppService,

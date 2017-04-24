@@ -6,7 +6,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 @Injectable()
 export class AdminGuard implements CanActivateChild {
-    private apiPath: string = "http://localhost:8080/api/";
+    private apiPath: string = "http://54.213.175.206:8080/api/";
 
     constructor(
         private router: Router,

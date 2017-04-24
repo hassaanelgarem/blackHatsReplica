@@ -15,7 +15,7 @@ export class TopBusinessesService {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
         //need to modify here to take more than one word
-        return this.http.get('http://localhost:8080/api/business/mostPopular', {headers: headers})
+        return this.http.get('http://54.213.175.206:8080/api/business/mostPopular', {headers: headers})
             //map method to transform the response
             .map((response: Response) => {
                 const businesses = response.json().data;

@@ -12,7 +12,7 @@ export class ResetPasswordService {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         
-    return this.http.get('http://localhost:8080/api/resetPassword/' + token, {headers: headers}).map(res => res.json());
+    return this.http.get('http://54.213.175.206:8080/api/resetPassword/' + token, {headers: headers}).map(res => res.json());
   }
 
 
@@ -23,7 +23,7 @@ export class ResetPasswordService {
           password: password,
           confirmPassword: confirmPassword
         }
-    return this.http.put('http://localhost:8080/api/resetPassword/' + id, body, {headers: headers}).map(res => {return res.json().data}); 
+    return this.http.put('http://54.213.175.206:8080/api/resetPassword/' + id, body, {headers: headers}).map(res => {return res.json().data}); 
   }
     
 }

@@ -16,7 +16,7 @@ import 'rxjs/add/operator/map';
 })
 
 export class EditUserProfileComponent implements OnInit {
-    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
+    public uploader: FileUploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
     private profilePicture: String;
     private loggedin: Boolean;
     private isUser: Boolean;
@@ -68,14 +68,14 @@ export class EditUserProfileComponent implements OnInit {
                 this.birthDate = data.data.birthDate;
 
                 if (data.data.profilePicture != null) {
-                    this.path = "http://localhost:8080/api/image/profilePictures/";
+                    this.path = "http://54.213.175.206:8080/api/image/profilePictures/";
                     this.profilePicture = data.data.profilePicture;
                 }
                 else {
                     this.path = "";
-                    this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
+                    this.profilePicture = "http://54.213.175.206:8080/api/image/profilePictures/defaultpp.jpg";
                 }
-                this.uploader = new FileUploader({ url: 'http://localhost:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
+                this.uploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/user/profile/uploadProfilePicture', itemAlias: "myfile" });
                 this.uploader.onCompleteItem = (item: any, response, status: any, headers: any) => {
                     switch (status) {
                         case 404:

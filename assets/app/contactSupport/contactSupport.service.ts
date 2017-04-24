@@ -4,7 +4,7 @@ import { Http, Headers, Response } from '@angular/http';
 @Injectable()
 export class ContactSupportService {
 
-  apiPath: String = "http://localhost:8080/api/";
+  apiPath: String = "http://54.213.175.206:8080/api/";
 
   constructor(private http: Http) { }
 

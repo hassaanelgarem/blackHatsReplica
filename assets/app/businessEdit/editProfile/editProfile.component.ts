@@ -18,7 +18,7 @@ import {EventEmitter} from "@angular/common/src/facade/async";
 })
 
 export class EditProfileComponent implements OnInit {
-    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
+    public uploader: FileUploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/business/addLogo', itemAlias: "myfile" });
     private logo: String;
     name: String;
     workingFrom: Date;
@@ -88,14 +88,14 @@ export class EditProfileComponent implements OnInit {
                                 this.city = data.data.location.city;
                             }
                             if (data.data.logo != null) {
-                                this.path = "http://localhost:8080/api/image/businessLogos/";
+                                this.path = "http://54.213.175.206:8080/api/image/businessLogos/";
                                 this.logo = data.data.logo;
                             }
                             else {
                                 this.path = "";
-                                this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
+                                this.logo = "http://54.213.175.206:8080/api/image/businessLogos/defaultBLogo.jpg";
                             }
-                            this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
+                            this.uploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/business/addLogo', itemAlias: "myfile" });
                             this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
                                 this.initialise();
                             };

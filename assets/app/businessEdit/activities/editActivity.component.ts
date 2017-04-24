@@ -17,7 +17,7 @@ export class EditActivityComponent implements OnInit {
     newEnd: Date;
     activity: Activity;
     gotActivity = false;
-    path: String = "http://localhost:8080/api/";
+    path: String = "http://54.213.175.206:8080/api/";
     public config: DropzoneConfigInterface;
     public myFocusTriggeringEventEmitterOne = new EventEmitter<boolean>();
     public myFocusTriggeringEventEmitterTwo = new EventEmitter<boolean>();
@@ -47,7 +47,7 @@ export class EditActivityComponent implements OnInit {
             (params: Params) => {
                 let id = params['activityId'];
                 this.config = {
-                    server: 'http://localhost:8080/api/activity/' + id + '/addPhoto',
+                    server: 'http://54.213.175.206:8080/api/activity/' + id + '/addPhoto',
                     paramName: 'myfile'
                 };
                 this.businessService.getActivity(id).subscribe(

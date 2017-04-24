@@ -13,8 +13,8 @@ import { AppService } from '../../app.service';
 })
 export class AddPhotoComponent implements OnInit {
     photos: String[];
-    path: String = "http://localhost:8080/api/";
-    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/business/addPhoto', itemAlias: "myfile" });
+    path: String = "http://54.213.175.206:8080/api/";
+    public uploader: FileUploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/business/addPhoto', itemAlias: "myfile" });
     businessId: String;
 
     constructor(
@@ -37,7 +37,7 @@ export class AddPhotoComponent implements OnInit {
                     this.editProfileService.getBusinessProfile(this.businessId).subscribe(
                         (data) => {
                             this.photos = data.data.photos;
-                            this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addPhoto', itemAlias: "myfile" });
+                            this.uploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/business/addPhoto', itemAlias: "myfile" });
                             this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
                                 switch (status) {
                                     case 404:

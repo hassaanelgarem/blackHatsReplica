@@ -13,25 +13,25 @@ export class BusinessService {
     getCurrentUser() {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.get('http://localhost:8080/api/currentUser', { headers: headers }).map(res => res.json());
+        return this.http.get('http://54.213.175.206:8080/api/currentUser', { headers: headers }).map(res => res.json());
     }
 
     getAverageRating(businessId) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.get('http://localhost:8080/api/review/averageRating/' + businessId, { headers: headers }).map(res => res.json());
+        return this.http.get('http://54.213.175.206:8080/api/review/averageRating/' + businessId, { headers: headers }).map(res => res.json());
     }
 
     getReviews(businessId) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.get('http://localhost:8080/api/review/' + businessId, { headers: headers }).map(res => res.json());
+        return this.http.get('http://54.213.175.206:8080/api/review/' + businessId, { headers: headers }).map(res => res.json());
     }
 
     getActivity(activityId) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.get('http://localhost:8080/api/activity/' + activityId + '/getActivity', { headers: headers }).map(res => res.json());
+        return this.http.get('http://54.213.175.206:8080/api/activity/' + activityId + '/getActivity', { headers: headers }).map(res => res.json());
 
     }
 
@@ -39,7 +39,7 @@ export class BusinessService {
         let headers = new Headers();
 
         headers.append('Content-Type', 'application/json');
-        return this.http.get('http://localhost:8080/api/activity/' + businessId, { headers: headers })
+        return this.http.get('http://54.213.175.206:8080/api/activity/' + businessId, { headers: headers })
             .map((response: Response) => {
                 const acts = response.json().data;
                 let transformedActs: Activity[] = [];
@@ -72,7 +72,7 @@ export class BusinessService {
     deleteActivity(activity: Activity) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.delete('http://localhost:8080/api/activity/' + activity.id + "/delete", { headers: headers }).map(res => res.json());
+        return this.http.delete('http://54.213.175.206:8080/api/activity/' + activity.id + "/delete", { headers: headers }).map(res => res.json());
     }
 
     editActivity(activity: Activity) {
@@ -84,7 +84,7 @@ export class BusinessService {
             "description": activity.description,
             "bookingsPerSlot": activity.bookingsPerSlot
         };
-        return this.http.post('http://localhost:8080/api/activity/' + activity.id + "/edit", body, {headers: headers }).map(res => res.json());
+        return this.http.post('http://54.213.175.206:8080/api/activity/' + activity.id + "/edit", body, {headers: headers }).map(res => res.json());
     }
 
     deleteSlot(slot: Slot, activity: Activity) {
@@ -94,7 +94,7 @@ export class BusinessService {
             "startTime": slot.startTime,
             "endTime": slot.endTime
         }
-        return this.http.delete('http://localhost:8080/api/activity/' + activity.id + "/deleteSlot", { body: body, headers: headers }).map(res => res.json());
+        return this.http.delete('http://54.213.175.206:8080/api/activity/' + activity.id + "/deleteSlot", { body: body, headers: headers }).map(res => res.json());
     }
 
     addSlot(slot: Slot, activity: Activity) {
@@ -104,20 +104,20 @@ export class BusinessService {
             "startTime": slot.startTime,
             "endTime": slot.endTime
         }
-        return this.http.post('http://localhost:8080/api/activity/' + activity.id + "/addSlot", body, { headers: headers }).map(res => res.json());
+        return this.http.post('http://54.213.175.206:8080/api/activity/' + activity.id + "/addSlot", body, { headers: headers }).map(res => res.json());
     }
 
     deleteActivityPhoto(path, activity: Activity) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.delete('http://localhost:8080/api/activity/' + activity.id + '/deletePhoto/' + path, { headers: headers }).map(res => res.json());
+        return this.http.delete('http://54.213.175.206:8080/api/activity/' + activity.id + '/deletePhoto/' + path, { headers: headers }).map(res => res.json());
     }
 
     addActivity(activity: Activity) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const body = JSON.stringify(activity);
-        return this.http.post('http://localhost:8080/api/activity/add', body, { headers: headers }).map(res => res.json());
+        return this.http.post('http://54.213.175.206:8080/api/activity/add', body, { headers: headers }).map(res => res.json());
 
     }
 
@@ -129,7 +129,7 @@ export class BusinessService {
             "username": "aya",
             "password": "aya"
         };
-        return this.http.post('http://localhost:8080/api/user/login', body, { headers: headers }).map(res => res.json());
+        return this.http.post('http://54.213.175.206:8080/api/user/login', body, { headers: headers }).map(res => res.json());
     }
 
     testBusinessLogin() {
@@ -139,7 +139,7 @@ export class BusinessService {
             "email": "five@gmail.com",
             "password": "pass"
         };
-        return this.http.post('http://localhost:8080/api/business/login', body, { headers: headers }).map(res => res.json());
+        return this.http.post('http://54.213.175.206:8080/api/business/login', body, { headers: headers }).map(res => res.json());
     }
 
 }
