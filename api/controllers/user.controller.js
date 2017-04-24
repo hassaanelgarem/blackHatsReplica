@@ -160,7 +160,7 @@ module.exports.registerUser = function (req, res) {
                                 });
                                 else {
                                     if (user) {
-                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/verify/" + token + "</p>";
+                                        var html = "<p>Hello " + newUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://54.213.175.206:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://54.213.175.206:8080/verify/" + token + "</p>";
                                         var subject = 'Account Verification';
                                         emailSender.sendEmail(subject, req.body.email, "", html, function (err, info) {
                                             if (err)
@@ -449,7 +449,7 @@ module.exports.searchByLocationAndCategory = function (req, res) {
         ip = ip.split(',')[0];
         ip = ip.split(':').slice(-1)[0];
 
-        /*the ip when testing in localhost will always be 127.0.0.1 but on the
+        /*the ip when testing in 54.213.175.206 will always be 127.0.0.1 but on the
         deployed server it will work with real ips so to test put you real ip
         address instead of the existing ip in lookup, you can get it from whatismyip.com
         */
@@ -836,7 +836,7 @@ module.exports.resendVerification = function (req, res) {
                             });
                         } else {
                             //TO-DO replace the link with the angular route not server route.
-                            var html = "<p>Hello " + tempUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://localhost:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/verify/" + token + "</p>";
+                            var html = "<p>Hello " + tempUser.firstName + ", <br><br>Welcome to Black Hats, Please verify your account by clicking this <a href=\"http://54.213.175.206:8080/verify/" + token + "\">Link</a>.<br><br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://54.213.175.206:8080/verify/" + token + "</p>";
                             var subject = 'Account Verification';
                             emailSender.sendEmail(subject, email, "", html, function (err, info) {
                                 if (err) res.status(500).json({
