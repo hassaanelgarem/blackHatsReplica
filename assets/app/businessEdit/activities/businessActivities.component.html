@@ -129,7 +129,7 @@
                                     </div>
                                     <label>Price</label>
                                     <div class="input-group mb-15">
-                                        <input class="form-control" type="number" [(ngModel)]="addPrice" name="addPrice">
+                                        <input class="form-control" type="number" min="0" [(ngModel)]="addPrice" name="addPrice">
                                         <span class="input-group-addon">EGP</span>
                                     </div>
                                 </div>
@@ -144,7 +144,7 @@
                                         choose the number of bookings per slot!
                                     </div>
                                     <label>Bookings per slot</label>
-                                    <input class="form-control" placeholder="Maximum number of bookings for one slot" type="number" [(ngModel)]="addPerSlot"
+                                    <input class="form-control" placeholder="Maximum number of bookings for one slot" type="number" min="0" [(ngModel)]="addPerSlot"
                                         name="addPerSlot" value="1">
                                 </div>
 

@@ -22,7 +22,7 @@ export class UserComponent implements OnInit {
     private isUser: Boolean;
     private user: Object;
 
-    userId: String = ""; //58e8d26b86e48c253b2c3c1e"; //get the id of the logged in user
+    userId: String = "";
     favorites: Object[];
     firstName: String;
     lastName: String;
@@ -154,7 +154,7 @@ export class UserComponent implements OnInit {
     }
 
     pictureChanged(path: string) {
+        this.path = "http://54.213.175.206:8080/api/image/profilePictures/";
         this.profilePicture = path;
     }
-
 }

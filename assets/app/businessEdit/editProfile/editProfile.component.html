@@ -263,7 +263,7 @@
 											<div *ngIf="depositFlag == true" class="form-group">
 												<label class="col-sm-3 col-md-2 control-label">Deposit</label>
 												<div class="col-sm-5 col-md-5">
-													<input type="number" class="form-control" [(ngModel)]="deposit" name="deposit">
+													<input type="number" min="0" class="form-control" [(ngModel)]="deposit" name="deposit">
 												</div>
 											</div>
 										</div>

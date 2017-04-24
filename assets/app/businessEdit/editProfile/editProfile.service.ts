@@ -26,7 +26,8 @@ export class EditProfileService {
           phoneNumbers: phoneNumbers,
           workingDays: wDays,
           workingHours: wHours,
-          location: location
+          location: location,
+          deposit: deposit
         }
         return this.http.put('http://54.213.175.206:8080/api/business/editInfo', body, { headers: headers }).map(res => res.json());
     }
