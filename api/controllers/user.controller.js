@@ -240,7 +240,6 @@ module.exports.addFavorite = function (req, res) {
     Business.findById(businessId, function (err, doc) {
         //if an error to find the business,I return the error message
         if (err) {
-            console.log("1");
             res.status(500).json({
                 error: err,
                 msg: "Error retrieving desired business",
@@ -266,7 +265,6 @@ module.exports.addFavorite = function (req, res) {
                 function (err, result) {
                     //couldn't add to array, return the error
                     if (err) {
-                        console.log("2");
                         res.status(500).json({
                             error: null,
                             msg: "adding business to favorites failed",
