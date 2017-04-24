@@ -3,9 +3,10 @@ const randtoken = require('rand-token');
 const bcrypt = require('bcryptjs');
 const Business = mongoose.model("Business");
 const User = mongoose.model("User");
-const AdvSlot = mongoose.model("AdvSlot");
+const TempUser = mongoose.model("TempUser");
 const SupportRequest = mongoose.model("SupportRequest");
 const emailSender = require('../config/emailSender');
+const AdvSlot = mongoose.model('AdvSlot');
 
 
 /*
@@ -21,7 +22,7 @@ const emailSender = require('../config/emailSender');
 module.exports.verifyBusiness = function (req, res) {
 
     //Getting the business by its id
-    Business.findById(req.params.businessId, function(err, business) {
+    Business.findById(req.params.businessId, function (err, business) {
         if (err)
             res.status(500).json({
                 error: err,
@@ -255,7 +256,6 @@ module.exports.removeAdmin = function (req, res) {
     Calling Route: '/api/admin/user/delete/:userId'
 */
 module.exports.deleteUser = function (req, res) {
-
     User.findById(req.params.userId, function (err, user) {
         if (err)
             res.status(500).json({
@@ -266,6 +266,7 @@ module.exports.deleteUser = function (req, res) {
         else {
             if (user) {
                 var email = user.email;
+                var username = user.firstName;
                 user.remove(function (err) {
                     if (err)
                         res.status(500).json({
@@ -274,7 +275,58 @@ module.exports.deleteUser = function (req, res) {
                             data: null
                         });
                     else {
-                        var text = 'Hello ' + user.firstName + ',\n\nUnfortunately, your account was suspended for not meeting our terms and conditions.\n\nThank you for considering Black Hats.';
+                        var text = 'Hello ' + username + ',\n\nUnfortunately, your account was suspended for not meeting our terms and conditions.\n\nThank you for considering Black Hats.';
+                        var subject = 'Account Suspended';
+
+                        emailSender.sendEmail(subject, email, text, null, function (err, info) {
+                            if (err) {
+                                res.status(500).json({
+                                    error: null,
+                                    msg: 'User was deleted, however the user was not notified.',
+                                    data: null
+                                });
+                            } else {
+                                res.status(200).json({
+                                    error: null,
+                                    msg: 'User was deleted and notified.',
+                                    data: null
+                                });
+                            }
+                        });
+                    }
+                });
+            } else
+                res.status(404).json({
+                    error: null,
+                    msg: 'User not found.',
+                    data: null
+                });
+        }
+    });
+};
+
+
+module.exports.deleteTempUser = function (req, res) {
+    TempUser.findById(req.params.userId, function (err, user) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            if (user) {
+                var email = user.email;
+                var username = user.firstName;
+                user.remove(function (err) {
+                    if (err)
+                        res.status(500).json({
+                            error: err,
+                            msg: null,
+                            data: null
+                        });
+                    else {
+                        var text = 'Hello ' + username + ',\n\nUnfortunately, your account was suspended for not meeting our terms and conditions.\n\nThank you for considering Black Hats.';
                         var subject = 'Account Suspended';
 
                         emailSender.sendEmail(subject, email, text, null, function (err, info) {
@@ -528,7 +580,7 @@ module.exports.unVerifiedBusinesses = function (req, res) {
     const query = Business.find({
         verified: false
     });
-    query.exec(function (err, businesses) {
+    query.select('-password').exec(function (err, businesses) {
         if (err) res.status(500).json({
             "error": err,
             "msg": "Can not retrieve unverified businesses.",
@@ -583,8 +635,7 @@ module.exports.addAdvSlots = function (req, res) {
             name: req.body.name,
             price: req.body.price,
             length: req.body.length,
-            width: req.body.width,
-            advSchedule: []
+            width: req.body.width
         });
         //  saves the new advertisement slot in the database
         newAdvSlot.save(function (err, newSlot) {
@@ -603,3 +654,152 @@ module.exports.addAdvSlots = function (req, res) {
         })
     }
 }
+
+
+module.exports.getUsers = function (req, res) {
+    User.find({
+        _id: {
+            $ne: req.user._id
+        },
+    }).select('-password').exec(function (err, users) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: users
+            });
+        }
+    });
+};
+
+
+module.exports.getUnverifiedUsers = function (req, res) {
+    TempUser.find({}).select('-password').exec(function (err, tempUsers) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: tempUsers
+            });
+        }
+    });
+};
+
+
+module.exports.getNonAdmins = function (req, res) {
+    User.find({
+        admin: false
+    }).select('-password').exec(function (err, users) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: users
+            });
+    })
+};
+
+
+module.exports.getAdmins = function (req, res) {
+    User.find({
+        _id: {
+            $ne: req.user._id
+        },
+        admin: true
+    }).select('-password').exec(function (err, users) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: users
+            });
+    })
+};
+
+
+module.exports.getBusinesses = function (req, res) {
+    Business.find({
+        verified: true
+    }).select('-password').exec(function (err, businesses) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: businesses
+            });
+    });
+};
+
+
+module.exports.getRequests = function (req, res) {
+    SupportRequest.find({}).exec(function (err, requests) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else
+            res.status(200).json({
+                error: null,
+                msg: null,
+                data: requests
+            });
+    });
+};
+
+
+module.exports.deleteAdvSlot = function (req, res) {
+    AdvSlot.findByIdAndRemove(req.params.slotId, function (err, slot) {
+        if (err)
+            res.status(500).json({
+                error: err,
+                msg: null,
+                data: null
+            });
+        else {
+            if (slot) {
+                res.status(200).json({
+                    error: null,
+                    msg: 'Slot was deleted successfully.',
+                    data: null
+                });
+            } else
+                res.status(404).json({
+                    error: null,
+                    msg: 'Slot was not found.',
+                    data: null
+                });
+        }
+    });
+};

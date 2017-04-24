@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserService } from "../user.service";
 import { FileUploader } from 'ng2-file-upload';
-import { EditUserProfileService} from "./editProfile.service";
+import { EditUserProfileService } from "./editProfile.service";
 import { AppService } from '../../app.service';
-import {Http, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 
 
 import 'rxjs/add/operator/map';
@@ -12,8 +12,7 @@ import 'rxjs/add/operator/map';
 
 @Component({
     selector: 'app-editUserProfile',
-    templateUrl: './editProfile.component.html',
-    styleUrls: ['./editProfile.component.css']
+    templateUrl: './editProfile.component.html'
 })
 
 export class EditUserProfileComponent implements OnInit {
@@ -56,24 +55,6 @@ export class EditUserProfileComponent implements OnInit {
                         break;
                 }
             });
-        /*this.appService.getCurrentUser().subscribe(data => {
-            if(data.success){
-                if(data.user){
-                this.user = data.user;
-                this.isUser = true;
-                this.userId = data.user._id;
-
-                }
-                else{
-                //business
-                }
-                this.loggedin = true;
-            }
-            else{
-                this.loggedin = false;
-            }
-        });
-        */
         this.initialise();
     }
 
@@ -102,6 +83,9 @@ export class EditUserProfileComponent implements OnInit {
                             break;
                         case 401:
                             this.router.navigateByUrl('/notAuthorized-error');
+                            break;
+                        case 200:
+                            console.log('skm');
                             break;
                         default:
                             this.router.navigateByUrl('/500-error');
@@ -171,7 +155,7 @@ export class EditUserProfileComponent implements OnInit {
                     label: '<i class="fa fa-check"></i> Confirm'
                 }
             },
-            callback: function(result) {
+            callback: function (result) {
                 if (result) {
                     _this.editProfileService.deleteAccount().subscribe(
                         (data) => {

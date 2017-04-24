@@ -1,103 +1,101 @@
-<body>
+<div class="dashboard-wrapper">
 
-    <div class="dashboard-wrapper">
+    <h4 class="section-title">Edit profile</h4>
 
-        <h4 class="section-title">Edit profile</h4>
+    <form class="post-form-wrapper">
 
-        <form class="post-form-wrapper">
+        <div class="row gap-20" style="margin-left: 40px;">
+            <div class="col-sm-6 col-md-4">
 
-            <div class="row gap-20" style="margin-left: 40px;">
-                <div class="col-sm-6 col-md-4">
+                <div class="form-group bootstrap-fileinput-style-01">
+                    <label>Change your profile</label>
+                    <br>
 
-                    <div class="form-group bootstrap-fileinput-style-01">
-                        <label>Change your profile</label>
-                        <br>
-
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-sm-9 col-md-9">
-                                    <input type="file" class='form-control' name='profilePicture' ng2FileSelect [uploader]="uploader">
-                                </div>
-                                <div class="col-sm-3 col-md-2">
-                                    <a class="btn btn-primary" (click)="onUpload()">Upload</a>
-                                </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-9 col-md-9">
+                                <input type="file" class='form-control' name='profilePicture' ng2FileSelect [uploader]="uploader">
+                            </div>
+                            <div class="col-sm-3 col-md-2">
+                                <a class="btn btn-primary" (click)="onUpload()">Upload</a>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-                <br>
-                <hr>
-
-
-                <div class="clear"></div>
-
-                <div class="col-sm-6 col-md-4">
-
-                    <div class="form-group">
-                        <label>First Name:</label>
-                        <input type="text" class="form-control" [(ngModel)]="firstName" name="firstName">
-                    </div>
-
-                </div>
-
-                <div class="clear"></div>
-
-                <div class="col-sm-6 col-md-4">
-
-
-                </div>
-
-                <div class="clear"></div>
-
-                <div class="col-sm-6 col-md-4">
-
-                    <div class="form-group">
-                        <label>Last Name:</label>
-                        <input type="text" class="form-control" [(ngModel)]="lastName" name="lastName">
-                    </div>
-
-                </div>
-
-                <div class="clear"></div>
-
-                <div class="col-sm-6 col-md-4">
-
-                    <div class="form-group">
-                        <label>Bidth Date: </label>
-                        <input name="birthDate" [ngModel]="birthDate | date: 'shortDate' " [(dateTimePicker)]="birthDate" [pickerType]=" 'date' " [mode]=" 'dropdown' " [theme]=" 'gray' " [hourTime]=" '12' " class="form-control " />
-
-                    </div>
-
-                </div>
-
-
-                <p>
-
-                    <div class="clear "></div>
-                    <p>
-
-                        <div class="clear "></div>
-                        <p>
-
-                            <div class="clear mb-10 "></div>
-
-                            <div class="col-sm-12 ">
-                                <a class="btn btn-primary " (click)=updateProfile()>Save</a>
-                                <a class="btn btn-primary btn-border ">Cancel</a>
-                            </div>
 
             </div>
 
             <br>
             <hr>
-            <div class="col-sm-12" style="margin-left: 50px;">
-                <a class="btn btn-primary" (click)=deleteAccount()>delete Account</a>
+
+
+            <div class="clear"></div>
+
+            <div class="col-sm-6 col-md-4">
+
+                <div class="form-group">
+                    <label>First Name:</label>
+                    <input type="text" class="form-control" [(ngModel)]="firstName" name="firstName">
+                </div>
 
             </div>
 
-        </form>
+            <div class="clear"></div>
 
-    </div>
-</body>
+            <div class="col-sm-6 col-md-4">
+
+
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="col-sm-6 col-md-4">
+
+                <div class="form-group">
+                    <label>Last Name:</label>
+                    <input type="text" class="form-control" [(ngModel)]="lastName" name="lastName">
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="col-sm-6 col-md-4">
+
+                <div class="form-group">
+                    <label>Bidth Date: </label>
+                    <input name="birthDate" [ngModel]="birthDate | date: 'shortDate' " [(dateTimePicker)]="birthDate" [pickerType]=" 'date' "
+                        [mode]=" 'dropdown' " [theme]=" 'gray' " [hourTime]=" '12' " class="form-control " />
+
+                </div>
+
+            </div>
+
+
+            <p>
+
+                <div class="clear "></div>
+                <p>
+
+                    <div class="clear "></div>
+                    <p>
+
+                        <div class="clear mb-10 "></div>
+
+                        <div class="col-sm-12 ">
+                            <a class="btn btn-primary " (click)=updateProfile()>Save</a>
+                            <a class="btn btn-primary btn-border ">Cancel</a>
+                        </div>
+
+        </div>
+
+        <br>
+        <hr>
+        <div class="col-sm-12" style="margin-left: 50px;">
+            <a class="btn btn-primary" (click)=deleteAccount()>delete Account</a>
+
+        </div>
+
+    </form>
+
+</div>

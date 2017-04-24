@@ -94,6 +94,8 @@ export class BookAdvComponent implements OnInit {
                 case 401:
                     this.router.navigateByUrl('/notAuthorized-error');
                     break;
+                    case 200:
+                    break;
                 default:
                     this.router.navigateByUrl('/500-error');
                     break;
@@ -126,6 +128,7 @@ export class BookAdvComponent implements OnInit {
             var handler = (<any>window).StripeCheckout.configure({
                 key: 'pk_test_9AEHvD0gXViwtKYQDpQcLXlY',
                 locale: 'auto',
+                currency: 'EGP',
                 token: token => this.gotToken(token, advId)
             });
 

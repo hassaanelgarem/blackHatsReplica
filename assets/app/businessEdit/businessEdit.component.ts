@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {BusinessService} from './business.service';
-// import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-business',
   templateUrl: './businessEdit.component.html',
   styleUrls: ['./businessEdit.component.css']
 })
-export class BusinessEditComponent implements OnInit {
+export class BusinessEditComponent {
 
   public showActivities = true;
   public showPhotos = false;
@@ -18,8 +17,6 @@ export class BusinessEditComponent implements OnInit {
 
   constructor(private businessService: BusinessService) { }
 
-  ngOnInit() {
-  }
 
   onActivitiesClick(){
     this.showActivities = true;

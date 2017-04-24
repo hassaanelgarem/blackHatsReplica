@@ -90,17 +90,26 @@ module.exports = function (passportConfig) {
     router.route('/activity/getActivity/:businessId').get(activityCtrl.getActivityBookings); //passportConfig.isBusinessLoggedIn,
 
     //Admin routes
+    //TO-DO: add login check after testing
     router.route('/admin/business/verify/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.verifyBusiness);
     router.route('/admin/business/delete/:businessId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteBusiness);
     router.route('/admin/business/recoverAccount/:businessId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
+    router.route('/admin/business/getAll').get(passportConfig.isAdminLoggedIn, adminCtrl.getBusinesses);
     router.route('/admin/business/unVerifiedBusinesses').get(passportConfig.isAdminLoggedIn, adminCtrl.unVerifiedBusinesses);
     router.route('/admin/makeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.makeAdmin);
     router.route('/admin/removeAdmin/:userId').put(passportConfig.isAdminLoggedIn, adminCtrl.removeAdmin);
     router.route('/admin/user/delete/:userId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteUser);
+    router.route('/admin/user/deleteTemp/:userId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteTempUser);
+    router.route('/admin/user/getVerified').get(passportConfig.isAdminLoggedIn, adminCtrl.getUsers);
+    router.route('/admin/user/getUnverified').get(passportConfig.isAdminLoggedIn, adminCtrl.getUnverifiedUsers);
+    router.route('/admin/user/getAdmins').get(passportConfig.isAdminLoggedIn, adminCtrl.getAdmins);
+    router.route('/admin/user/getNonAdmins').get(passportConfig.isAdminLoggedIn, adminCtrl.getNonAdmins);
+    router.route('/admin/support/getRequests').get(passportConfig.isAdminLoggedIn, adminCtrl.getRequests);
     router.route('/admin/support/user/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverUser);
     router.route('/admin/support/business/recoverAccount/:requestId').put(passportConfig.isAdminLoggedIn, adminCtrl.recoverBusiness);
     router.route('/admin/support/deleteRequest/:requestId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteSupportRequest);
     router.route('/admin/advertisement/addAdvSlots').post(passportConfig.isAdminLoggedIn, adminCtrl.addAdvSlots);
+    router.route('/admin/advertisement/deleteAdvSlot/:slotId').delete(passportConfig.isAdminLoggedIn, adminCtrl.deleteAdvSlot);
 
     //User routes
     //router.route('/user/logout').get(passportConfig.isUserLoggedIn, passportConfig.logout);

@@ -1,3 +1,4 @@
+import { AdminGuard } from './admin/admin.guard';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -50,7 +51,8 @@ import { NotAuthorizedErrorComponent } from "./errors/notAuthorized.component";
 import { SomethingWrongComponent } from "./errors/500.component";
 import { ContactSupportComponent } from './contactSupport/contactSupport.component';
 import { ActivityPageComponent } from "./businessPage/activityPage.component";
-
+import { AdminComponent } from './admin/admin.component';
+import { LoaderComponent } from './loader.component';
 
 import { BusinessPageService } from "./businessPage/businessPage.service";
 import { ReviewsService } from "./reviews/reviews.service";
@@ -72,6 +74,7 @@ import { UserService } from "./user/user.service";
 import { EditUserProfileService } from "./user/editProfile/editProfile.service";
 import { ContactSupportService } from './contactSupport/contactSupport.service';
 import { BusinessEditGuard } from "./businessEdit/businessEdit.guard";
+import { AdminModule } from "./admin/admin.module";
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   acceptedFiles: 'image/*'
@@ -118,7 +121,9 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       ActivityPageComponent,
       FileSelectDirective,
       FocusDirective,
-      ContactSupportComponent
+      ContactSupportComponent,
+      LoaderComponent,
+      AdminComponent
     ],
     imports: [
       BrowserModule,
@@ -133,7 +138,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       RatingModule,
       AgmCoreModule.forRoot({
         apiKey: 'AIzaSyAhPwdEndt1K4nL2Q3wjR1P7LITWK794iI'
-      })
+      }),
+      AdminModule
     ],
     providers: [
       AppService,
@@ -155,7 +161,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
       UserService,
       EditUserProfileService,
       ContactSupportService,
-      BusinessEditGuard
+      BusinessEditGuard,
+      AdminGuard
     ],
     bootstrap : [AppComponent]
 })
