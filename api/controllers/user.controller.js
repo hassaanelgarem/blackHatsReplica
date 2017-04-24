@@ -218,7 +218,7 @@ module.exports.deleteAccount = function (req, res) {
             });
         else {
             req.logout();
-            res.status(200).redirect('/');
+            res.status(200).json({success: true});
         }
     });
 };
