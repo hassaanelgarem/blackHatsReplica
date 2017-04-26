@@ -110,7 +110,7 @@ export class BusinessRegisterComponent {
                 (data) => {
                     this.success = true;
                     setTimeout(() => {
-                        location.reload();
+                        // location.reload();
                     }, 5000);
                 },
                 (error) => {

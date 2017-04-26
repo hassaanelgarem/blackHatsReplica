@@ -1,9 +1,8 @@
 <!--sidebar menu -->
-<link href="/admin/css/simple-sidebar.css" rel="stylesheet">
 <div class="col-md-3 left_col menu_fixed">
   <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">
-      <a href="/" class="site_title"> <span>Black Hats</span></a>
+      <a routerLink="/" class="site_title"> <span>Black Hats</span></a>
     </div>
     <!-- menu profile quick info -->
     <div class="profile clearfix">
@@ -17,20 +16,20 @@
         <ul class="nav side-menu">
           <li><a><i class="fa fa-user"></i> Users <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="admin/user/review">Review Accounts</a></li>
-              <li><a href="admin/user/assignAdmin">Assign Admins</a></li>
-              <li><a href="admin/user/unAssignAdmin">Unassign Admins</a></li>
+              <li><a routerLink="/admin/user/review">Review Accounts</a></li>
+              <li><a routerLink="/admin/user/assignAdmin">Assign Admins</a></li>
+              <li><a routerLink="/admin/user/unAssignAdmin">Unassign Admins</a></li>
             </ul>
           </li>
           <li><a><i class="fa fa-building"></i> Businesses<span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="admin/business/review">Review Verified Accounts</a></li>
-              <li><a href="admin/business/verify">Verify Accounts</a></li>
+              <li><a routerLink="/admin/business/review">Review Verified Accounts</a></li>
+              <li><a routerLink="/admin/business/verify">Verify Accounts</a></li>
             </ul>
           </li>
-          <li><a href="admin/advertisement"><i class="fa fa-calendar"></i> Advertisements</a>
+          <li><a routerLink="/admin/advertisement"><i class="fa fa-calendar"></i> Advertisements</a>
           </li>
-          <li><a href="admin/support"><i class="fa fa-support"></i> Support</a>
+          <li><a routerLink="/admin/support"><i class="fa fa-support"></i> Support</a>
           </li>
         </ul>
       </div>

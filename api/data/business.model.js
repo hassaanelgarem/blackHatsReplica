@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+function oneDecimalPlace(number) {
+    return Math.round(number * 10) / 10;
+}
 
 const businessSchema = new mongoose.Schema({
     name: {
@@ -71,6 +74,7 @@ const businessSchema = new mongoose.Schema({
     },
     averageRating: {
         type: Number,
+        set: oneDecimalPlace,
         default: 0
     },
     photos: [{
@@ -96,9 +100,9 @@ const businessSchema = new mongoose.Schema({
         default: false
     },
     createdAt: {
-		type: Date,
-		default: Date.now
-	},
+        type: Date,
+        default: Date.now
+    },
     resetPasswordToken: String,
     resetPasswordTokenExpiry: Date
 });

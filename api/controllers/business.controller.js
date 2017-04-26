@@ -54,7 +54,7 @@ module.exports.addPhoto = function (req, res) {
 
             string = string.toLowerCase();
             //check if it is not a valid image format
-            if (!(string === "png" || string === "jpg" || string === "jpeg")) {
+            if (!(string === "png" || string === "jpg" || string === "jpeg" || string === "gif")) {
                 //delete the uploaded file
                 fs.unlink(req.file.path);
 
@@ -228,7 +228,9 @@ module.exports.addBusiness = function (req, res) {
             });
             if (business) {
                 var msg = "Email already used. Please enter another email.";
-                var newError = {"msg": msg};
+                var newError = {
+                    "msg": msg
+                };
 
                 res.status(500).json({
                     error: newError,
@@ -343,7 +345,9 @@ module.exports.updateInteractivity = function (req, res) {
 */
 module.exports.getMostPopular = function (req, res) {
     // query for sorting businesses based on interactivity and limits the result to 3
-    const query = Business.find().sort({
+    const query = Business.find({
+        verified: true
+    }).sort({
         interactivity: -1
     }).limit(3);
     // execute the above query
@@ -401,7 +405,7 @@ module.exports.uploadLogo = function (req, res) {
                 string = "j" + string;
             string = string.toLowerCase();
             //check if it is not a valid image format
-            if (!(string === "png" || string === "jpg" || string === "jpeg")) {
+            if (!(string === "png" || string === "jpg" || string === "jpeg" || string === "gif")) {
                 //delete the uploaded file
                 fs.unlink(req.file.path);
 
@@ -423,7 +427,7 @@ module.exports.uploadLogo = function (req, res) {
             });
 
             //save the image file path to the Business model
-            Business.findById(req.user._id , function (err, business) {
+            Business.findById(req.user._id, function (err, business) {
                 //if an error occurred, return the error
                 if (err)
                     res.status(500).json({
@@ -507,20 +511,18 @@ module.exports.getCurrentInfo = function (req, res) {
 
             });
         } else {
-            if (business){
-            /*    let filteredBusiness = {
-                  name: business.name,
-                  email: business.email,
-                  category
-                }  */
+            if (business) {
+                /*    let filteredBusiness = {
+                      name: business.name,
+                      email: business.email,
+                      category
+                    }  */
                 res.status(200).json({
                     error: null,
                     msg: null,
                     data: business
                 });
-              }
-
-            else
+            } else
                 res.status(404).json({
                     error: null,
                     msg: 'Business not found.',

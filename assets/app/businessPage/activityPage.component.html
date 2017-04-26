@@ -1,7 +1,5 @@
-<body class="home transparent-header">
 <!-- start Container Wrapper -->
 <div class="container-wrapper">
-
 
 	<!-- start Main Wrapper -->
 
@@ -21,27 +19,26 @@
 							<h2>{{activity.name}}</h2>
 							<p>{{activity.description}}</p>
 							<!-- <div> -->
-								<div class="col-md-6 col-sm-6">
-									<p style="font-size: 20px">Price: {{activity.price}}EGP</p>
-								</div>
+							<div class="col-md-6 col-sm-6">
+								<p style="font-size: 20px">Price: {{activity.price}}EGP</p>
+							</div>
 
-								<div class="col-md-6 col-sm-6">
-									<p style="font-size: 20px">Bookings per slot: {{activity.bookingsPerSlot}}</p>
-								</div>
-					<!-- </div> -->
+							<div class="col-md-6 col-sm-6">
+								<p style="font-size: 20px">Bookings per slot: {{activity.bookingsPerSlot}}</p>
+							</div>
+							<!-- </div> -->
+
+						</div>
+
+					</div>
 
 				</div>
-
 			</div>
-
 		</div>
-	</div>
-</div>
 
 		<!-- end breadcrumb -->
-
 		<div class="bg-light">
-
+<br><br>
 			<div class="create-tour-wrapper">
 
 				<div class="container">
@@ -58,22 +55,20 @@
 
 									<h4 class="section-title">Gallery</h4>
 									<div *ngIf="!noPhotos">
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-12 mt-20">
-													<div class="gallery-wrapper">
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 mt-20">
+												<div class="gallery-wrapper">
 
-														<div class="GridLex-gap-5">
+													<div class="GridLex-gap-5">
 
-															<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+														<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
 
-																<div *ngFor="let photo of activity.photos; let i = index" class="GridLex-col-4_sm-4_xs-4_xss-4">
-																	<div class="sumi-gallery-wrapper clearfix">
-																		<div class="gallery-item image-object-fit image-object-fit-cover img-wrap">
-																			<img data-sgallery="guideGallery" title="Guide Gallery" src="{{path}}image/activityPhotos/{{photo}}" alt="images">
-																		</div>
+															<div *ngFor="let photo of activity.photos; let i = index" class="GridLex-col-4_sm-4_xs-4_xss-4">
+																<div class="sumi-gallery-wrapper clearfix">
+																	<div class="gallery-item image-object-fit image-object-fit-cover img-wrap">
+																		<img data-sgallery="guideGallery" title="Guide Gallery" src="{{path}}image/activityPhotos/{{photo}}" alt="images">
 																	</div>
 																</div>
-
 															</div>
 
 														</div>
@@ -83,6 +78,8 @@
 												</div>
 
 											</div>
+
+										</div>
 									</div>
 									<div *ngIf="noPhotos" style="text-align: center;">
 										<br>
@@ -93,66 +90,67 @@
 									<div *ngIf="!loggedIn" style="text-align: center;">
 										<br>
 										<br>
-										<h4 class="section-title" style="border-bottom: 0px;"> You must be logged in to book </h4>
+										<h4 class="section-title" style="border-bottom: 0px;"> You must be logged in as a user to book </h4>
 									</div>
 									<div *ngIf="loggedIn">
-									<div class="row gap-20">
-										<h4 class="section-title">Book now</h4>
-										<div class="col-xs-12 col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-
-											<div class="form-group">
-												<input placeholder="Please choose a date" [ngModel]="chosenDate | date: 'shortDate'" [(dateTimePicker)]="chosenDate" [pickerType]="'date'" [mode]="'dropdown'" [theme]="'gray'" class="form-control" (dateTimePickerChange)="updateSlots($event)"/>
-											</div>
-
-										</div>
-									</div>
-
-									<div *ngIf="dateChosen">
-										<div class="mb-30"></div>
-										<div *ngIf="!validDate" style="text-align: center">
-											<h4 class="section-title" style="border-bottom: 0px; font-size: 14px; color: red;"> Invalid date </h4>
-										</div>
-										<div *ngIf="validDate">
-										<h4 class="section-title">Available Slots</h4>
-
-										<div *ngIf="noSlots" style="text-align: center;">
-											<br>
-											<br>
-											<h4 class="section-title" style="border-bottom: 0px; font-size: 14px;"> No available slots on that day </h4>
-										</div>
-										<div *ngIf="!noSlots">
-										<div *ngFor="let slot of slots; let i = index" class="row gap-20 bottomLine">
-
-											<div class="col-xs-12 col-sm-5 col-md-5">
+										<div class="row gap-20">
+											<h4 class="section-title">Book now</h4>
+											<div class="col-xs-12 col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
 
 												<div class="form-group">
-													<label>Start Time</label>
-													<br>
-													<label> {{slot.startTime | date: 'shortTime'}} </label>
+													<input placeholder="Please choose a date" [ngModel]="chosenDate | date: 'shortDate'" [(dateTimePicker)]="chosenDate" [pickerType]="'date'"
+													    [mode]="'dropdown'" [theme]="'gray'" class="form-control" (dateTimePickerChange)="updateSlots($event)" />
 												</div>
 
 											</div>
+										</div>
 
-											<div class="col-xs-12 col-sm-5 col-md-5">
-
-												<div class="form-group">
-													<label>End Time</label>
-													<br>
-													<label> {{slot.endTime | date: 'shortTime'}} </label>
-												</div>
-
+										<div *ngIf="dateChosen">
+											<div class="mb-30"></div>
+											<div *ngIf="!validDate" style="text-align: center">
+												<h4 class="section-title" style="border-bottom: 0px; font-size: 14px; color: red;"> Invalid date </h4>
 											</div>
+											<div *ngIf="validDate">
+												<h4 class="section-title">Available Slots</h4>
 
-											<div class="col-xs-12 col-sm-2 col-md-2">
-												<br>
-												<button style="margin-top: -15px;" type="button" class="btn btn-primary" (click)="bookSlot(i)"> Book </button>
+												<div *ngIf="noSlots" style="text-align: center;">
+													<br>
+													<br>
+													<h4 class="section-title" style="border-bottom: 0px; font-size: 14px;"> No available slots on that day </h4>
+												</div>
+												<div *ngIf="!noSlots">
+													<div *ngFor="let slot of slots; let i = index" class="row gap-20 bottomLine">
 
+														<div class="col-xs-12 col-sm-5 col-md-5">
+
+															<div class="form-group">
+																<label>Start Time</label>
+																<br>
+																<label> {{slot.startTime | date: 'shortTime'}} </label>
+															</div>
+
+														</div>
+
+														<div class="col-xs-12 col-sm-5 col-md-5">
+
+															<div class="form-group">
+																<label>End Time</label>
+																<br>
+																<label> {{slot.endTime | date: 'shortTime'}} </label>
+															</div>
+
+														</div>
+
+														<div class="col-xs-12 col-sm-2 col-md-2">
+															<br>
+															<button style="margin-top: -15px;" type="button" class="btn btn-primary" (click)="bookSlot(i)"> Book </button>
+
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-									</div>
-								</div>
 
 
 								</div>
@@ -183,6 +181,4 @@
 
 	<!-- end Main Wrapper -->
 </div>
-</body>
-
 <!-- end Container Wrapper -->

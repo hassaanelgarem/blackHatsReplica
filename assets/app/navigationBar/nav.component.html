@@ -9,7 +9,7 @@
 
 			<div class="logo-wrapper">
 				<div class="logo">
-					<a href="/homepage">
+					<a routerLink="/homepage">
 						<h1>Black Hats</h1>
 					</a>
 				</div>
@@ -19,19 +19,22 @@
 
 				<ul class="nav navbar-nav" id="responsive-menu">
 					<li>
-						<a href="/homepage">Home</a>
+						<a routerLink="/homepage" >Home</a>
 					</li>
 					<li>
-						<a href="/search?result=undefined&location=All&category=All&sort=interactivity&page=1">Explore</a>
+						<a routerLink="/search" [queryParams]="{result: undefined, location:'All', category: 'All'}">Explore</a>
 					</li>
 					<li *ngIf="loggedin && isUser">
-						<a href="{{path}}user/{{user._id}}">Profile</a>
+						<a routerLink="/user/{{user._id}}">Profile</a>
 					</li>
 					<li *ngIf="loggedin && !isUser">
-						<a href="{{path}}business/{{business._id}}">My Page</a>
+						<a routerLink="/business/{{business._id}}">My Page</a>
+					</li>
+					<li *ngIf="loggedin && isAdmin">
+						<a routerLink="/admin">Admin Panel</a>
 					</li>
 					<li>
-						<a href="/contactSupport">Support</a>
+						<a routerLink="/contactSupport">Support</a>
 					</li>
 				</ul>
 

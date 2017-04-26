@@ -13,7 +13,7 @@ export class EditUserProfileService {
     getOneUser(userId){
     let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-    return this.http.get('http://54.213.175.206:8080/api/user/profile/' + userId, {headers: headers}).map(res => res.json());
+    return this.http.get('http://localhost:8080/api/user/profile/' + userId, {headers: headers}).map(res => res.json());
   }
 
     editUserProfile(firstName, lastName, birthDate) {
@@ -25,12 +25,12 @@ export class EditUserProfileService {
           birthDate: birthDate,
 
         }
-        return this.http.put('http://54.213.175.206:8080/api/user/profile/editInfo', body, { headers: headers }).map(res => res.json());
+        return this.http.put('http://localhost:8080/api/user/profile/editInfo', body, { headers: headers }).map(res => res.json());
     }
 
     deleteAccount(){
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
-      return this.http.delete('http://54.213.175.206:8080/api/user/deleteAccount', {headers: headers}).map(res => res.json());
+      return this.http.delete('http://localhost:8080/api/user/deleteAccount', {headers: headers}).map(res => res.json());
     }
 }

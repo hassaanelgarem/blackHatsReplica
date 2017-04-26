@@ -130,7 +130,8 @@ export class RegisterComponent {
                 (data) => {
                     this.success = true;
                     setTimeout(() => {
-                        location.reload();
+                        // location.reload();
+                        $("#userRegisterClose").click();
                     }, 5000);
 
                 },

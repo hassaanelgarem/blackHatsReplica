@@ -1,21 +1,18 @@
-<body>
-    <div class="review-wrapper">
+<div class="review-wrapper">
 
-        <div class="review-header">
+    <div class="review-header">
 
-            <div class="GridLex-gap-30">
+        <div class="GridLex-gap-30">
 
-                <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
+            <div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
 
-                    <div class="GridLex-col-9_sm-8_xs-12_xss-12">
+                <div class="GridLex-col-9_sm-8_xs-12_xss-12">
 
-                        <div class="review-rating">
-                            <div class="number">{{averageString}}</div>
-                            <div class="rating-wrapper">
-                                {{count}} Reviews
-                            </div>
+                    <div class="review-rating">
+                        <div class="number">{{averageString}}</div>
+                        <div class="rating-wrapper">
+                            {{count}} Reviews
                         </div>
-
                     </div>
 
                 </div>
@@ -24,74 +21,74 @@
 
         </div>
 
-        <div class="review-content">
+    </div>
 
-            <ul class="review-list">
+    <div class="review-content">
 
-                <li class="clearfix" *ngFor="let review of reviews; let i = index">
+        <ul class="review-list">
 
-                    <div class="row">
+            <li class="clearfix" *ngFor="let review of reviews; let i = index">
 
-                        <div class="col-xs-12 col-sm-12 col-md-3">
-                            <div class="review-header">
-                                <h6><a href="business/{{review.business._id}}">{{review.business.name}}</a></h6>
-                                <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span><br>
-                                <rating *ngIf="!editing[i]" [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
-                                <rating *ngIf="editing[i]" [(ngModel)]="editRating" name="editRating" [titles]="false"></rating>
-                            </div>
-                        </div>
+                <div class="row">
 
-                        <div class="col-xs-12 col-sm-12 col-md-9">
-                            <div class="review-replied">
-                                <div class="review-content" *ngIf="!editing[i]">
-
-                                    <h4>{{review.comment}}</h4>
-                                    <!-- <h4>Rating: {{review.rating}}</h4> -->
-                                    <!-- <rating [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating> -->
-
-                                </div>
-                                <div class="review-content" *ngIf="editing[i]">
-
-                                    <textarea style="resize: none;" type="text" class="form-control" [(ngModel)]="editComment" name="editComment" rows="4"></textarea>
-                                    <!-- <input type="text" class="form-control" [(ngModel)]="editRating" name="editRating"> -->
-                                    <!-- <rating [(ngModel)]="editRating" name="editRating" [titles]="false"></rating> -->
-
-                                </div>
-
-                            </div>
-
-                            <div *ngIf="loggedIn && !editing[i]">
-                                <footer class="panel-footer">
-                                    <div class="config text-center">
-                                        <button type="button" class="btn btn-primary" (click)="onEdit(i)"> Edit </button>
-                                    </div>
-                                </footer>
-                            </div>
-
-                            <div *ngIf="loggedIn && editing[i]">
-                                <footer class="panel-footer">
-                                    <div class="config text-center">
-                                      <div class="text-center">
-                                          <button type="button" class="btn btn-primary" (click)="onSave(i)"> Save </button>
-                                          <button type="button" class="btn btn-danger" (click)="onDelete(i)">Delete</button>
-                                          <button type="button" class="btn btn-primary btn-border" (click)="onCancel(i)">Cancel</button>
-                                      </div>
-                                    </div>
-                                </footer>
-
-                            </div>
-
+                    <div class="col-xs-12 col-sm-12 col-md-3">
+                        <div class="review-header">
+                            <h6><a href="business/{{review.business._id}}">{{review.business.name}}</a></h6>
+                            <span class="review-date">{{review.time | date:'hh:mm - MMM d, y'}}</span><br>
+                            <rating *ngIf="!editing[i]" [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating>
+                            <rating *ngIf="editing[i]" [(ngModel)]="editRating" name="editRating" [titles]="false"></rating>
                         </div>
                     </div>
 
-                </li>
+                    <div class="col-xs-12 col-sm-12 col-md-9">
+                        <div class="review-replied">
+                            <div class="review-content" *ngIf="!editing[i]">
 
-            </ul>
+                                <h4>{{review.comment}}</h4>
+                                <!-- <h4>Rating: {{review.rating}}</h4> -->
+                                <!-- <rating [(ngModel)]="review.rating" [readonly]="true" [float]="true" [titles]="false"></rating> -->
 
-            <!-- <a href="#" class="review-load-more mb-40">load more...</a> -->
+                            </div>
+                            <div class="review-content" *ngIf="editing[i]">
 
-        </div>
+                                <textarea style="resize: none;" type="text" class="form-control" [(ngModel)]="editComment" name="editComment" rows="4"></textarea>
+                                <!-- <input type="text" class="form-control" [(ngModel)]="editRating" name="editRating"> -->
+                                <!-- <rating [(ngModel)]="editRating" name="editRating" [titles]="false"></rating> -->
+
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="loggedIn && !editing[i]">
+                            <footer class="panel-footer">
+                                <div class="config text-center">
+                                    <button type="button" class="btn btn-primary" (click)="onEdit(i)"> Edit </button>
+                                </div>
+                            </footer>
+                        </div>
+
+                        <div *ngIf="loggedIn && editing[i]">
+                            <footer class="panel-footer">
+                                <div class="config text-center">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-primary" (click)="onSave(i)"> Save </button>
+                                        <button type="button" class="btn btn-danger" (click)="onDelete(i)">Delete</button>
+                                        <button type="button" class="btn btn-primary btn-border" (click)="onCancel(i)">Cancel</button>
+                                    </div>
+                                </div>
+                            </footer>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </li>
+
+        </ul>
+
+        <!-- <a href="#" class="review-load-more mb-40">load more...</a> -->
 
     </div>
 
-</body>
+</div>

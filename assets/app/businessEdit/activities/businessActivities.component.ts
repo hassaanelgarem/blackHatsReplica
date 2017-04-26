@@ -16,7 +16,7 @@ export class BusinessActivitiesComponent implements OnInit {
 
     activities: Activity[] = [];
     business: any;
-    path: String = "http://54.213.175.206:8080/api/";
+    path: String = "http://localhost:8080/api/";
     currentIndex = 0;
     showEdit = false;
     addDone = false;

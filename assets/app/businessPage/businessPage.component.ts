@@ -32,7 +32,7 @@ export class BusinessPageComponent implements OnInit {
     category: String;
     categoryAvailable = false;
     businessId: String = "";
-    path: String = "http://54.213.175.206:8080/api/";
+    path: String = "http://localhost:8080/api/";
     reviews: Object[] = new Array<Object>();
     photos: String[] = [];
     firstPhoto: String = "";

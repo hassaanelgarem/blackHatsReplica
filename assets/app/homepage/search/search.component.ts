@@ -12,10 +12,10 @@ export class SearchComponent {
   constructor(private router: Router) { }
 
   searchClicked(result: string) {
-    this.router.navigate(['search'], { queryParams: { result: result, location: "undefined", category: "undefined", sort:"interactivity", page: "1" } });
+    this.router.navigate(['search'], { queryParams: { result: result, location: "undefined", category: "undefined"} });
   }
 
   exploreClicked(location: string, category: string) {
-    this.router.navigate(['search'], { queryParams: { result: "undefined", location: location, category: category, sort: "interactivity", page: "1" } });
+    this.router.navigate(['search'], { queryParams: { result: "undefined", location: location, category: category} });
   }
 }

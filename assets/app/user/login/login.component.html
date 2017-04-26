@@ -7,7 +7,7 @@
     data-replace="true">
 
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserLoginCancel()">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onUserLoginCancel()" id="userLoginClose">&times;</button>
         <h4 class="modal-title text-center">Login To Your User Account</h4>
     </div>
 
@@ -32,7 +32,7 @@
 
                         <div class="form-group">
                             <label>Username</label>
-                            <input class="form-control" placeholder="Enter username" type="text" [(ngModel)]="username" name="username">
+                            <input class="form-control" placeholder="Enter username" type="text" [(ngModel)]="username" name="username" required>
                         </div>
 
                     </div>
@@ -46,7 +46,7 @@
 
                         <div class="form-group">
                             <label>Password</label>
-                            <input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="userPassword" name="userPassword">
+                            <input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="userPassword" name="userPassword" required>
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
         <div class="row gap-20">
 
             <div class="col-sm-12 col-md-12">
-                <p class="mb-20">Just provide us with your valid email address and we will send you an email with further instructions.</p>
+                <p class="mb-20">Just provide us with your valid registered email address and we will send you an email with further instructions.</p>
             </div>
 
             <div class="col-sm-12 col-md-12">
@@ -129,7 +129,7 @@
                 <form (keydown)="keyDownForgetUser($event)">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="userEmail" name="userEmail">
+                        <input class="form-control" placeholder="Enter your email address" type="email" [(ngModel)]="userEmail" name="userEmail" required>
                     </div>
                 </form>
 
@@ -188,7 +188,7 @@
 
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input autocomplete="off" class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="businessEmail" name="businessEmail">
+                        <input class="form-control" placeholder="Enter your email address" type="email" [(ngModel)]="businessEmail" name="businessEmail" required>
                     </div>
 
                 </div>
@@ -201,7 +201,7 @@
 
                     <div class="form-group">
                         <label>Password</label>
-                        <input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="businessPassword" name="businessPassword">
+                        <input class="form-control" placeholder="Enter password" type="password" [(ngModel)]="businessPassword" name="businessPassword" required>
                     </div>
 
                 </div>
@@ -209,7 +209,7 @@
 
 
 
-                <div class="col-sm-offset-8 col-md-offset-8">
+                <div class="col-sm-offset-8 col-md-offset-8 col-md-4 col-sm-4">
 
                     <div class="business-login-box-link-action">
                         <a data-toggle="modal" href="#businessForgotPasswordModal" class="block line18 mt-1" (click)="onBusinessLoginCancel()">Forgot password?</a>
@@ -219,12 +219,6 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="business-login-box-box-action">
                         No account? <a data-toggle="modal" href="#businessRegisterModal" (click)="onBusinessLoginCancel()">Signup</a>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-12">
-                    <div class="user-login-box-box-action">
-                        Not verified yet? <a data-toggle="modal" href="#resendEmailModal" (click)="onUserLoginCancel()">Resend email</a>
                     </div>
                 </div>
 
@@ -282,7 +276,7 @@
                 <form (keydown)="keyDownForgetBusiness($event)">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter your email address" type="text">
+                        <input class="form-control" placeholder="Enter your email address" type="email" required>
                     </div>
                 </form>
 
@@ -349,7 +343,7 @@
                 <form (keydown)="keyDownResend($event)">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter your email address" type="text" [(ngModel)]="userEmail" name="userEmail">
+                        <input class="form-control" placeholder="Enter your email address" type="email" [(ngModel)]="userEmail" name="userEmail" required>
                     </div>
                 </form>
 

@@ -8,15 +8,7 @@ module.exports = {
         extensions: ['.js', '.ts']
     },
     module: {
-        loaders: [{
-                test: /\.ts$/,
-                loaders: [
-                    'awesome-typescript-loader',
-                    'angular2-template-loader',
-                    'angular2-router-loader'
-                ]
-            },
-            {
+        rules: [{
                 test: /\.html$/,
                 loader: 'html-loader'
             },
@@ -43,15 +35,10 @@ module.exports = {
                 test: /\.scss$/,
                 loader: 'raw-loader!postcss-loader!sass-loader'
             }
-
-        ]
+        ],
+        exprContextCritical: false
     },
     plugins: [
-        new webpack.ContextReplacementPlugin(
-            // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            './src' // location of your src
-        ),
         new webpack.ProvidePlugin({
             jQuery: 'jquery',
             $: 'jquery',

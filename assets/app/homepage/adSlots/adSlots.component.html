@@ -21,11 +21,11 @@
 
 					<div class="GridLex-col-4_mdd-4_sm-6_xs-6_xss-12" *ngFor="let bookingSlot of bookingSlots">
 
-						<div class="trip-guide-item">
-							<a href="http://54.213.175.206:8080/business/{{bookingSlot.businessId}}">
-								<div class="trip-guide-image">
-									<img *ngIf="!bookingSlot.image" src="http://54.213.175.206:8080/api/image/businessLogos/x" alt="images" />
-									<img *ngIf="bookingSlot.image"src="http://54.213.175.206:8080/api/image/businessAds/{{bookingSlot.image}}" alt="images" />
+						<div class="top-destination-item">
+							<a routerLink="/business/{{bookingSlot.businessId}}">
+								<div class="image">
+									<img *ngIf="!bookingSlot.image" src="http://localhost:8080/api/image/businessLogos/x" alt="images" />
+									<img *ngIf="bookingSlot.image" src="http://localhost:8080/api/image/businessAds/{{bookingSlot.image}}" alt="images" />
 								</div>
 							</a>
 

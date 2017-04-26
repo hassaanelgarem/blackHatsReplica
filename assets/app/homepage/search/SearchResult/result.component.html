@@ -20,11 +20,17 @@
 
                             <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 
-                                <h2>Business Search results</h2>
+                                <h2>Search results</h2>
                             </div>
 
                         </div>
 
+                    </div>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li><a routerLink="/homepage">Home</a></li>
+                            <li class="active">Results</li>
+                        </ol>
                     </div>
 
                 </div>
@@ -68,7 +74,7 @@
                                                             <div class="input-group input-group-addon-icon no-border no-br-xs">
                                                                 <span class="input-group-addon input-group-addon-icon bg-white">
 																<label class="block-xs"><i class="fa fa-sort-amount-asc"></i> Sort by:</label></span>
-                                                                <select class="selectpicker form-control block-xs" #sort (change)="updateSortQuery(sort.value)">
+                                                                <select class="selectpicker form-control block-xs" #sort (change)="updateSortQuery(sort.value)" style="min-width: 120px;">
 																	<option value="interactivity"> Popularity</option>
 																	<option value="averageRating"> Ratings</option>
 
@@ -112,10 +118,11 @@
 
                                     <div class="user-item-02" style="background-color:white">
 
-                                        <div class="image">
-                                            <img *ngIf="!business.logo" src="http://54.213.175.206:8080/api/image/businessLogos/x" alt="Images" />
-                                            <img name="businessLogo" *ngIf="business.logo" src="http://54.213.175.206:8080/api/image/businessLogos/{{business.logo}}" alt="Images"
+                                        <div class="image" style="min-height: 86px;">
+                                            <img style="min-height: 86px;" *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="Images"
                                             />
+                                            <img style="min-height: 86px;" name="businessLogo" *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}"
+                                                alt="Images" />
                                         </div>
 
                                         <div class="content">
@@ -127,7 +134,7 @@
 
                                         </div>
 
-                                        <div class="user-meta">
+                                        <div class="user-meta" style="background-color: whitesmoke">
                                             <ul class="clearfix">
                                                 <li>
                                                     <div class="meta">
@@ -143,7 +150,7 @@
                                         </div>
 
                                         <div class="ph-20">
-                                            <a href="/business/{{business.businessId}}" class="btn btn-primary btn-block">View Profile</a>
+                                            <a routerLink="/business/{{business.businessId}}" class="btn btn-primary btn-block">View Profile</a>
                                         </div>
 
                                     </div>
@@ -167,15 +174,13 @@
                                 <nav class="pager-center">
                                     <ul class="pagination">
                                         <li *ngIf="pageNumber > 1">
-                                            <a routerLink="/search" [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i}"
-                                                aria-label="Previous">
+                                            <a (click)="previous()" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li routerLinkActive="active" *ngFor="let number of pagingIndex; let i = index"><a routerLink="/search" [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+1}">{{i+1}}</a></li>
+                                        <li *ngFor="let number of pagingIndex; let i = index" id="page{{i+1}}"><a (click)="updatePage(i+1)">{{i+1}}</a></li>
                                         <li *ngIf="pageNumber < pagingIndex.length">
-                                            <a routerLink="/search" [queryParams]="{result: result, location:location, category: category, sort: sort.value, page: i+2}"
-                                                aria-label="Next">
+                                            <a (click)="next()" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
                                         </li>

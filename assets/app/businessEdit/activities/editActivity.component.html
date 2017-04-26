@@ -1,29 +1,18 @@
-<body class="home transparent-header">
-	<!-- start Container Wrapper -->
-	<div class="container-wrapper">
+<div *ngIf="gotActivity" class="main-wrapper scrollspy-container">
 
+	<!-- start breadcrumb -->
 
-		<!-- start Main Wrapper -->
+	<div class="breadcrumb-image-bg pb-100 no-bg" style="background-image:url('/images/breadcrumb-bg.jpg');">
+		<div class="container">
 
-		<div *ngIf="gotActivity" class="main-wrapper scrollspy-container">
+			<div class="page-title">
 
-			<!-- start breadcrumb -->
+				<div class="row">
 
-			<div class="breadcrumb-image-bg pb-100 no-bg" style="background-image:url('/images/breadcrumb-bg.jpg');">
-				<div class="container">
+					<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 
-					<div class="page-title">
-
-						<div class="row">
-
-							<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-
-								<h2>{{activity.name}}</h2>
-								<p>Edit activity info, add or delete slots and photos</p>
-
-							</div>
-
-						</div>
+						<h2>{{activity.name}}</h2>
+						<p>Edit activity info, add or delete slots and photos</p>
 
 					</div>
 
@@ -31,154 +20,158 @@
 
 			</div>
 
-			<!-- end breadcrumb -->
+		</div>
 
-			<div class="bg-light">
+	</div>
 
-				<div class="create-tour-wrapper">
+	<!-- end breadcrumb -->
 
-					<div class="container">
+	<div class="bg-light">
+		<br>
+		<br>
+		<div class="create-tour-wrapper">
 
-						<div class="row">
+			<div class="container">
 
-							<div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+				<div class="row">
 
-								<div class="form">
+					<div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 
-									<div class="create-tour-inner">
+						<div class="form">
+
+							<div class="create-tour-inner">
+
+								<div class="row">
+
+									<div class="col-xs-12 col-sm-12">
+
+										<div class="form-group form-group-lg">
+											<label>Activity name:</label>
+											<input type="text" class="form-control" [(ngModel)]="name" name="name" required/>
+										</div>
+
+									</div>
+
+									<div class="col-xs-12 col-sm-5 col-md-5">
+										<label>Price:</label>
+										<div class="input-group mb-15">
+											<input class="form-control" type="number" min="0" [(ngModel)]="price" name="price" required>
+											<span class="input-group-addon">EGP</span>
+										</div>
+									</div>
+
+									<div class="col-xs-12 col-sm-7 col-md-7">
+										<div class="row gap-20">
+											<div class="col-xsw-12 col-xs-6 col-sm-6 col-md-6">
+												<div class="form-group">
+													<label>Bookings per slot?</label>
+													<input type="number" min="1" class="form-control" [(ngModel)]="perSlot" name="perSlot" />
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="col-xs-12 col-sm-12">
+
+										<div class="form-group">
+											<label>Brief Description:</label>
+											<textarea style="resize: none;" class="form-control" rows="5" type="text" [(ngModel)]="description" name="description" required></textarea>
+										</div>
+
+									</div>
+								</div>
+
+								<div class="mb-30"></div>
+
+								<h4 class="section-title">Your Slots</h4>
+
+								<div *ngFor="let slot of activity.slots; let i = index" class="row gap-20 bottomLine">
+
+									<div class="col-xs-12 col-sm-5 col-md-5">
+
+										<div class="form-group">
+											<label>Start Time</label>
+											<br>
+											<label> {{slot.startTime | date: 'shortTime'}} </label>
+										</div>
+
+									</div>
+									<div class="col-xs-12 col-sm-5 col-md-5">
+
+										<div class="form-group">
+											<label>End Time</label>
+											<br>
+											<label> {{slot.endTime | date: 'shortTime'}} </label>
+										</div>
+
+									</div>
+
+									<div class="col-xs-12 col-sm-2 col-md-2">
+										<br>
+										<button type="button" class="btn btn-danger" (click)="deleteSlot(i)"> Delete </button>
+
+									</div>
+								</div>
+
+								<div class="row gap-20">
+									<div *ngIf="addSlotWarning" class="alert alert-danger alert-dismissable">
+										<a class="close" (click)="hideSlotWarning()" aria-label="close">&times;</a> {{warningMessage}}
+									</div>
+									<br>
+
+									<div class="col-xs-12 col-sm-5 col-md-5">
+
+										<div class="form-group">
+											<label>Start Time</label>
+											<input [ngModel]="newStart | date: 'shortTime'" [(dateTimePicker)]="newStart" [pickerType]="'time'" [mode]="'dropdown'" [theme]="'gray'"
+											    [hourTime]=" '12' " class="form-control" />
+										</div>
+
+									</div>
+
+									<div class="col-xs-12 col-sm-5 col-md-5">
+
+										<div class="form-group">
+											<label>End Time</label>
+											<input [ngModel]="newEnd | date: 'shortTime'" [(dateTimePicker)]="newEnd" [pickerType]="'time'" [mode]="'dropdown'" [theme]="'gray'"
+											    [hourTime]=" '12' " class="form-control" />
+										</div>
+
+									</div>
+
+									<div class="col-xs-12 col-sm-2 col-md-2">
+										<br>
+										<button type="button" class="btn btn-primary" (click)="addSlot()"> Add Slot </button>
+
+									</div>
+
+								</div>
+
+
+								<div class="mb-30"></div>
+
+								<h4 class="section-title">Gallery</h4>
+								<div>
+
+									<div>
 
 										<div class="row">
 
-											<div class="col-xs-12 col-sm-12">
+											<div class="col-xs-12 col-sm-12 col-md-12 mt-20">
+												<div class="gallery-wrapper">
 
-												<div class="form-group form-group-lg">
-													<label>Activity name:</label>
-													<input type="text" class="form-control" [(ngModel)]="name" name="name"/>
-												</div>
+													<div class="GridLex-gap-5">
 
-											</div>
+														<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
 
-											<div class="col-xs-12 col-sm-5 col-md-5">
-												<label>Price:</label>
-												<div class="input-group mb-15">
-													<input class="form-control" type="text" [(ngModel)]="price" name="price">
-													<span class="input-group-addon">EGP</span>
-												</div>
-											</div>
-
-											<div class="col-xs-12 col-sm-7 col-md-7">
-												<div class="row gap-20">
-													<div class="col-xsw-12 col-xs-6 col-sm-6 col-md-6">
-														<div class="form-group">
-															<label>Bookings per slot?</label>
-															<input type="number" min="0" class="form-control" [(ngModel)]="perSlot" name="perSlot" />
-														</div>
-													</div>
-												</div>
-
-											</div>
-
-											<div class="col-xs-12 col-sm-12">
-
-												<div class="form-group">
-													<label>Brief Description:</label>
-													<textarea style="resize: none;" class="form-control" rows="5" type="text" [(ngModel)]="description" name="description"></textarea>
-												</div>
-
-											</div>
-										</div>
-
-										<div class="mb-30"></div>
-
-										<h4 class="section-title">Your Slots</h4>
-
-										<div *ngFor="let slot of activity.slots; let i = index" class="row gap-20 bottomLine">
-
-											<div class="col-xs-12 col-sm-5 col-md-5">
-
-												<div class="form-group">
-													<label>Start Time</label>
-													<br>
-													<label> {{slot.startTime | date: 'shortTime'}} </label>
-												</div>
-
-											</div>
-
-											<div class="col-xs-12 col-sm-5 col-md-5">
-
-												<div class="form-group">
-													<label>End Time</label>
-													<br>
-													<label> {{slot.endTime | date: 'shortTime'}} </label>
-												</div>
-
-											</div>
-
-											<div class="col-xs-12 col-sm-2 col-md-2">
-												<br>
-												<button type="button" class="btn btn-danger" (click)="deleteSlot(i)"> Delete </button>
-
-											</div>
-										</div>
-
-										<div class="row gap-20">
-											<div *ngIf="addSlotWarning" class="alert alert-danger alert-dismissable">
-													<a class="close" (click)="hideSlotWarning()" aria-label="close">&times;</a> {{warningMessage}}
-											</div>
-											<div class="col-xs-12 col-sm-5 col-md-5">
-
-												<div class="form-group">
-													<label>Start Time</label>
-													<input [ngModel]="newStart | date: 'shortTime'" [(dateTimePicker)]="newStart" [pickerType]="'time'" [mode]="'dropdown'" [theme]="'gray'" [hourTime]=" '12' " class="form-control" />
-												</div>
-
-											</div>
-
-											<div class="col-xs-12 col-sm-5 col-md-5">
-
-												<div class="form-group">
-													<label>End Time</label>
-													<input [ngModel]="newEnd | date: 'shortTime'" [(dateTimePicker)]="newEnd" [pickerType]="'time'" [mode]="'dropdown'" [theme]="'gray'" [hourTime]=" '12' " class="form-control" />
-												</div>
-
-											</div>
-
-											<div class="col-xs-12 col-sm-2 col-md-2">
-												<br>
-												<button type="button" class="btn btn-primary" (click)="addSlot()"> Add Slot </button>
-
-											</div>
-
-										</div>
-
-
-										<div class="mb-30"></div>
-
-										<h4 class="section-title">Gallery</h4>
-										<div>
-
-											<div>
-
-												<div class="row">
-
-													<div class="col-xs-12 col-sm-12 col-md-12 mt-20">
-														<div class="gallery-wrapper">
-
-															<div class="GridLex-gap-5">
-
-																<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
-
-																	<div *ngFor="let photo of activity.photos; let i = index" class="GridLex-col-4_sm-4_xs-4_xss-4">
-																		<div class="sumi-gallery-wrapper clearfix">
-																			<div class="gallery-item image-object-fit image-object-fit-cover img-wrap">
-																				<button class="topRight btn btn-sm btn-delete" (click)="deletePhoto(i)">x</button>
-																				<img data-sgallery="guideGallery" title="Guide Gallery" src="{{path}}image/activityPhotos/{{photo}}" alt="images">
-																			</div>
-																		</div>
+															<div *ngFor="let photo of activity.photos; let i = index" class="GridLex-col-4_sm-4_xs-4_xss-4">
+																<div class="sumi-gallery-wrapper clearfix">
+																	<div class="gallery-item image-object-fit image-object-fit-cover img-wrap">
+																		<button class="topRight btn btn-sm btn-delete" (click)="deletePhoto(i)">x</button>
+																		<img data-sgallery="guideGallery" title="Guide Gallery" src="{{path}}image/activityPhotos/{{photo}}" alt="images">
 																	</div>
-
 																</div>
-
 															</div>
 
 														</div>
@@ -190,31 +183,33 @@
 											</div>
 
 										</div>
-										<br>
-										<div class="submite-list-box">
-
-											<div class="content">
-												<div [dropzone]="config" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"></div>
-											</div>
-
-										</div>
-										<input style="border-width: 0px; outline: none; width: 0px; height: 0px;" type="text" [focus]="myFocusTriggeringEventEmitterOne" [(ngModel)]="fakeVaribaleOne" name="fakeVaribaleOne"/>
-										<input style="border-width: 0px; outline: none; width: 0px; height: 0px;" type="text" [focus]="myFocusTriggeringEventEmitterTwo" [(ngModel)]="fakeVaribaleTwo" name="fakeVaribaleTwo"/>
 
 									</div>
 
-									<div class="mb-50">
+								</div>
+								<br>
+								<div class="submite-list-box">
 
-										<div class="mb-25"></div>
-
-										<div class="text-center">
-						            <button type="button" class="btn btn-primary buttonSize" (click)="onSave()"> Save </button>
-						            <button type="button" class="btn btn-danger buttonSize" (click)="onDelete()">Delete</button>
-						            <button type="button" class="btn btn-primary btn-border buttonSize" (click)="onCancel()">Cancel</button>
-						        </div>
-
+									<div class="content">
+										<div [dropzone]="config" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"></div>
 									</div>
 
+								</div>
+								<input style="border-width: 0px; outline: none; width: 0px; height: 0px;" type="text" [focus]="myFocusTriggeringEventEmitterOne"
+								    [(ngModel)]="fakeVaribaleOne" name="fakeVaribaleOne" />
+								<input style="border-width: 0px; outline: none; width: 0px; height: 0px;" type="text" [focus]="myFocusTriggeringEventEmitterTwo"
+								    [(ngModel)]="fakeVaribaleTwo" name="fakeVaribaleTwo" />
+
+							</div>
+
+							<div class="mb-50">
+
+								<div class="mb-25"></div>
+
+								<div class="text-center">
+									<button type="button" class="btn btn-primary buttonSize" (click)="onSave()"> Save </button>
+									<button type="button" class="btn btn-danger buttonSize" (click)="onDelete()">Delete</button>
+									<button type="button" class="btn btn-primary btn-border buttonSize" (click)="onCancel()">Cancel</button>
 								</div>
 
 							</div>
@@ -229,7 +224,6 @@
 
 		</div>
 
-		<!-- end Main Wrapper -->
 	</div>
-</body>
-	<!-- end Container Wrapper -->
+
+</div>

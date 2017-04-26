@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { LoginService } from './login.service';
 import { AppService } from '../../app.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
     templateUrl: './login.component.html'
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
     @Output() loginClicked = new EventEmitter<boolean>();
 
@@ -61,11 +61,8 @@ export class LoginComponent implements OnInit {
     ) { }
 
 
-    ngOnInit() { }
-
-
-    onUserLogin(){
-        if(!this.username || this.username.length == 0){
+    onUserLogin() {
+        if (!this.username || this.username.length == 0) {
             this.incorrectUserWarning = false;
             this.userUsernameWarning = true;
             setTimeout(() => {
@@ -75,7 +72,7 @@ export class LoginComponent implements OnInit {
         else {
             this.userUsernameWarning = false;
         }
-        if(!this.userPassword || this.userPassword.length == 0){
+        if (!this.userPassword || this.userPassword.length == 0) {
             this.incorrectUserWarning = false;
 
             this.userPasswordWarning = true;
@@ -93,7 +90,10 @@ export class LoginComponent implements OnInit {
 
                     this.loggedin = true;
                     setTimeout(() => {
+                        $("#userLoginClose").click();
+                        // this.loginClicked.emit();
                         location.reload();
+
                     }, 1000);
 
                 }
@@ -113,8 +113,8 @@ export class LoginComponent implements OnInit {
     }
 
 
-    onBusinessLogin(){
-        if(!this.businessEmail || this.businessEmail.length == 0){
+    onBusinessLogin() {
+        if (!this.businessEmail || this.businessEmail.length == 0) {
             this.incorrectBusinessWarning = false;
             this.businessEmailWarning = true;
             setTimeout(() => {
@@ -124,7 +124,7 @@ export class LoginComponent implements OnInit {
         else {
             this.businessEmailWarning = false;
         }
-        if(!this.businessPassword || this.businessPassword.length == 0){
+        if (!this.businessPassword || this.businessPassword.length == 0) {
             this.incorrectBusinessWarning = false;
             this.businessPasswordWarning = true;
             setTimeout(() => {
@@ -173,25 +173,25 @@ export class LoginComponent implements OnInit {
 
         if (!this.resetUserEmailWarning) {
             this.loginService.forgetPassword(this.userEmail).subscribe(data => {
-            this.resetFailureWarning = false;
-            this.resetSuccessWarning = true;
-            setTimeout(() => {
-                this.resetSuccessWarning = false;
-            }, 5000);
-            this.successReset = data.msg;
-        }, err => {
-            this.resetSuccessWarning = false;
-            this.resetFailureWarning = true;
-            setTimeout(() => {
                 this.resetFailureWarning = false;
-            }, 5000);
-            if(err.status == 500) {
-                this.failedReset = err.json().error[0].msg;
-            }
-            else {
-                this.failedReset = err.json().msg;
-            }
-             });
+                this.resetSuccessWarning = true;
+                setTimeout(() => {
+                    this.resetSuccessWarning = false;
+                }, 5000);
+                this.successReset = data.msg;
+            }, err => {
+                this.resetSuccessWarning = false;
+                this.resetFailureWarning = true;
+                setTimeout(() => {
+                    this.resetFailureWarning = false;
+                }, 5000);
+                if (err.status == 500) {
+                    this.failedReset = err.json().error[0].msg;
+                }
+                else {
+                    this.failedReset = err.json().msg;
+                }
+            });
         }
 
     }
@@ -210,25 +210,25 @@ export class LoginComponent implements OnInit {
 
         if (!this.resetBusinessEmailWarning) {
             this.loginService.forgetPassword(this.businessEmail).subscribe(data => {
-            this.resetFailureWarning = false;
-            this.resetSuccessWarning = true;
-            setTimeout(() => {
-                this.resetSuccessWarning = false;
-            }, 5000);
-            this.successReset = data.msg;
-        }, err => {
-            this.resetSuccessWarning = false;
-            this.resetFailureWarning = true;
-            setTimeout(() => {
                 this.resetFailureWarning = false;
-            }, 5000);
-            if(err.status == 500) {
-                this.failedReset = err.json().error[0].msg;
-            }
-            else {
-                this.failedReset = err.json().msg;
-            }
-        });
+                this.resetSuccessWarning = true;
+                setTimeout(() => {
+                    this.resetSuccessWarning = false;
+                }, 5000);
+                this.successReset = data.msg;
+            }, err => {
+                this.resetSuccessWarning = false;
+                this.resetFailureWarning = true;
+                setTimeout(() => {
+                    this.resetFailureWarning = false;
+                }, 5000);
+                if (err.status == 500) {
+                    this.failedReset = err.json().error[0].msg;
+                }
+                else {
+                    this.failedReset = err.json().msg;
+                }
+            });
         }
 
     }
@@ -248,25 +248,25 @@ export class LoginComponent implements OnInit {
 
         if (!this.resendEmailWarning) {
             this.loginService.resendEmail(this.userEmail).subscribe(data => {
-            this.resendFailureWarning = false;
-            this.resendSuccessWarning = true;
-            setTimeout(() => {
-                this.resendSuccessWarning = false;
-            }, 5000);
-            this.successResend = data.msg;
-        }, err => {
-            this.resendSuccessWarning = false;
-            this.resendFailureWarning = true;
-            setTimeout(() => {
                 this.resendFailureWarning = false;
-            }, 5000);
-            if(err.status == 500) {
-                this.failedResend = err.json().error[0].msg;
-            }
-            else {
-                this.failedResend = err.json().msg;
-            }
-             });
+                this.resendSuccessWarning = true;
+                setTimeout(() => {
+                    this.resendSuccessWarning = false;
+                }, 5000);
+                this.successResend = data.msg;
+            }, err => {
+                this.resendSuccessWarning = false;
+                this.resendFailureWarning = true;
+                setTimeout(() => {
+                    this.resendFailureWarning = false;
+                }, 5000);
+                if (err.status == 500) {
+                    this.failedResend = err.json().error[0].msg;
+                }
+                else {
+                    this.failedResend = err.json().msg;
+                }
+            });
         }
 
     }
@@ -388,30 +388,30 @@ export class LoginComponent implements OnInit {
 
     keyDownUserLogin(event) {
         if (event.keyCode == 13) {
-          this.onUserLogin();
+            this.onUserLogin();
         }
     }
     keyDownForgetUser(event) {
         if (event.keyCode == 13) {
-          this.onUserForgetPass();
+            this.onUserForgetPass();
         }
     }
 
     keyDownBusinessLogin(event) {
         if (event.keyCode == 13) {
-          this.onBusinessLogin();
+            this.onBusinessLogin();
         }
     }
 
     keyDownForgetBusiness(event) {
         if (event.keyCode == 13) {
-          this.onBusinessForgetPass();
+            this.onBusinessForgetPass();
         }
     }
 
     keyDownResend(event) {
         if (event.keyCode == 13) {
-          this.onResendEmail();
+            this.onResendEmail();
         }
     }
 

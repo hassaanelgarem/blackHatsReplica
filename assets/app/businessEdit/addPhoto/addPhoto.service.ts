@@ -10,6 +10,6 @@ export class AddPhotoService {
   deletePhoto(photoName){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.delete('http://54.213.175.206:8080/api/business/deletePhoto/' + photoName, { headers: headers }).map(res => res.json());
+    return this.http.delete('http://localhost:8080/api/business/deletePhoto/' + photoName, { headers: headers }).map(res => res.json());
   }
 }

@@ -1,55 +1,50 @@
-<!-- start Container Wrapper -->
-<div class="container-wrapper">
+<!-- start Main Wrapper -->
 
-    <!-- start Main Wrapper -->
+<div class="main-wrapper scrollspy-container" style="background-color: white;">
 
-    <div class="main-wrapper scrollspy-container">
+    <div class="col-xs-12 col-sm-8 col-md-9 mt-20">
+        <h4 class="section-title">Activities:</h4>
 
-        <div class="col-xs-12 col-sm-8 col-md-9 mt-20">
-            <h4 class="section-title">Activities:</h4>
+        <div class="trip-guide-wrapper">
 
-            <div class="trip-guide-wrapper">
+            <div class="GridLex-gap-20 GridLex-gap-20-xs">
 
-                <div class="GridLex-gap-20 GridLex-gap-20-xs">
+                <div class="GridLex-grid-noGutter-equalHeight">
 
-                    <div class="GridLex-grid-noGutter-equalHeight">
+                    <div class="GridLex-col-6_sm-12_xs-6_xss-12" *ngFor="let activity of activities; let i = index">
 
-                        <div class="GridLex-col-6_sm-12_xs-6_xss-12" *ngFor="let activity of activities; let i = index">
+                        <div class="trip-guide-item no-person">
 
-                            <div class="trip-guide-item no-person">
+                            <div class="trip-guide-image" style="min-height: 290.81px;">
+                                <img class="img-responsive" *ngIf="!activity.photos[0]" src="{{path}}image/activityPhotos/x" alt="images" style="width: inherit; height: inherit"
+                                />
+                                <img class="img-preview" *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" style="height: 290.81px;" alt="images"
+                                />
+                            </div>
 
-                                <div class="trip-guide-image" style="width: 290px; height: 290px">
-                                    <img *ngIf="!activity.photos[0]" src="{{path}}image/activityPhotos/x" alt="images" style="width: inherit; height: inherit"
-                                    />
-                                    <img *ngIf="activity.photos[0]" src="{{path}}image/activityPhotos/{{activity.photos[0]}}" alt="images" style="width: inherit; height: inherit"
-                                    />
-                                </div>
+                            <div class="trip-guide-content">
+                                <h3>{{activity.name}}</h3>
+                                <p style="width: inherit;" class="truncate"> {{truncate(activity.description)}}</p>
+                            </div>
 
-                                <div class="trip-guide-content">
-                                    <h3>{{activity.name}}</h3>
-                                    <p style="width: inherit;" class="truncate"> {{truncate(activity.description)}}</p>
-                                </div>
+                            <div class="trip-guide-bottom bg-light-primary bt">
 
-                                <div class="trip-guide-bottom bg-light-primary bt">
-
-                                    <div class="trip-guide-meta row gap-10">
-                                        <div class="col-xs-6 col-sm-6">
-
-                                        </div>
+                                <div class="trip-guide-meta row gap-10">
+                                    <div class="col-xs-6 col-sm-6">
 
                                     </div>
 
-                                    <div class="row gap-10">
-                                        <div class="col-xs-12 col-sm-6">
-                                            <div class="trip-guide-price">
-                                                <span class="number">{{activity.price.toFixed(2)}}EGP</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6 text-right">
-                                            <a (click)="onEdit(i)" class="btn btn-primary">Edit</a>
+                                </div>
+
+                                <div class="row gap-10">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="trip-guide-price">
+                                            <span class="number">{{activity.price.toFixed(2)}}EGP</span>
                                         </div>
                                     </div>
-
+                                    <div class="col-xs-12 col-sm-6 text-right">
+                                        <a (click)="onEdit(i)" class="btn btn-primary">Edit</a>
+                                    </div>
                                 </div>
 
                             </div>
@@ -59,23 +54,21 @@
                     </div>
 
                 </div>
-                <br>
-                <div class="add-button-wrapper">
-                    <button style="font-size:20pt" type="button" class="add-button btn btn-primary" href="#addActivityModal" data-toggle="modal">Add</button>
-                </div>
-                <br>
-                <br>
-            </div>
 
+            </div>
+            <br>
+            <div class="add-button-wrapper">
+                <button style="font-size:20pt" type="button" class="add-button btn btn-primary" href="#addActivityModal" data-toggle="modal">Add</button>
+            </div>
+            <br>
+            <br>
         </div>
 
     </div>
 
-    <!-- end Main Wrapper -->
-
 </div>
 
-<!-- end Container Wrapper -->
+<!-- end Main Wrapper -->
 
 <!-- start Add Modal -->
 <div id="addActivityModal" class="modal fade login-box-wrapper" style="background-color: #fff; border: 1px solid #999;
@@ -103,7 +96,7 @@
                                         fill out a name!
                                     </div>
                                     <label>Name</label>
-                                    <input class="form-control" type="text" [(ngModel)]="addName" name="addName">
+                                    <input class="form-control" type="text" [(ngModel)]="addName" name="addName" required>
                                 </div>
 
                             </div>
@@ -129,7 +122,7 @@
                                     </div>
                                     <label>Price</label>
                                     <div class="input-group mb-15">
-                                        <input class="form-control" type="number" min="0" [(ngModel)]="addPrice" name="addPrice">
+                                        <input class="form-control" type="number" min="0" [(ngModel)]="addPrice" name="addPrice" required>
                                         <span class="input-group-addon">EGP</span>
                                     </div>
                                 </div>
@@ -144,8 +137,8 @@
                                         choose the number of bookings per slot!
                                     </div>
                                     <label>Bookings per slot</label>
-                                    <input class="form-control" placeholder="Maximum number of bookings for one slot" type="number" min="0" [(ngModel)]="addPerSlot"
-                                        name="addPerSlot" value="1">
+                                    <input class="form-control" placeholder="Maximum number of bookings for one slot" type="number" min="1" [(ngModel)]="addPerSlot"
+                                        name="addPerSlot" value="1" required>
                                 </div>
 
                             </div>
