@@ -1,13 +1,13 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { EditProfileService} from "./editProfile.service";
+import { EditProfileService } from "./editProfile.service";
 import { Router } from '@angular/router';
-import {Http, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BrowserModule } from '@angular/platform-browser';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AppService } from '../../app.service';
-import {EventEmitter} from "@angular/common/src/facade/async";
+import { EventEmitter } from "@angular/common/src/facade/async";
 
 
 
@@ -55,6 +55,7 @@ export class EditProfileComponent implements OnInit {
     ngOnInit() {
         this.initialise();
     }
+
     initialise() {
         this.appService.getCurrentUser().subscribe(
             (data) => {
@@ -132,7 +133,7 @@ export class EditProfileComponent implements OnInit {
             this.descriptionRequired = false;
         }
 
-        if (!this.descriptionRequired || !this.nameRequired) {
+        if (!this.descriptionRequired && !this.nameRequired) {
             let workingHours = {
                 from: this.workingFrom,
                 to: this.workingTo
@@ -163,7 +164,9 @@ export class EditProfileComponent implements OnInit {
                     }
                 });
         }
-
+        else {
+           $("#back-to-top").click();
+        }
     }
 
     cancel() {
