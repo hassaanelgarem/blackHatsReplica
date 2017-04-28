@@ -19,7 +19,7 @@ var forgotPasswordHelper = function (doc, callback) {
             //send the email
             //TO-Do replace the link in email to the frontend route not server route
             var subject = "Password Reset";
-            var html = "<p>A reset password request has been made, please reset the password to your account by clicking this <a href=\"http://54.213.175.206:8080/resetPassword/" + token + "\">Link</a>.<br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://54.213.175.206:8080/resetPassword/" + token + "<br><br>If you did not do the request then ignore this email and your password will remain unchanged.</p>";
+            var html = "<p>A reset password request has been made, please reset the password to your account by clicking this <a href=\"http://localhost:8080/resetPassword/" + token + "\">Link</a>.<br>If you are unable to do so, copy and paste the following link into your browser:<br><br>http://localhost:8080/resetPassword/" + token + "<br><br>If you did not do the request then ignore this email and your password will remain unchanged.</p>";
             emailSender.sendEmail(subject, doc.email, "", html, function (err, info) {
                 if (err) {
                     callback(null, false);

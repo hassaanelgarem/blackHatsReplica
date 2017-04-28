@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserService } from "./user.service";
 import { AppService } from '../app.service';
 import { Http, Headers } from '@angular/http';
@@ -8,8 +8,7 @@ import 'rxjs/add/operator/map';
 
 @Component({
     selector: 'user-profile',
-    templateUrl: 'user.component.html',
-    styleUrls: ['./user.component.css']
+    templateUrl: 'user.component.html'
 })
 export class UserComponent implements OnInit {
     public showReviews = true;
@@ -58,12 +57,12 @@ export class UserComponent implements OnInit {
                             this.birthDate = data.user.birthDate;
                             this.createdAt = data.user.createdAt;
                             if (data.user.profilePicture != null) {
-                                this.path = "http://54.213.175.206:8080/api/image/profilePictures/";
+                                this.path = "http://localhost:8080/api/image/profilePictures/";
                                 this.profilePicture = data.user.profilePicture;
                             }
                             else {
                                 this.path = "";
-                                this.profilePicture = "http://54.213.175.206:8080/api/image/profilePictures/defaultpp.jpg";
+                                this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                             }
                         }
 
@@ -80,12 +79,12 @@ export class UserComponent implements OnInit {
                                     this.birthDate = info.data.birthDate;
                                     this.createdAt = info.data.createdAt;
                                     if (info.data.profilePicture != null) {
-                                        this.path = "http://54.213.175.206:8080/api/image/profilePictures/";
+                                        this.path = "http://localhost:8080/api/image/profilePictures/";
                                         this.profilePicture = info.data.profilePicture;
                                     }
                                     else {
                                         this.path = "";
-                                        this.profilePicture = "http://54.213.175.206:8080/api/image/profilePictures/defaultpp.jpg";
+                                        this.profilePicture = "http://localhost:8080/api/image/profilePictures/defaultpp.jpg";
                                     }
 
                                 }, (err) => {
@@ -154,7 +153,7 @@ export class UserComponent implements OnInit {
     }
 
     pictureChanged(path: string) {
-        this.path = "http://54.213.175.206:8080/api/image/profilePictures/";
+        this.path = "http://localhost:8080/api/image/profilePictures/";
         this.profilePicture = path;
     }
 }

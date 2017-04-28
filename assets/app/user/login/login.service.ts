@@ -14,7 +14,7 @@ export class LoginService {
       username: username,
       password: password
     }
-    return this.http.post('http://54.213.175.206:8080/api/user/login', body, { headers: headers }).map(res => res.json());
+    return this.http.post('http://localhost:8080/api/user/login', body, { headers: headers }).map(res => res.json());
   }
 
 
@@ -25,7 +25,7 @@ export class LoginService {
       email: email,
       password: password
     }
-    return this.http.post('http://54.213.175.206:8080/api/business/login', body, { headers: headers }).map(res => res.json());
+    return this.http.post('http://localhost:8080/api/business/login', body, { headers: headers }).map(res => res.json());
   }
 
 
@@ -35,14 +35,14 @@ export class LoginService {
     let body = {
       email: email
     }
-    return this.http.post('http://54.213.175.206:8080/api/forgotPassword', body, { headers: headers }).map(res => res.json());
+    return this.http.post('http://localhost:8080/api/forgotPassword', body, { headers: headers }).map(res => res.json());
   }
 
 
   logout() {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://54.213.175.206:8080/api/logout', { headers: headers }).map(res => res.json());
+    return this.http.get('http://localhost:8080/api/logout', { headers: headers }).map(res => res.json());
   }
 
   resendEmail(email) {
@@ -51,7 +51,7 @@ export class LoginService {
         let body = {
           email: email
     }
-    return this.http.post('http://54.213.175.206:8080/api/user/resendVerification', body, {headers: headers}).map(res => res.json());
+    return this.http.post('http://localhost:8080/api/user/resendVerification', body, {headers: headers}).map(res => res.json());
   }
 
 }

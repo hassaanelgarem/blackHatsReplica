@@ -3,8 +3,7 @@ import {BusinessService} from './business.service';
 
 @Component({
   selector: 'app-business',
-  templateUrl: './businessEdit.component.html',
-  styleUrls: ['./businessEdit.component.css']
+  templateUrl: './businessEdit.component.html'
 })
 export class BusinessEditComponent {
 

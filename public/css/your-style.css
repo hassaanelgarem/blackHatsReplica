@@ -1,9 +1,3 @@
-/*------------------------------------------------------------------
-* Project:        Togoby
-* Author:         Crenoveative
-* URL:            http://crenoveative.com or https://themeforest.net/user/crenoveative/portfolio
-* Created:        08/03/2017
--------------------------------------------------------------------*/
 
 .truncate {
   width: 260px;
@@ -29,3 +23,7 @@ $lines-to-show: 3;
   text-overflow: ellipsis;
 }
 
+body{
+  min-height: 500px;
+  padding-top: 3px;
+}

@@ -129,8 +129,10 @@ export class RegisterComponent {
                 .subscribe(
                 (data) => {
                     this.success = true;
+                    // $("#userRegisterModal").scrollTop(0);
                     setTimeout(() => {
-                        location.reload();
+                        this.success = false;
+                        $("#userRegisterClose").click();
                     }, 5000);
 
                 },
@@ -138,8 +140,12 @@ export class RegisterComponent {
                     this.success = false;
                     this.failure = true;
                     this.message = error.error.msg;
+                    // $("#userRegisterModal").scrollTop(0);
                 }
                 );
+        }
+        else {
+            $("#userRegisterModal").animate({ scrollTop: 0 }, "slow");
         }
 
     };

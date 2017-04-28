@@ -1,13 +1,13 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { EditProfileService} from "./editProfile.service";
+import { EditProfileService } from "./editProfile.service";
 import { Router } from '@angular/router';
-import {Http, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BrowserModule } from '@angular/platform-browser';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AppService } from '../../app.service';
-import {EventEmitter} from "@angular/common/src/facade/async";
+import { EventEmitter } from "@angular/common/src/facade/async";
 
 
 
@@ -18,7 +18,7 @@ import {EventEmitter} from "@angular/common/src/facade/async";
 })
 
 export class EditProfileComponent implements OnInit {
-    public uploader: FileUploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/business/addLogo', itemAlias: "myfile" });
+    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
     private logo: String;
     name: String;
     workingFrom: Date;
@@ -55,6 +55,7 @@ export class EditProfileComponent implements OnInit {
     ngOnInit() {
         this.initialise();
     }
+
     initialise() {
         this.appService.getCurrentUser().subscribe(
             (data) => {
@@ -88,14 +89,14 @@ export class EditProfileComponent implements OnInit {
                                 this.city = data.data.location.city;
                             }
                             if (data.data.logo != null) {
-                                this.path = "http://54.213.175.206:8080/api/image/businessLogos/";
+                                this.path = "http://localhost:8080/api/image/businessLogos/";
                                 this.logo = data.data.logo;
                             }
                             else {
                                 this.path = "";
-                                this.logo = "http://54.213.175.206:8080/api/image/businessLogos/defaultBLogo.jpg";
+                                this.logo = "http://localhost:8080/api/image/businessLogos/defaultBLogo.jpg";
                             }
-                            this.uploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/business/addLogo', itemAlias: "myfile" });
+                            this.uploader = new FileUploader({ url: 'http://localhost:8080/api/business/addLogo', itemAlias: "myfile" });
                             this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
                                 this.initialise();
                             };
@@ -132,7 +133,7 @@ export class EditProfileComponent implements OnInit {
             this.descriptionRequired = false;
         }
 
-        if (!this.descriptionRequired || !this.nameRequired) {
+        if (!this.descriptionRequired && !this.nameRequired) {
             let workingHours = {
                 from: this.workingFrom,
                 to: this.workingTo
@@ -163,7 +164,9 @@ export class EditProfileComponent implements OnInit {
                     }
                 });
         }
-
+        else {
+           $("#back-to-top").click();
+        }
     }
 
     cancel() {

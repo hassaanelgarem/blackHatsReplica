@@ -13,7 +13,7 @@ export class BusinessRegisterService {
         const body = JSON.stringify(business);
         const headers = new Headers({ 'Content-Type': 'application/json' });
         //Adds a header to indicate that the body is a JSON object to pass to the apply post route 
-        return this.http.post('http://54.213.175.206:8080/api/business/apply', body, { headers: headers })
+        return this.http.post('http://localhost:8080/api/business/apply', body, { headers: headers })
             .map((response: Response) => response.json())
             .catch((error: Response) => Observable.throw(error.json()));
     }

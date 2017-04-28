@@ -6,16 +6,17 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls : ['./nav.component.css']
+  styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
 
-//to check for this part later
+  //to check for this part later
   private loggedin: Boolean;
   private isUser: Boolean;
+  private isAdmin: boolean;
   private user: Object;
   private business: Object;
-  private path: String = "http://54.213.175.206:8080/";
+  private path: String = "http://localhost:8080/";
 
   constructor(
     private appService: AppService,
@@ -25,50 +26,52 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.appService.getCurrentUser().subscribe(data => {
-      if(data.success){
-        if(data.user){
+      if (data.success) {
+        if (data.user) {
           this.user = data.user;
           this.isUser = true;
-
+          if (data.user.admin)
+            this.isAdmin = true;
         }
-        else{
+        else {
           this.business = data.business;
           this.isUser = false;
         }
         this.loggedin = true;
       }
-      else{
+      else {
         this.loggedin = false;
       }
     });
   }
 
-  loggedIn(args:any){
+  loggedIn(args: any) {
     this.appService.getCurrentUser().subscribe(data => {
-      if(data.success){
-        if(data.user){
+      if (data.success) {
+        if (data.user) {
           this.user = data.user;
           this.isUser = true;
-
+          if (data.user.admin)
+            this.isAdmin = true;
         }
-        else{
+        else {
           this.business = data.business;
           this.isUser = false;
         }
         this.loggedin = true;
       }
-      else{
+      else {
         this.loggedin = false;
       }
     });
   }
 
-  onLogout(){
+  onLogout() {
     this.loginService.logout().subscribe(data => {
       location.reload();
     }, err => {
       bootbox.alert(err.msg);
     });
 
-    }
+  }
 }

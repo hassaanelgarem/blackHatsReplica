@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { BookAdvService} from "./bookAdv.service"
+import { BookAdvService } from "./bookAdv.service"
 import { AppService } from "../../app.service"
 import { Router } from '@angular/router';
-import {Http, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Component({
@@ -16,7 +16,7 @@ export class BookAdvComponent implements OnInit {
     availableSlots: Date[] = [];
     date: Date;
     noOfDays: number[] = [];
-    public uploader: FileUploader = new FileUploader({ url: 'http://54.213.175.206:8080/api/advertisement/addAdvPhoto', itemAlias: "myfile" });;
+    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/api/advertisement/addAdvPhoto', itemAlias: "myfile" });;
     startTime: Date = new Date();
     endTime: Date = new Date();
     startTimeValue: Date = new Date();
@@ -36,7 +36,7 @@ export class BookAdvComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.advPicture = "http://54.213.175.206:8080/api/image/businessAds/defaultAPic.jpg";
+        this.advPicture = "http://localhost:8080/api/image/businessAds/defaultAPic.jpg";
         this.showAdvSlots();
     }
 
@@ -94,14 +94,14 @@ export class BookAdvComponent implements OnInit {
                 case 401:
                     this.router.navigateByUrl('/notAuthorized-error');
                     break;
-                    case 200:
+                case 200:
                     break;
                 default:
                     this.router.navigateByUrl('/500-error');
                     break;
             }
             this.advPicture = JSON.parse(response).data;
-            this.path = "http://54.213.175.206:8080/api/image/businessAds/";
+            this.path = "http://localhost:8080/api/image/businessAds/";
         }
     }
 
@@ -115,13 +115,13 @@ export class BookAdvComponent implements OnInit {
         else {
             this.advNoOfDaysWarning = false;
         }
-        if (!this.advPicture || this.advPicture.length == 0) {
+        if (!this.advPicture || this.advPicture.length == 0 || this.advPicture === "http://localhost:8080/api/image/businessAds/defaultAPic.jpg") {
             this.advImgWarning = true;
         }
         else {
             this.advImgWarning = false;
         }
-        if (!this.advImgWarning && !this.advImgWarning) {
+        if (!this.advImgWarning && !this.advNoOfDaysWarning) {
             this.startTimeValue = new Date(this.availableSlots[index]);
             this.endTimeValue = new Date();
             this.endTimeValue.setDate(this.startTimeValue.getDate() + this.noOfDays[index]);
@@ -129,7 +129,7 @@ export class BookAdvComponent implements OnInit {
             var handler = (<any>window).StripeCheckout.configure({
                 key: 'pk_test_9AEHvD0gXViwtKYQDpQcLXlY',
                 locale: 'auto',
-                currency: 'EGP',
+                currency: 'egp',
                 token: token => this.gotToken(token, advId)
             });
 
@@ -138,6 +138,9 @@ export class BookAdvComponent implements OnInit {
                 description: this.advertisements[index].name,
                 amount: this.advertisements[index].price * 100
             });
+        }
+        else {
+            $("#back-to-top").click();
         }
     }
 

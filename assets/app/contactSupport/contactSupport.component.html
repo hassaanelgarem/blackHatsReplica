@@ -11,7 +11,7 @@
         <div class="breadcrumb-wrapper">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li><a href="/homepage">Home</a></li>
+                    <li><a routerLink="/homepage">Home</a></li>
                     <li class="active">Contact Us</li>
                 </ol>
             </div>
@@ -48,7 +48,7 @@
 
                                             <div class="form-group">
                                                 <label for="form_name">Title <span class="font10 text-danger">(required)</span></label>
-                                                <input id="form_name" type="text" class="form-control" name="title" data-error="Title is required" required="required" #title/>
+                                                <input id="form_name" type="text" placeholder="Title" class="form-control" name="title" data-error="Title is required" required="required" #title/>
                                                 <div class="help-block with-errors"></div>
                                             </div>
 
@@ -58,7 +58,7 @@
 
                                             <div class="form-group">
                                                 <label for="form_contactEmail">Contact Email <span class="font10 text-danger">(required)</span></label>
-                                                <input id="form_contactEmail" type="email" class="form-control" name="contactEmail" data-error="Your contact email is required and must be a valid email address"
+                                                <input id="form_contactEmail" type="email" placeholder="An Email You Have Access To" class="form-control" name="contactEmail" data-error="Your contact email is required and must be a valid email address"
                                                     required="required" #contactEmail/>
                                                 <div class="help-block with-errors"></div>
                                             </div>
@@ -69,7 +69,7 @@
 
                                             <div class="form-group">
                                                 <label>Contact Phone Number</label>
-                                                <input type="text" class="form-control" name="contactPhoneNumber" #contactPhoneNumber/>
+                                                <input type="text" placeholder="Optional Phone Number" class="form-control" name="contactPhoneNumber" #contactPhoneNumber/>
                                             </div>
 
                                         </div>
@@ -86,7 +86,7 @@
 
                                             <div class="form-group">
                                                 <label for="form_registeredEmail">Registered Email <span class="font10 text-danger">(required)</span></label>
-                                                <input id="form_registeredEmail" type="email" class="form-control" name="registeredEmail" data-error="Your registered email is required and must be a valid email address"
+                                                <input id="form_registeredEmail" placeholder="The Email You Registered With" type="email" class="form-control" name="registeredEmail" data-error="Your registered email is required and must be a valid email address"
                                                     required="required" #registeredEmail/>
                                                 <div class="help-block with-errors"></div>
                                             </div>
@@ -96,7 +96,7 @@
 
                                             <div class="form-group">
                                                 <label for="form_description">Description <span class="font10 text-danger">(required)</span></label>
-                                                <textarea id="form_description" class="form-control" name="description" rows="5" data-minlength="50" data-error="Description is required and must not less than 50 characters"
+                                                <textarea id="form_description" class="form-control" placeholder="Describe Your Issue in Detail" name="description" rows="5" data-minlength="50" data-error="Description is required and must not less than 50 characters"
                                                     required="required" #description></textarea>
                                                 <div class="help-block with-errors"></div>
                                             </div>

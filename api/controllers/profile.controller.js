@@ -187,7 +187,7 @@ module.exports.uploadProfilePicture = function (req, res) {
                 string = "j" + string;
             string = string.toLowerCase();
             //check if it is not a valid image format
-            if (!(string === "png" || string === "jpg" || string === "jpeg")) {
+            if (!(string === "png" || string === "jpg" || string === "jpeg" || string === "gif")) {
                 //delete the uploaded file
                 fs.unlink(req.file.path);
 

@@ -1,4 +1,4 @@
-<div class="container pt-70 pb-60 clearfix">
+<div *ngIf="businesses.length > 0" class="container pt-70 pb-60 clearfix">
 
 	<div class="row">
 
@@ -22,11 +22,10 @@
 
 				<div class="GridLex-col-4_sm-4_xs-6_xss-12" *ngFor="let business of businesses">
 					<div class="top-destination-item">
-						<!--to add the link later-->
-						<a href="http://54.213.175.206:8080/business/{{business.businessId}}">
+						<a routerLink="/business/{{business.businessId}}">
 							<div class="image">
-								<img *ngIf="!business.logo" src="http://54.213.175.206:8080/api/image/businessLogos/x" alt="images" />
-								<img *ngIf="business.logo" src="http://54.213.175.206:8080/api/image/businessLogos/{{business.logo}}" alt="images" />
+								<img *ngIf="!business.logo" src="http://localhost:8080/api/image/businessLogos/x" alt="images" />
+								<img *ngIf="business.logo" src="http://localhost:8080/api/image/businessLogos/{{business.logo}}" alt="images" />
 							</div>
 							<h4 class="uppercase"><span>{{business.name}}</span></h4>
 						</a>

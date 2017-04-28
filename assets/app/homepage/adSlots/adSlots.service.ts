@@ -16,7 +16,7 @@ export class AdSlotsService {
     getAdSlots() {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
-        return this.http.get('http://54.213.175.206:8080/api/advertisement/getAdvSlots', {headers: headers})
+        return this.http.get('http://localhost:8080/api/advertisement/getAdvSlots', {headers: headers})
             //map method to transform the response
             .map((response: Response) => {
                 const adSlots = response.json().data;
@@ -32,7 +32,7 @@ export class AdSlotsService {
     getBookedSlots(advertismentId : string) {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
-        return this.http.get('http://54.213.175.206:8080/api/advertisement/getCurrentBookings/' + advertismentId, {headers: headers})
+        return this.http.get('http://localhost:8080/api/advertisement/getCurrentBookings/' + advertismentId, {headers: headers})
             //map method to transform the response
             .map((response: Response) => {
                 const bookingSlots = response.json().data;

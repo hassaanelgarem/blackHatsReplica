@@ -1,37 +1,26 @@
-<!doctype html>
-<html lang="en">
+<div class="row">
 
-<div class="pt-30 pb-50">
+	<div class="col-xs-12 col-sm-7 col-md-8">
+		<h4 class="section-title">Photos:</h4>
 
-	<div class="container">
+		<div class="gallery-wrapper">
 
-		<div class="row">
+			<div class="GridLex-gap-5">
 
-			<div class="col-xs-12 col-sm-7 col-md-8 mt-20">
-				<h4 class="section-title">Photos:</h4>
+				<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
 
-				<div class="gallery-wrapper">
-
-					<div class="GridLex-gap-5">
-
-						<div class="GridLex-grid-noGutter-equalHeight GridLex-grid-middle">
-
-							<div *ngFor="let photo of photos; let i=index">
-								<div class="GridLex-col-4_sm-4_xs-4_xss-6">
-									<div class="sumi-gallery-wrapper clearfix">
-										<div class="gallery-item image-object-fit image-object-fit-cover">
-											<div class="img-wrap">
-												<span class="close" (click)="deletePhoto(i)">&times;</span>
-												<img data-sgallery="guideGallery" src="{{path}}image/businessPhotos/{{photo}}" alt="Business photo" style="width:200px;height:200px">
-											</div>
-										</div>
+					<div *ngFor="let photo of photos; let i=index">
+						<div class="GridLex-col-4_sm-4_xs-4_xss-6">
+							<div class="sumi-gallery-wrapper clearfix">
+								<div class="gallery-item image-object-fit image-object-fit-cover">
+									<div class="img-wrap">
+										<button class="close btn"  style=" font-size: 35px; color: black; background-color: white;" (click)="deletePhoto(i)">&times;</button>
+										<img data-sgallery="guideGallery" src="{{path}}image/businessPhotos/{{photo}}" alt="Business photo" style="width:200px;height:200px">
 									</div>
 								</div>
-								<br>
 							</div>
-
 						</div>
-
+						<br>
 					</div>
 
 				</div>
@@ -54,5 +43,3 @@
 		</div>
 	</div>
 </div>
-
-</html>

@@ -25,7 +25,7 @@ export class ReviewsComponent implements OnInit {
     reviews: Object[] = new Array<Review>();
     firstPhoto: String;
     businessPhotos: String[] = [];
-    path: String = "http://54.213.175.206:8080/api/";
+    path: String = "http://localhost:8080/api/";
     loadDone = false;
     firstName: String;
     lastName: String;

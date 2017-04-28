@@ -36,7 +36,7 @@
 
                 <div class="form-group">
                     <div *ngIf="lastNameRequired" class="alert alert-danger alert-dismissable">
-                        <a class="close" (click)="hideLastNameWarning()" aria-label="close">&times;</a> Last Name is required
+                        <a id="userRegisterClose" class="close" (click)="hideLastNameWarning()" aria-label="close">&times;</a> Last Name is required
                     </div>
                     <label>Last Name</label>
                     <input class="form-control" placeholder="Enter your Last Name" type="text" [(ngModel)]="lastName" name="lastName" required>
@@ -114,7 +114,7 @@
 
     <div class="modal-footer text-center">
         <button type="button" class="btn btn-primary" (click)="onSubmit()">Register</button>
-        <button type="button" data-dismiss="modal" (click)="onClose()" class="btn btn-primary btn-border">Close</button>
+        <button id="userRegisterClose" type="button" data-dismiss="modal" (click)="onClose()" class="btn btn-primary btn-border">Close</button>
     </div>
 
 </div>

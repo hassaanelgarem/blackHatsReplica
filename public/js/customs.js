@@ -138,9 +138,9 @@ jQuery(function($) {
 	
 		
 		
-		/**
-		 * Bootstrap Tooltip
-		 */
+		// /**
+		//  * Bootstrap Tooltip
+		//  */
 		// $(function () {
 		//   $('[data-toggle="tooltip"]').tooltip()
 		// })
